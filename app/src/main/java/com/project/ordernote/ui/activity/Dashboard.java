@@ -66,7 +66,7 @@ public class Dashboard extends AppCompatActivity {
 
             Fragment selectedFragment = new Fragment();
             int id = item.getItemId();
-
+                //aDDED BY ARUN USING GIT
 
             if (id == R.id.orderslist) {
                 selectedFragment = (new OrdersListFragment());
