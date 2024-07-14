@@ -35,6 +35,7 @@ public class AddOrdersFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //newly added from new branch
         try {
             ordersViewModel = new ViewModelProvider(this).get(OrderDetails_ViewModel.class);
         }
