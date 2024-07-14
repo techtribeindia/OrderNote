@@ -41,6 +41,7 @@ public class AddOrdersFragment extends Fragment {
         catch (Exception e){
             e.printStackTrace();
         }
+        //BY ARUNNN
         // Example of adding an order
         binding.btnAddOrder.setOnClickListener(v -> {
             List<OrderItemDetails_Model> cartItems = getCartItems(); // Implement this method

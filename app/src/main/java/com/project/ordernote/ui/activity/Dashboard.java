@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.firebase.FirebaseApp;
@@ -95,10 +96,15 @@ public class Dashboard extends AppCompatActivity {
 
 
         activityDashboardBinding.addOrderFabButton.setOnClickListener(v -> {
-            BottomNavigationItemView orderlist =activityDashboardBinding.bottomNavigationView. findViewById( R.id.orderslist);
-            orderlist.setSelected(false);
-            orderlist.clearAnimation();
-            orderlist.clearFocus();
+           //// BottomNavigationItemView orderlist =activityDashboardBinding.bottomNavigationView. findViewById( R.id.orderslist);
+           // orderlist.setSelected(false);
+           // orderlist.clearAnimation();
+           // orderlist.clearFocus()
+            //bY aRUN
+            for (int i = 0; i < activityDashboardBinding.bottomNavigationView.getMenu().size(); i++) {
+                activityDashboardBinding.bottomNavigationView.getMenu().getItem(i).setChecked(false);
+            }
+            activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.addOrders);
 
             dashboardViewModel.setSelectedFragment(new AddOrdersFragment());
 
