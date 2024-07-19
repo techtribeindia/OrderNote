@@ -15,13 +15,12 @@
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:id="@+id/bottomAppBar"
         android:layout_gravity="bottom"
         android:background="@color/white"
          app:fabCradleMargin="10dp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
+        android:alpha="2"
         app:fabCradleRoundedCornerRadius="50dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -30,6 +29,8 @@
             android:id="@+id/bottomNavigationView"
             app:labelVisibilityMode="labeled"
               app:elevation="0dp"
+            android:background="@color/white"
+
             app:backgroundTint="@color/transparent"
             app:itemRippleColor="@color/transparent"
              app:menu="@menu/bottom_navigation"/>
@@ -44,7 +45,7 @@
         android:src="@drawable/ic_baseline_add"
         app:layout_anchor="@id/bottomAppBar"
         app:maxImageSize="40dp"
-        app:tint ="@color/lavender"
+         app:tint ="@color/darkgrey"
         android:contentDescription="@string/todo" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

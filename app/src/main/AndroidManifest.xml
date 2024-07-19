@@ -7,9 +7,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/ordernotelogo"
+        android:icon="@mipmap/ordernotelogo"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ordernotelogo"
+        android:roundIcon="@mipmap/ordernotelogo"
         android:supportsRtl="true"
         android:theme="@style/Theme.OrderNote"
         tools:targetApi="31">
@@ -26,6 +26,10 @@
             android:exported="false">
 
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 

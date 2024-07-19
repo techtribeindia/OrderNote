@@ -1,21 +1,21 @@
 package com.project.ordernote.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.View;
 
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.firebase.FirebaseApp;
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.ActivityDashboardBinding;
-import com.project.ordernote.ui.fragment.AddOrdersFragment;
+import com.project.ordernote.ui.fragment.CreateOrderFragment;
 import com.project.ordernote.ui.fragment.BuyersFragment;
 import com.project.ordernote.ui.fragment.OrdersListFragment;
 import com.project.ordernote.ui.fragment.ReportsFragment;
@@ -27,7 +27,7 @@ public class Dashboard extends AppCompatActivity {
      private Dashboard_ViewModel dashboardViewModel;
 
 
-    @SuppressLint("NonConstantResourceId")
+    @SuppressLint({"NonConstantResourceId", "UseCompatLoadingForColorStateLists"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +59,7 @@ public class Dashboard extends AppCompatActivity {
 
        */
 
+
          dashboardViewModel = new ViewModelProvider(this).get(Dashboard_ViewModel.class);
         if (savedInstanceState == null) {
             activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.orderslist);
@@ -82,6 +83,11 @@ public class Dashboard extends AppCompatActivity {
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
             }
             dashboardViewModel.setSelectedFragment(selectedFragment);
+          //  activityDashboardBinding.addOrderFabButton.setBackgroundTintList(getResources().getColorStateList(R.color.darkgrey));
+            Drawable drawable = activityDashboardBinding.addOrderFabButton.getDrawable();
+            Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
+            DrawableCompat.setTint(wrappedDrawable, ContextCompat.getColor(Dashboard.this, R.color.darkgrey));
+
             return true;
         });
 
@@ -101,12 +107,18 @@ public class Dashboard extends AppCompatActivity {
            // orderlist.clearAnimation();
            // orderlist.clearFocus()
             //bY aRUN
+           // activityDashboardBinding.addOrderFabButton.setBackgroundTintList(ContextCompat.getColorStateList(Dashboard.this, R.color.red));
+            Drawable drawable = activityDashboardBinding.addOrderFabButton.getDrawable();
+            Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
+            DrawableCompat.setTint(wrappedDrawable, ContextCompat.getColor(Dashboard.this, R.color.red));
+
+
             for (int i = 0; i < activityDashboardBinding.bottomNavigationView.getMenu().size(); i++) {
                 activityDashboardBinding.bottomNavigationView.getMenu().getItem(i).setChecked(false);
             }
-            activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.addOrders);
+             activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.addOrders);
 
-            dashboardViewModel.setSelectedFragment(new AddOrdersFragment());
+            dashboardViewModel.setSelectedFragment(new CreateOrderFragment());
 
            // activityDashboardBinding.bottomNavigationView.clearChildFocus(activityDashboardBinding.bottomNavigationView.getFocusedChild());
           //  activityDashboardBinding.bottomNavigationView.setActivated(false);

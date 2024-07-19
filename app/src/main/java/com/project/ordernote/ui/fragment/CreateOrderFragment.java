@@ -11,18 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.project.ordernote.R;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.model.OrderItemDetails_Model;
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.databinding.FragmentAddOrdersBinding;
-import com.project.ordernote.viewmodel.Dashboard_ViewModel;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddOrdersFragment extends Fragment {
+public class CreateOrderFragment extends Fragment {
     private OrderDetails_ViewModel ordersViewModel;
     private FragmentAddOrdersBinding binding;
 
@@ -44,7 +42,7 @@ public class AddOrdersFragment extends Fragment {
         }
         //BY ARUNNN
         // Example of adding an order
-        binding.btnAddOrder.setOnClickListener(v -> {
+        binding.buyerdetailsLabelTextview.setOnClickListener(v -> {
             List<OrderItemDetails_Model> cartItems = getCartItems(); // Implement this method
             double discountPercentage = getDiscountValue(); // Implement this method
 

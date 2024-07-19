@@ -14,4 +14,38 @@
         <!-- Customize your theme here. -->
     </style>
 
+
+
+
+    <!-- Define a   text style -->
+    <style name="ScreenTitleTextStyle">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item> <!-- Example: red color -->
+    </style>
+
+    <style name="SubTitleTextStyle1">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item> <!-- Example: red color -->
+    </style>
+    <style name="SubTitleGreyTextStyle1">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/darkgrey</item> <!-- Example: red color -->
+    </style>
+
+    <style name="TextStyle1">
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item> <!-- Example: red color -->
+    </style>
+
+
+    <style name="WhiteTextStyle">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/white</item> <!-- Example: red color -->
+    </style>
+
 </resources>
