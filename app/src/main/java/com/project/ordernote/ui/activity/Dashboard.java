@@ -61,9 +61,7 @@ public class Dashboard extends AppCompatActivity {
 
 
          dashboardViewModel = new ViewModelProvider(this).get(Dashboard_ViewModel.class);
-        if (savedInstanceState == null) {
-            activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.orderslist);
-        }
+
         activityDashboardBinding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
             Fragment selectedFragment = new Fragment();
@@ -90,7 +88,9 @@ public class Dashboard extends AppCompatActivity {
 
             return true;
         });
-
+        if (savedInstanceState == null) {
+            activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.orderslist);
+        }
         dashboardViewModel.getSelectedFragment().observe(this, fragment -> {
             if (fragment != null) {
                 getSupportFragmentManager().beginTransaction()
