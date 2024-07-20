@@ -1,8 +1,15 @@
 package com.project.ordernote.data.remote;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import com.google.firebase.firestore.QuerySnapshot;
+
+import com.project.ordernote.data.model.MenuItems_Model;
+
 import com.project.ordernote.data.model.OrderDetails_Model;
 
 import java.util.ArrayList;
@@ -104,6 +111,28 @@ public class FirestoreService {
                 .add(order)
                 .addOnSuccessListener(documentReference -> callback.onSuccess(null))
                 .addOnFailureListener(callback::onFailure);
+    }
+
+    public void fetchMenuItemsUsingVendorkey(String vendorkey, FirestoreCallback<List<MenuItems_Model>> callback) {
+
+
+        db.collection("MenuItems")
+                .whereEqualTo("vendorkey", vendorkey)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<MenuItems_Model> menuList = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            MenuItems_Model menu = document.toObject(MenuItems_Model.class);
+                            Log.d("fetchmenuUsingvendorkey", menu.getItemname(), new Throwable("Errorrr"));
+                            menuList.add(menu);
+                        }
+                        callback.onSuccess(menuList);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+
     }
 
     public interface FirestoreCallback<T> {

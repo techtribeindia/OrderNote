@@ -16,7 +16,9 @@
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="grey">#f5f0f0</color>
+    <color name="reddishgrey">#f5f0f0</color>
     <color name="darkgrey">#7688a2</color>
+    <color name="grey">#F6F6F6</color>
+    <color name="progressbar_grey">#EFEFFF</color>
 
 </resources>
