@@ -40,6 +40,7 @@ android {
 
 dependencies {
     implementation ("com.github.bumptech.glide:glide:4.15.1")
+    implementation("androidx.activity:activity:1.8.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
     implementation ("androidx.core:core:1.9.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
