@@ -8,6 +8,8 @@
     <color name="lavender">#d43122</color>
     <color name="transparent">#00000000</color>
 
+
+    <color name="transparentgrey">#EFEFFF</color>
     <color name="colorAccent">#2196F3</color>
     <color name="green">#2C9F1C</color>
     <color name="backgroundgreen">#c4f4be</color>
@@ -19,6 +21,6 @@
     <color name="reddishgrey">#f5f0f0</color>
     <color name="darkgrey">#7688a2</color>
     <color name="grey">#F6F6F6</color>
-    <color name="progressbar_grey">#EFEFFF</color>
+    <color name="progressbar_grey">#4D4D4D</color>
 
 </resources>
