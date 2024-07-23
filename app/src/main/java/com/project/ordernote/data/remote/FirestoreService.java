@@ -7,6 +7,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.firebase.firestore.QuerySnapshot;
 
+import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 
 import com.project.ordernote.data.model.OrderDetails_Model;
@@ -21,6 +22,29 @@ public class FirestoreService {
 
     public FirestoreService() {
         db = FirebaseFirestore.getInstance();
+    }
+
+    public void fetchBuyersListUsingVendorkey(String vendorKey, FirestoreCallback<List<Buyers_Model>> callback) {
+
+        db.collection("BuyerDetails")
+                .whereEqualTo("vendorkey", vendorKey)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Buyers_Model> menuList = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Buyers_Model buyer = document.toObject(Buyers_Model.class);
+                            Log.d("fetchBuyerlistUsingvendorkey", buyer.getName()
+                            );
+                            menuList.add(buyer);
+                        }
+                        callback.onSuccess(menuList);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+
+
     }
 
     public interface LoginCallback {
@@ -137,7 +161,7 @@ public class FirestoreService {
                         List<MenuItems_Model> menuList = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             MenuItems_Model menu = document.toObject(MenuItems_Model.class);
-                            Log.d("fetchmenuUsingvendorkey", menu.getItemname(), new Throwable("Errorrr"));
+                            Log.d("fetchmenuUsingvendorkey", menu.getItemname());
                             menuList.add(menu);
                         }
                         callback.onSuccess(menuList);
