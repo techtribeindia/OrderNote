@@ -108,7 +108,7 @@ public class CreateOrderFragment extends Fragment {
             List<OrderItemDetails_Model> cartItems = getCartItems(); // Implement this method
             double discountPercentage = getDiscountValue(); // Implement this method
 
-            OrderDetails_Model order = new OrderDetails_Model(/* Initialize order details */);
+            OrderDetails_Model order = new OrderDetails_Model();
 
             ordersViewModel.addOrder(order, cartItems, discountPercentage, new FirestoreService.FirestoreCallback<Void>() {
                 @Override

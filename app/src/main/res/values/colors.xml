@@ -21,4 +21,7 @@
     <color name="grey">#F6F6F6</color>
     <color name="progressbar_grey">#EFEFFF</color>
 
+    <color name="active_button_color">#FF0000</color> <!-- Example active color -->
+    <color name="inactive_button_color">#CCCCCC</color> <!-- Example inactive color -->
+
 </resources>

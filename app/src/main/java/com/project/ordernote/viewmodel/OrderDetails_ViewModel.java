@@ -13,6 +13,7 @@ import com.project.ordernote.data.repository.OrderDetails_Repository;
 import com.project.ordernote.utils.calculations.OrderValueCalculator;
 
 import java.util.List;
+import java.util.Map;
 
 
 public class OrderDetails_ViewModel extends AndroidViewModel {
@@ -27,7 +28,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         return repository.getOrdersByDate(startDate, endDate);
     }
 
-    public LiveData<List<OrderDetails_Model>> getOrdersByStatus(String status) {
+    public LiveData<List<Map<String, Object>>> getOrdersByStatus(String status) {
         return repository.getOrdersByStatus(status);
     }
 
