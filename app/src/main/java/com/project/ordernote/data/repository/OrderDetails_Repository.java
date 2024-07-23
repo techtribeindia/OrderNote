@@ -3,10 +3,13 @@ package com.project.ordernote.data.repository;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.remote.FirestoreService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class OrderDetails_Repository {
 
@@ -32,23 +35,22 @@ public class OrderDetails_Repository {
         return ordersLiveData;
     }
 
-    public LiveData<List<OrderDetails_Model>> getOrdersByStatus(String status) {
-        MutableLiveData<List<OrderDetails_Model>> ordersLiveData = new MutableLiveData<>();
-        firestoreService.fetchOrdersByStatus(status, new FirestoreService.FirestoreCallback<List<OrderDetails_Model>>() {
-            @Override
-            public void onSuccess(List<OrderDetails_Model> result) {
-                ordersLiveData.postValue(result);
+    public LiveData<List<Map<String, Object>>> getOrdersByStatus(String status) {
+        MutableLiveData<List<Map<String, Object>>> ordersWithStatusResult = new MutableLiveData<>();
+        firestoreService.fetchOrdersByStatus(status, orderWithStatusDocument -> {
+            List<Map<String, Object>> ordersData = new ArrayList<>();
+            for (DocumentSnapshot document : orderWithStatusDocument.getDocuments()) {
+                ordersData.add(document.getData());
             }
-
-            @Override
-            public void onFailure(Exception e) {
-                // Handle failure
-            }
+            ordersWithStatusResult.setValue(ordersData);
         });
-        return ordersLiveData;
+        return ordersWithStatusResult;
     }
 
     public void addOrder(OrderDetails_Model order, FirestoreService.FirestoreCallback<Void> callback) {
         firestoreService.addOrder(order, callback);
     }
+
+
+
 }

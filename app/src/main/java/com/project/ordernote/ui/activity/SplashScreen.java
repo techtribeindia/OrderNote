@@ -19,8 +19,11 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splashscreen);
 
-        // Initialize SessionManager
+        Intent intent;
         sessionManager = new SessionManager(this);
+        if (sessionManager.isLoggedIn()) {
+
+        }
 
         new Handler().postDelayed(new Runnable() {
             @Override
