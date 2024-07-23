@@ -3,6 +3,33 @@ package com.project.ordernote.data.model;
 import org.json.JSONArray;
 
 public class OrderDetails_Model {
+
+    private String OrderId;
+    private String OrderStatus;
+
+    public OrderDetails_Model() {
+    }
+
+    public OrderDetails_Model(String orderStatus, String orderId) {
+        OrderStatus = orderStatus;
+        OrderId = orderId;
+    }
+
+    public String getOrderId() {
+        return OrderId;
+    }
+
+    public void setOrderId(String orderId) {
+        OrderId = orderId;
+    }
+
+    public String getOrderStatus() {
+        return OrderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        OrderStatus = orderStatus;
+
     String orderid = "";
     String buyeraddress ="";
     String buyergstin = "";
@@ -120,6 +147,7 @@ public class OrderDetails_Model {
 
     public void setVendorname(String vendorname) {
         this.vendorname = vendorname;
+
     }
 }
 
