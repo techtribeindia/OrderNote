@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    tools:context=".ui.fragment.BuyerSelectionDialogFragment">
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rounded_dialog_background"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+
+        <TextView
+            style="@style/RedDialogTitleTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="1dp"
+            android:gravity="center"
+            android:text="@string/buyer_details"
+
+            />
+
+        <TextView
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="25dp"
+            android:text="@string/name" />
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextViewBuyer"
+            style="@style/BlackEditTextStyleSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/rectangle_greybackground"
+            android:gravity="center_vertical"
+            android:hint="@string/enter_buyer_name_amp_choose_a_buyer" />
+
+
+        <TextView
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/mobile_no" />
+
+
+        <TextView
+            android:id="@+id/buyerMobileNoTextview"
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/rectangle_whitebackground_blackborder"
+            android:elevation="5dp"
+            android:gravity="center_vertical"
+            android:hint="@string/sample_phoneno" />
+
+        <TextView
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="15dp"
+            android:hint="@string/address" />
+
+        <TextView
+            android:id="@+id/buyerAddressTextview"
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/rectangle_whitebackground_blackborder"
+            android:elevation="5dp"
+            android:gravity="center_vertical"
+            android:hint="@string/address" />
+
+        <Button
+            android:id="@+id/selectBuyer_button"
+            style="@style/WhiteTextStyleBold"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rectangle_redbackground"
+            android:text="@string/select_buyer" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/closeIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+         android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        android:padding="8dp"
+        android:layout_marginEnd="25dp"
+         android:src="@mipmap/closewithcircle"/>
+
+
+</RelativeLayout>
