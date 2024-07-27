@@ -125,6 +125,96 @@ public class CreateOrderFragment extends Fragment {
 
 
 
+        return binding.getRoot();
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        try {
+            try {
+                ordersViewModel = new ViewModelProvider(this).get(OrderDetails_ViewModel.class);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+               // buyersViewModel = new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication()).create(Buyers_ViewModel.class);
+                // Initialize ViewModels
+                buyersViewModel = new ViewModelProvider(requireActivity()).get(Buyers_ViewModel.class);
+
+                //     buyersViewModel = new ViewModelProvider(this).get(Buyers_ViewModel.class);
+                List<Buyers_Model> buyersList = LocalDataManager.getInstance().getBuyers();
+
+                if(buyersList.size() > 0){
+
+                    buyersViewModel.setBuyersListinMutableLiveData(buyersList);
+                }
+                else{
+                    buyersViewModel.getBuyersListFromRepository("vendor_1");
+                }
+
+                buyersViewModel.setSelectedBuyerLiveData(new Buyers_Model());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                menuItemsViewModel = new ViewModelProvider(requireActivity()).get(MenuItems_ViewModel.class);
+
+
+
+                List<MenuItems_Model> menuItemsList = LocalDataManager.getInstance().getMenuItem();
+
+                if(menuItemsList.size() > 0){
+                    menuItemsViewModel.setMenuListinMutableLiveData(menuItemsList);
+                }
+                else{
+                    menuItemsViewModel.fetchMenuItemsByVendorKey("vendor_1");
+                }
+
+
+               // menuItemsViewModel = new ViewModelProvider(this).get(MenuItems_ViewModel.class);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e ){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+        binding.buyerselectionCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openBuyerSelectionDialog();
+            }
+        });
+
+
+        binding.addItemCardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuitemSelectionDialog();
+            }
+        });
+
+
+
+
         menuItemsViewModel.getMenuItemsFromViewModel().observe(getViewLifecycleOwner(), resource -> {
             if (resource != null) {
                 switch (resource.status) {
