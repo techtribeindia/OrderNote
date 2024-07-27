@@ -11,7 +11,11 @@ import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.ActivityDashboardBinding;
@@ -37,6 +41,20 @@ public class Dashboard extends AppCompatActivity {
 
         activityDashboardBinding = ActivityDashboardBinding.inflate(getLayoutInflater());
         setContentView(activityDashboardBinding.getRoot());
+
+
+        // Change status bar color programmatically if needed
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.reddishgrey));
+        }
+
+        // Optional: Make status bar icons dark if you have a light status bar color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decor = getWindow().getDecorView();
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
       //  replaceFragment(new OrdersListFragment());
       /*  activityDashboardBinding.bottomNavigationView.setBackground(null);
 
@@ -102,28 +120,23 @@ public class Dashboard extends AppCompatActivity {
 
 
         activityDashboardBinding.addOrderFabButton.setOnClickListener(v -> {
-           //// BottomNavigationItemView orderlist =activityDashboardBinding.bottomNavigationView. findViewById( R.id.orderslist);
-           // orderlist.setSelected(false);
-           // orderlist.clearAnimation();
-           // orderlist.clearFocus()
-            //bY aRUN
-           // activityDashboardBinding.addOrderFabButton.setBackgroundTintList(ContextCompat.getColorStateList(Dashboard.this, R.color.red));
-            Drawable drawable = activityDashboardBinding.addOrderFabButton.getDrawable();
-            Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
-            DrawableCompat.setTint(wrappedDrawable, ContextCompat.getColor(Dashboard.this, R.color.red));
+            try {
+                Drawable drawable = activityDashboardBinding.addOrderFabButton.getDrawable();
+                Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
+                DrawableCompat.setTint(wrappedDrawable, ContextCompat.getColor(Dashboard.this, R.color.red));
 
 
-            for (int i = 0; i < activityDashboardBinding.bottomNavigationView.getMenu().size(); i++) {
-                activityDashboardBinding.bottomNavigationView.getMenu().getItem(i).setChecked(false);
+                for (int i = 0; i < activityDashboardBinding.bottomNavigationView.getMenu().size(); i++) {
+                    activityDashboardBinding.bottomNavigationView.getMenu().getItem(i).setChecked(false);
+                }
+                activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.addOrders);
+
+                dashboardViewModel.setSelectedFragment(new CreateOrderFragment());
+
             }
-             activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.addOrders);
-
-            dashboardViewModel.setSelectedFragment(new CreateOrderFragment());
-
-           // activityDashboardBinding.bottomNavigationView.clearChildFocus(activityDashboardBinding.bottomNavigationView.getFocusedChild());
-          //  activityDashboardBinding.bottomNavigationView.setActivated(false);
-          //  activityDashboardBinding.bottomNavigationView.clearFocus();
-            //activityDashboardBinding.bottomNavigationView.setSelected(false);
+            catch (Exception e){
+                e.printStackTrace();
+            }
         });
 
         // Set the default fragment
