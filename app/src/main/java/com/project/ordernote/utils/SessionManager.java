@@ -11,6 +11,7 @@ public class SessionManager {
     private static final String KEY_NAME = "name";
     private static final String KEY_MOBILE_NUMBER = "mobileno";
     private static final String KEY_ROLE = "role";
+
     private static final String VENDORKEY = "vendorkey";
     private static final String VENDORNAME = "vendorname";
 
@@ -39,8 +40,10 @@ public class SessionManager {
         editor.putString(KEY_NAME, userDocument.getString(KEY_NAME));
         editor.putString(KEY_MOBILE_NUMBER, userDocument.getString(KEY_MOBILE_NUMBER));
         editor.putString(KEY_ROLE, userDocument.getString(KEY_ROLE));
+
         editor.putString(VENDORKEY, userDocument.getString(VENDORKEY));
         editor.putString(VENDORNAME, userDocument.getString(VENDORNAME));
+
         // Add other fields as needed
         editor.apply();
     }

@@ -5,9 +5,16 @@ public class Buyers_Model {
     String name ="";
     String gstin ="";
     String mobileno ="";
-    String address ="";
+    String address1 ="";
+    String address2 ="";
     String pincode ="";
+    public String getAddress2() {
+        return address2;
+    }
 
+    public void setAddress2(String address2) {
+        this.address2 = address2;
+    }
 
     public String getName() {
         return name;
@@ -33,12 +40,13 @@ public class Buyers_Model {
         this.mobileno = mobileno;
     }
 
-    public String getAddress() {
-        return address;
+    public String getAddress1() {
+        return address1;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddress1(String address1) {
+        this.address1 = address1;
+
     }
 
     public String getPincode() {

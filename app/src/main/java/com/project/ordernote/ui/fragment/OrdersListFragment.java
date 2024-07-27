@@ -1,6 +1,7 @@
 package com.project.ordernote.ui.fragment;
 
 import android.os.Bundle;
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -30,9 +31,11 @@ public class OrdersListFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     public static OrdersListFragment newInstance(String param1, String param2) {
         OrdersListFragment fragment = new OrdersListFragment();
         Bundle args = new Bundle();
+
         fragment.setArguments(args);
         return fragment;
     }

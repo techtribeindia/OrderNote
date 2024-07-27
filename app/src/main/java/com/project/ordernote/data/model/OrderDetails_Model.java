@@ -1,5 +1,6 @@
 package com.project.ordernote.data.model;
 
+
 import com.google.firebase.Timestamp;
 
 import org.json.JSONArray;
@@ -12,18 +13,22 @@ public class OrderDetails_Model {
 
     String orderid = "";
     String buyername ="";
+
     String buyeraddress ="";
     String buyergstin = "";
     String buyerkey = "";
     double discount =0;
-    List<Map<String, Object>> itemdetails;
-    Timestamp orderplaceddate;
+
+    JSONArray itemDetailsJsonArray = new JSONArray();
+    String orderplaceddate = "";
+
     double price = 0 ;
     String status = "";
     String tokenno = "";
     double totalprice =0;
     String vendorkey = "";
     String vendorname ="";
+
     double totalqty = 0;
     public OrderDetails_Model()
     {
@@ -103,19 +108,21 @@ public class OrderDetails_Model {
         this.discount = discount;
     }
 
-    public List<Map<String, Object>> getItemdetails() {
-        return itemdetails;
+
+    public JSONArray getItemDetailsJsonArray() {
+        return itemDetailsJsonArray;
     }
 
-    public void setItemdetails(List<Map<String, Object>> itemdetails) {
-        this.itemdetails = itemdetails;
+    public void setItemDetailsJsonArray(JSONArray itemDetailsJsonArray) {
+        this.itemDetailsJsonArray = itemDetailsJsonArray;
     }
 
-    public Timestamp getOrderplaceddate() {
+    public String getOrderplaceddate() {
         return orderplaceddate;
     }
 
-    public void setOrderplaceddate(Timestamp orderplaceddate) {
+    public void setOrderplaceddate(String orderplaceddate) {
+
         this.orderplaceddate = orderplaceddate;
     }
 
@@ -146,7 +153,6 @@ public class OrderDetails_Model {
     public double getTotalprice() {
         return totalprice;
     }
-
 
     public void setTotalprice(double totalprice) {
         this.totalprice = totalprice;

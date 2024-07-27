@@ -1,6 +1,7 @@
 package com.project.ordernote.viewmodel;
 
 import android.app.Application;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.project.ordernote.data.model.MenuItems_Model;
+
+import com.project.ordernote.data.model.Buyers_Model;
+
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.model.OrderItemDetails_Model;
 import com.project.ordernote.data.remote.FirestoreService;
@@ -17,12 +21,14 @@ import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.utils.calculations.OrderValueCalculator;
 
 import java.util.List;
+
 import java.util.Map;
 import java.util.Objects;
 
 
 public class OrderDetails_ViewModel extends AndroidViewModel {
     private final OrderDetails_Repository repository;
+
     private MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> orderDetailsLiveData;
 
     public OrderDetails_ViewModel(@NonNull Application application) {

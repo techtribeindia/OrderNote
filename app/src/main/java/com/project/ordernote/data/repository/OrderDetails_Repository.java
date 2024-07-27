@@ -1,5 +1,6 @@
 package com.project.ordernote.data.repository;
 
+
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -39,6 +40,7 @@ public class OrderDetails_Repository {
         return ordersLiveData;
     }
 
+
     public MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersByStatus(String status) {
         MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersLiveData = new MutableLiveData<>();
         ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
@@ -77,12 +79,11 @@ public class OrderDetails_Repository {
             ordersWithStatusResult.setValue(ordersData);
         });
         return ordersWithStatusResult;
+
     }
 
     public void addOrder(OrderDetails_Model order, FirestoreService.FirestoreCallback<Void> callback) {
         firestoreService.addOrder(order, callback);
     }
-
-
 
 }

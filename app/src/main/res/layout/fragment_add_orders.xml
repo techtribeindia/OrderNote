@@ -10,12 +10,17 @@
 
     <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+
+    android:layout_height="40dp"
+
     android:id="@+id/titleBarLayout"
         android:layout_margin="10dp"
     android:orientation="horizontal">
     <RelativeLayout
         android:layout_width="40dp"
+
+        android:visibility="gone"
+
         android:layout_height="40dp">
         <ImageView
             android:layout_width="20dp"
@@ -40,86 +45,88 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:scrollbars="none"
-        android:layout_margin="10dp"
+
+        android:layout_height="match_parent"
 
         android:layout_below="@+id/titleBarLayout"
-          android:layout_height="match_parent">
+        android:layout_marginStart="10dp"
+         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:padding="1dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="1dp">
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_marginTop="5dp"
-                android:visibility="gone"
                 android:id="@+id/orderDetails_Relativelayout"
-                android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:visibility="gone">
+
                 <TextView
                     android:id="@+id/orderno_label_textview"
+                    style="@style/SubTitleTextStyle1"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:gravity="center"
                     android:layout_centerVertical="true"
-                    android:text="Order No: "
-                    style="@style/SubTitleTextStyle1"
-                    />
+                    android:gravity="center"
+                    android:text="Order No: " />
 
 
                 <TextView
                     android:id="@+id/orderno_value_textview"
+
+                    style="@style/BlackTextStyleNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginTop="2dp"
                     android:layout_marginStart="5dp"
-                    android:text="# 0001"
-                    android:gravity="center"
-                    style="@style/BlackTextStyleNormal"
+                    android:layout_marginTop="2dp"
                     android:layout_toEndOf="@+id/orderno_label_textview"
-                    />
+                    android:gravity="center"
+                    android:text="# 0001" />
 
                 <TextView
                     android:id="@+id/date_value_textview"
+                    style="@style/BlackTextStyleNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="5dp"
-                    android:text="17-07-2024"
-                    android:gravity="center"
-                    style="@style/BlackTextStyleNormal"
                     android:layout_alignParentEnd="true"
-                    />
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="17-07-2024" />
             </RelativeLayout>
-
 
 
             <TextView
                 android:id="@+id/orderInfo_label_textview"
+                style="@style/SubTitleGreyTextStyle1"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:gravity="center"
-                android:layout_marginBottom="3dp"
-                android:layout_marginStart="5dp"
                 android:layout_centerVertical="true"
-                android:text="Order Info "
-                style="@style/SubTitleGreyTextStyle1"
-                />
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:text="Order Info " />
+
 
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                app:cardCornerRadius="10dp"
                 android:layout_margin="5dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:visibility="visible"
                 android:layout_marginBottom="10dp"
-                app:cardElevation="10dp"
-                >
+                android:visibility="visible"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp">
+
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -128,11 +135,11 @@
                         android:id="@+id/circleOrderImage"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        app:cardCornerRadius="25dp"
-                        android:layout_marginBottom="25dp"
-                        android:layout_marginStart="10dp"
                         android:layout_centerVertical="true"
-                        app:cardBackgroundColor="@color/backgroundred">
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="25dp"
+                        app:cardBackgroundColor="@color/backgroundred"
+                        app:cardCornerRadius="25dp">
 
 
                         <ImageView
@@ -140,42 +147,45 @@
                             android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:background="@color/backgroundred"
-                            android:src="@mipmap/ordericonred"
-                            android:scaleType="centerCrop"/>
+
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ordericonred" />
+
 
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/orderno_labelTexview"
+
+                        style="@style/SubTitleTextStyle1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
                         android:layout_marginTop="15dp"
                         android:layout_toEndOf="@+id/circleOrderImage"
-                        android:layout_marginStart="15dp"
-                        android:text="Order No : "
-                        style="@style/SubTitleTextStyle1"/>
+                        android:text="Order No : " />
 
 
                     <TextView
                         android:id="@+id/orderno_ValueTexview"
+
+                        style="@style/SubTitleTextStyle1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
                         android:layout_marginTop="15dp"
                         android:layout_toEndOf="@+id/orderno_labelTexview"
-                        android:layout_marginStart="15dp"
-                        android:text=" #0001 "
-                        style="@style/SubTitleTextStyle1"/>
+                        android:text=" #0001 " />
 
 
                     <TextView
+                        style="@style/BlackTextStyleNormal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
-                        android:layout_toEndOf="@+id/circleOrderImage"
                         android:layout_marginStart="15dp"
-                        android:text="Sun, 21 Jul 2024"
-                        style="@style/BlackTextStyleNormal"/>
-
+                        android:layout_marginTop="45dp"
+                        android:layout_toEndOf="@+id/circleOrderImage"
+                        android:text="Sun, 21 Jul 2024" />
 
 
                 </RelativeLayout>
@@ -185,30 +195,33 @@
 
             <TextView
                 android:id="@+id/buyerdetails_label_textview"
+
+                style="@style/SubTitleGreyTextStyle1"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:layout_marginBottom="3dp"
-                android:layout_marginStart="5dp"
                 android:layout_centerVertical="true"
-                android:text="Buyer Info "
-                style="@style/SubTitleGreyTextStyle1"
-                />
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:text="Buyer Info " />
+
 
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
-                app:cardCornerRadius="10dp"
+
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="5dp"
                 android:visibility="visible"
+                app:cardCornerRadius="10dp"
+                android:id="@+id/buyerselectionCardView"
+                app:cardElevation="5dp">
 
-                app:cardElevation="5dp"
-                >
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -217,11 +230,12 @@
                         android:id="@+id/circleBuyerImage"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        app:cardCornerRadius="25dp"
-                        android:layout_marginBottom="25dp"
-                        android:layout_marginStart="10dp"
+
                         android:layout_centerVertical="true"
-                        app:cardBackgroundColor="@color/backgroundred">
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="25dp"
+                        app:cardBackgroundColor="@color/backgroundred"
+                        app:cardCornerRadius="25dp">
 
 
                         <ImageView
@@ -229,41 +243,50 @@
                             android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:background="@color/backgroundred"
-                            android:src="@mipmap/buyersiconred"
-                            android:scaleType="centerCrop"/>
+
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/buyersiconred" />
+
 
                     </androidx.cardview.widget.CardView>
 
                     <TextView
+
+                        android:id="@+id/selectedBuyerNameTextview"
+                        style="@style/SubTitleTextStyle1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
                         android:layout_marginTop="10dp"
                         android:layout_toEndOf="@+id/circleBuyerImage"
-                        android:layout_marginStart="15dp"
-                        android:text="Select Buyer name"
-                        style="@style/SubTitleTextStyle1"/>
+                        android:text="Select Buyer name" />
 
 
                     <TextView
+                        android:id="@+id/selecedBuyerDetailsTextview"
+                        style="@style/BlackTextStyleNormal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="36dp"
+                        android:lineHeight="20dp"
                         android:layout_toEndOf="@+id/circleBuyerImage"
-                        android:layout_marginStart="15dp"
-                        android:text="xx , xxxxx  xxx xxxx , \nxxxx - xxxx . \nPh : - +91798xxxxxxx"
-                        style="@style/BlackTextStyleNormal"/>
+                        android:text="xx , xxxxx  xxx xxxx , \nxxxx - xxxx . \nPh : - +91798xxxxxxx" />
 
                     <RelativeLayout
                         android:layout_width="40dp"
-                        android:layout_centerVertical="true"
+                        android:layout_height="40dp"
                         android:layout_alignParentEnd="true"
-                        android:layout_height="40dp">
+                        android:layout_centerVertical="true">
+
 
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:alpha=".7"
+
                             android:layout_centerInParent="true"
+                            android:alpha=".7"
+
                             android:src="@mipmap/right_arrow" />
                     </RelativeLayout>
 
@@ -276,229 +299,253 @@
 
             <TextView
                 android:id="@+id/itemDetails_label_textview"
+                style="@style/SubTitleGreyTextStyle1"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="3dp"
                 android:layout_centerVertical="true"
-                android:text="Item Details "
-                style="@style/SubTitleGreyTextStyle1"
-                />
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:text="Item Details " />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:visibility="visible"
-                 android:layout_height="match_parent">
+
+                android:layout_height="match_parent"
+                android:visibility="visible">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="110dp"
-                    app:cardCornerRadius="10dp"
-                    android:layout_marginTop="5dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     android:id="@+id/itemListViewCardview"
-                    app:cardElevation="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
-                    >
-
-                    <ListView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:scrollbars="none"
-                        android:id="@+id/itemDetails_listview"/>
-
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/addItem_cardview"
-                    android:translationZ="9dp"
-                    android:layout_width="130dp"
-                    android:layout_height="40dp"
-                    app:cardCornerRadius="30dp"
-
-                    android:layout_marginTop="-15dp"
-                    app:cardBackgroundColor="@color/red"
-                    app:layout_constraintTop_toBottomOf="@id/itemListViewCardview"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    >
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ListView
+                        android:id="@+id/itemDetails_listview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:scrollbars="none" />
+
+                    <TextView
+                        style="@style/SubTitleTextStyle1"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="10dp"
+                        android:gravity="center"
+                        android:text="Click the red button to add item in the cart "
+                        android:visibility="visible" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/addItem_cardview"
+                    android:layout_width="130dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="-15dp"
+                    android:translationZ="9dp"
+
+                    app:cardBackgroundColor="@color/red"
+                    app:cardCornerRadius="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/itemListViewCardview">
 
 
 
                     <RelativeLayout
                         android:layout_width="match_parent"
+
+                        android:layout_height="46dp"
                         android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:layout_height="match_parent">
+                         android:paddingEnd="10dp"
+                         >
 
                         <ImageView
                             android:id="@+id/addItem_imageView"
                             android:layout_width="26dp"
-                            android:layout_centerVertical="true"
+
                             android:layout_height="26dp"
+                            android:layout_centerVertical="true"
+
                             android:src="@drawable/add_circle_white" />
 
 
                         <TextView
+
+                            style="@style/WhiteTextStyleBold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Add Item"
-                            android:layout_centerVertical="true"
+                            android:layout_centerInParent="true"
                             android:layout_marginStart="7dp"
-                            android:layout_toEndOf="@+id/addItem_imageView"
-                            style="@style/WhiteTextStyleBold"
-                            />
+                            android:layout_marginBottom="10dp"
+                               android:layout_toEndOf="@+id/addItem_imageView"
+                            android:text="Add Item " />
+
 
                     </RelativeLayout>
 
                 </androidx.cardview.widget.CardView>
+
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/billValueCardview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:cardCornerRadius="10dp"
-                     android:layout_marginTop="-15dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginTop="-15dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
-                     app:layout_constraintTop_toBottomOf="@+id/addItem_cardview"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardCornerRadius="10dp"
                     app:cardElevation="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:id="@+id/billValueCardview"
+                    app:layout_constraintTop_toBottomOf="@+id/addItem_cardview"
 
                     >
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
                             android:orientation="horizontal">
+
+
                             <TextView
+                                style="@style/GreyTextStyleSemiBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Subtotal"
-                                android:layout_weight="1"
+
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="15dp"
                                 android:layout_marginTop="15dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
-                                style="@style/GreyTextStyleSemiBold"
-                                />
+
+                                android:layout_weight="1"
+                                android:text="Subtotal" />
+
                             <TextView
+                                style="@style/BlackTextStyleNormal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="₹ 25,000.00"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_toEndOf="@+id/addItem_imageView"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:layout_marginEnd="10dp"
-                                android:layout_centerVertical="true"
-                                android:layout_marginStart="15dp"
-                                android:layout_marginTop="15dp"
-                                android:layout_toEndOf="@+id/addItem_imageView"
-                                style="@style/BlackTextStyleNormal"
-                                />
-
+                                android:text="₹ 25,000.00" />
 
 
                         </LinearLayout>
+
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
                             android:orientation="horizontal">
+
+
                             <TextView
+                                style="@style/GreyTextStyleSemiBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Discount"
+
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="15dp"
                                 android:layout_marginTop="15dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
-                                style="@style/GreyTextStyleSemiBold"
-                                />
+
+                                android:text="Discount" />
 
                             <TextView
+                                style="@style/BlackTextStyleNormal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=" ( 10% )"
-                                android:layout_weight="1"
-                                android:gravity="left"
-                                android:layout_marginEnd="10dp"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="5dp"
                                 android:layout_marginTop="15dp"
+                                android:layout_marginEnd="10dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
-                                style="@style/BlackTextStyleNormal"
-                                />
+                                android:layout_weight="1"
+                                android:gravity="left"
+                                android:text=" ( 10% )" />
 
                             <TextView
+                                style="@style/BlackTextStyleNormal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="- ₹ 2,000.00"
-                                android:layout_weight="1"
-                                android:gravity="right"
-                                android:layout_marginEnd="10dp"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="15dp"
                                 android:layout_marginTop="15dp"
+                                android:layout_marginEnd="10dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
-                                style="@style/BlackTextStyleNormal"
-                                />
-
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="- ₹ 2,000.00" />
 
 
                         </LinearLayout>
+
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
                             android:orientation="horizontal">
+
+
                             <TextView
+                                style="@style/GreyTextStyleSemiBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Tax"
+
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="15dp"
                                 android:layout_marginTop="15dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
-                                style="@style/GreyTextStyleSemiBold"
-                                />
+
+                                android:text="Tax" />
 
                             <TextView
+                                style="@style/BlackTextStyleNormal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=" ( 10% )"
-                                android:layout_weight="1"
-                                android:gravity="left"
-                                android:layout_marginEnd="10dp"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="5dp"
                                 android:layout_marginTop="15dp"
+                                android:layout_marginEnd="10dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
-                                style="@style/BlackTextStyleNormal"
-                                />
+                                android:layout_weight="1"
+                                android:gravity="left"
+                                android:text=" ( 10% )" />
 
                             <TextView
+                                style="@style/BlackTextStyleNormal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="₹ 250.00"
-                                android:layout_weight="1"
-                                android:gravity="right"
-                                android:layout_marginEnd="10dp"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="15dp"
                                 android:layout_marginTop="15dp"
+                                android:layout_marginEnd="10dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
-                                style="@style/BlackTextStyleNormal"
-                                />
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="₹ 250.00" />
 
 
 
@@ -507,29 +554,30 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
+
+                            android:layout_marginTop="15dp"
                             android:background="@color/backgroundred"
                             android:orientation="horizontal">
+
                             <TextView
+                                style="@style/BlackTextStyleNormal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total"
-                                android:layout_weight="1"
                                 android:layout_gravity="center"
                                 android:layout_marginStart="15dp"
-                                style="@style/BlackTextStyleNormal"
-                                />
+                                android:layout_weight="1"
+                                android:text="Total" />
+
                             <TextView
+                                style="@style/BlackTextStyleNormal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="₹ 25,000.00"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="10dp"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:layout_gravity="center"
-                                android:layout_marginEnd="10dp"
-                                android:layout_marginStart="15dp"
-                                style="@style/BlackTextStyleNormal"
-                                />
-
+                                android:text="₹ 25,000.00" />
 
 
                         </LinearLayout>
@@ -538,79 +586,83 @@
                 </androidx.cardview.widget.CardView>
 
 
-
                 <View
-                     android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="3dp"
                     android:layout_marginTop="10dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:background="@color/reddishgrey"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/billValueCardview"
-                    android:background="@color/reddishgrey"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/billValueCardview" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <TextView
                 android:id="@+id/paymentInfo_label_textview"
+
+                style="@style/SubTitleGreyTextStyle1"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:layout_marginBottom="3dp"
-                android:layout_marginStart="5dp"
                 android:layout_centerVertical="true"
-                android:text="Payment Info"
-                style="@style/SubTitleGreyTextStyle1"
-                />
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:text="Payment Info" />
 
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                android:visibility="visible"
+
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="5dp"
-                app:cardElevation="5dp"
-                >
+                android:visibility="visible"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="15dp"
                     android:layout_marginTop="25dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_height="match_parent">
-
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="10dp">
 
 
                     <LinearLayout
+                        android:id="@+id/receivedAmount_layout"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:gravity="center"
-                        android:id="@+id/receivedAmount_layout"
+
                         android:orientation="horizontal">
 
 
                         <TextView
+
+                            style="@style/SubTitleTextStyle1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Received"
                             android:layout_weight="2.2"
-                            style="@style/SubTitleTextStyle1"/>
+                            android:text="Received" />
 
                         <EditText
+                            style="@style/BlackTextStyleSemiBold"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:paddingEnd="10dp"
-                            android:gravity="end"
-                             android:layout_margin="10dp"
-                            android:hint="Enter Received amount"
-                             android:layout_weight="1"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/rectangle_greybackground"
-                            style="@style/BlackTextStyleBold"/>
+                            android:gravity="end|center"
+                            android:paddingEnd="10dp"
+                            android:hint="Enter Received amount"
+                              />
+
 
                     </LinearLayout>
 
@@ -619,84 +671,88 @@
                         android:id="@+id/viewBelow_receivedAmt"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
-                        android:layout_marginTop="10dp"
+
                         android:layout_below="@+id/receivedAmount_layout"
-                        android:background="@color/grey"/>
+                        android:layout_marginTop="10dp"
+                        android:background="@color/grey" />
 
                     <LinearLayout
+                        android:id="@+id/balanceAmountLayout"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:id="@+id/balanceAmountLayout"
                         android:layout_below="@+id/viewBelow_receivedAmt"
                         android:orientation="horizontal">
+
                         <TextView
+                            style="@style/GreyTextStyleSemiBold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Balance Amount"
-                            android:layout_weight="1"
+
                             android:layout_centerVertical="true"
                             android:layout_marginStart="1dp"
                             android:layout_marginTop="15dp"
                             android:layout_toEndOf="@+id/addItem_imageView"
-                            style="@style/GreyTextStyleSemiBold"
-                            />
+
+                            android:layout_weight="1"
+                            android:text="Balance Amount" />
+
                         <TextView
+                            style="@style/BlackTextStyleNormal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="₹ 25,000.00"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:layout_marginEnd="10dp"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="15dp"
                             android:layout_marginTop="15dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_toEndOf="@+id/addItem_imageView"
-                            style="@style/BlackTextStyleNormal"
-                            />
-
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="₹ 25,000.00" />
 
 
                     </LinearLayout>
-
 
 
                     <RelativeLayout
                         android:id="@+id/paymentModeSelectionLayout"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:layout_marginTop="10dp"
+
                         android:layout_below="@+id/balanceAmountLayout"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/rectangle_greybackground"
                         android:orientation="vertical">
+
                         <TextView
+                            style="@style/GreyTextStyleSemiBold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Payment Made through"
-                            android:layout_weight="1"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="5dp"
-                             style="@style/GreyTextStyleSemiBold"
-                            />
+                            android:layout_weight="1"
+                            android:text="Payment Made through" />
 
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:alpha=".7"
-                            android:layout_alignParentEnd="true"
-                            android:src="@mipmap/downarrow" />
 
+                            android:layout_alignParentEnd="true"
+                            android:alpha=".7"
+                            android:src="@mipmap/downarrow" />
 
 
                     </RelativeLayout>
 
                     <EditText
                         android:id="@+id/paymentDescription_edittext"
-                        style="@style/BlackTextStyleBold"
+
+                        style="@style/BlackTextStyleSemiBold"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
                         android:layout_below="@+id/paymentModeSelectionLayout"
-                         android:layout_marginTop="15dp"
+                        android:layout_marginTop="15dp"
+
                         android:background="@drawable/rectangle_greybackground"
                         android:gravity="start"
                         android:hint="Payment Description"
@@ -708,25 +764,25 @@
             </androidx.cardview.widget.CardView>
 
 
-
             <Button
                 android:id="@+id/createOrder_button"
+                style="@style/WhiteTextStyleBold"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="25dp"
                 android:background="@drawable/rectangle_redbackground"
-                style="@style/WhiteTextStyleBold"
-                android:text="Place Order"/>
+                android:text="Place Order" />
 
             <View
-                 android:layout_width="match_parent"
+                android:layout_width="match_parent"
                 android:layout_height="110dp"
-                android:layout_marginTop="10dp"
                 android:layout_below="@+id/createOrder_button"
-                android:background="@color/reddishgrey"/>
+                android:layout_marginTop="10dp"
+                android:background="@color/reddishgrey" />
+
         </LinearLayout>
     </ScrollView>
 

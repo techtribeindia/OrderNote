@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+     android:background="@color/transparent"
+    tools:context=".ui.fragment.AddMenuItem_InCart_Fragment">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rounded_dialog_background"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+
+        <TextView
+            style="@style/RedDialogTitleTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="1dp"
+            android:gravity="center"
+            android:text="@string/add_item_in_cart"
+
+            />
+
+        <TextView
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="25dp"
+            android:text="@string/item_name" />
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextViewBuyer"
+            style="@style/BlackEditTextStyleSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/rectangle_greybackground"
+            android:gravity="center_vertical"
+            android:hint="Enter menu name &amp; choose an menu " />
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp"
+            android:paddingTop="3dp"
+            android:orientation="horizontal"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                 android:paddingRight="10dp"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    style="@style/BlackTextStyleSemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Weight" />
+                <EditText
+                    android:id="@+id/weightEditText"
+                    style="@style/BlackEditTextStyleSemiBold"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rectangle_greybackground"
+                    android:gravity="center_vertical"
+                    android:hint="Enter weight" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight=".8"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    style="@style/BlackTextStyleSemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Quantity" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:id="@+id/plusIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="37dp"
+                         android:padding="8dp"
+                         android:src="@mipmap/plus"/>
+
+                    <TextView
+                        android:id="@+id/quantityTextview"
+                        style="@style/BlackTextStyleSemiBold"
+                        android:layout_width="90dp"
+                        android:layout_height="match_parent"
+                          android:background="@drawable/rectangle_whitebackground_blackborder"
+                        android:elevation="5dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:hint="1" />
+
+
+                    <ImageView
+                        android:id="@+id/minusIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="37dp"
+                         android:padding="8dp"
+                         android:src="@mipmap/minus"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <TextView
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="15dp"
+            android:text="Price per item / Kg" />
+        <EditText
+            android:id="@+id/priceEditText"
+            style="@style/BlackEditTextStyleSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/rectangle_greybackground"
+            android:gravity="center_vertical"
+            android:hint="Enter price" />
+
+        <TextView
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="15dp"
+            android:text="Final Price" />
+
+
+        <TextView
+            android:id="@+id/buyerMobileNoTextview"
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/rectangle_whitebackground_blackborder"
+            android:elevation="5dp"
+            android:gravity="center_vertical"
+            android:hint="₹ 23,494.00" />
+
+
+        <Button
+            android:id="@+id/addInCart_button"
+            style="@style/WhiteTextStyleBold"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rectangle_redbackground"
+            android:text="Add in cart" />
+    </LinearLayout>
+
+
+
+
+    <ImageView
+        android:id="@+id/closeIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp"
+        android:padding="8dp"
+        android:layout_marginEnd="30dp"
+        android:src="@mipmap/closewithcircle"/>
+
+
+
+
+</RelativeLayout>

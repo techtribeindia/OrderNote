@@ -22,7 +22,8 @@ public class MenuItems_Repository {
         firestoreService = new FirestoreService();
     }
 
-    public LiveData<ApiResponseState_Enum<List<MenuItems_Model>>> fetchMenuItemsUsingVendorkey(String vendorkey) {
+    public MutableLiveData<ApiResponseState_Enum<List<MenuItems_Model>>> fetchMenuItemsUsingVendorkey(String vendorkey) {
+
         MutableLiveData<ApiResponseState_Enum<List<MenuItems_Model>>> menuItemLiveData = new MutableLiveData<>();
         menuItemLiveData.postValue(ApiResponseState_Enum.loading(null));
 
@@ -30,14 +31,21 @@ public class MenuItems_Repository {
             @Override
             public void onSuccess(List<MenuItems_Model> result) {
                 if (result.isEmpty()) {
+
+                    Log.i("Repository Log: ", "MenuItemSuccesfully Fetched but empty" );
                     menuItemLiveData.postValue(ApiResponseState_Enum.error("No data available", result));
                 } else {
+                    Log.i("Repository Log: ", "MenuItemSuccesfully Fetched" );
+
                     menuItemLiveData.postValue(ApiResponseState_Enum.success(result));
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
+
+                Log.i("Repository Log: ", "Error in fetching MenuItem " );
+
                 menuItemLiveData.postValue(ApiResponseState_Enum.error(e.getMessage(), null));
             }
         });

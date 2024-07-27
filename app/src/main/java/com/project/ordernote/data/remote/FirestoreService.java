@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+
+import android.widget.Toast;
+
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.firebase.firestore.QuerySnapshot;
@@ -134,6 +137,7 @@ public class FirestoreService {
     }
 
     public void fetchOrdersByStatus(String status, FirestoreCallback<List<OrderDetails_Model>> callback) {
+
         db.collection("OrderDetails")
                 .whereEqualTo("status", status)
                 .get()
@@ -154,12 +158,11 @@ public class FirestoreService {
                             callback.onFailure(new Exception("No orders found with status: " + status));
                         }
                     } else {
-                        // Handle failure
+              
                         callback.onFailure(task.getException());
                     }
                 });
     }
-
 
     public void fetchOrdersByStatus1(String status, fetchOrdersWithStatusCallback callback) {
         db.collection("OrderDetails")
