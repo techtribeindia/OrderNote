@@ -1,15 +1,12 @@
 package com.project.ordernote.data.model;
 
 public class Buyers_Model {
- 
     String name ="";
     String gstin ="";
     String mobileno ="";
     String address1 ="";
     String address2 ="";
     String pincode ="";
-
-
     public String getAddress2() {
         return address2;
     }
