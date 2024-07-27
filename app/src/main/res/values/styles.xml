@@ -24,6 +24,12 @@
         <item name="android:textColor">@color/black</item> <!-- Example: red color -->
     </style>
 
+    <style name="RedDialogTitleTextStyle">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/red</item> <!-- Example: red color -->
+    </style>
+
     <style name="SubTitleTextStyle1">
         <item name="android:fontFamily">@font/open_sans_semibold</item>
         <item name="android:textSize">16sp</item>
@@ -42,13 +48,13 @@
     </style>
 
 
-    <style name="BlackTextStyleBold">
+    <style name="BlackTextStyleSemiBold">
         <item name="android:fontFamily">@font/open_sans_semibold</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item> <!-- Example: red color -->
     </style>
 
-    <style name="BlackEditTextStyleBold">
+    <style name="BlackEditTextStyleSemiBold">
         <item name="android:fontFamily">@font/open_sans_semibold</item>
         <item name="android:textSize">14sp</item>
         <item name="android:hint">14sp</item>
