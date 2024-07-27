@@ -22,6 +22,5 @@ Customize your light theme here.
     <item name="android:windowLightStatusBar">true</item>
     <!-- Status bar color.-->
     <item name="android:statusBarColor">?attr/colorSecondary </item>
-    <!-- Customize your theme here. -->
 </style>
 </resources>
