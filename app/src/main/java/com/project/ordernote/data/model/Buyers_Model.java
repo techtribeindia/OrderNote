@@ -1,7 +1,7 @@
 package com.project.ordernote.data.model;
 
 public class Buyers_Model {
-
+ 
     String name ="";
     String gstin ="";
     String mobileno ="";
