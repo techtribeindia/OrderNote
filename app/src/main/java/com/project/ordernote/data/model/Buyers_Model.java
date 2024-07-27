@@ -1,6 +1,7 @@
 package com.project.ordernote.data.model;
 
 public class Buyers_Model {
+
     String name ="";
     String gstin ="";
     String mobileno ="";
@@ -45,6 +46,7 @@ public class Buyers_Model {
 
     public void setAddress1(String address1) {
         this.address1 = address1;
+
     }
 
     public String getPincode() {

@@ -10,13 +10,17 @@
 
     <LinearLayout
     android:layout_width="match_parent"
+
     android:layout_height="40dp"
+
     android:id="@+id/titleBarLayout"
         android:layout_margin="10dp"
     android:orientation="horizontal">
     <RelativeLayout
         android:layout_width="40dp"
+
         android:visibility="gone"
+
         android:layout_height="40dp">
         <ImageView
             android:layout_width="20dp"
@@ -41,6 +45,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
+
         android:layout_height="match_parent"
 
         android:layout_below="@+id/titleBarLayout"
@@ -74,6 +79,7 @@
 
                 <TextView
                     android:id="@+id/orderno_value_textview"
+
                     style="@style/BlackTextStyleNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
@@ -108,6 +114,7 @@
                 android:text="Order Info " />
 
 
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
@@ -118,6 +125,7 @@
                 android:visibility="visible"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp">
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -139,13 +147,16 @@
                             android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:background="@color/backgroundred"
+
                             android:scaleType="centerCrop"
                             android:src="@mipmap/ordericonred" />
+
 
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/orderno_labelTexview"
+
                         style="@style/SubTitleTextStyle1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -157,6 +168,7 @@
 
                     <TextView
                         android:id="@+id/orderno_ValueTexview"
+
                         style="@style/SubTitleTextStyle1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -183,6 +195,7 @@
 
             <TextView
                 android:id="@+id/buyerdetails_label_textview"
+
                 style="@style/SubTitleGreyTextStyle1"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -194,9 +207,11 @@
                 android:text="Buyer Info " />
 
 
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
+
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
@@ -206,6 +221,7 @@
                 android:id="@+id/buyerselectionCardView"
                 app:cardElevation="5dp">
 
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -214,6 +230,7 @@
                         android:id="@+id/circleBuyerImage"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+
                         android:layout_centerVertical="true"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="25dp"
@@ -226,12 +243,15 @@
                             android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:background="@color/backgroundred"
+
                             android:scaleType="centerCrop"
                             android:src="@mipmap/buyersiconred" />
+
 
                     </androidx.cardview.widget.CardView>
 
                     <TextView
+
                         android:id="@+id/selectedBuyerNameTextview"
                         style="@style/SubTitleTextStyle1"
                         android:layout_width="match_parent"
@@ -259,11 +279,14 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true">
 
+
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
+
                             android:layout_centerInParent="true"
                             android:alpha=".7"
+
                             android:src="@mipmap/right_arrow" />
                     </RelativeLayout>
 
@@ -271,6 +294,7 @@
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
+
 
 
             <TextView
@@ -288,6 +312,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+
                 android:layout_height="match_parent"
                 android:visibility="visible">
 
@@ -337,8 +362,10 @@
                     app:layout_constraintTop_toBottomOf="@id/itemListViewCardview">
 
 
+
                     <RelativeLayout
                         android:layout_width="match_parent"
+
                         android:layout_height="46dp"
                         android:paddingStart="10dp"
                          android:paddingEnd="10dp"
@@ -347,12 +374,15 @@
                         <ImageView
                             android:id="@+id/addItem_imageView"
                             android:layout_width="26dp"
+
                             android:layout_height="26dp"
                             android:layout_centerVertical="true"
+
                             android:src="@drawable/add_circle_white" />
 
 
                         <TextView
+
                             style="@style/WhiteTextStyleBold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -361,6 +391,7 @@
                             android:layout_marginBottom="10dp"
                                android:layout_toEndOf="@+id/addItem_imageView"
                             android:text="Add Item " />
+
 
                     </RelativeLayout>
 
@@ -382,6 +413,7 @@
 
                     >
 
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -392,14 +424,17 @@
                             android:layout_height="35dp"
                             android:orientation="horizontal">
 
+
                             <TextView
                                 style="@style/GreyTextStyleSemiBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="15dp"
                                 android:layout_marginTop="15dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
+
                                 android:layout_weight="1"
                                 android:text="Subtotal" />
 
@@ -419,19 +454,23 @@
 
                         </LinearLayout>
 
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
                             android:orientation="horizontal">
 
+
                             <TextView
                                 style="@style/GreyTextStyleSemiBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="15dp"
                                 android:layout_marginTop="15dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
+
                                 android:text="Discount" />
 
                             <TextView
@@ -463,19 +502,23 @@
 
                         </LinearLayout>
 
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
                             android:orientation="horizontal">
 
+
                             <TextView
                                 style="@style/GreyTextStyleSemiBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="15dp"
                                 android:layout_marginTop="15dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
+
                                 android:text="Tax" />
 
                             <TextView
@@ -505,11 +548,13 @@
                                 android:text="₹ 250.00" />
 
 
+
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
+
                             android:layout_marginTop="15dp"
                             android:background="@color/backgroundred"
                             android:orientation="horizontal">
@@ -550,11 +595,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/billValueCardview" />
 
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <TextView
                 android:id="@+id/paymentInfo_label_textview"
+
                 style="@style/SubTitleGreyTextStyle1"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -569,6 +616,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
@@ -591,10 +639,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:gravity="center"
+
                         android:orientation="horizontal">
 
 
                         <TextView
+
                             style="@style/SubTitleTextStyle1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -613,6 +663,7 @@
                             android:hint="Enter Received amount"
                               />
 
+
                     </LinearLayout>
 
 
@@ -620,6 +671,7 @@
                         android:id="@+id/viewBelow_receivedAmt"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
+
                         android:layout_below="@+id/receivedAmount_layout"
                         android:layout_marginTop="10dp"
                         android:background="@color/grey" />
@@ -635,10 +687,12 @@
                             style="@style/GreyTextStyleSemiBold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+
                             android:layout_centerVertical="true"
                             android:layout_marginStart="1dp"
                             android:layout_marginTop="15dp"
                             android:layout_toEndOf="@+id/addItem_imageView"
+
                             android:layout_weight="1"
                             android:text="Balance Amount" />
 
@@ -663,6 +717,7 @@
                         android:id="@+id/paymentModeSelectionLayout"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+
                         android:layout_below="@+id/balanceAmountLayout"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/rectangle_greybackground"
@@ -681,6 +736,7 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+
                             android:layout_alignParentEnd="true"
                             android:alpha=".7"
                             android:src="@mipmap/downarrow" />
@@ -690,11 +746,13 @@
 
                     <EditText
                         android:id="@+id/paymentDescription_edittext"
+
                         style="@style/BlackTextStyleSemiBold"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
                         android:layout_below="@+id/paymentModeSelectionLayout"
                         android:layout_marginTop="15dp"
+
                         android:background="@drawable/rectangle_greybackground"
                         android:gravity="start"
                         android:hint="Payment Description"
@@ -724,6 +782,7 @@
                 android:layout_below="@+id/createOrder_button"
                 android:layout_marginTop="10dp"
                 android:background="@color/reddishgrey" />
+
         </LinearLayout>
     </ScrollView>
 

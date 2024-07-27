@@ -4,6 +4,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="place_order">Place Order</string>
+
     <string name="buyer_details">Buyer Details</string>
     <string name="enter_buyer_name_amp_choose_a_buyer"><![CDATA[Enter Buyer Name & choose a buyer]]></string>
     <string name="sample_phoneno">+919394247523</string>

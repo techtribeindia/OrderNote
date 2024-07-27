@@ -3,7 +3,9 @@
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
+
     <color name="teal_200">#f5f0f0</color>
+
     <color name="teal_700">#FFFFFFFF</color>
     <color name="lavender">#d43122</color>
     <color name="transparent">#00000000</color>
@@ -22,5 +24,8 @@
     <color name="darkgrey">#7688a2</color>
     <color name="grey">#F6F6F6</color>
     <color name="progressbar_grey">#4D4D4D</color>
+
+    <color name="active_button_color">#FF0000</color> <!-- Example active color -->
+    <color name="inactive_button_color">#CCCCCC</color> <!-- Example inactive color -->
 
 </resources>

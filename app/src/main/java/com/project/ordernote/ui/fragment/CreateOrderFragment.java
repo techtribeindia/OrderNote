@@ -16,6 +16,7 @@ import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.data.model.OrderItemDetails_Model;
+
 import com.project.ordernote.databinding.FragmentAddOrdersBinding;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
@@ -36,6 +37,7 @@ public class CreateOrderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentAddOrdersBinding.inflate(inflater, container, false);
+
         return binding.getRoot();
     }
 
@@ -122,9 +124,6 @@ public class CreateOrderFragment extends Fragment {
             }
         });
 
-
-
-
         menuItemsViewModel.getMenuItemsFromViewModel().observe(getViewLifecycleOwner(), resource -> {
             if (resource != null) {
                 switch (resource.status) {
@@ -175,6 +174,7 @@ public class CreateOrderFragment extends Fragment {
                 }
             }
         });
+
         buyersViewModel.getSelectedBuyersDetailsFromViewModel().observe(getViewLifecycleOwner(), buyerData -> {
             if (buyerData != null) {
 
@@ -242,11 +242,10 @@ public class CreateOrderFragment extends Fragment {
             e.printStackTrace();
         }
 
-
-
     }
 
     private void showProgressBar(boolean show) {
+
         try {
             if (show) {
                 binding.progressbar.playAnimation();
@@ -260,6 +259,7 @@ public class CreateOrderFragment extends Fragment {
         }
         catch (Exception e){
             e.printStackTrace();
+
         }
     }
 

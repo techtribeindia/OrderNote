@@ -10,6 +10,7 @@ Customize your light theme here.
 <resources xmlns:tools="http://schemas.android.com/tools">
 <!-- Base application theme. -->
 <style name="Theme.BottomNavigation" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
     <!-- Primary brand color. -->
     <item name="colorPrimary">@color/lavender</item>
     <item name="colorPrimaryVariant">@color/lavender</item>
@@ -18,6 +19,7 @@ Customize your light theme here.
     <item name="colorSecondary">@color/teal_200</item>
     <item name="colorSecondaryVariant">@color/teal_700</item>
     <item name="colorOnSecondary">@color/black</item>
+
      <!-- If you want light content (dark icons) in the status bar -->
     <item name="android:windowLightStatusBar">true</item>
     <!-- Status bar color.-->

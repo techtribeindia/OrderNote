@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -41,9 +42,6 @@ public class Dashboard extends AppCompatActivity {
 
         activityDashboardBinding = ActivityDashboardBinding.inflate(getLayoutInflater());
         setContentView(activityDashboardBinding.getRoot());
-
-
-        // Change status bar color programmatically if needed
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -55,6 +53,7 @@ public class Dashboard extends AppCompatActivity {
             View decor = getWindow().getDecorView();
             decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+
       //  replaceFragment(new OrdersListFragment());
       /*  activityDashboardBinding.bottomNavigationView.setBackground(null);
 
@@ -120,6 +119,7 @@ public class Dashboard extends AppCompatActivity {
 
 
         activityDashboardBinding.addOrderFabButton.setOnClickListener(v -> {
+
             try {
                 Drawable drawable = activityDashboardBinding.addOrderFabButton.getDrawable();
                 Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
@@ -137,6 +137,7 @@ public class Dashboard extends AppCompatActivity {
             catch (Exception e){
                 e.printStackTrace();
             }
+
         });
 
         // Set the default fragment
