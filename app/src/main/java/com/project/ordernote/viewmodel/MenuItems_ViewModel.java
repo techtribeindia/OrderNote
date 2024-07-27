@@ -5,11 +5,13 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.data.repository.Buyers_Repository;
+
 import com.project.ordernote.data.repository.MenuItems_Repository;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 
@@ -31,6 +33,7 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
             menuItemsLiveData = new MutableLiveData<>();
 
         }
+
     }
 
     public void fetchMenuItemsByVendorKey(String vendorKey) {
@@ -38,11 +41,11 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
     }
 
 
-
     public void setMenuListinMutableLiveData(List<MenuItems_Model> menuItems_List) {
         menuItemsLiveData.setValue(ApiResponseState_Enum.success(menuItems_List));
 
     }
+
 
 
     public LiveData<ApiResponseState_Enum<List<MenuItems_Model>>> getMenuItemsFromViewModel() {

@@ -2,53 +2,40 @@ package com.project.ordernote.ui.fragment;
 
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+
 import com.project.ordernote.R;
-import com.project.ordernote.databinding.FragmentAddOrdersBinding;
 import com.project.ordernote.databinding.FragmentOrdersBinding;
-import com.project.ordernote.utils.ApiResponseState_Enum;
-import com.project.ordernote.viewmodel.Buyers_ViewModel;
+import com.project.ordernote.ui.adapter.OrdersListAdapter;
+import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
-import java.util.Objects;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link OrdersListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class OrdersListFragment extends Fragment {
-
-    FragmentOrdersBinding fragmentOrdersBinding;
-    private Buyers_ViewModel buyersViewModel;
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private OrderDetails_ViewModel orderDetails_viewModel;
+    private OrdersListAdapter ordersListAdapter;
+    private FragmentOrdersBinding binding;
+    private OrderListItemDescFragment orderListItemDescFragment;
     public OrdersListFragment() {
         // Required empty public constructor
     }
 
 
-    // TODO: Rename and change types and number of parameters
     public static OrdersListFragment newInstance(String param1, String param2) {
         OrdersListFragment fragment = new OrdersListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,71 +43,112 @@ public class OrdersListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-
-
-        try {
-         //   buyersViewModel = new ViewModelProvider(requireActivity()).get(Buyers_ViewModel.class);
-           // buyersViewModel = new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication()).create(Buyers_ViewModel.class);
-
-            buyersViewModel = new ViewModelProvider(requireActivity()).get(Buyers_ViewModel.class);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        fragmentOrdersBinding = FragmentOrdersBinding.inflate(inflater, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        orderDetails_viewModel = new ViewModelProvider(this).get(OrderDetails_ViewModel.class);
+        binding = FragmentOrdersBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
+        orderListItemDescFragment = new OrderListItemDescFragment();
+        ordersListAdapter = new OrdersListAdapter();
+        ordersListAdapter.setmHandler(newHandler());
+        binding.ordersRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        binding.ordersRecyclerView.setAdapter(ordersListAdapter);
 
+        setActiveButton(binding.pendingordersButton);
 
         try {
-            buyersViewModel.getBuyersListFromViewModel().observe(getViewLifecycleOwner(), buyersResponse -> {
-                if (buyersResponse.status == ApiResponseState_Enum.Status.SUCCESS) {
-                    // Use buyers data
-                    fragmentOrdersBinding.buyersname.setText(String.valueOf(buyersResponse.data.size()));
-                }
-            });
-
-             /*
-            buyersViewModel.getBuyersListFromViewModel().observe(getViewLifecycleOwner(), resource -> {
-                if (resource != null) {
-                    switch (resource.status) {
-                        case LOADING:
-                            fragmentOrdersBinding.buyersname.setText(String.valueOf("Loading"));
-                            break;
-                        case SUCCESS:
-                            fragmentOrdersBinding.buyersname.setText(String.valueOf(resource.data.size()));
-                            break;
-                        case ERROR:
-                            fragmentOrdersBinding.buyersname.setText(String.valueOf("Error"));
-
-                            break;
-                    }
-                }
-            });
-
-
-              */
+            orderDetailViewModel("ORDERCREATED");
         }
-
-        catch (Exception e){
+        catch (Exception e ){
             e.printStackTrace();
         }
 
+        binding.pendingordersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
 
-        return fragmentOrdersBinding.getRoot();
+                setActiveButton(binding.pendingordersButton);
+                orderDetailViewModel("ORDERCREATED");
+                observeOrderDetails();
+            }
+        });
 
+        binding.rejectedordersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+
+                setActiveButton(binding.rejectedordersButton);
+                orderDetailViewModel("ORDERREJECTED");
+                observeOrderDetails();
+            }
+        });
+
+        return view;
+    }
+
+    private Handler newHandler() {
+
+        Handler.Callback callback = new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message message) {
+
+                Bundle bundle = message.getData();
+                Toast.makeText(requireActivity(), bundle.getString("fromadapter"), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), String.valueOf(bundle.getInt("position")), Toast.LENGTH_SHORT).show();
+
+                orderListItemDescFragment.show(getParentFragmentManager(),"orderListItemDescFragment");
+
+                return false;
+            }
+        };
+
+        return new Handler(callback);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        observeOrderDetails();
+
+    }
+
+    private void observeOrderDetails() {
+        orderDetails_viewModel.getOrdersByStatusFromViewModel().observe(getViewLifecycleOwner(), resource -> {
+            ordersListAdapter.clearOrders();
+            if (resource != null) {
+                switch (resource.status) {
+                    case LOADING:
+                        Toast.makeText(requireActivity(), "Loading Orders", Toast.LENGTH_SHORT).show();
+                        break;
+                    case SUCCESS:
+                        Toast.makeText(requireActivity(), "Success in fetching orders", Toast.LENGTH_SHORT).show();
+                        ordersListAdapter.setOrders(resource.data);
+                        break;
+                    case ERROR:
+                        Toast.makeText(requireActivity(), "Error in fetching orders", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+    }
+
+    private void orderDetailViewModel(String status) {
+        orderDetails_viewModel.getOrdersByStatus(status);
+    }
+
+    private void setActiveButton(Button activeButton) {
+        binding.pendingordersButton.setBackgroundResource(R.drawable.button_inactive);
+        binding.rejectedordersButton.setBackgroundResource(R.drawable.button_inactive);
+
+        binding.pendingordersButton.setTextColor(getResources().getColor(R.color.black));
+        binding.rejectedordersButton.setTextColor(getResources().getColor(R.color.black));
+
+        activeButton.setBackgroundResource(R.drawable.button_active);
+        activeButton.setTextColor(getResources().getColor(R.color.white));
     }
 }

@@ -1,9 +1,12 @@
 package com.project.ordernote.data.remote;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+
+import android.widget.Toast;
+
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.firebase.firestore.QuerySnapshot;
@@ -23,6 +26,7 @@ public class FirestoreService {
 
     public FirestoreService() {
         db = FirebaseFirestore.getInstance();
+
     }
 
     public void fetchBuyersListUsingVendorkey(String vendorKey, FirestoreCallback<List<Buyers_Model>> callback) {
@@ -52,6 +56,26 @@ public class FirestoreService {
         void onLoginResult(boolean isSuccess,String result, QueryDocumentSnapshot userDocument);
     }
 
+    public interface fetchOrdersWithStatusCallback{
+        void onOrdersWithStatusResult(QuerySnapshot orderWithStatusDocument);
+    }
+
+
+
+    public void fetchOrdersWithStatus(fetchOrdersWithStatusCallback callback)
+    {
+        db.collection("OrderDetails")
+                .whereEqualTo("status", "ORDERCONFIRMED")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            callback.onOrdersWithStatusResult(querySnapshot);
+                        }
+                    }
+                });
+    }
     public void userDetailsFetch(String mobileNumber, String password, LoginCallback callback) {
         db.collection("UserDetails")
                 .whereEqualTo("mobileno", mobileNumber)
@@ -113,23 +137,46 @@ public class FirestoreService {
     }
 
     public void fetchOrdersByStatus(String status, FirestoreCallback<List<OrderDetails_Model>> callback) {
-        db.collection("orders")
+
+        db.collection("OrderDetails")
                 .whereEqualTo("status", status)
                 .get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        List<OrderDetails_Model> orderList = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            OrderDetails_Model order = document.toObject(OrderDetails_Model.class);
-                            orderList.add(order);
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            List<OrderDetails_Model> orders = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : querySnapshot) {
+                                OrderDetails_Model order = document.toObject(OrderDetails_Model.class);
+                                orders.add(order);
+
+                            }
+                            Log.d("fetchOrdersByStatus", orders.toString());
+                            callback.onSuccess(orders);
+                        } else {
+                            // Handle empty result
+                            callback.onFailure(new Exception("No orders found with status: " + status));
                         }
-                        callback.onSuccess(orderList);
                     } else {
+              
                         callback.onFailure(task.getException());
                     }
                 });
     }
 
+    public void fetchOrdersByStatus1(String status, fetchOrdersWithStatusCallback callback) {
+        db.collection("OrderDetails")
+                .whereEqualTo("status", status)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            callback.onOrdersWithStatusResult(querySnapshot);
+                        }
+                    }
+                });
+    }
     public void addOrder(OrderDetails_Model order, FirestoreCallback<Void> callback) {
         db.collection("orders")
                 .add(order)

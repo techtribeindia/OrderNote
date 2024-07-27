@@ -1,6 +1,7 @@
 package com.project.ordernote.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -20,9 +21,11 @@ import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
 
+
 public class SplashScreen extends AppCompatActivity {
     private static final int SPLASH_DISPLAY_LENGTH = 2000;
     private SessionManager sessionManager;
+
     private Buyers_ViewModel buyersViewModel;
     private MenuItems_ViewModel menuItemViewModel;
 
@@ -31,6 +34,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splashscreen);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -56,6 +60,7 @@ public class SplashScreen extends AppCompatActivity {
 
 
 /*
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -114,5 +119,6 @@ public class SplashScreen extends AppCompatActivity {
             startActivity(new Intent(SplashScreen.this, Dashboard.class));
             finish();
         }
+
     }
 }

@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.project.ordernote.data.model.Buyers_Model;
@@ -46,7 +47,6 @@ public class Buyers_ViewModel extends AndroidViewModel {
     public void getBuyersListFromRepository(String vendorKey) {
         buyersListLiveData = repository.getBuyersList(vendorKey);
     }
-
 
     public void setBuyersListinMutableLiveData(List<Buyers_Model> buyerlist) {
         buyersListLiveData.setValue(ApiResponseState_Enum.success(buyerlist));
@@ -100,5 +100,6 @@ public class Buyers_ViewModel extends AndroidViewModel {
         }
         return new Buyers_Model();
     }
+
 }
 
