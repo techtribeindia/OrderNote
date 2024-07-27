@@ -1,11 +1,15 @@
 package com.project.ordernote.data.repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.remote.FirestoreService;
+import com.project.ordernote.utils.ApiResponseState_Enum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +39,37 @@ public class OrderDetails_Repository {
         return ordersLiveData;
     }
 
-    public LiveData<List<Map<String, Object>>> getOrdersByStatus(String status) {
+    public MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersByStatus(String status) {
+        MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersLiveData = new MutableLiveData<>();
+        ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
+
+    firestoreService.fetchOrdersByStatus(status, new FirestoreService.FirestoreCallback<List<OrderDetails_Model>>() {
+        @Override
+        public void onSuccess(List<OrderDetails_Model> result) {
+            Log.d("orderdetails response   :  ", result.toString());
+
+            if (result.isEmpty()) {
+                ordersLiveData.postValue(ApiResponseState_Enum.error("No data available", result));
+            } else {
+                ordersLiveData.postValue(ApiResponseState_Enum.success(result));
+            }
+        }
+
+        @Override
+        public void onFailure(Exception e) {
+            ordersLiveData.postValue(ApiResponseState_Enum.error(e.getMessage(), null));
+        }
+    });
+        Log.d("orderdetails ordersLiveData  :  ", ordersLiveData.toString());
+
+
+        return ordersLiveData;
+
+    }
+
+    public LiveData<List<Map<String, Object>>> getOrdersByStatus1(String status) {
         MutableLiveData<List<Map<String, Object>>> ordersWithStatusResult = new MutableLiveData<>();
-        firestoreService.fetchOrdersByStatus(status, orderWithStatusDocument -> {
+        firestoreService.fetchOrdersByStatus1(status, orderWithStatusDocument -> {
             List<Map<String, Object>> ordersData = new ArrayList<>();
             for (DocumentSnapshot document : orderWithStatusDocument.getDocuments()) {
                 ordersData.add(document.getData());

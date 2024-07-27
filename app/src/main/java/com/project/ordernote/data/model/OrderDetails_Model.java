@@ -1,50 +1,67 @@
 package com.project.ordernote.data.model;
 
+import com.google.firebase.Timestamp;
+
 import org.json.JSONArray;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 public class OrderDetails_Model {
 
-    private String OrderId;
-    private String OrderStatus;
-
-    public OrderDetails_Model() {
-    }
-
-    public OrderDetails_Model(String orderStatus, String orderId) {
-        OrderStatus = orderStatus;
-        OrderId = orderId;
-    }
-
-    public String getOrderId() {
-        return OrderId;
-    }
-
-    public void setOrderId(String orderId) {
-        OrderId = orderId;
-    }
-
-    public String getOrderStatus() {
-        return OrderStatus;
-    }
-
-    public void setOrderStatus(String orderStatus) {
-        OrderStatus = orderStatus;
-    }
-
     String orderid = "";
+    String buyername ="";
     String buyeraddress ="";
     String buyergstin = "";
     String buyerkey = "";
     double discount =0;
-    JSONArray itemDetailsJsonArray = new JSONArray();
-    String orderplaceddate = "";
+    List<Map<String, Object>> itemdetails;
+    Timestamp orderplaceddate;
     double price = 0 ;
     String status = "";
     String tokenno = "";
     double totalprice =0;
     String vendorkey = "";
     String vendorname ="";
+    double totalqty = 0;
+    public OrderDetails_Model()
+    {
 
+    }
+    public OrderDetails_Model(String orderid, String buyername, String buyeraddress, String buyergstin, String buyerkey, double discount, List<Map<String, Object>> itemdetails, Timestamp orderplaceddate, double price, String status, String tokenno, double totalprice, String vendorkey, String vendorname, double totalqty) {
+        this.orderid = orderid;
+        this.buyername = buyername;
+        this.buyeraddress = buyeraddress;
+        this.buyergstin = buyergstin;
+        this.buyerkey = buyerkey;
+        this.discount = discount;
+        this.itemdetails = itemdetails;
+        this.orderplaceddate = orderplaceddate;
+        this.price = price;
+        this.status = status;
+        this.tokenno = tokenno;
+        this.totalprice = totalprice;
+        this.vendorkey = vendorkey;
+        this.vendorname = vendorname;
+        this.totalqty = totalqty;
+    }
+
+    public String getBuyername() {
+        return buyername;
+    }
+
+    public double getTotalqty() {
+        return totalqty;
+    }
+
+    public void setTotalqty(double totalqty) {
+        this.totalqty = totalqty;
+    }
+
+    public void setBuyername(String buyername) {
+        this.buyername = buyername;
+    }
 
     public String getOrderid() {
         return orderid;
@@ -86,19 +103,19 @@ public class OrderDetails_Model {
         this.discount = discount;
     }
 
-    public JSONArray getItemDetailsJsonArray() {
-        return itemDetailsJsonArray;
+    public List<Map<String, Object>> getItemdetails() {
+        return itemdetails;
     }
 
-    public void setItemDetailsJsonArray(JSONArray itemDetailsJsonArray) {
-        this.itemDetailsJsonArray = itemDetailsJsonArray;
+    public void setItemdetails(List<Map<String, Object>> itemdetails) {
+        this.itemdetails = itemdetails;
     }
 
-    public String getOrderplaceddate() {
+    public Timestamp getOrderplaceddate() {
         return orderplaceddate;
     }
 
-    public void setOrderplaceddate(String orderplaceddate) {
+    public void setOrderplaceddate(Timestamp orderplaceddate) {
         this.orderplaceddate = orderplaceddate;
     }
 
@@ -129,6 +146,7 @@ public class OrderDetails_Model {
     public double getTotalprice() {
         return totalprice;
     }
+
 
     public void setTotalprice(double totalprice) {
         this.totalprice = totalprice;
