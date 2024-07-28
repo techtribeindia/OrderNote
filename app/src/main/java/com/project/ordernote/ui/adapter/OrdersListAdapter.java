@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.ordernote.R;
+import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
 
 import java.util.ArrayList;
@@ -44,6 +46,19 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
         holder.buyerAddress.setText(order.getBuyeraddress() != null ? order.getBuyeraddress() : "N/A");
         holder.orderQty.setText(String.valueOf(order.getTotalqty()));
         holder.orderPrice.setText(String.valueOf(order.getTotalprice()));
+        List<ItemDetails_Model> itemDetailsList = order.getItemdetails();
+        if (itemDetailsList != null && !itemDetailsList.isEmpty()) {
+            for (ItemDetails_Model itemDetail : itemDetailsList) {
+                Log.d("Item Detail", "Menu Item Key: " + itemDetail.getMenuitemkey());
+                Log.d("Item Detail", "Menu Type: " + itemDetail.getMenutype());
+                Log.d("Item Detail", "Gross Weight: " + itemDetail.getGrossweight());
+                Log.d("Item Detail", "Net Weight: " + itemDetail.getNetweight());
+                Log.d("Item Detail", "Price per Kg: " + itemDetail.getPriceperkg());
+                Log.d("Item Detail", "Price: " + itemDetail.getPrice());
+            }
+        } else {
+            Log.d("Item Detail", "No item details available");
+        }
         holder.ViewBill.setOnClickListener(view -> {
           //  showOrderDetailsDialog(view.getContext(), order);
             sendHandlerMessage(position);

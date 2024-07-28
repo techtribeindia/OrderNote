@@ -54,6 +54,12 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+    public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersListFromViewModel() {
+        if(orderDetailsLiveData == null){
+            orderDetailsLiveData = new MutableLiveData<>();
+        }
+        return orderDetailsLiveData;
+    }
     public LiveData<List<Map<String, Object>>> getOrdersByStatus1(String status) {
         return repository.getOrdersByStatus1(status);
     }

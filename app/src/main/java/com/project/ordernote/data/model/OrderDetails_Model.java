@@ -1,6 +1,7 @@
 package com.project.ordernote.data.model;
 
 
+
 import com.google.firebase.Timestamp;
 
 import org.json.JSONArray;
@@ -18,9 +19,9 @@ public class OrderDetails_Model {
     String buyergstin = "";
     String buyerkey = "";
     double discount =0;
+    private List<ItemDetails_Model> itemdetails;
 
-    JSONArray itemDetailsJsonArray = new JSONArray();
-    String orderplaceddate = "";
+    Timestamp orderplaceddate;
 
     double price = 0 ;
     String status = "";
@@ -34,15 +35,13 @@ public class OrderDetails_Model {
     {
 
     }
-    public OrderDetails_Model(String orderid, String buyername, String buyeraddress, String buyergstin, String buyerkey, double discount, List<Map<String, Object>> itemdetails, Timestamp orderplaceddate, double price, String status, String tokenno, double totalprice, String vendorkey, String vendorname, double totalqty) {
+    public OrderDetails_Model(String orderid, String buyername, String buyeraddress, String buyergstin, String buyerkey, double discount, List<Map<String, Object>> itemdetails, double price, String status, String tokenno, double totalprice, String vendorkey, String vendorname, double totalqty) {
         this.orderid = orderid;
         this.buyername = buyername;
         this.buyeraddress = buyeraddress;
         this.buyergstin = buyergstin;
         this.buyerkey = buyerkey;
         this.discount = discount;
-        this.itemdetails = itemdetails;
-        this.orderplaceddate = orderplaceddate;
         this.price = price;
         this.status = status;
         this.tokenno = tokenno;
@@ -50,6 +49,14 @@ public class OrderDetails_Model {
         this.vendorkey = vendorkey;
         this.vendorname = vendorname;
         this.totalqty = totalqty;
+    }
+
+    public List<ItemDetails_Model> getItemdetails() {
+        return itemdetails;
+    }
+
+    public void setItemdetails(List<ItemDetails_Model> itemdetails) {
+        this.itemdetails = itemdetails;
     }
 
     public String getBuyername() {
@@ -108,20 +115,11 @@ public class OrderDetails_Model {
         this.discount = discount;
     }
 
-
-    public JSONArray getItemDetailsJsonArray() {
-        return itemDetailsJsonArray;
-    }
-
-    public void setItemDetailsJsonArray(JSONArray itemDetailsJsonArray) {
-        this.itemDetailsJsonArray = itemDetailsJsonArray;
-    }
-
-    public String getOrderplaceddate() {
+    public Timestamp getOrderplaceddate() {
         return orderplaceddate;
     }
 
-    public void setOrderplaceddate(String orderplaceddate) {
+    public void setOrderplaceddate(Timestamp orderplaceddate) {
 
         this.orderplaceddate = orderplaceddate;
     }
