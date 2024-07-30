@@ -45,6 +45,7 @@ dependencies {
     implementation("androidx.activity:activity:1.8.0")
 
     implementation ("com.airbnb.android:lottie:4.2.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
 
 
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")

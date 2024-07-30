@@ -73,7 +73,7 @@ public class OrdersListFragment extends Fragment {
 
                 setActiveButton(binding.pendingordersButton);
                 orderDetailViewModel("ORDERCREATED");
-                observeOrderDetails();
+              //  observeOrderDetails();
             }
         });
 
@@ -83,7 +83,7 @@ public class OrdersListFragment extends Fragment {
 
                 setActiveButton(binding.rejectedordersButton);
                 orderDetailViewModel("ORDERREJECTED");
-                observeOrderDetails();
+               // observeOrderDetails();
             }
         });
 

@@ -1,14 +1,25 @@
 package com.project.ordernote.data.model;
 
 public class ItemDetails_Model {
-    private String menuitemkey;
-    private String menutype;
-    private double grossweight;
-    private String netweight;
-    private double priceperkg;
-    private double price;
+    String itemname = "" ;
+    String menuitemkey = "" ;
+    String menutype = "" ;
+    String netweight = "" ;
+    double totalprice = 0 ;
+    double price = 0 ;
+    double grossweight = 0 ;
+    int quantity = 0;
 
     public ItemDetails_Model() {}
+
+
+    public String getItemname() {
+        return itemname;
+    }
+
+    public void setItemname(String itemname) {
+        this.itemname = itemname;
+    }
 
     public String getMenuitemkey() {
         return menuitemkey;
@@ -26,14 +37,6 @@ public class ItemDetails_Model {
         this.menutype = menutype;
     }
 
-    public double getGrossweight() {
-        return grossweight;
-    }
-
-    public void setGrossweight(double grossweight) {
-        this.grossweight = grossweight;
-    }
-
     public String getNetweight() {
         return netweight;
     }
@@ -42,12 +45,12 @@ public class ItemDetails_Model {
         this.netweight = netweight;
     }
 
-    public double getPriceperkg() {
-        return priceperkg;
+    public double getTotalprice() {
+        return totalprice;
     }
 
-    public void setPriceperkg(double priceperkg) {
-        this.priceperkg = priceperkg;
+    public void setTotalprice(double totalprice) {
+        this.totalprice = totalprice;
     }
 
     public double getPrice() {
@@ -56,5 +59,21 @@ public class ItemDetails_Model {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public double getGrossweight() {
+        return grossweight;
+    }
+
+    public void setGrossweight(double grossweight) {
+        this.grossweight = grossweight;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
