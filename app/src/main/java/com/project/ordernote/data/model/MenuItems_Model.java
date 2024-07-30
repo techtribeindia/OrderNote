@@ -3,16 +3,33 @@ package com.project.ordernote.data.model;
 public class MenuItems_Model {
 
     int grossweight = 0 ;
-    double priceperkg = 0 , unitprice = 0 ;
+    double priceperkg = 0 , unitprice = 0 , quantity = 0 ;
     boolean showforbilling = true;
-    String vendorkey = "" , vendorname = "" , itemtype = "" , itemname = "" , portionsize = "" , key = "";
+    String vendorkey = "" , vendorname = "" , itemtype = "" , itemname = "" , portionsize = "" ,
+            itemkey = "" , netweight = "";
 
-    public int getGrossweight() {
-        return grossweight;
+    public double getQuantity() {
+        return quantity;
     }
 
-    public void setGrossweight(int grossweight) {
-        this.grossweight = grossweight;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getNetweight() {
+        return netweight;
+    }
+
+    public void setNetweight(String netweight) {
+        this.netweight = netweight;
+    }
+
+    public double getGrossweight() {
+        return (double) grossweight;
+    }
+
+    public void setGrossweight(double grossweight) {
+        this.grossweight =(int) grossweight;
     }
 
     public double getPriceperkg() {
@@ -79,11 +96,11 @@ public class MenuItems_Model {
         this.portionsize = portionsize;
     }
 
-    public String getKey() {
-        return key;
+    public String getItemkey() {
+        return itemkey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setItemkey(String itemkey) {
+        this.itemkey = itemkey;
     }
 }

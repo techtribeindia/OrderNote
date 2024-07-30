@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-     android:background="@color/transparent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
     tools:context=".ui.fragment.AddMenuItem_InCart_Fragment">
 
 
@@ -39,7 +40,7 @@
             android:text="@string/item_name" />
 
         <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextViewBuyer"
+            android:id="@+id/autoCompleteTextViewMenuItem"
             style="@style/BlackEditTextStyleSemiBold"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -82,7 +83,22 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/rectangle_greybackground"
                     android:gravity="center_vertical"
+                    android:digits="0987654321."
+                    android:inputType="number"
                     android:hint="Enter weight" />
+
+
+                <TextView
+                    android:id="@+id/weightTextView"
+                    style="@style/BlackEditTextStyleSemiBold"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone"
+                    android:background="@drawable/rectangle_whitebackground_blackborder"
+                    android:gravity="center_vertical"
+                    android:hint="" />
 
             </LinearLayout>
 
@@ -143,6 +159,7 @@
 
 
         <TextView
+            android:id="@+id/priceperitemorunitpricelabel"
             style="@style/BlackTextStyleSemiBold"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
@@ -154,6 +171,9 @@
             style="@style/BlackEditTextStyleSemiBold"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:digits="0987654321."
+            android:inputType="number"
+
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/rectangle_greybackground"
@@ -170,7 +190,7 @@
 
 
         <TextView
-            android:id="@+id/buyerMobileNoTextview"
+            android:id="@+id/finalPriceTextview"
             style="@style/BlackTextStyleSemiBold"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -211,5 +231,22 @@
 
 
 
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/progressbar_backlayout"
+        android:alpha=".6"
+        android:background="@color/progressbar_grey"
+        android:visibility="gone"/>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/progressbar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_centerInParent="true"
+        app:lottie_fileName="dotanimator.json"
+        android:visibility="gone" />
 
 </RelativeLayout>

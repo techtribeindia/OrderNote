@@ -1,8 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ 
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="horizontal"
+    android:layout_margin="15dp"
+    android:padding="5dp"
+    android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+         android:orientation="vertical">
 
+            <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/menuItemName_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Menu item Name"
+            style="@style/SubTitleTextStyle1"/>
+
+
+    </LinearLayout>
+           <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Nos : "
+                   style="@style/BlackTextStyleNormal"/>
+
+               <TextView
+                   android:id="@+id/quantity_textview"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="9999 "
+                   android:gravity="center"
+                   style="@style/BlackTextStyleNormal"/>
+
+               <TextView
+                   android:id="@+id/X_textview"
+                   android:layout_width="25dp"
+                   android:layout_height="wrap_content"
+                   android:text=" X "
+                    style="@style/BlackTextStyleSemiBold"/>
+
+               <TextView
+                   android:id="@+id/itemprice_textview"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="₹5,000.00 "
+                   style="@style/BlackTextStyleSemiBold"/>
+
+
+
+
+
+           </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2.4"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/totalPrice_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="₹ 1,23,322.00"
+            style="@style/SubTitleTextStyle1"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
+ 

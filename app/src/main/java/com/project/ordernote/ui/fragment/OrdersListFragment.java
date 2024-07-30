@@ -95,6 +95,7 @@ public class OrdersListFragment extends Fragment {
                 setActiveButton(binding.rejectedordersButton);
                 orderDetailViewModel("ORDERREJECTED");
               //  observeOrderDetails();
+ 
             }
         });
 
