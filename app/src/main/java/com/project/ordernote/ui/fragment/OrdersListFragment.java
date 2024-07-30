@@ -22,6 +22,9 @@ import com.project.ordernote.databinding.FragmentOrdersBinding;
 import com.project.ordernote.ui.adapter.OrdersListAdapter;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class OrdersListFragment extends Fragment {
     private OrderDetails_ViewModel orderDetails_viewModel;
     private OrdersListAdapter ordersListAdapter;
@@ -48,18 +51,26 @@ public class OrdersListFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        orderDetails_viewModel = new ViewModelProvider(this).get(OrderDetails_ViewModel.class);
+        orderDetails_viewModel = new ViewModelProvider(requireActivity()).get(OrderDetails_ViewModel.class);
         binding = FragmentOrdersBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
         orderListItemDescFragment = new OrderListItemDescFragment();
-        ordersListAdapter = new OrdersListAdapter();
-        ordersListAdapter.setmHandler(newHandler());
+        Handler handler = newHandler();
+
+        ordersListAdapter = new OrdersListAdapter(orderDetails_viewModel);
+//        ordersListAdapter.setmHandler(newHandler());
         binding.ordersRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         binding.ordersRecyclerView.setAdapter(ordersListAdapter);
 
         setActiveButton(binding.pendingordersButton);
-
+        orderDetails_viewModel.getSelectedOrderJson().observe(getViewLifecycleOwner(), orderJson -> {
+            if (orderJson != null) {
+                OrderListItemDescFragment orderListItemDescFragment = OrderListItemDescFragment.newInstance(orderJson);
+                orderListItemDescFragment.setmHandler(newHandler());
+                orderListItemDescFragment.show(getParentFragmentManager(), "orderListItemDescFragment");
+            }
+        });
         try {
             orderDetailViewModel("ORDERCREATED");
         }
@@ -73,7 +84,7 @@ public class OrdersListFragment extends Fragment {
 
                 setActiveButton(binding.pendingordersButton);
                 orderDetailViewModel("ORDERCREATED");
-                observeOrderDetails();
+              //  observeOrderDetails();
             }
         });
 
@@ -83,7 +94,7 @@ public class OrdersListFragment extends Fragment {
 
                 setActiveButton(binding.rejectedordersButton);
                 orderDetailViewModel("ORDERREJECTED");
-                observeOrderDetails();
+              //  observeOrderDetails();
             }
         });
 
@@ -91,22 +102,21 @@ public class OrdersListFragment extends Fragment {
     }
 
     private Handler newHandler() {
-
-        Handler.Callback callback = new Handler.Callback() {
+        return new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message message) {
-
                 Bundle bundle = message.getData();
-                Toast.makeText(requireActivity(), bundle.getString("fromadapter"), Toast.LENGTH_SHORT).show();
-                Toast.makeText(requireActivity(), String.valueOf(bundle.getInt("position")), Toast.LENGTH_SHORT).show();
-
-                orderListItemDescFragment.show(getParentFragmentManager(),"orderListItemDescFragment");
-
+                Toast.makeText(requireActivity(), String.valueOf(bundle.getString("OrderListItemDescFragment")), Toast.LENGTH_SHORT).show();
+                if (Objects.equals(bundle.getString("fragment"), "OrderListItemDescFragment"))
+                {
+                    if (Objects.equals(bundle.getString("status"), "success"))
+                    {
+                       // observeOrderDetails();
+                    }
+                }
                 return false;
             }
-        };
-
-        return new Handler(callback);
+        });
     }
 
     @Override

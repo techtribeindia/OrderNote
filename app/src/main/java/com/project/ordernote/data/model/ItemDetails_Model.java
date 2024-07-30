@@ -7,6 +7,15 @@ public class ItemDetails_Model {
     private String netweight;
     private double priceperkg;
     private double price;
+    private String itemname;
+
+    public String getItemname() {
+        return itemname;
+    }
+
+    public void setItemname(String itemname) {
+        this.itemname = itemname;
+    }
 
     public ItemDetails_Model() {}
 

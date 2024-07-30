@@ -2,6 +2,7 @@ package com.project.ordernote.data.remote;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
@@ -17,7 +18,9 @@ import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class FirestoreService {
@@ -133,6 +136,57 @@ public class FirestoreService {
                     } else {
                         callback.onFailure(task.getException());
                     }
+                });
+    }
+
+    public void acceptOrder(String transportName, String driverMobileNo, String truckNo, String status, String orderId, FirestoreCallback<String> callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference orderRef = db.collection("OrderDetails").document(orderId);
+
+        Map<String, Object> updates = new HashMap<>();
+
+        // Check if each parameter is not empty and add to the map if so
+        if (transportName != null && !transportName.isEmpty()) {
+            updates.put("transportName", transportName);
+        }
+        if (driverMobileNo != null && !driverMobileNo.isEmpty()) {
+            updates.put("driverMobileNo", driverMobileNo);
+        }
+        if (truckNo != null && !truckNo.isEmpty()) {
+            updates.put("truckNo", truckNo);
+        }
+        if (status != null && !status.isEmpty()) {
+            updates.put("orderstatus", status);
+        }
+
+        // Check if there are any updates to make
+        if (!updates.isEmpty()) {
+            orderRef.update(updates)
+                    .addOnSuccessListener(aVoid -> {
+                        callback.onSuccess("success");
+                    })
+                    .addOnFailureListener(e -> {
+                        callback.onFailure(e);
+                    });
+        } else {
+            // No updates to make, you may want to handle this case
+            callback.onFailure(new Exception("No orders found with orderid: " + orderId));
+        }
+    }
+
+
+    public void rejectOrder(String status, String orderid, FirestoreCallback<String> callback)
+    {
+        DocumentReference orderRef = db.collection("OrderDetails").document(orderid);
+
+        orderRef.update("orderstatus", status)
+                .addOnSuccessListener(aVoid -> {
+                    callback.onSuccess("success");
+                    // Handle success, e.g., notify user, update UI
+                })
+                .addOnFailureListener(e -> {
+                    callback.onFailure(e);
+                    // Handle failure, e.g., notify user, retry
                 });
     }
 

@@ -2,6 +2,7 @@ package com.project.ordernote.data.model;
 
 public class OrderItemDetails_Model {
 
+    String itemname = "";
     String menuitemkey = "" ;
     String menutype = "" ;
     String netweight = "" ;
@@ -10,6 +11,13 @@ public class OrderItemDetails_Model {
     double unitprice = 0 ;
     double grossweight = 0 ;
 
+    public String getItemname() {
+        return itemname;
+    }
+
+    public void setItemname(String itemname) {
+        this.itemname = itemname;
+    }
 
     public String getMenuitemkey() {
         return menuitemkey;
