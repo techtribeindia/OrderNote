@@ -6,475 +6,738 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/reddishgrey"
     tools:context=".ui.fragment.OrderListItemDescFragment">
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp"
+        android:background="@color/reddishgrey"
+        android:orientation="vertical"
         >
-        <ImageView
-            android:id="@+id/dialog_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back_button"/>
-        <TextView
+
+        <LinearLayout
             android:layout_width="match_parent"
+
+            android:layout_height="40dp"
+
+            android:id="@+id/titleBarLayout"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/dialog_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:alpha=".7"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/back"/>
+            </RelativeLayout>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:text="Order Details"
+                android:layout_marginStart="20dp"
+                style="@style/ScreenTitleTextStyle"
+
+                />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+
             android:layout_height="match_parent"
-            android:text="Order Details"
-            android:gravity="center"/>
-    </LinearLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_weight="1">
-    <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:cardCornerRadius="10dp"
-            >
+
+            android:layout_below="@+id/titleBarLayout"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:scrollbars="none">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:padding="10dp"
-                android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:textStyle="bold"
-                    android:text="Inoice:"/>
-                <TextView
-                    android:id="@+id/dialog_invoice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:text=" Selan" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
-            android:layout_marginTop="10dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp">
-        <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="Bill To:" />
-                <LinearLayout
+                android:padding="1dp">
+
+                <RelativeLayout
+                    android:id="@+id/orderDetails_Relativelayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="10dp"
-                    android:layout_marginTop="5dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone">
 
-                         android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/orderno_label_textview"
+                        style="@style/SubTitleTextStyle1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:text="Order No: " />
+
+
+                    <TextView
+                        android:id="@+id/orderno_value_textview"
+
+                        style="@style/BlackTextStyleNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_toEndOf="@+id/orderno_label_textview"
+                        android:gravity="center"
+                        android:text="# 0001" />
+
+                    <TextView
+                        android:id="@+id/date_value_textview"
+                        style="@style/BlackTextStyleNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="17-07-2024" />
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/orderInfo_label_textview"
+                    style="@style/SubTitleGreyTextStyle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="3dp"
+                    android:gravity="center"
+                    android:text="Order Info " />
+
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="visible"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="10dp">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/circleOrderImage"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginBottom="25dp"
+                            app:cardBackgroundColor="@color/backgroundred"
+                            app:cardCornerRadius="25dp">
+
+
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_gravity="center"
+                                android:background="@color/backgroundred"
+
+                                android:scaleType="centerCrop"
+                                android:src="@mipmap/ordericonred" />
+
+
+                        </androidx.cardview.widget.CardView>
+
                         <TextView
+                            android:id="@+id/orderno_labelTexview"
+
+                            style="@style/SubTitleTextStyle1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_toEndOf="@+id/circleOrderImage"
+                            android:text="Order No : " />
+
+
+                        <TextView
+                            android:id="@+id/dialog_orderid"
+                            style="@style/SubTitleTextStyle1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="3"
-                            android:textStyle="bold"
-                            android:text="Name:"/>
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_toEndOf="@+id/orderno_labelTexview"
+                            android:text=" #0001 " />
+
+
                         <TextView
+                            android:id="@+id/dialog_orderplaceddate"
+                            style="@style/BlackTextStyleNormal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="45dp"
+                            android:layout_toEndOf="@+id/circleOrderImage"
+                            android:text="Sun, 21 Jul 2024" />
+
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                    android:id="@+id/buyerdetails_label_textview"
+
+                    style="@style/SubTitleGreyTextStyle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="3dp"
+                    android:gravity="center"
+                    android:text="Buyer Info " />
+
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="visible"
+                    app:cardCornerRadius="10dp"
+                    android:id="@+id/buyerselectionCardView"
+                    app:cardElevation="5dp">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/circleBuyerImage"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginBottom="25dp"
+                            app:cardBackgroundColor="@color/backgroundred"
+                            app:cardCornerRadius="25dp">
+
+
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_gravity="center"
+                                android:background="@color/backgroundred"
+
+                                android:scaleType="centerCrop"
+                                android:src="@mipmap/buyersiconred" />
+
+
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+
                             android:id="@+id/dialog_buyername"
+                            style="@style/SubTitleTextStyle1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Selan" />
-                    </LinearLayout>
-                    <LinearLayout
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_toEndOf="@+id/circleBuyerImage"
+                            android:text="Buyer name" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginStart="18dp"
+                            android:layout_marginTop="36dp"
+                            android:lineHeight="20dp"
+                            android:layout_toEndOf="@+id/circleBuyerImage"
+                            >
+                            <TextView
+                                android:id="@+id/dialog_buyeraddress"
+                                style="@style/BlackTextStyleNormal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="xx , xxxxx  xxx xxxx , xxxx - xxxx ." />
+                            <TextView
+                                android:id="@+id/dialog_mobileno"
+                                style="@style/BlackTextStyleNormal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Ph : - +91798xxxxxxx" />
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+
+                <TextView
+                    android:id="@+id/itemDetails_label_textview"
+                    style="@style/SubTitleGreyTextStyle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="3dp"
+                    android:gravity="center"
+                    android:text="Item Details " />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="match_parent"
+                    android:visibility="visible">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/itemListViewCardview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="5dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        android:orientation="horizontal">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/dialog_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:scrollbars="vertical" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/billValueCardview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="5dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/itemListViewCardview"
+
+                        >
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="35dp"
+                                android:orientation="horizontal">
+
+
+                                <TextView
+                                    style="@style/GreyTextStyleSemiBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_toEndOf="@+id/addItem_imageView"
+
+                                    android:layout_weight="1"
+                                    android:text="Subtotal" />
+
+                                <TextView
+                                    android:id="@+id/dialog_subtotal"
+                                    style="@style/BlackTextStyleNormal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_toEndOf="@+id/addItem_imageView"
+                                    android:layout_weight="1"
+                                    android:gravity="right"
+                                    android:text="₹ 25,000.00" />
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="35dp"
+                                android:orientation="horizontal">
+
+
+                                <TextView
+                                    style="@style/GreyTextStyleSemiBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_toEndOf="@+id/addItem_imageView"
+
+                                    android:text="Discount" />
+
+                                <TextView
+                                    style="@style/BlackTextStyleNormal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_toEndOf="@+id/addItem_imageView"
+                                    android:layout_weight="1"
+                                    android:gravity="left"
+                                    android:text=" ( 10% )" />
+
+                                <TextView
+                                    android:id="@+id/dialog_discount"
+                                    style="@style/BlackTextStyleNormal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_toEndOf="@+id/addItem_imageView"
+                                    android:layout_weight="1"
+                                    android:gravity="right"
+                                    android:text="- ₹ 2,000.00" />
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="35dp"
+                                android:orientation="horizontal">
+
+
+                                <TextView
+                                    style="@style/GreyTextStyleSemiBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_toEndOf="@+id/addItem_imageView"
+
+                                    android:text="Tax" />
+
+                                <TextView
+                                    style="@style/BlackTextStyleNormal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_toEndOf="@+id/addItem_imageView"
+                                    android:layout_weight="1"
+                                    android:gravity="left"
+                                    android:text=" ( 10% )" />
+
+                                <TextView
+                                    android:id="@+id/dialog_tax"
+                                    style="@style/BlackTextStyleNormal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_toEndOf="@+id/addItem_imageView"
+                                    android:layout_weight="1"
+                                    android:gravity="right"
+                                    android:text="₹ 250.00" />
+
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="35dp"
+
+                                android:layout_marginTop="15dp"
+                                android:background="@color/backgroundred"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    style="@style/BlackTextStyleNormal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_weight="1"
+                                    android:text="Total" />
+
+                                <TextView
+                                    android:id="@+id/dialog_total"
+                                    style="@style/BlackTextStyleNormal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_weight="1"
+                                    android:gravity="right"
+                                    android:text="₹ 25,000.00" />
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="3dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/reddishgrey"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/billValueCardview" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <TextView
+                    android:id="@+id/dispatchInfo_label_textview"
+
+                    style="@style/SubTitleGreyTextStyle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="3dp"
+                    android:gravity="center"
+                    android:text="Dispatch Info" />
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="visible"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="10dp">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                style="@style/SubTitleTextStyle1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2.2"
+                                android:text="Transport Name" />
+
+                            <EditText
+                                android:id="@+id/dialog_transportname"
+                                style="@style/BlackTextStyleSemiBold"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_margin="10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/rectangle_greybackground"
+                                android:gravity="end|center"
+                                android:paddingEnd="10dp"
+                                android:hint="Enter the transport name"
+                                />
+
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                style="@style/SubTitleTextStyle1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2.2"
+                                android:text="Driver Mobile.No" />
+
+                            <EditText
+                                android:id="@+id/dialog_driver_mobileno"
+                                style="@style/BlackTextStyleSemiBold"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_margin="10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/rectangle_greybackground"
+                                android:gravity="end|center"
+                                android:paddingEnd="10dp"
+                                android:hint="Enter the drier mobile no"
+                                />
+
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                style="@style/SubTitleTextStyle1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2.2"
+                                android:text="Truck.No" />
+
+                            <EditText
+                                android:id="@+id/dialog_truckno"
+                                style="@style/BlackTextStyleSemiBold"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_margin="10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/rectangle_greybackground"
+                                android:gravity="end|center"
+                                android:paddingEnd="10dp"
+                                android:hint="Enter the truck number"
+                                />
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:orientation="horizontal"
+
+                    android:padding="5dp">
+                    <RelativeLayout
+                        android:id="@+id/dialog_reject"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1.4">
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="3"
-                            android:textStyle="bold"
-                            android:gravity="center_vertical"
-                            android:text="Address :"/>
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            style="@style/WhiteTextStyleBold"
+                            android:background="@drawable/rectangle_blackbackground"
+                            android:text="Reject"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/dialog_accept"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1.4">
                         <TextView
-                            android:id="@+id/dialog_buyer_address"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="1/15 North Street, Athimarapatti, Thoothukkudi- 628005." />
-                    </LinearLayout>
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            style="@style/WhiteTextStyleBold"
+                            android:background="@drawable/rectangle_redbackground"
+                            android:text="Accept"/>
+                    </RelativeLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textStyle="bold"
-            android:layout_margin="10dp"
-            android:text="Invoice Items:"
-            />
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:orientation="horizontal"
-                android:gravity="center"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:textStyle="bold"
-                    android:text="Item"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:textStyle="bold"
-                    android:text="Price" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:textStyle="bold"
-                    android:text="Qty" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:textStyle="bold"
-                    android:text="Total P" />
-            </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    >
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:textAlignment="center"
-                        android:text="Item 1"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:textAlignment="center"
-                        android:text="100" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:textAlignment="center"
-                        android:text="1" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:textAlignment="center"
-                        android:text="100" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    >
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:textAlignment="center"
-                        android:text="Item 1"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:textAlignment="center"
-                        android:text="100" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:textAlignment="center"
-                        android:text="1" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:textAlignment="center"
-                        android:text="100" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    >
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:textAlignment="center"
-                        android:text="Item 1"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:textAlignment="center"
-                        android:text="100" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:textAlignment="center"
-                        android:text="1" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:textAlignment="center"
-                        android:text="100" />
-                </LinearLayout>
-            </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:layout_below="@+id/createOrder_button"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/reddishgrey" />
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
-            android:layout_marginTop="10dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Subtotal"
-                        android:textStyle="bold"
-                        android:layout_weight="1"/>
-                    <TextView
-                        android:id="@+id/dialog_subtotal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="25,000"
-                        android:textAlignment="textEnd"
-                        android:layout_weight="1"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Discount"
-                        android:textStyle="bold"
-                        android:layout_weight="1"/>
-                    <TextView
-                        android:id="@+id/dialog_discount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="25,000"
-                        android:textAlignment="textEnd"
-                        android:layout_weight="1"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tax"
-                        android:textStyle="bold"
-                        android:layout_weight="1"/>
-                    <TextView
-                        android:id="@+id/dialog_tax"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="25,000"
-                        android:textAlignment="textEnd"
-                        android:layout_weight="1"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Total"
-                        android:textStyle="bold"
-                        android:layout_weight="1"/>
-                    <TextView
-                        android:id="@+id/dialog_total"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="25,000"
-                        android:textAlignment="textEnd"
-                        android:layout_weight="1"/>
-                </LinearLayout>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Dispatched to"
-            android:textStyle="bold"
-            android:layout_margin="10dp"/>
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:orientation="vertical">
-                <TextView
-                    style="@style/BlackTextStyleSemiBold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="15dp"
-                    android:text="Transport Name" />
-                <EditText
-                    android:id="@+id/dialog_transport_name"
-                    style="@style/BlackEditTextStyleSemiBold"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/rectangle_greybackground"
-                    android:gravity="center_vertical"
-                    android:hint="eg. Senthil Murugan Traders" />
-                <TextView
-                    style="@style/BlackTextStyleSemiBold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="15dp"
-                    android:text="Driver Mobile Number" />
-                <EditText
-                    android:id="@+id/dialog_driver_mobile_number"
-                    style="@style/BlackEditTextStyleSemiBold"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/rectangle_greybackground"
-                    android:gravity="center_vertical"
-                    android:hint="eg. 7010779096" />
-                <TextView
-                    style="@style/BlackTextStyleSemiBold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="15dp"
-                    android:text="Vehicle Number" />
-                <EditText
-                    android:id="@+id/dialog_vehicle_number"
-                    style="@style/BlackEditTextStyleSemiBold"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/rectangle_greybackground"
-                    android:gravity="center_vertical"
-                    android:hint="eg. TN69 AP3579" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
-    </ScrollView>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:orientation="horizontal"
+        </ScrollView>
 
-            android:padding="5dp">
-            <RelativeLayout
-                android:id="@+id/dialog_reject"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:gravity="center"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_weight="1.4">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                     android:gravity="center"
-                    android:layout_margin="5dp"
-                    style="@style/WhiteTextStyleBold"
-                    android:background="@drawable/rectangle_blackbackground"
-                    android:text="Reject"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/dialog_accept"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:gravity="center"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_weight="1.4">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_margin="5dp"
-                    style="@style/WhiteTextStyleBold"
-                    android:background="@drawable/rectangle_redbackground"
-                    android:text="Accept"/>
-            </RelativeLayout>
-        </LinearLayout>
-    </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/progressbar_backlayout"
+            android:alpha=".6"
+            android:background="@color/progressbar_grey"
+            android:visibility="gone"/>
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/progressbar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:layout_centerInParent="true"
+            app:lottie_fileName="dotanimator.json"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+
 </FrameLayout>

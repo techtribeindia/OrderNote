@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.utils.ApiResponseState_Enum;
@@ -86,4 +85,59 @@ public class OrderDetails_Repository {
         firestoreService.addOrder(order, callback);
     }
 
+    public MutableLiveData<ApiResponseState_Enum<String>> acceptOrder(String transporName,String driverMobieno,String truckNo, String status, String orderid) {
+        MutableLiveData<ApiResponseState_Enum<String>> ordersLiveData = new MutableLiveData<>();
+        ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
+
+        firestoreService.acceptOrder(transporName,driverMobieno,truckNo,status,orderid, new FirestoreService.FirestoreCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d("orderdetails response   :  ", result.toString());
+
+                if (result.isEmpty()) {
+                    ordersLiveData.postValue(ApiResponseState_Enum.error("No data available", result));
+                } else {
+                    ordersLiveData.postValue(ApiResponseState_Enum.success(result));
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                ordersLiveData.postValue(ApiResponseState_Enum.error(e.getMessage(), null));
+            }
+        });
+        Log.d("orderdetails ordersLiveData  :  ", ordersLiveData.toString());
+
+
+        return ordersLiveData;
+
+    }
+
+    public MutableLiveData<ApiResponseState_Enum<String>> rejectOrder(String status, String orderid) {
+        MutableLiveData<ApiResponseState_Enum<String>> ordersLiveData = new MutableLiveData<>();
+        ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
+
+        firestoreService.rejectOrder(status, orderid, new FirestoreService.FirestoreCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d("orderdetails response   :  ", result.toString());
+
+                if (result.isEmpty()) {
+                    ordersLiveData.postValue(ApiResponseState_Enum.error("No data available", result));
+                } else {
+                    ordersLiveData.postValue(ApiResponseState_Enum.success(result));
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                ordersLiveData.postValue(ApiResponseState_Enum.error(e.getMessage(), null));
+            }
+        });
+        Log.d("orderdetails ordersLiveData  :  ", ordersLiveData.toString());
+
+
+        return ordersLiveData;
+
+    }
 }
