@@ -18,14 +18,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.project.ordernote.R;
 import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
+import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.OrderViewHolder> {
     private List<OrderDetails_Model> orders = new ArrayList<>();
-
+    private OrderDetails_ViewModel viewModel;
     Handler mHandler;
+
+    public OrdersListAdapter(OrderDetails_ViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
+
+    public OrdersListAdapter() {
+
+    }
 
 
     @NonNull
@@ -57,8 +66,8 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
             Log.d("Item Detail", "No item details available");
         }
         holder.ViewBill.setOnClickListener(view -> {
-          //  showOrderDetailsDialog(view.getContext(), order);
-            sendHandlerMessage(position);
+            viewModel.setSelectedOrder(order);
+           // sendHandlerMessage(position);
         });
     }
 

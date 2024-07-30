@@ -41,12 +41,13 @@ android {
 
 dependencies {
     implementation ("com.github.bumptech.glide:glide:4.15.1")
-
     implementation("androidx.activity:activity:1.8.0")
-
     implementation ("com.airbnb.android:lottie:4.2.0")
+
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
+
+    implementation ("com.google.code.gson:gson:2.10.1")
 
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
     implementation ("androidx.core:core:1.9.0")

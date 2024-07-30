@@ -1,7 +1,7 @@
 package com.project.ordernote.data.model;
 
 public class ItemDetails_Model {
-    String itemname = "" ;
+     String itemname = "" ;
     String menuitemkey = "" ;
     String menutype = "" ;
     String netweight = "" ;
@@ -9,6 +9,7 @@ public class ItemDetails_Model {
     double price = 0 ;
     double grossweight = 0 ;
     int quantity = 0;
+ 
 
     public ItemDetails_Model() {}
 

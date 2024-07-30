@@ -12,7 +12,7 @@ public class ApiResponseState_Enum<T> {
     public final T data;
     public final String message;
 
-    private ApiResponseState_Enum(Status status, T data, String message) {
+    public ApiResponseState_Enum(Status status, T data, String message) {
         this.status = status;
         this.data = data;
         this.message = message;
