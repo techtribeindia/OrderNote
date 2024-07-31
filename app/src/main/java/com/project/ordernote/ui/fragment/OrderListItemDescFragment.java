@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,7 +20,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +33,8 @@ import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.ui.adapter.OrderItemListAdapter;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +47,10 @@ public class OrderListItemDescFragment extends DialogFragment {
     private OrderItemListAdapter orderItemListAdapter;
     private OrderDetails_ViewModel orderDetails_viewModel;
     private Handler mHandler;
+    CardView dialogOrderStatusCard;
+    TextView dialogOrderStatusText;
+    LinearLayout dialogButtonLayout,dialogCancelAndPlaceAgainButtonLayout,dialogEditRequestButtonLayout;
+    private String selectedScreen;
 
     public OrderListItemDescFragment() {
 
@@ -55,9 +64,10 @@ public class OrderListItemDescFragment extends DialogFragment {
         return fragment;
     }
 
-    public void setmHandler(Handler mHandler) {
+    public void setmHandler(Handler mHandler, String selectedOrderButton) {
         this.mHandler = mHandler;
-        Log.d(TAG, "Handler set: " + mHandler);
+        this.selectedScreen  = selectedOrderButton;
+        Log.d("selectedOrderButton", String.valueOf(selectedOrderButton));
     }
     public void sendHandlerMessage(String status) {
         if (mHandler != null) { // Null check to prevent NullPointerException
@@ -100,18 +110,67 @@ public class OrderListItemDescFragment extends DialogFragment {
                 TextView buyerNameTextView = view.findViewById(R.id.dialog_buyername);
                 TextView buyerAddressTextView = view.findViewById(R.id.dialog_buyeraddress);
                 TextView orderPriceTextView = view.findViewById(R.id.dialog_total);
+
+                TextView dialogTransportNameText = view.findViewById(R.id.dialog_transportname_text);
+                TextView dialogMobileNoText = view.findViewById(R.id.dialog_driver_mobileno_text);
+                TextView dialogTrucckNoText = view.findViewById(R.id.dialog_truckno_text);
+
                 RelativeLayout backbut = view.findViewById(R.id.dialog_back);
                 RelativeLayout rejectbut = view.findViewById(R.id.dialog_reject);
                 RelativeLayout accepttbut = view.findViewById(R.id.dialog_accept);
                 EditText transport_name = view.findViewById(R.id.dialog_transportname);
                 EditText driver_mobieno = view.findViewById(R.id.dialog_driver_mobileno);
                 EditText truck_no = view.findViewById(R.id.dialog_truckno);
+                dialogOrderStatusCard = view.findViewById(R.id.dialog_orderstatus_card);
+                dialogOrderStatusText = view.findViewById(R.id.dialog_orderstatus_text);
+                dialogButtonLayout = view.findViewById(R.id.dialog_button_layout);
 
-                String transporName = transport_name.getText().toString();
-                String driverMobieno = driver_mobieno.getText().toString();
-                String truckNo = truck_no.getText().toString();
+                dialogCancelAndPlaceAgainButtonLayout = view.findViewById(R.id.dialog_cancel_and_reapeal_button_layout);
+                RelativeLayout dialogCancel = view.findViewById(R.id.dialog_cancel);
+                RelativeLayout dialogPlaceAgain = view.findViewById(R.id.dialog_place_again);
+
+                dialogEditRequestButtonLayout = view.findViewById(R.id.dialog_edit_request_button_layout);
+                RelativeLayout dialogEditRequest = view.findViewById(R.id.dialog_edit_request);
+
                 // Check for empty transport details
 
+                if (Objects.equals(selectedScreen, "ORDERCREATED"))
+                {
+                    dialogButtonLayout.setVisibility(View.VISIBLE);
+                }
+                else if (Objects.equals(selectedScreen, "ORDERREJECTED"))
+                {
+                    dialogCancelAndPlaceAgainButtonLayout.setVisibility(View.VISIBLE);
+
+                }
+                else
+                {
+                    if (order.isEditrequest())
+                    {
+                        dialogOrderStatusCard.setVisibility(View.VISIBLE);
+                        dialogOrderStatusText.setText(String.valueOf("The request to edit the dispatch details has already been submitted"));
+                    }
+                    else
+                    {
+                        dialogEditRequestButtonLayout.setVisibility(View.VISIBLE);
+                    }
+
+
+                }
+
+                if (!Objects.equals(selectedScreen, "ORDERCREATED"))
+                {
+                    dialogTransportNameText.setVisibility(View.VISIBLE);
+                    dialogMobileNoText.setVisibility(View.VISIBLE);
+                    dialogTrucckNoText.setVisibility(View.VISIBLE);
+
+                    transport_name.setVisibility(View.GONE);
+                    driver_mobieno.setVisibility(View.GONE);
+                    truck_no.setVisibility(View.GONE);
+                }
+                dialogTransportNameText.setText(order.getTransportname() != null ? order.getTransportname() : "");
+                dialogMobileNoText.setText(order.getDrivermobileno() != null ? order.getDrivermobileno() : "");
+                dialogTrucckNoText.setText(order.getTruckno() != null ? order.getTruckno() : "");
 
                 RecyclerView orderitem_recyclerView = view.findViewById(R.id.dialog_recycler_view);
                 orderitem_recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
@@ -142,13 +201,15 @@ public class OrderListItemDescFragment extends DialogFragment {
 
                 accepttbut.setOnClickListener(v -> {
                     boolean Dispatchstatus = true;
+
+                    String transporName = transport_name.getText().toString();
+                    String driverMobieno = driver_mobieno.getText().toString();
+                    String truckNo = truck_no.getText().toString();
+
                     if (transporName.isEmpty() && driverMobieno.isEmpty() && truckNo.isEmpty()) {
                         Dispatchstatus = false;
                     }
-                    Log.d("transporName", transporName);
-                    Log.d("driverMobieno", driverMobieno);
-                    Log.d("truckNo", truckNo);
-                    Log.d("Dispatchstatus", String.valueOf(Dispatchstatus));
+
                     if (!Dispatchstatus) {
                         new AlertDialog.Builder(requireContext())
                                 .setTitle("Dispatch Details")
@@ -162,6 +223,38 @@ public class OrderListItemDescFragment extends DialogFragment {
                             "Are you sure you want to accept this order?",
                             () -> handleOrderAcceptance(transporName,driverMobieno,truckNo,order.getOrderid(),"ORDERPLACED")
                     );
+                });
+
+                dialogCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showConfirmationDialog(
+                                "Order Cancellation",
+                                "Do you want to cancel the order? \n Order Cancellation cannot be reversed",
+                                () -> handleOrderCancellation(order.getOrderid(),"ORDERCANCELLED")
+                        );
+                    }
+                });
+
+                dialogPlaceAgain.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showConfirmationDialog(
+                                "Accept Order",
+                                "Are you sure you want to accept this order?",
+                                () -> handleOrderPlace(order.getOrderid(),"ORDERCREATED")
+                        );
+                    }
+                });
+                dialogEditRequest.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showConfirmationDialog(
+                                "Dispatch Edit Request",
+                                "Request Admin to edit the Dispatch Details",
+                                () -> handleEditRequest(order.getOrderid())
+                        );
+                    }
                 });
 
             } else {
@@ -193,24 +286,51 @@ public class OrderListItemDescFragment extends DialogFragment {
                 .show();
     }
 
-    public void handleOrderAcceptance(String transporName, String driverMobieno, String truckNo,String orderid,String orderplaced)
+    public void handleOrderAcceptance(String transporName, String driverMobieno, String truckNo,String orderid,String status)
     {
-        orderDetailAcceptOrderModel(transporName, driverMobieno, truckNo,  orderplaced,orderid);
+        orderDetailAcceptOrderModel(transporName, driverMobieno, truckNo,orderid,status);
     }
 
-    public void handleOrderRejection(String orderid,String orderrejected)
+    public void handleOrderRejection(String orderid,String status)
     {
-        Toast.makeText(requireActivity(), orderid, Toast.LENGTH_LONG).show();
-        orderDetailRejectOrderModel(orderid , orderrejected);
+
+        orderDetailRejectOrderModel(orderid , status);
     }
 
-    private void orderDetailAcceptOrderModel(String transporName, String driverMobieno, String truckNo, String orderid, String orderrejected) {
-        orderDetails_viewModel.acceptOrder(transporName, driverMobieno, truckNo, orderid, orderrejected).observe(this, this::observeOrderDetails);
+    public void handleOrderCancellation(String orderid, String ststus)
+    {
+        orderDetailCancelOrderModel(orderid , ststus);
+    }
+    public void handleOrderPlace(String orderid, String ststus)
+    {
+        orderDetailPlaceOrderModel(orderid , ststus);
+    }
+    public void handleEditRequest(String orderid)
+    {
+        orderDetailEditRequestModel(orderid);
     }
 
-    private void orderDetailRejectOrderModel(String orderid, String orderrejected) {
-      //  orderDetails_viewModel.rejectOrder(orderid, orderrejected).observe(this, this::observeOrderDetails);
-        orderDetails_viewModel.removeOrderFromLiveData(orderid);
+    private void orderDetailAcceptOrderModel(String transporName, String driverMobieno, String truckNo, String orderid, String status) {
+        orderDetails_viewModel.acceptOrder(transporName, driverMobieno, truckNo,orderid,status).observe(this, this::observeOrderDetails);
+    }
+
+    private void orderDetailRejectOrderModel(String orderid, String status) {
+        orderDetails_viewModel.rejectOrder( orderid,status).observe(this, this::observeOrderDetails);
+       // orderDetails_viewModel.removeOrderFromLiveData(orderid);
+    }
+    private void orderDetailCancelOrderModel(String orderid, String status)
+    {
+        orderDetails_viewModel.cancelOrder( orderid,status).observe(this, this::observeOrderDetails);
+    }
+
+    private void orderDetailPlaceOrderModel(String orderid, String status)
+    {
+        orderDetails_viewModel.placeOrder( orderid,status).observe(this, this::observeOrderDetails);
+    }
+
+    private void orderDetailEditRequestModel(String orderid)
+    {
+        orderDetails_viewModel.placeEditRequest( orderid).observe(this, this::observeOrderDetails);
     }
 
     private void observeOrderDetails(ApiResponseState_Enum<String> resource) {
@@ -221,6 +341,11 @@ public class OrderListItemDescFragment extends DialogFragment {
                 break;
             case SUCCESS:
                 sendHandlerMessage("success");
+                dialogButtonLayout.setVisibility(View.GONE);
+                dialogCancelAndPlaceAgainButtonLayout.setVisibility(View.GONE);
+                dialogEditRequestButtonLayout.setVisibility(View.GONE);
+                dialogOrderStatusCard.setVisibility(View.VISIBLE);
+                dialogOrderStatusText.setText(String.valueOf(resource.data));
                 Toast.makeText(requireActivity(), "Success in fetching orders", Toast.LENGTH_SHORT).show();
 //                        ordersListAdapter.setOrders(resource.data);
                 break;

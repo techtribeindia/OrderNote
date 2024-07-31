@@ -2,6 +2,7 @@ package com.project.ordernote.data.remote;
 
 import android.util.Log;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -139,7 +140,7 @@ public class FirestoreService {
                 });
     }
 
-    public void acceptOrder(String transportName, String driverMobileNo, String truckNo, String status, String orderId, FirestoreCallback<String> callback) {
+    public void acceptOrder(String transportName, String driverMobileNo, String truckNo, String orderId, String status, FirestoreCallback<String> callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference orderRef = db.collection("OrderDetails").document(orderId);
 
@@ -147,23 +148,23 @@ public class FirestoreService {
 
         // Check if each parameter is not empty and add to the map if so
         if (transportName != null && !transportName.isEmpty()) {
-            updates.put("transportName", transportName);
+            updates.put("transportname", transportName);
         }
         if (driverMobileNo != null && !driverMobileNo.isEmpty()) {
-            updates.put("driverMobileNo", driverMobileNo);
+            updates.put("drivermobileno", driverMobileNo);
         }
         if (truckNo != null && !truckNo.isEmpty()) {
-            updates.put("truckNo", truckNo);
+            updates.put("truckno", truckNo);
         }
         if (status != null && !status.isEmpty()) {
-            updates.put("orderstatus", status);
+            updates.put("status", status);
         }
-
+        updates.put("orderplaceddate", Timestamp.now());
         // Check if there are any updates to make
         if (!updates.isEmpty()) {
             orderRef.update(updates)
                     .addOnSuccessListener(aVoid -> {
-                        callback.onSuccess("success");
+                        callback.onSuccess("The order succfully accepted");
                     })
                     .addOnFailureListener(e -> {
                         callback.onFailure(e);
@@ -175,13 +176,58 @@ public class FirestoreService {
     }
 
 
-    public void rejectOrder(String status, String orderid, FirestoreCallback<String> callback)
+    public void rejectOrder( String orderid,String status, FirestoreCallback<String> callback)
     {
         DocumentReference orderRef = db.collection("OrderDetails").document(orderid);
 
-        orderRef.update("orderstatus", status)
+        orderRef.update("status", status)
                 .addOnSuccessListener(aVoid -> {
-                    callback.onSuccess("success");
+                    callback.onSuccess("The order status changed to rejected");
+                    // Handle success, e.g., notify user, update UI
+                })
+                .addOnFailureListener(e -> {
+                    callback.onFailure(e);
+                    // Handle failure, e.g., notify user, retry
+                });
+    }
+
+    public void cancelOrder( String orderid,String status, FirestoreCallback<String> callback)
+    {
+        DocumentReference orderRef = db.collection("OrderDetails").document(orderid);
+
+        orderRef.update("status", status)
+                .addOnSuccessListener(aVoid -> {
+                    callback.onSuccess("Order Cancelled");
+                    // Handle success, e.g., notify user, update UI
+                })
+                .addOnFailureListener(e -> {
+                    callback.onFailure(e);
+                    // Handle failure, e.g., notify user, retry
+                });
+    }
+
+    public void placeOrder( String orderid,String status, FirestoreCallback<String> callback)
+    {
+        DocumentReference orderRef = db.collection("OrderDetails").document(orderid);
+
+        orderRef.update("status", status)
+                .addOnSuccessListener(aVoid -> {
+                    callback.onSuccess("Order Placed");
+                    // Handle success, e.g., notify user, update UI
+                })
+                .addOnFailureListener(e -> {
+                    callback.onFailure(e);
+                    // Handle failure, e.g., notify user, retry
+                });
+    }
+
+    public void EditRequest( String orderid, FirestoreCallback<String> callback)
+    {
+        DocumentReference orderRef = db.collection("OrderDetails").document(orderid);
+
+        orderRef.update("editrequest", true)
+                .addOnSuccessListener(aVoid -> {
+                    callback.onSuccess("Requested permission to edit the Dispatch Details");
                     // Handle success, e.g., notify user, update UI
                 })
                 .addOnFailureListener(e -> {
@@ -217,6 +263,32 @@ public class FirestoreService {
                     }
                 });
     }
+
+    public void getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp, FirestoreCallback<List<OrderDetails_Model>> callback) {
+        db.collection("OrderDetails")
+                .whereEqualTo("status", status)
+                .whereGreaterThanOrEqualTo("orderplaceddate", startTimestamp)
+                .whereLessThanOrEqualTo("orderplaceddate", endTimestamp)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            List<OrderDetails_Model> orders = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : querySnapshot) {
+                                OrderDetails_Model order = document.toObject(OrderDetails_Model.class);
+                                orders.add(order);
+                            }
+                            callback.onSuccess(orders);
+                        } else {
+                            callback.onFailure(new Exception("No orders found with status: " + status + " and date range."));
+                        }
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+    }
+
 
     public void fetchOrdersByStatus1(String status, fetchOrdersWithStatusCallback callback) {
         db.collection("OrderDetails")

@@ -14,23 +14,24 @@ public class OrderDetails_Model {
 
     String orderid = "";
     String buyername ="";
-
     String buyeraddress ="";
     String buyergstin = "";
     String buyerkey = "";
     double discount =0;
     private List<ItemDetails_Model> itemdetails;
-
     Timestamp orderplaceddate;
-
     double price = 0 ;
     String status = "";
     String tokenno = "";
     double totalprice =0;
     String vendorkey = "";
     String vendorname ="";
-
     double totalqty = 0;
+    String transportname = "";
+    String drivermobileno = "";
+    String truckno = "";
+    boolean editrequest;
+
     public OrderDetails_Model()
     {
 
@@ -49,6 +50,38 @@ public class OrderDetails_Model {
         this.vendorkey = vendorkey;
         this.vendorname = vendorname;
         this.totalqty = totalqty;
+    }
+
+    public boolean isEditrequest() {
+        return editrequest;
+    }
+
+    public void setEditrequest(boolean editrequest) {
+        this.editrequest = editrequest;
+    }
+
+    public String getTransportname() {
+        return transportname;
+    }
+
+    public void setTransportname(String transportname) {
+        this.transportname = transportname;
+    }
+
+    public String getDrivermobileno() {
+        return drivermobileno;
+    }
+
+    public void setDrivermobileno(String drivermobileno) {
+        this.drivermobileno = drivermobileno;
+    }
+
+    public String getTruckno() {
+        return truckno;
+    }
+
+    public void setTruckno(String truckno) {
+        this.truckno = truckno;
     }
 
     public List<ItemDetails_Model> getItemdetails() {

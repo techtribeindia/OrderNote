@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.google.firebase.Timestamp;
 import com.google.gson.Gson;
 import com.project.ordernote.data.model.MenuItems_Model;
 
@@ -23,6 +24,8 @@ import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.utils.calculations.OrderValueCalculator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import java.util.Map;
@@ -71,6 +74,14 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
+    public void getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp) {
+
+        LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> source = repository.getOrdersByStatusAndDate(status, startTimestamp, endTimestamp);
+        source.observeForever(ordersObserver);
+    }
+
+
     public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersListFromViewModel() {
         if(orderDetailsLiveData == null){
             orderDetailsLiveData = new MutableLiveData<>();
@@ -97,8 +108,8 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         selectedOrderJson.setValue(orderJson);
     }
 
-    public MutableLiveData<ApiResponseState_Enum<String>> acceptOrder(String transporName, String driverMobieno, String truckNo, String status, String orderId) {
-        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.acceptOrder(transporName, driverMobieno, truckNo, status, orderId);
+    public MutableLiveData<ApiResponseState_Enum<String>> acceptOrder(String transporName, String driverMobieno, String truckNo, String orderId, String status) {
+        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.acceptOrder(transporName, driverMobieno, truckNo, orderId, status);
         resultLiveData.observeForever(result -> {
             if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
                 removeOrderFromLiveData(orderId);
@@ -107,14 +118,63 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         return resultLiveData;
     }
 
-    public MutableLiveData<ApiResponseState_Enum<String>> rejectOrder(String status, String orderId) {
-        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.rejectOrder(status, orderId);
+    public MutableLiveData<ApiResponseState_Enum<String>> rejectOrder(String orderId,String status) {
+        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.rejectOrder( orderId,status);
         resultLiveData.observeForever(result -> {
             if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
                 removeOrderFromLiveData(orderId);
             }
         });
         return resultLiveData;
+    }
+
+    public MutableLiveData<ApiResponseState_Enum<String>> cancelOrder(String orderId,String status) {
+        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.cancelOrder( orderId,status);
+        resultLiveData.observeForever(result -> {
+            if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
+                removeOrderFromLiveData(orderId);
+            }
+        });
+        return resultLiveData;
+    }
+
+    public MutableLiveData<ApiResponseState_Enum<String>> placeOrder(String orderId,String status) {
+        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.placeOrder( orderId,status);
+        resultLiveData.observeForever(result -> {
+            if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
+                removeOrderFromLiveData(orderId);
+            }
+        });
+        return resultLiveData;
+    }
+
+    public MutableLiveData<ApiResponseState_Enum<String>> placeEditRequest(String orderId) {
+        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.orderEditRequest( orderId);
+        resultLiveData.observeForever(result -> {
+            if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
+                editOrderDetails(orderId);
+            }
+        });
+        return resultLiveData;
+    }
+
+    public void editOrderDetails(String orderId)
+    {
+        ApiResponseState_Enum<List<OrderDetails_Model>> currentData = orderDetailsLiveData.getValue();
+        if (currentData != null && currentData.data != null) {
+            List<OrderDetails_Model> updatedOrders = new ArrayList<>(currentData.data);
+            for (OrderDetails_Model order : updatedOrders) {
+                if (order.getOrderid().equals(orderId)) {
+                    order.setEditrequest(true);
+                    break;
+                }
+            }
+
+            orderDetailsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
+            //  orderDetailsLiveData.observeForever(ordersObserver);
+
+            //orderDetailsLiveData.setValue(new ApiResponseState_Enum.Status.SUCCESS, updatedOrders, null));
+        }
     }
 
     public void removeOrderFromLiveData(String orderId) {

@@ -29,6 +29,7 @@ import java.util.Map;
 public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.OrderViewHolder> {
     private List<OrderDetails_Model> orders = new ArrayList<>();
     private OrderDetails_ViewModel viewModel;
+    private String selectedScreen;
     Handler mHandler;
 
     public OrdersListAdapter(OrderDetails_ViewModel viewModel) {
@@ -90,9 +91,11 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
         return orders.size();
     }
 
-    public void setOrders(List<OrderDetails_Model> orders) {
+    public void setOrders(List<OrderDetails_Model> orders, String selectedOrderButton) {
         this.orders = orders;
+        this.selectedScreen  = selectedOrderButton;
         notifyDataSetChanged();
+
     }
     public void clearOrders() {
         this.orders.clear();
