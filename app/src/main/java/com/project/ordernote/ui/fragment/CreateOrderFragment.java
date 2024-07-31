@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,14 @@ import android.widget.Toast;
 
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.Buyers_Model;
+import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
+import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.model.OrderItemDetails_Model;
 
 import com.project.ordernote.databinding.FragmentAddOrdersBinding;
+import com.project.ordernote.ui.adapter.CreateOrderCartItemAdapter;
+import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
@@ -33,7 +38,7 @@ public class CreateOrderFragment extends Fragment {
     private Buyers_ViewModel buyersViewModel;
 
     private FragmentAddOrdersBinding binding;
-
+    CreateOrderCartItemAdapter createOrderCartItemAdapter ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentAddOrdersBinding.inflate(inflater, container, false);
@@ -188,30 +193,31 @@ public class CreateOrderFragment extends Fragment {
             }
         });
 
-        ordersViewModel.getOrdersListFromViewModel().observe(getViewLifecycleOwner(),  resource -> {
-            if (resource != null) {
-                switch (resource.status) {
-                    case LOADING:
-                        buyerDetailsFetchedSuccessfully = false;
-                        showProgressBar(true);
-                        Toast.makeText(requireActivity(), "Loading Buyer", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SUCCESS:
-                        buyerDetailsFetchedSuccessfully = true;
-                        if(menuItemFetchedSuccesfully){
-                            showProgressBar(false);
-                        }
+        ordersViewModel.getItemDetailsArraylistViewModel().observe(getViewLifecycleOwner(),  data -> {
+            if (data != null) {
 
-                        Toast.makeText(requireActivity(), "Success in fetching Buyer", Toast.LENGTH_SHORT).show();
-                        break;
-                    case ERROR:
-                        buyerDetailsFetchedSuccessfully = false;
-                        Toast.makeText(requireActivity(), "Error in fetching Buyer", Toast.LENGTH_SHORT).show();
-                        showProgressBar(false);
-                        break;
-                }
+                setAdapterForCartRecyclerView(data);
+
             }
         });
+
+
+
+    }
+
+    private void setAdapterForCartRecyclerView(List<ItemDetails_Model> data) {
+
+        if(createOrderCartItemAdapter != null){
+            createOrderCartItemAdapter.notifyDataSetChanged();
+        }
+        else{
+            createOrderCartItemAdapter = new CreateOrderCartItemAdapter(data);
+            binding.itemDetailsRecyclerview.setAdapter(createOrderCartItemAdapter);
+            binding.itemDetailsRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        }
+
+
 
 
 

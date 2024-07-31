@@ -11,10 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.ordernote.R;
@@ -24,7 +22,6 @@ import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.OrderViewHolder> {
     private List<OrderDetails_Model> orders = new ArrayList<>();
@@ -63,8 +60,8 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
                 Log.d("Item Detail", "Menu Type: " + itemDetail.getMenutype());
                 Log.d("Item Detail", "Gross Weight: " + itemDetail.getGrossweight());
                 Log.d("Item Detail", "Net Weight: " + itemDetail.getNetweight());
-                Log.d("Item Detail", "Price per Kg: " + itemDetail.getPriceperkg());
-                Log.d("Item Detail", "Price: " + itemDetail.getPrice());
+                Log.d("Item Detail", "Price per Kg: " + itemDetail.getPrice());
+                Log.d("Item Detail", "Price: " + itemDetail.getTotalprice());
             }
         } else {
             Log.d("Item Detail", "No item details available");

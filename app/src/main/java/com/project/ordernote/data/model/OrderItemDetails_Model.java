@@ -1,15 +1,24 @@
 package com.project.ordernote.data.model;
 
 public class OrderItemDetails_Model {
-
-    String itemname = "";
+     String itemname = "" ;
+ 
     String menuitemkey = "" ;
     String menutype = "" ;
     String netweight = "" ;
+    double totalprice = 0 ;
     double price = 0 ;
-    double priceperkg = 0 ;
-    double unitprice = 0 ;
-    double grossweight = 0 ;
+     double grossweight = 0 ;
+    int quantity = 0;
+
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public String getItemname() {
         return itemname;
@@ -43,6 +52,14 @@ public class OrderItemDetails_Model {
         this.netweight = netweight;
     }
 
+    public double getTotalprice() {
+        return totalprice;
+    }
+
+    public void setTotalprice(double totalprice) {
+        this.totalprice = totalprice;
+    }
+
     public double getPrice() {
         return price;
     }
@@ -51,21 +68,6 @@ public class OrderItemDetails_Model {
         this.price = price;
     }
 
-    public double getPriceperkg() {
-        return priceperkg;
-    }
-
-    public void setPriceperkg(double priceperkg) {
-        this.priceperkg = priceperkg;
-    }
-
-    public double getUnitprice() {
-        return unitprice;
-    }
-
-    public void setUnitprice(double unitprice) {
-        this.unitprice = unitprice;
-    }
 
     public double getGrossweight() {
         return grossweight;

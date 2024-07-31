@@ -98,6 +98,7 @@ public class OrdersListFragment extends Fragment {
 
                 setActiveButton(binding.rejectedordersButton);
                 orderDetailViewModel("ORDERREJECTED");
+
                 selectedOrderButton = "ORDERREJECTED";
             }
         });
@@ -107,6 +108,7 @@ public class OrdersListFragment extends Fragment {
                 setActiveButton(binding.totayActivedordersButton);
                 orderDetailViewModel("ORDERPLACED");
                 selectedOrderButton = "ORDERPLACED";
+
             }
         });
 

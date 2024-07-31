@@ -10,8 +10,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+
 import com.google.firebase.Timestamp;
 import com.google.gson.Gson;
+
+ import com.project.ordernote.data.model.ItemDetails_Model;
+ import com.google.gson.Gson;
+ 
 import com.project.ordernote.data.model.MenuItems_Model;
 
 import com.project.ordernote.data.model.Buyers_Model;
@@ -40,25 +45,48 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
 
     private Observer<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersObserver;
 
+    private MutableLiveData<List<ItemDetails_Model>> itemDetailsArrayListLiveData;
+    private Observer<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersObserver;
+
+
+
     public OrderDetails_ViewModel(@NonNull Application application) {
         super(application);
         repository = new OrderDetails_Repository();
         orderDetailsLiveData = new MutableLiveData<>();
+ 
+        itemDetailsArrayListLiveData = new MutableLiveData<>();
+ 
         selectedOrderJson = new MutableLiveData<>();
         initObserver();
     }
 
     private void initObserver() {
         ordersObserver = state -> orderDetailsLiveData.setValue(state);
-    }
+     }
 
-    public LiveData<List<OrderDetails_Model>> getOrdersByDate(String startDate, String endDate) {
-        return repository.getOrdersByDate(startDate, endDate);
+
+
+    private void initObserver() {
+        ordersObserver = state -> orderDetailsLiveData.setValue(state);
     }
 
     public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersByStatusFromViewModel() {
         return orderDetailsLiveData;
     }
+    public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersListFromViewModel() {
+        if(orderDetailsLiveData == null){
+            orderDetailsLiveData = new MutableLiveData<>();
+        }
+        return orderDetailsLiveData;
+    }
+    public LiveData<List<ItemDetails_Model>> getItemDetailsArraylistViewModel() {
+        if(itemDetailsArrayListLiveData == null){
+            itemDetailsArrayListLiveData = new MutableLiveData<>();
+        }
+        return itemDetailsArrayListLiveData;
+    }
+
 
     public void getOrdersByStatus(String status) {
         try {
@@ -75,6 +103,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         }
     }
 
+
     public void getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp) {
 
         LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> source = repository.getOrdersByStatusAndDate(status, startTimestamp, endTimestamp);
@@ -88,17 +117,24 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         }
         return orderDetailsLiveData;
     }
+
+
+
+
+
     public LiveData<List<Map<String, Object>>> getOrdersByStatus1(String status) {
         return repository.getOrdersByStatus1(status);
     }
-    public void addOrder(OrderDetails_Model order, List<OrderItemDetails_Model> cartItems, double discountPercentage, FirestoreService.FirestoreCallback<Void> callback) {
-     //   double totalPrice = calculateTotalPrice(cartItems);
-     //   double discountAmount = totalPrice * (discountPercentage / 100);
-        double payablePrice = OrderValueCalculator.calculateTotalPrice(cartItems);
+    public LiveData<List<OrderDetails_Model>> getOrdersByDate(String startDate, String endDate) {
+        return repository.getOrdersByDate(startDate, endDate);
+    }
 
-       // order.setTotalPrice(totalPrice);
-       // order.setDiscountAmount(discountAmount);
-      //  order.setPayablePrice(payablePrice);
+
+
+    public void addOrder(OrderDetails_Model order, List<OrderItemDetails_Model> cartItems, double discountPercentage, FirestoreService.FirestoreCallback<Void> callback) {
+          double payablePrice = OrderValueCalculator.calculateTotalPrice(cartItems);
+
+
 
         repository.addOrder(order, callback);
     }
@@ -179,6 +215,8 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
 
     public void removeOrderFromLiveData(String orderId) {
 
+  
+ 
 
 
         ApiResponseState_Enum<List<OrderDetails_Model>> currentData = orderDetailsLiveData.getValue();
@@ -208,4 +246,5 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
 
         orderDetailsLiveData.removeObserver(ordersObserver);
     }
+ 
 }
