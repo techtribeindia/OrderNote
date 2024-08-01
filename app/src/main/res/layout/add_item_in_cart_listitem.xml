@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<TextView
+    android:id="@+id/recycler_itemname"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+</LinearLayout>
+
  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
  
     android:layout_width="match_parent"
@@ -114,7 +124,6 @@
         android:layout_marginTop="15dp"
         android:visibility="gone"
         android:background="@color/reddishgrey"/>
-
 
 </LinearLayout>
  

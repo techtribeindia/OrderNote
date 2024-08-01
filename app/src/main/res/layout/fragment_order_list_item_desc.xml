@@ -604,7 +604,18 @@
                                 android:paddingEnd="10dp"
                                 android:hint="Enter the transport name"
                                 />
-
+                            <TextView
+                                android:id="@+id/dialog_transportname_text"
+                                style="@style/BlackTextStyleSemiBold"
+                                android:background="@drawable/rectangle_greybackground"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="end|center"
+                                android:paddingEnd="10dp"
+                                android:layout_margin="10dp"
+                                android:text=""
+                                android:visibility="gone"/>
 
                         </LinearLayout>
                         <LinearLayout
@@ -631,9 +642,20 @@
                                 android:background="@drawable/rectangle_greybackground"
                                 android:gravity="end|center"
                                 android:paddingEnd="10dp"
-                                android:hint="Enter the drier mobile no"
+                                android:hint="Enter the driver mobile no"
                                 />
-
+                            <TextView
+                                android:id="@+id/dialog_driver_mobileno_text"
+                                style="@style/BlackTextStyleSemiBold"
+                                android:background="@drawable/rectangle_greybackground"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="end|center"
+                                android:paddingEnd="10dp"
+                                android:layout_margin="10dp"
+                                android:text=""
+                                android:visibility="gone"/>
 
                         </LinearLayout>
                         <LinearLayout
@@ -662,18 +684,50 @@
                                 android:paddingEnd="10dp"
                                 android:hint="Enter the truck number"
                                 />
-
+                            <TextView
+                                android:id="@+id/dialog_truckno_text"
+                                style="@style/BlackTextStyleSemiBold"
+                                android:background="@drawable/rectangle_greybackground"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="end|center"
+                                android:paddingEnd="10dp"
+                                android:layout_margin="10dp"
+                                android:text=""
+                                android:visibility="gone"/>
 
                         </LinearLayout>
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/dialog_orderstatus_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
+                    <TextView
+                        android:id="@+id/dialog_orderstatus_text"
+                        style="@style/SubTitleTextStyle1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Order Status Changed"
+                        android:gravity="center"
+                        />
+                </androidx.cardview.widget.CardView>
                 <LinearLayout
+                    android:id="@+id/dialog_button_layout"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
                     android:orientation="horizontal"
-
-                    android:padding="5dp">
+                    android:padding="5dp"
+                    android:visibility="gone">
                     <RelativeLayout
                         android:id="@+id/dialog_reject"
                         android:layout_width="match_parent"
@@ -709,7 +763,74 @@
                             android:text="Accept"/>
                     </RelativeLayout>
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/dialog_cancel_and_reapeal_button_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:visibility="gone">
+                    <RelativeLayout
+                        android:id="@+id/dialog_cancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1.4">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            style="@style/WhiteTextStyleBold"
+                            android:background="@drawable/rectangle_blackbackground"
+                            android:text="Cancel"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/dialog_place_again"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1.4">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            style="@style/WhiteTextStyleBold"
+                            android:background="@drawable/rectangle_redbackground"
+                            android:text="Please Again"/>
+                    </RelativeLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/dialog_edit_request_button_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:visibility="gone">
 
+                    <RelativeLayout
+                        android:id="@+id/dialog_edit_request"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1.4">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            style="@style/WhiteTextStyleBold"
+                            android:background="@drawable/rectangle_redbackground"
+                            android:text="Request to Edit Dispatch Details"/>
+                    </RelativeLayout>
+                </LinearLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="110dp"

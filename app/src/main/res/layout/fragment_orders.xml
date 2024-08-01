@@ -27,7 +27,7 @@
                 android:layout_weight="1"
                 android:hint="Search"
                 android:padding="8dp"
-                android:drawableEnd="@drawable/ic_search"
+
                 android:drawablePadding="5dp"
                 android:background="@drawable/edit_text_background"
                 android:paddingLeft="40dp"
@@ -40,20 +40,22 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_filter"
+                android:src="@drawable/ic_search"
                 android:contentDescription="Filter"
                 android:padding="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"/>
         </LinearLayout>
-
+<HorizontalScrollView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
 
                 android:background="@color/white"
-                android:layout_gravity="center"
+
                 android:orientation="horizontal">
 
                 <Button
@@ -75,8 +77,18 @@
                     android:minWidth="120dp"
                     android:layout_weight="1"
                     android:textColor="@color/black" />
+                <Button
+                    android:id="@+id/totay_activedorders_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_inactive"
+                    android:text="Active Orders \n ( For today only )"
+                    android:minWidth="120dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/black" />
 
             </LinearLayout>
+</HorizontalScrollView>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/orders_recycler_view"
             android:layout_width="match_parent"
