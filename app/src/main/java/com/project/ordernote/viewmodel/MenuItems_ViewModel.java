@@ -48,7 +48,7 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
 
     }
 
-    public void fetchMenuItemsByVendorKey(String vendorKey) {
+    public void FetchMenuItemByVendorKeyFromRepository(String vendorKey) {
         menuItemsLiveData = repository.fetchMenuItemsUsingVendorkey(vendorKey);
     }
 
@@ -66,20 +66,37 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
     public LiveData<MenuItems_Model> getSelectedMenuItemsFromViewModel() {
         return selectedMenuItemModel;
     }
+
+    public void updateSelectedMenuItemModel(MenuItems_Model selectedMenuItemModel) {
+        this.selectedMenuItemModel .setValue( selectedMenuItemModel);
+    }
+
     public LiveData<String> getSelectedMenuItemPositionFromViewModel() {
         return selectedMenuItemPosition;
     }
     public LiveData<MenuItems_Model> getMenuItemForMenuItemKeyFromViewModel(String menuitemkey) {
-        selectedMenuItemModel. setValue(new MenuItems_Model());
-        selectedMenuItemPosition.setValue("");
+       // selectedMenuItemModel. setValue(new MenuItems_Model());
+       // selectedMenuItemPosition.setValue("");
+        boolean isItemFound  = false;
         for(int i = 0; i < Objects.requireNonNull(menuItemsLiveData.getValue()).data.size(); i++){
 
             MenuItems_Model menuItemsModel = Objects.requireNonNull(menuItemsLiveData.getValue()).data.get(i);
 
             if(menuItemsModel.getItemkey().equals(menuitemkey)){
-                 selectedMenuItemModel. setValue(menuItemsModel);
+
+                isItemFound = true;
+                menuItemsModel.setQuantity(1);
+                 selectedMenuItemModel.setValue(menuItemsModel);
+
                  selectedMenuItemPosition.setValue(String.valueOf(i));
             }
+
+            if((Objects.requireNonNull(menuItemsLiveData.getValue()).data.size() -1 )== i){
+                if(!isItemFound){
+                    selectedMenuItemModel. setValue(new MenuItems_Model());
+                }
+            }
+
 
 
         }

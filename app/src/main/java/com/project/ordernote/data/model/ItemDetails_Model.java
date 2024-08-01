@@ -5,6 +5,8 @@ public class ItemDetails_Model {
     String menuitemkey = "" ;
     String menutype = "" ;
     String netweight = "" ;
+    String portionsize = "" ;
+
     double totalprice = 0 ;
     double price = 0 ;
     double grossweight = 0 ;
@@ -13,6 +15,13 @@ public class ItemDetails_Model {
 
     public ItemDetails_Model() {}
 
+    public String getPortionsize() {
+        return portionsize;
+    }
+
+    public void setPortionsize(String portionsize) {
+        this.portionsize = portionsize;
+    }
 
     public String getItemname() {
         return itemname;

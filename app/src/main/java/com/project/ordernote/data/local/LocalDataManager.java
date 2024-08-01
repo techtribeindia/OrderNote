@@ -3,6 +3,7 @@ package com.project.ordernote.data.local;
 
 import android.view.MenuItem;
 
+import com.project.ordernote.data.model.AppData_Model;
 import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 
@@ -18,11 +19,12 @@ public class LocalDataManager {
     // Lists to hold the data
     private List<MenuItems_Model> menuItems;
     private List<Buyers_Model> buyers;
-
+    private AppData_Model appData_model;
     // Private constructor to prevent instantiation
     private LocalDataManager() {
         menuItems = new ArrayList<>();
         buyers = new ArrayList<>();
+        appData_model = new AppData_Model();
     }
 
     // Method to get the singleton instance
@@ -39,6 +41,17 @@ public class LocalDataManager {
             menuItems = new ArrayList<>();
         }
         return menuItems;
+    }
+
+    public AppData_Model getAppData_model() {
+        if(appData_model == null ){
+            appData_model = new AppData_Model();
+        }
+        return appData_model;
+    }
+
+    public void setAppData_model(AppData_Model appData_model) {
+        this.appData_model = appData_model;
     }
 
     // Method to set the list of menu items
