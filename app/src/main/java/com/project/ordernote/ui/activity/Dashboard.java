@@ -105,17 +105,6 @@ public class Dashboard extends AppCompatActivity {
 
             return true;
         });
-        if (savedInstanceState == null) {
-            activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.orderslist);
-        }
-        dashboardViewModel.getSelectedFragment().observe(this, fragment -> {
-            if (fragment != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_layout, fragment)
-                        .commit();
-            }
-        });
-
 
 
         activityDashboardBinding.addOrderFabButton.setOnClickListener(v -> {
@@ -139,6 +128,19 @@ public class Dashboard extends AppCompatActivity {
             }
 
         });
+
+        if (savedInstanceState == null) {
+            activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.addOrders);
+            activityDashboardBinding.addOrderFabButton.performClick();
+        }
+        dashboardViewModel.getSelectedFragment().observe(this, fragment -> {
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, fragment)
+                        .commit();
+            }
+        });
+
 
         // Set the default fragment
 

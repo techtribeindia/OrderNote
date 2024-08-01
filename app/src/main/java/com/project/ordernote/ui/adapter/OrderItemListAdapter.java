@@ -64,7 +64,7 @@ public class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdap
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
-            recycler_itemname = itemView.findViewById(R.id.recycler_itemname);
+            recycler_itemname = itemView.findViewById(R.id.menuItemName_textview);
         }
     }
 

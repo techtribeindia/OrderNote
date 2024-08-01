@@ -1,19 +1,21 @@
 package com.project.ordernote.data.model;
 
+import com.project.ordernote.utils.WeightConverter;
+
 public class MenuItems_Model {
 
-    int grossweight = 0 ;
-    double priceperkg = 0 , unitprice = 0 , quantity = 0 ;
+    int grossweight = 0 , quantity = 0;
+    double priceperkg = 0 , unitprice = 0   ;
     boolean showforbilling = true;
     String vendorkey = "" , vendorname = "" , itemtype = "" , itemname = "" , portionsize = "" ,
             itemkey = "" , netweight = "";
 
     public double getQuantity() {
-        return quantity;
+        return (double) quantity;
     }
 
     public void setQuantity(double quantity) {
-        this.quantity = quantity;
+        this.quantity = (int) quantity;
     }
 
     public String getNetweight() {
@@ -25,10 +27,40 @@ public class MenuItems_Model {
     }
 
     public double getGrossweight() {
-        return (double) grossweight;
+        double grossweightinKg = 0;
+             try{
+                 grossweightinKg = Double.parseDouble(WeightConverter.ConvertGramsToKilograms(String.valueOf(grossweight)));
+                 return  grossweightinKg;
+
+             }
+            catch (Exception e){
+
+                e.printStackTrace();
+                return  grossweight;
+
+            }
+
     }
 
+    public void setGrossweightAndConvertItToGrams(double grossweightinKg) {
+        int grossweightingrams = 0;
+        try{
+            grossweightingrams = (int) (Double.parseDouble(WeightConverter.ConvertKilogramstoGrams(String.valueOf(grossweightinKg))));
+            this.grossweight = grossweightingrams;
+
+        }
+        catch (Exception e){
+
+            e.printStackTrace();
+            this.grossweight =(int) grossweightinKg;
+
+        }
+        //  this.grossweight =(int) grossweight;
+    }
+
+
     public void setGrossweight(double grossweight) {
+
         this.grossweight =(int) grossweight;
     }
 

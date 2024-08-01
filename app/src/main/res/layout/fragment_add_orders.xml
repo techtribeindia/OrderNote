@@ -60,47 +60,6 @@
             android:orientation="vertical"
             android:padding="1dp">
 
-            <RelativeLayout
-                android:id="@+id/orderDetails_Relativelayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/orderno_label_textview"
-                    style="@style/SubTitleTextStyle1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:gravity="center"
-                    android:text="Order No: " />
-
-
-                <TextView
-                    android:id="@+id/orderno_value_textview"
-
-                    style="@style/BlackTextStyleNormal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_toEndOf="@+id/orderno_label_textview"
-                    android:gravity="center"
-                    android:text="# 0001" />
-
-                <TextView
-                    android:id="@+id/date_value_textview"
-                    style="@style/BlackTextStyleNormal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center"
-                    android:text="17-07-2024" />
-            </RelativeLayout>
-
 
             <TextView
                 android:id="@+id/orderInfo_label_textview"
@@ -172,13 +131,14 @@
                         style="@style/SubTitleTextStyle1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="5dp"
                         android:layout_marginTop="15dp"
                         android:layout_toEndOf="@+id/orderno_labelTexview"
-                        android:text=" #0001 " />
+                        android:text=" #0000 " />
 
 
                     <TextView
+                        android:id="@+id/dateValueTextview"
                         style="@style/BlackTextStyleNormal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -195,7 +155,6 @@
 
             <TextView
                 android:id="@+id/buyerdetails_label_textview"
-
                 style="@style/SubTitleGreyTextStyle1"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -332,12 +291,14 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/itemDetails_recyclerview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
                         android:visibility="gone"
                         android:scrollbars="none" />
 
                     <TextView
+                        android:id="@+id/itemDetailsInstruc_Textview_recyclerview"
                         style="@style/SubTitleTextStyle1"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
@@ -351,7 +312,7 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/addItem_cardview"
                     android:layout_width="130dp"
-                    android:layout_height="40dp"
+                    android:layout_height="45dp"
                     android:layout_marginTop="-15dp"
                     android:translationZ="9dp"
 
@@ -366,7 +327,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
 
-                        android:layout_height="46dp"
+                        android:layout_height="45dp"
                         android:paddingStart="10dp"
                          android:paddingEnd="10dp"
                          >
@@ -388,8 +349,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:layout_marginStart="7dp"
-                            android:layout_marginBottom="10dp"
-                               android:layout_toEndOf="@+id/addItem_imageView"
+                                android:layout_toEndOf="@+id/addItem_imageView"
                             android:text="Add Item " />
 
 
@@ -422,34 +382,32 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
+                            android:layout_marginTop="10dp"
                             android:orientation="horizontal">
 
 
                             <TextView
                                 style="@style/GreyTextStyleSemiBold"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="35dp"
 
-                                android:layout_centerVertical="true"
-                                android:layout_marginStart="15dp"
-                                android:layout_marginTop="15dp"
-                                android:layout_toEndOf="@+id/addItem_imageView"
-
+                                 android:layout_marginStart="15dp"
+                                 android:layout_toEndOf="@+id/addItem_imageView"
+                                android:gravity="center_vertical"
                                 android:layout_weight="1"
                                 android:text="Subtotal" />
 
                             <TextView
+                                android:id="@+id/subtotal_textview"
                                 style="@style/BlackTextStyleNormal"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
+                                android:layout_height="35dp"
                                 android:layout_marginStart="15dp"
-                                android:layout_marginTop="15dp"
+                                android:gravity="center_vertical|right"
                                 android:layout_marginEnd="10dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
                                 android:layout_weight="1"
-                                android:gravity="right"
-                                android:text="₹ 25,000.00" />
+                                 android:text="₹0.00" />
 
 
                         </LinearLayout>
@@ -458,46 +416,56 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
+                            android:layout_gravity="center"
                             android:orientation="horizontal">
 
 
                             <TextView
                                 style="@style/GreyTextStyleSemiBold"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-
+                                android:layout_height="35dp"
+                                android:gravity="center_vertical"
+                                android:id="@+id/discountLabel"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="15dp"
-                                android:layout_marginTop="15dp"
-                                android:layout_toEndOf="@+id/addItem_imageView"
+                                 android:layout_toEndOf="@+id/addItem_imageView"
+                                 android:text="Discount" />
 
-                                android:text="Discount" />
-
-                            <TextView
-                                style="@style/BlackTextStyleNormal"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
+                            <ImageView
+                                android:id="@+id/editDicountImage"
+                                 android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_gravity="center_vertical"
+                                 android:gravity="center_vertical"
                                 android:layout_marginStart="5dp"
-                                android:layout_marginTop="15dp"
                                 android:layout_marginEnd="10dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
-                                android:layout_weight="1"
-                                android:gravity="left"
-                                android:text=" ( 10% )" />
-
+                                 android:src="@mipmap/redediticon"
+                               />
                             <TextView
+                                android:id="@+id/dicountPercentageValue"
                                 style="@style/BlackTextStyleNormal"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_marginStart="15dp"
-                                android:layout_marginTop="15dp"
+                                android:layout_height="35dp"
+                                android:gravity="center_vertical|right"
+                                android:layout_marginStart="5dp"
+                                 android:layout_marginEnd="10dp"
+                                android:layout_toEndOf="@+id/addItem_imageView"
+                                android:layout_weight="1"
+                                android:visibility="gone"
+                                 android:text="" />
+
+                            <TextView
+                                android:id="@+id/dicountValue"
+                                style="@style/BlackTextStyleNormal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="35dp"
+                                 android:layout_marginStart="15dp"
+                                android:gravity="center_vertical|right"
                                 android:layout_marginEnd="10dp"
                                 android:layout_toEndOf="@+id/addItem_imageView"
                                 android:layout_weight="1"
-                                android:gravity="right"
-                                android:text="- ₹ 2,000.00" />
+                                 android:text="- ₹ 0.00" />
 
 
                         </LinearLayout>
@@ -506,6 +474,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
+                            android:visibility="gone"
                             android:orientation="horizontal">
 
 
@@ -532,7 +501,7 @@
                                 android:layout_toEndOf="@+id/addItem_imageView"
                                 android:layout_weight="1"
                                 android:gravity="left"
-                                android:text=" ( 10% )" />
+                                android:text=" ( 0% )" />
 
                             <TextView
                                 style="@style/BlackTextStyleNormal"
@@ -545,7 +514,7 @@
                                 android:layout_toEndOf="@+id/addItem_imageView"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:text="₹ 250.00" />
+                                android:text="₹ 0.00" />
 
 
 
@@ -553,31 +522,32 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="35dp"
+                            android:layout_height="40dp"
 
                             android:layout_marginTop="15dp"
                             android:background="@color/backgroundred"
                             android:orientation="horizontal">
 
+
                             <TextView
-                                style="@style/BlackTextStyleNormal"
+                                style="@style/BlackTextStyleSemiBold"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
+                                android:layout_height="40dp"
+                                android:gravity="center_vertical"
                                 android:layout_marginStart="15dp"
                                 android:layout_weight="1"
                                 android:text="Total" />
 
                             <TextView
-                                style="@style/BlackTextStyleNormal"
+                                android:id="@+id/totalPriceTextview"
+                                style="@style/BlackTextStyleSemiBold"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
+                                android:layout_height="40dp"
+                                android:gravity="center_vertical|right"
                                 android:layout_marginStart="15dp"
                                 android:layout_marginEnd="10dp"
                                 android:layout_weight="1"
-                                android:gravity="right"
-                                android:text="₹ 25,000.00" />
+                                 android:text="₹ 0.00" />
 
 
                         </LinearLayout>
@@ -597,7 +567,6 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             <TextView
                 android:id="@+id/paymentInfo_label_textview"
@@ -652,10 +621,13 @@
                             android:text="Received" />
 
                         <EditText
+                            android:id="@+id/receivedAmountEditText"
                             style="@style/BlackTextStyleSemiBold"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:layout_margin="10dp"
+                            android:digits="0987654321."
+                            android:inputType="numberDecimal"
                             android:layout_weight="1"
                             android:background="@drawable/rectangle_greybackground"
                             android:gravity="end|center"
@@ -697,6 +669,7 @@
                             android:text="Balance Amount" />
 
                         <TextView
+                            android:id="@+id/balanceAmountTextview"
                             style="@style/BlackTextStyleNormal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -707,7 +680,7 @@
                             android:layout_toEndOf="@+id/addItem_imageView"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="₹ 25,000.00" />
+                            android:text="₹ 0.00" />
 
 
                     </LinearLayout>
@@ -723,15 +696,17 @@
                         android:background="@drawable/rectangle_greybackground"
                         android:orientation="vertical">
 
-                        <TextView
+
+                        <Spinner
+                            android:id="@+id/paymentMode_Spinner"
                             style="@style/GreyTextStyleSemiBold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="5dp"
-                            android:layout_weight="1"
-                            android:text="Payment Made through" />
+                            android:background="@color/grey"
+                             />
 
                         <ImageView
                             android:layout_width="20dp"
