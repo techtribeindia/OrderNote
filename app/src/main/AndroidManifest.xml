@@ -14,9 +14,12 @@
         android:theme="@style/Theme.OrderNote"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.DatwWiseOrderScreen"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.LoginScreen"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activity.SplashScreen"
             android:exported="true">
@@ -28,7 +31,7 @@
         </activity>
         <activity
             android:name=".ui.activity.Dashboard"
-            android:exported="false"></activity>
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

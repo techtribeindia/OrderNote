@@ -69,7 +69,7 @@ public class FirestoreService {
     public void fetchOrdersWithStatus(fetchOrdersWithStatusCallback callback)
     {
         db.collection("OrderDetails")
-                .whereEqualTo("status", "ORDERCONFIRMED")
+                .whereEqualTo("status", "CONFIRMED")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
@@ -140,22 +140,12 @@ public class FirestoreService {
                 });
     }
 
-    public void acceptOrder(String transportName, String driverMobileNo, String truckNo, String orderId, String status, FirestoreCallback<String> callback) {
+    public void acceptOrder(String orderId, String status, FirestoreCallback<String> callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference orderRef = db.collection("OrderDetails").document(orderId);
 
         Map<String, Object> updates = new HashMap<>();
 
-        // Check if each parameter is not empty and add to the map if so
-        if (transportName != null && !transportName.isEmpty()) {
-            updates.put("transportname", transportName);
-        }
-        if (driverMobileNo != null && !driverMobileNo.isEmpty()) {
-            updates.put("drivermobileno", driverMobileNo);
-        }
-        if (truckNo != null && !truckNo.isEmpty()) {
-            updates.put("truckno", truckNo);
-        }
         if (status != null && !status.isEmpty()) {
             updates.put("status", status);
         }
@@ -172,6 +162,39 @@ public class FirestoreService {
         } else {
             // No updates to make, you may want to handle this case
             callback.onFailure(new Exception("No orders found with orderid: " + orderId));
+        }
+    }
+
+    public void updateBatchDetails(String orderid,String transporName, String driverMobieno, String truckNo, FirestoreCallback<String> callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference orderRef = db.collection("OrderDetails").document(orderid);
+
+        Map<String, Object> updates = new HashMap<>();
+
+        // Check if each parameter is not empty and add to the map if so
+        if (transporName != null && !transporName.isEmpty()) {
+            updates.put("transportname", transporName);
+        }
+        if (driverMobieno != null && !driverMobieno.isEmpty()) {
+            updates.put("drivermobileno", driverMobieno);
+        }
+        if (truckNo != null && !truckNo.isEmpty()) {
+            updates.put("truckno", truckNo);
+        }
+        updates.put("dispatchstatus", "DISPATCHED");
+
+        // Check if there are any updates to make
+        if (!updates.isEmpty()) {
+            orderRef.update(updates)
+                    .addOnSuccessListener(aVoid -> {
+                        callback.onSuccess("Dispatch Successfully Updated");
+                    })
+                    .addOnFailureListener(e -> {
+                        callback.onFailure(e);
+                    });
+        } else {
+            // No updates to make, you may want to handle this case
+            callback.onFailure(new Exception("No orders found with orderid: " + orderid));
         }
     }
 

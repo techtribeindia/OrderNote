@@ -59,7 +59,7 @@ public class SplashScreen extends AppCompatActivity {
         fetchInitialData();
 
 
-/*
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -79,7 +79,7 @@ public class SplashScreen extends AppCompatActivity {
             }
         }, SPLASH_DISPLAY_LENGTH);
 
- */
+
     }
 
 

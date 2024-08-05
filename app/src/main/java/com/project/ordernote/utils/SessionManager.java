@@ -36,6 +36,11 @@ public class SessionManager {
         return pref.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
+    public String getRole()
+    {
+        return  pref.getString(KEY_ROLE,"");
+    }
+
     public void saveUserData(QueryDocumentSnapshot userDocument) {
         editor.putString(KEY_NAME, userDocument.getString(KEY_NAME));
         editor.putString(KEY_MOBILE_NUMBER, userDocument.getString(KEY_MOBILE_NUMBER));
