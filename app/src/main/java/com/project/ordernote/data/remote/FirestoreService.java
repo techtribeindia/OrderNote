@@ -62,19 +62,12 @@ public class FirestoreService {
 
     }
 
+  //changes made by arun directlt
+
     public void fetchAppData(FirestoreCallback<AppData_Model> callback) {
 
-    public interface fetchOrdersWithStatusCallback{
-        void onOrdersWithStatusResult(QuerySnapshot orderWithStatusDocument);
-    }
-
-
-
-    public void fetchOrdersWithStatus(fetchOrdersWithStatusCallback callback)
-    {
-        db.collection("OrderDetails")
-                .whereEqualTo("status", "CONFIRMED")
-                .get()
+        db.collection("AppData")
+                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
@@ -88,6 +81,39 @@ public class FirestoreService {
                     }
                 });
 
+    }
+
+
+
+
+  //changes made by arun directlt
+    public void fetchOrdersByStatus(String status, FirestoreCallback<List<OrderDetails_Model>> callback)
+    {
+
+        db.collection("OrderDetails")
+                .whereEqualTo("status", status)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            List<OrderDetails_Model> orders = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : querySnapshot) {
+                                OrderDetails_Model order = document.toObject(OrderDetails_Model.class);
+                                orders.add(order);
+
+                            }
+                            Log.d("fetchOrdersByStatus", orders.toString());
+                            callback.onSuccess(orders);
+                        } else {
+                            // Handle empty result
+                            callback.onFailure(new Exception("No orders found with status: " + status));
+                        }
+                    } else {
+              
+                        callback.onFailure(task.getException());
+                    }
+                });
     }
 
     public void userDetailsFetch(String mobileNumber, String password, LoginCallback callback) {
