@@ -2,8 +2,6 @@ package com.project.ordernote.viewmodel;
 
 import android.app.Application;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -15,25 +13,21 @@ import com.google.firebase.Timestamp;
 import com.google.gson.Gson;
 
  import com.project.ordernote.data.model.ItemDetails_Model;
- import com.google.gson.Gson;
- 
+
 import com.project.ordernote.data.model.MenuItems_Model;
 
-import com.project.ordernote.data.model.Buyers_Model;
-
 import com.project.ordernote.data.model.OrderDetails_Model;
-import com.project.ordernote.data.model.OrderItemDetails_Model;
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.data.repository.OrderDetails_Repository;
 import com.project.ordernote.utils.ApiResponseState_Enum;
+import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.calculations.MenuItemValueCalculator;
 import com.project.ordernote.utils.calculations.OrderValueCalculator;
 
+import java.text.Annotation;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -47,15 +41,50 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<ItemDetails_Model>> itemDetailsArrayListLiveData;
 
+    private MutableLiveData<OrderDetails_Model> ordersValueModel;
+    private MutableLiveData<Double> discountLiveData;
+
     public OrderDetails_ViewModel(@NonNull Application application) {
         super(application);
         repository = new OrderDetails_Repository();
         orderDetailsLiveData = new MutableLiveData<>();
- 
         itemDetailsArrayListLiveData = new MutableLiveData<>();
- 
+        ordersValueModel = new MutableLiveData<>();
         selectedOrderJson = new MutableLiveData<>();
+        discountLiveData = new MutableLiveData<>();
         initObserver();
+    }
+
+    public void clearAllLiveData(){
+
+        try {
+            orderDetailsLiveData = new MutableLiveData<>();
+
+            if (orderDetailsLiveData.getValue() != null) {
+                orderDetailsLiveData.setValue(ApiResponseState_Enum.success(new ArrayList<>()));
+            }
+
+
+            if (selectedOrderJson.getValue() != null) {
+                selectedOrderJson.setValue("");
+            }
+            if (ordersValueModel.getValue() != null) {
+                ordersValueModel.setValue(new OrderDetails_Model());
+            }
+
+            if (discountLiveData.getValue() == null) {
+                discountLiveData.setValue(0.00);
+            }
+            if (itemDetailsArrayListLiveData.getValue() != null) {
+                itemDetailsArrayListLiveData.setValue(new ArrayList<>());
+            }
+
+
+            discountLiveData = new MutableLiveData<>();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void initObserver() {
@@ -79,23 +108,57 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         return itemDetailsArrayListLiveData;
     }
 
+ 
+    public LiveData<OrderDetails_Model> getOrderDetailsCalculatedValueModel() {
+        if(ordersValueModel == null){
+            ordersValueModel = new MutableLiveData<>();
+        }
+        return ordersValueModel;
+    }
+ 
 
     public void getOrdersByStatus(String status) {
         try {
-       //     orderDetailsLiveData = repository.getOrdersByStatus(status);
-         //   Log.d("orderdetails getOrdersByStatus  :  ", String.valueOf(Objects.requireNonNull(orderDetailsLiveData.getValue()).data));
+            //     orderDetailsLiveData = repository.getOrdersByStatus(status);
+            //   Log.d("orderdetails getOrdersByStatus  :  ", String.valueOf(Objects.requireNonNull(orderDetailsLiveData.getValue()).data));
 
-        LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> source = repository.getOrdersByStatus(status);
-        source.observeForever(ordersObserver);
-
-
-        }
-        catch (Exception e){
+            LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> source = repository.getOrdersByStatus(status);
+            source.observeForever(ordersObserver);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+ 
 
 
+    public LiveData<Double> getDiscountValue() {
+        if(discountLiveData == null){
+            discountLiveData = new MutableLiveData<>();
+        }
+        return discountLiveData;
+    }
+
+
+    public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersListFromViewModel() {
+        if(orderDetailsLiveData == null){
+            orderDetailsLiveData = new MutableLiveData<>();
+             }
+        return orderDetailsLiveData;
+    }
+
+    public void setDisountValue(double discountAmount) {
+        if(discountLiveData == null){
+            discountLiveData = new MutableLiveData<>();
+
+        }
+        discountLiveData.setValue(discountAmount);
+        OrderDetails_Model orderDetailsModel = new OrderDetails_Model();
+        orderDetailsModel = OrderValueCalculator.CalculateOrderDetailsValue(itemDetailsArrayListLiveData.getValue() , discountAmount);
+        ordersValueModel.setValue(orderDetailsModel);
+    }
+
+ 
+  
     public void getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp) {
 
         LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> source = repository.getOrdersByStatusAndDate(status, startTimestamp, endTimestamp);
@@ -105,33 +168,8 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
 
 
 
-    public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersListFromViewModel() {
-        if(orderDetailsLiveData == null){
-            orderDetailsLiveData = new MutableLiveData<>();
-        }
-        return orderDetailsLiveData;
-    }
 
 
-
-
-
-    public LiveData<List<Map<String, Object>>> getOrdersByStatus1(String status) {
-        return repository.getOrdersByStatus1(status);
-    }
-    public LiveData<List<OrderDetails_Model>> getOrdersByDate(String startDate, String endDate) {
-        return repository.getOrdersByDate(startDate, endDate);
-    }
-
-
-
-    public void addOrder(OrderDetails_Model order, List<OrderItemDetails_Model> cartItems, double discountPercentage, FirestoreService.FirestoreCallback<Void> callback) {
-          double payablePrice = OrderValueCalculator.calculateTotalPrice(cartItems);
-
-
-
-        repository.addOrder(order, callback);
-    }
     public void setSelectedOrder(OrderDetails_Model order) {
         Gson gson = new Gson();
         String orderJson = gson.toJson(order);
@@ -275,5 +313,215 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
 
         orderDetailsLiveData.removeObserver(ordersObserver);
     }
- 
+
+    public void addItemInCart(MenuItems_Model menuItemsModel) {
+        try {
+            if (itemDetailsArrayListLiveData == null) {
+                itemDetailsArrayListLiveData = new MutableLiveData<>();
+            }
+            if (itemDetailsArrayListLiveData.getValue() == null) {
+                itemDetailsArrayListLiveData.setValue(new ArrayList<>());
+            }
+            if(discountLiveData == null){
+                discountLiveData = new MutableLiveData<>();
+
+            }
+            if (discountLiveData.getValue() == null) {
+                discountLiveData.setValue(0.0);
+            }
+
+
+            List<ItemDetails_Model> cartItemList = new ArrayList<>(Objects.requireNonNull(itemDetailsArrayListLiveData.getValue()));
+
+            try{
+                if(!cartItemList.isEmpty()) {
+                    boolean isSameItemHaveDifferentPrice = false;
+                    boolean isSameItemWithDifferentPriceAdded = false;
+                    for (int i = 0; i < cartItemList.size(); i++) {
+                        ItemDetails_Model itemDetailsModelFromCart = cartItemList.get(i);
+
+                        if (menuItemsModel.getItemkey().equals(itemDetailsModelFromCart.getMenuitemkey())) {
+                            //item already added in cart
+
+                            if(menuItemsModel.getItemtype().equals(Constants.priceperkg_pricetype)){
+                                if((menuItemsModel.getPriceperkg() == itemDetailsModelFromCart.getMenuitemprice() ) && (menuItemsModel.getGrossweight() == itemDetailsModelFromCart.getGrossweight() ) )
+                                {
+                                    //handle for priceperkg
+                                    double grossweightfromCart = itemDetailsModelFromCart.getGrossweight();
+                                    double grossweightFromMenu = menuItemsModel.getGrossweight();
+                                    int qtyfromCart = itemDetailsModelFromCart.getQuantity();
+                                    int qtyFromMenu = (int) menuItemsModel.getQuantity();
+                                    int quantity = qtyfromCart  + qtyFromMenu;
+                                    itemDetailsModelFromCart.setQuantity(quantity);
+                                    menuItemsModel.setQuantity((double) quantity);
+                                    //double grossweight = grossweightFromMenu + grossweightfromCart;
+                                    //itemDetailsModelFromCart.setGrossweight(grossweight);
+                                    double itemtotalprice = MenuItemValueCalculator.calculateItemtotalPrice(menuItemsModel);
+                                    itemDetailsModelFromCart.setTotalprice(itemtotalprice);
+
+                                    cartItemList.set(i, itemDetailsModelFromCart);
+                                    break;
+                                }
+                                else{
+
+
+                                }
+                            }
+                            else{
+                                //handle for unitprice
+                                if(menuItemsModel.getUnitprice() == itemDetailsModelFromCart.getMenuitemprice()) {
+
+                                    int quantityfromCart = itemDetailsModelFromCart.getQuantity();
+                                    int quantityFromMenu = (int) menuItemsModel.getQuantity();
+                                    int quantity = 0;
+
+                                    quantity = quantityFromMenu + quantityfromCart;
+                                    itemDetailsModelFromCart.setQuantity(quantity);
+
+                                    double itemtotalprice = MenuItemValueCalculator.calculateItemtotalPrice(menuItemsModel);
+                                    itemDetailsModelFromCart.setTotalprice(itemtotalprice);
+                                    cartItemList.set(i, itemDetailsModelFromCart);
+
+                                    break;
+                                }
+                                else{
+
+                                }
+                            }
+
+
+                        }
+
+                            //last item of loop
+                        if ((cartItemList.size() - 1) == i) {
+                                // this particular item is not added in cart
+                                ItemDetails_Model itemDetailsModel = new ItemDetails_Model();
+                                itemDetailsModel.setGrossweight((menuItemsModel.getGrossweight()));
+
+                                itemDetailsModel.setItemname(menuItemsModel.getItemname());
+                                itemDetailsModel.setQuantity((int) menuItemsModel.getQuantity());
+                                itemDetailsModel.setNetweight(menuItemsModel.getNetweight());
+                                itemDetailsModel.setMenutype(menuItemsModel.getItemtype());
+                                itemDetailsModel.setMenuitemkey(menuItemsModel.getItemkey());
+                                if (menuItemsModel.getItemtype().equals(Constants.priceperkg_pricetype)) {
+                                    itemDetailsModel.setMenuitemprice(menuItemsModel.getPriceperkg());
+
+                                } else if (menuItemsModel.getItemtype().equals(Constants.unitprice_pricetype)) {
+                                    itemDetailsModel.setMenuitemprice(menuItemsModel.getUnitprice());
+                                }
+
+
+                            double itemprice = MenuItemValueCalculator.calculateItemPrice(menuItemsModel);
+                            itemDetailsModel.setPrice(itemprice);
+                            double itemtotalprice = MenuItemValueCalculator.calculateItemtotalPrice(menuItemsModel);
+                                itemDetailsModel.setTotalprice(itemtotalprice);
+                                cartItemList.add(itemDetailsModel);
+
+                                break;
+                            }
+
+
+                    }
+                }
+                else{
+                    //no item added in cart
+                    ItemDetails_Model itemDetailsModel = new ItemDetails_Model();
+                    itemDetailsModel.setGrossweight((menuItemsModel.getGrossweight()));
+
+                    itemDetailsModel.setItemname(menuItemsModel.getItemname());
+                    itemDetailsModel.setQuantity((int) menuItemsModel.getQuantity());
+                    itemDetailsModel.setNetweight(menuItemsModel.getNetweight());
+                    itemDetailsModel.setMenutype(menuItemsModel.getItemtype());
+                    itemDetailsModel.setMenuitemkey(menuItemsModel.getItemkey());
+                    if (menuItemsModel.getItemtype().equals(Constants.priceperkg_pricetype)) {
+                        itemDetailsModel.setMenuitemprice(menuItemsModel.getPriceperkg());
+
+                    } else if (menuItemsModel.getItemtype().equals(Constants.unitprice_pricetype)) {
+                        itemDetailsModel.setMenuitemprice(menuItemsModel.getUnitprice());
+                    }
+
+
+                    double itemprice = MenuItemValueCalculator.calculateItemPrice(menuItemsModel);
+                    itemDetailsModel.setPrice(itemprice);
+
+                    double itemtotalprice = MenuItemValueCalculator.calculateItemtotalPrice(menuItemsModel);
+                    itemDetailsModel.setTotalprice(itemtotalprice);
+                    cartItemList.add(itemDetailsModel);
+
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+            itemDetailsArrayListLiveData.setValue(cartItemList);
+            OrderDetails_Model orderDetailsModel = new OrderDetails_Model();
+            orderDetailsModel = OrderValueCalculator.CalculateOrderDetailsValue(itemDetailsArrayListLiveData.getValue() , discountLiveData.getValue());
+            ordersValueModel.setValue(orderDetailsModel);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public double getSubTotalPrice() {
+        if(ordersValueModel == null){
+            ordersValueModel = new MutableLiveData<>();
+
+        }
+        if (ordersValueModel.getValue() == null) {
+            ordersValueModel.setValue(new OrderDetails_Model());
+        }
+        return ordersValueModel.getValue().getPrice();
+    }
+
+    public double getTotalPrice() {
+        if(ordersValueModel == null){
+            ordersValueModel = new MutableLiveData<>();
+
+        }
+        if (ordersValueModel.getValue() == null) {
+            ordersValueModel.setValue(new OrderDetails_Model());
+        }
+        return ordersValueModel.getValue().getTotalprice();
+    }
+
+    public void createOrderInDb(OrderDetails_Model orderDetailsModel , FirestoreService.FirestoreCallback<Void> callback) {
+        repository.createOrder(orderDetailsModel, callback);
+
+    }
+
+    public void removeItemFromCart(int position) {
+
+
+        List<ItemDetails_Model> cartItemList = new ArrayList<>(Objects.requireNonNull(itemDetailsArrayListLiveData.getValue()));
+        cartItemList.remove(position);
+        itemDetailsArrayListLiveData.setValue(cartItemList);
+        OrderDetails_Model orderDetailsModel = new OrderDetails_Model();
+        orderDetailsModel = OrderValueCalculator.CalculateOrderDetailsValue(itemDetailsArrayListLiveData.getValue() , discountLiveData.getValue());
+        ordersValueModel.setValue(orderDetailsModel);
+
+
+    }
+
+    public int getTotalQtyFromItemDetailsArrayList() {
+
+        if(!itemDetailsArrayListLiveData.getValue().isEmpty()){
+            int totalquantity = 0;
+            for(int i = 0 ; i < itemDetailsArrayListLiveData.getValue().size(); i++){
+                int quantity = itemDetailsArrayListLiveData.getValue().get(i).getQuantity();
+                totalquantity  = totalquantity + quantity;
+
+
+            }
+            return totalquantity;
+        }
+        else{
+            return  0;
+        }
+
+
+    }
 }

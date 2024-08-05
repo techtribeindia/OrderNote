@@ -1,19 +1,45 @@
 package com.project.ordernote.data.model;
 
+import com.project.ordernote.utils.WeightConverter;
+
 public class MenuItems_Model {
 
-    int grossweight = 0 ;
-    double priceperkg = 0 , unitprice = 0 , quantity = 0 ;
+    int grossweight = 0 , quantity = 0;
+    double priceperkg = 0 , unitprice = 0   ;
     boolean showforbilling = true;
     String vendorkey = "" , vendorname = "" , itemtype = "" , itemname = "" , portionsize = "" ,
             itemkey = "" , netweight = "";
 
+
+
+
+
+
+    //default constructor
+    public MenuItems_Model() {}
+
+    // Copy constructor
+    public MenuItems_Model(MenuItems_Model original) {
+        this.grossweight = original.grossweight;
+        this.quantity = original.quantity;
+        this.priceperkg = original.priceperkg;
+        this.unitprice = original.unitprice;
+        this.showforbilling = original.showforbilling;
+        this.vendorkey = original.vendorkey;
+        this.vendorname = original.vendorname;
+        this.itemtype = original.itemtype;
+        this.itemname = original.itemname;
+        this.portionsize = original.portionsize;
+        this.itemkey = original.itemkey;
+        this.netweight = original.netweight;
+    }
+
     public double getQuantity() {
-        return quantity;
+        return (double) quantity;
     }
 
     public void setQuantity(double quantity) {
-        this.quantity = quantity;
+        this.quantity = (int) quantity;
     }
 
     public String getNetweight() {
@@ -24,11 +50,14 @@ public class MenuItems_Model {
         this.netweight = netweight;
     }
 
-    public double getGrossweight() {
-        return (double) grossweight;
+    public int getGrossweight() {
+        return grossweight;
     }
 
+
+
     public void setGrossweight(double grossweight) {
+
         this.grossweight =(int) grossweight;
     }
 

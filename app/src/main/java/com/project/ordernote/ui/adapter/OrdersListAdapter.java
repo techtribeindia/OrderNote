@@ -52,7 +52,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
         holder.orderId.setText(order.getTokenno() != null ? order.getTokenno() : "N/A");
         holder.buyerName.setText(order.getBuyername() != null ? order.getBuyername() : "N/A");
         holder.buyerAddress.setText(order.getBuyeraddress() != null ? order.getBuyeraddress() : "N/A");
-        holder.orderQty.setText(String.valueOf(order.getTotalqty()));
+        holder.orderQty.setText(String.valueOf(order.getTotalquantity()));
         holder.orderPrice.setText(String.valueOf(order.getTotalprice()));
         List<ItemDetails_Model> itemDetailsList = order.getItemdetails();
         if (itemDetailsList != null && !itemDetailsList.isEmpty()) {
@@ -122,6 +122,35 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
             orderPrice = itemView.findViewById(R.id.order_amount);
             ViewBill = itemView.findViewById(R.id.view_bill);
         }
+    }
+
+    private void showOrderDetailsDialog(Context context, OrderDetails_Model order) {
+        // Create an instance of LayoutInflater
+        LayoutInflater inflater = LayoutInflater.from(context);
+        // Inflate the dialog layout from the XML file
+        View dialogView = inflater.inflate(R.layout.dialog_order_details, null);
+
+        // Find the TextViews in the dialog layout and set their text
+        TextView orderId = dialogView.findViewById(R.id.dialog_order_id);
+        TextView buyerName = dialogView.findViewById(R.id.dialog_buyer_name);
+        TextView buyerAddress = dialogView.findViewById(R.id.dialog_buyer_address);
+        TextView orderQty = dialogView.findViewById(R.id.dialog_order_qty);
+        TextView orderPrice = dialogView.findViewById(R.id.dialog_order_price);
+
+        orderId.setText("Order ID: " + order.getTokenno());
+        buyerName.setText("Buyer Name: " + order.getBuyername());
+        buyerAddress.setText("Buyer Address: " + order.getBuyeraddress());
+        orderQty.setText("Order Quantity: " + order.getTotalquantity());
+        orderPrice.setText("Order Price: " + order.getTotalprice());
+
+        // Build the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Order Details")
+                .setView(dialogView)
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+
+        // Show the dialog
+        builder.create().show();
     }
 
 }

@@ -8,6 +8,17 @@ public class Buyers_Model {
     String address1 ="";
     String address2 ="";
     String pincode ="";
+    String uniquekey = "";
+
+
+    public String getUniquekey() {
+        return uniquekey;
+    }
+
+    public void setUniquekey(String uniquekey) {
+        this.uniquekey = uniquekey;
+    }
+
     public String getAddress2() {
         return address2;
     }

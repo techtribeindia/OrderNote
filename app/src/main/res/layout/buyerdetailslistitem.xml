@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"
+        android:visibility="visible"
+        app:cardCornerRadius="10dp"
+        android:id="@+id/buyerselectionCardView"
+        app:cardElevation="0dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/circleBuyerImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="25dp"
+                app:cardBackgroundColor="@color/backgroundred"
+                app:cardCornerRadius="25dp">
+
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:background="@color/backgroundred"
+
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/buyersiconred" />
+
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+
+                android:id="@+id/selectedBuyerNameTextview"
+                style="@style/SubTitleTextStyle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/circleBuyerImage"
+                android:text="Select Buyer name" />
+
+
+            <TextView
+                android:id="@+id/selecedBuyerDetailsTextview"
+                style="@style/BlackTextStyleNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="36dp"
+                android:lineHeight="20dp"
+                android:layout_toEndOf="@+id/circleBuyerImage"
+                android:text="xx , xxxxx  xxx xxxx , \nxxxx - xxxx . \nPh : - +91798xxxxxxx" />
+
+            <RelativeLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true">
+
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+
+                    android:layout_centerInParent="true"
+                    android:alpha=".7"
+
+                    android:src="@mipmap/right_arrow" />
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:id="@+id/buyerlistdivider"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:visibility="gone"
+        android:layout_below="@+id/buyerselectionCardView"
+        android:background="@color/reddishgrey"/>
+
+</RelativeLayout>

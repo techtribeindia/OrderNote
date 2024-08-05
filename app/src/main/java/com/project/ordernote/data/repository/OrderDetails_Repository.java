@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.project.ordernote.data.model.OrderDetails_Model;
@@ -109,9 +110,7 @@ public class OrderDetails_Repository {
 
     }
 
-    public void addOrder(OrderDetails_Model order, FirestoreService.FirestoreCallback<Void> callback) {
-        firestoreService.addOrder(order, callback);
-    }
+
 
     public MutableLiveData<ApiResponseState_Enum<String>> acceptOrder(String orderid, String status) {
         MutableLiveData<ApiResponseState_Enum<String>> ordersLiveData = new MutableLiveData<>();
@@ -253,6 +252,7 @@ public class OrderDetails_Repository {
 
     }
 
+
     public MutableLiveData<ApiResponseState_Enum<String>> updateBatchDetails( String orderid,String transporName, String driverMobieno, String truckNo) {
         MutableLiveData<ApiResponseState_Enum<String>> ordersLiveData = new MutableLiveData<>();
         ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
@@ -279,6 +279,11 @@ public class OrderDetails_Repository {
 
         return ordersLiveData;
 
+    }
+
+
+    public void createOrder(OrderDetails_Model order, FirestoreService.FirestoreCallback<Void> callback) {
+        firestoreService.createOrder(order, callback);
     }
 
 }

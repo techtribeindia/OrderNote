@@ -14,6 +14,8 @@
     <string name="name">Name</string>
     <string name="add_item_in_cart">Add item in cart</string>
     <string name="item_name">Item name</string>
+    <string name="apply_discount">Apply Discount</string>
+    <string name="manage_buyers">Manage Buyers</string>
 
 
 </resources>

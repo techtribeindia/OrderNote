@@ -1,10 +1,16 @@
 package com.project.ordernote.data.model;
 
+import com.project.ordernote.utils.WeightConverter;
+
 public class ItemDetails_Model {
      String itemname = "" ;
     String menuitemkey = "" ;
     String menutype = "" ;
     String netweight = "" ;
+    String portionsize = "" ;
+
+
+    double menuitemprice = 0 ;
     double totalprice = 0 ;
     double price = 0 ;
     double grossweight = 0 ;
@@ -13,6 +19,22 @@ public class ItemDetails_Model {
 
     public ItemDetails_Model() {}
 
+
+    public double getMenuitemprice() {
+        return menuitemprice;
+    }
+
+    public void setMenuitemprice(double menuitemprice) {
+        this.menuitemprice = menuitemprice;
+    }
+
+    public String getPortionsize() {
+        return portionsize;
+    }
+
+    public void setPortionsize(String portionsize) {
+        this.portionsize = portionsize;
+    }
 
     public String getItemname() {
         return itemname;
@@ -62,13 +84,26 @@ public class ItemDetails_Model {
         this.price = price;
     }
 
+
     public double getGrossweight() {
         return grossweight;
     }
 
+
+
+
     public void setGrossweight(double grossweight) {
-        this.grossweight = grossweight;
+        try{
+            this.grossweight = grossweight;
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+        }
     }
+
+
 
     public int getQuantity() {
         return quantity;

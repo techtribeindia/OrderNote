@@ -2,21 +2,27 @@ package com.project.ordernote.data.remote;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.Firebase;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
-
-import android.widget.Toast;
 
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.firebase.firestore.QuerySnapshot;
 
+import com.google.firebase.firestore.Transaction;
+import com.project.ordernote.data.model.AppData_Model;
 import com.project.ordernote.data.model.Buyers_Model;
+import com.project.ordernote.data.model.Counter_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 
 import com.project.ordernote.data.model.OrderDetails_Model;
+import com.project.ordernote.data.model.OrderItemDetails_Model;
+import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,9 +62,7 @@ public class FirestoreService {
 
     }
 
-    public interface LoginCallback {
-        void onLoginResult(boolean isSuccess,String result, QueryDocumentSnapshot userDocument);
-    }
+    public void fetchAppData(FirestoreCallback<AppData_Model> callback) {
 
     public interface fetchOrdersWithStatusCallback{
         void onOrdersWithStatusResult(QuerySnapshot orderWithStatusDocument);
@@ -72,14 +76,20 @@ public class FirestoreService {
                 .whereEqualTo("status", "CONFIRMED")
                 .get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        if (!querySnapshot.isEmpty()) {
-                            callback.onOrdersWithStatusResult(querySnapshot);
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            AppData_Model appData_model = document.toObject(AppData_Model.class);
+                            Log.d("fetchAppData", String.valueOf(appData_model.getPaymentmode().toString()));
+                            callback.onSuccess(appData_model);
+
                         }
+                    } else {
+                        callback.onFailure(task.getException());
                     }
                 });
+
     }
+
     public void userDetailsFetch(String mobileNumber, String password, LoginCallback callback) {
         db.collection("UserDetails")
                 .whereEqualTo("mobileno", mobileNumber)
@@ -259,7 +269,8 @@ public class FirestoreService {
                 });
     }
 
-    public void fetchOrdersByStatus(String status, FirestoreCallback<List<OrderDetails_Model>> callback) {
+    public void fetchOrdersByStatus(String status, FirestoreCallback<List<OrderDetails_Model>> callback)
+    {
 
         db.collection("OrderDetails")
                 .whereEqualTo("status", status)
@@ -287,7 +298,8 @@ public class FirestoreService {
                 });
     }
 
-    public void getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp, FirestoreCallback<List<OrderDetails_Model>> callback) {
+    public void getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp, FirestoreCallback<List<OrderDetails_Model>> callback)
+    {
         db.collection("OrderDetails")
                 .whereEqualTo("status", status)
                 .whereGreaterThanOrEqualTo("orderplaceddate", startTimestamp)
@@ -313,6 +325,15 @@ public class FirestoreService {
     }
 
 
+    public void createOrder(OrderDetails_Model orderDetailsModel,   FirestoreService.FirestoreCallback <Void>callback) {
+        db.collection(DatabaseReference.OrderDetails_TableName)
+                .document(orderDetailsModel.getOrderid())
+                .set(orderDetailsModel)
+                .addOnSuccessListener(documentReference -> callback.onSuccess(null))
+                .addOnFailureListener(callback::onFailure);
+
+    }
+
     public void fetchOrdersByStatus1(String status, fetchOrdersWithStatusCallback callback) {
         db.collection("OrderDetails")
                 .whereEqualTo("status", status)
@@ -326,12 +347,11 @@ public class FirestoreService {
                     }
                 });
     }
-    public void addOrder(OrderDetails_Model order, FirestoreCallback<Void> callback) {
-        db.collection("orders")
-                .add(order)
-                .addOnSuccessListener(documentReference -> callback.onSuccess(null))
-                .addOnFailureListener(callback::onFailure);
-    }
+
+
+
+
+
 
     public void fetchMenuItemsUsingVendorkey(String vendorkey, FirestoreCallback<List<MenuItems_Model>> callback) {
 
@@ -355,8 +375,76 @@ public class FirestoreService {
 
     }
 
+
+
+    public void incrementOrderCounter(String vendorkey, FirestoreCallback callback) {
+        DocumentReference counterRef = db.collection(DatabaseReference.Counter_TableName).document(vendorkey);
+
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentSnapshot snapshot = transaction.get(counterRef);
+            long newOrderNumber = snapshot.getLong(DatabaseReference.Orderno_CounterTable) + 1;
+            transaction.update(counterRef, DatabaseReference.Orderno_CounterTable, newOrderNumber);
+
+            // Return the new order number through the callback
+            callback.onSuccess(newOrderNumber);
+
+            return null;
+        }).addOnFailureListener(e -> {
+            // Handle failure through the callback
+            callback.onFailure(e);
+        });
+    }
+
+    public void getOrderCounterAndIncrementLocally(String vendorkey, FirestoreCallback<Long> callback) {
+        db.collection(DatabaseReference.Counter_TableName).document(vendorkey)
+                 .get()
+                .addOnCompleteListener(task -> {
+                    Log.i("orderno taskcomplete : ", String.valueOf(Objects.requireNonNull(task)));
+
+                    if (task.isSuccessful()) {
+                        Log.i("orderno task.isSuccessful() : ", String.valueOf(Objects.requireNonNull(task.isSuccessful())));
+
+
+
+
+                            Counter_Model appData_model = task.getResult().toObject(Counter_Model.class);
+                            Log.d("orderno fetchordernoData", String.valueOf(Objects.requireNonNull(appData_model).getOrderno()));
+                            callback.onSuccess(appData_model.getOrderno());
+
+
+                    } else {
+                        callback.onFailure(task.getException());
+                        Log.i("orderno taskFailure: ", String.valueOf(Objects.requireNonNull(task.getException())));
+                    }
+                });
+
+    }
+
+    public void addOrderItemDetails(OrderItemDetails_Model orderItemDetailsModel) {
+
+        db.collection(DatabaseReference.OrderItemDetails_TableName)
+                .document(orderItemDetailsModel.getUnqiuekey())
+                .set(orderItemDetailsModel);
+
+
+
+
+    }
+
+
     public interface FirestoreCallback<T> {
         void onSuccess(T result);
         void onFailure(Exception e);
     }
+
+
+    public interface LoginCallback {
+        void onLoginResult(boolean isSuccess,String result, QueryDocumentSnapshot userDocument);
+    }
+
+    public interface fetchOrdersWithStatusCallback{
+        void onOrdersWithStatusResult(QuerySnapshot orderWithStatusDocument);
+    }
+
+
 }
