@@ -114,5 +114,8 @@ public class Buyers_ViewModel extends AndroidViewModel {
         return new Buyers_Model();
     }
 
+    public void deleteBuyerDetailsFromDB(int position) {
+
+    }
 }
 

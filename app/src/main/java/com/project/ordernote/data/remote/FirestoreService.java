@@ -70,7 +70,7 @@ public class FirestoreService {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             AppData_Model appData_model = document.toObject(AppData_Model.class);
-                            Log.d("fetchAppData", String.valueOf(appData_model.getPaymentmode().toString()));
+                            Log.d("fetchAppData from arun", String.valueOf(appData_model.getPaymentmode().toString()));
                             callback.onSuccess(appData_model);
 
                         }

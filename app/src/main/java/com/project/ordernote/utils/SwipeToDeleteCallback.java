@@ -108,7 +108,7 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
         }
 
         // Draw the text
-        String text = "Delete";
+        String text = "Remove";
         canvas.drawText(text, itemView.getLeft() + 120, itemView.getTop()+16 + itemView.getHeight() / 2, mTextPaint);
     }
 
