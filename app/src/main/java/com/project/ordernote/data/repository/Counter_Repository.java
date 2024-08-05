@@ -25,7 +25,7 @@ public class Counter_Repository {
     public MutableLiveData<ApiResponseState_Enum<Long>> incrementOrderCounter(String vendorkey) {
 
 
-        if (orderNumberLiveData.getValue() == null || orderNumberLiveData.getValue().status == ApiResponseState_Enum.Status.ERROR) {
+      //  if (orderNumberLiveData.getValue() == null || orderNumberLiveData.getValue().status == ApiResponseState_Enum.Status.ERROR) {
             orderNumberLiveData.setValue(ApiResponseState_Enum.loading(null));
 
             firestoreService.incrementOrderCounter(vendorkey , new FirestoreService.FirestoreCallback<Long>() {
@@ -43,7 +43,7 @@ public class Counter_Repository {
 
                 }
             });
-        }
+       // }
         return orderNumberLiveData;
 
 

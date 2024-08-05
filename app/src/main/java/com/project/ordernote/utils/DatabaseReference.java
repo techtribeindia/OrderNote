@@ -8,6 +8,9 @@ public class DatabaseReference{
     public static String Vendorkey_CounterTable = "vendorkey";
 
 
+    //orderdetails Table name
+    public static String OrderDetails_TableName = "OrderDetails";
+    public static String OrderItemDetails_TableName = "OrderItemDetails";
 
 
 }

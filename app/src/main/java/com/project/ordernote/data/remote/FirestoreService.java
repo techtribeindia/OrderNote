@@ -1,9 +1,9 @@
 package com.project.ordernote.data.remote;
 
-import static com.project.ordernote.utils.DatabaseReference.Vendorkey_CounterTable;
-
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.Firebase;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -20,6 +20,8 @@ import com.project.ordernote.data.model.Counter_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 
 import com.project.ordernote.data.model.OrderDetails_Model;
+import com.project.ordernote.data.model.OrderItemDetails_Model;
+import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.DatabaseReference;
 
 import java.util.ArrayList;
@@ -235,7 +237,8 @@ public class FirestoreService {
                 });
     }
 
-    public void fetchOrdersByStatus(String status, FirestoreCallback<List<OrderDetails_Model>> callback) {
+    public void fetchOrdersByStatus(String status, FirestoreCallback<List<OrderDetails_Model>> callback)
+    {
 
         db.collection("OrderDetails")
                 .whereEqualTo("status", status)
@@ -263,7 +266,8 @@ public class FirestoreService {
                 });
     }
 
-    public void getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp, FirestoreCallback<List<OrderDetails_Model>> callback) {
+    public void getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp, FirestoreCallback<List<OrderDetails_Model>> callback)
+    {
         db.collection("OrderDetails")
                 .whereEqualTo("status", status)
                 .whereGreaterThanOrEqualTo("orderplaceddate", startTimestamp)
@@ -289,6 +293,15 @@ public class FirestoreService {
     }
 
 
+    public void createOrder(OrderDetails_Model orderDetailsModel,   FirestoreService.FirestoreCallback <Void>callback) {
+        db.collection(DatabaseReference.OrderDetails_TableName)
+                .document(orderDetailsModel.getOrderid())
+                .set(orderDetailsModel)
+                .addOnSuccessListener(documentReference -> callback.onSuccess(null))
+                .addOnFailureListener(callback::onFailure);
+
+    }
+
     public void fetchOrdersByStatus1(String status, fetchOrdersWithStatusCallback callback) {
         db.collection("OrderDetails")
                 .whereEqualTo("status", status)
@@ -302,12 +315,11 @@ public class FirestoreService {
                     }
                 });
     }
-    public void addOrder(OrderDetails_Model order, FirestoreCallback<Void> callback) {
-        db.collection("orders")
-                .add(order)
-                .addOnSuccessListener(documentReference -> callback.onSuccess(null))
-                .addOnFailureListener(callback::onFailure);
-    }
+
+
+
+
+
 
     public void fetchMenuItemsUsingVendorkey(String vendorkey, FirestoreCallback<List<MenuItems_Model>> callback) {
 
@@ -373,6 +385,17 @@ public class FirestoreService {
                         Log.i("orderno taskFailure: ", String.valueOf(Objects.requireNonNull(task.getException())));
                     }
                 });
+
+    }
+
+    public void addOrderItemDetails(OrderItemDetails_Model orderItemDetailsModel) {
+
+        db.collection(DatabaseReference.OrderItemDetails_TableName)
+                .document(orderItemDetailsModel.getUnqiuekey())
+                .set(orderItemDetailsModel);
+
+
+
 
     }
 

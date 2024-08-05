@@ -26,6 +26,7 @@ import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.databinding.FragmentAddMenuItemInCartBinding;
 import com.project.ordernote.ui.adapter.AutoCompleteMenuItemAdapter;
 import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.WeightConverter;
 import com.project.ordernote.utils.calculations.MenuItemValueCalculator;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
@@ -230,7 +231,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
                             e.printStackTrace();
                         }
                         MenuItems_Model menuItemsModel = menuItemsViewModel.getSelectedMenuItemsFromViewModel().getValue();
-                        Objects.requireNonNull(menuItemsModel).setGrossweightAndConvertItToGrams(weight_double);
+                        Objects.requireNonNull(menuItemsModel).setGrossweight(Double.parseDouble(WeightConverter.ConvertKilogramstoGrams(String.valueOf(weight_double))));
                         menuItemsViewModel.updateSelectedMenuItemModel(menuItemsModel);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -400,7 +401,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
 
             */
 
-            double itemprice = MenuItemValueCalculator.calculateItemPrice(newMenuItemModel);
+            double itemprice = MenuItemValueCalculator.calculateItemtotalPrice(newMenuItemModel);
             binding.finalPriceTextview.setText(String.valueOf(currencyFormat.format(itemprice)));
 
         }
@@ -460,6 +461,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
                     needToUpdateUI_inObserver = true;
 
                          try {
+
                              menuItemsViewModel.getMenuItemForMenuItemKeyFromViewModel(menuitemkey);
 
                              binding.autoCompleteTextViewMenuItem.clearFocus();
@@ -509,7 +511,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
                                     binding.weightTextView.setText(String.valueOf(menuItemsModel.getNetweight()));
 
                                 } else {
-                                    binding.weightTextView.setText(String.valueOf(menuItemsModel.getGrossweight()));
+                                    binding.weightTextView.setText(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(menuItemsModel.getGrossweight()))));
 
                                 }
                                 getCurrentKgAndPriceValue_and_Call_Calculation();
@@ -518,7 +520,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
                             else if (menuItemsModel.getItemtype().equals(Constants.priceperkg_pricetype)) {
                                 binding.weightEditText.setVisibility(View.VISIBLE);
                                 binding.weightTextView.setVisibility(View.GONE);
-                                binding.weightEditText.setText(String.valueOf(menuItemsModel.getGrossweight()));
+                                binding.weightEditText.setText(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(menuItemsModel.getGrossweight()))));
                                 binding.priceperitemorunitpricelabel.setText("Price Per Kg");
                                 binding.priceEditText.setText(String.valueOf(menuItemsModel.getPriceperkg()));
                                 binding.finalPriceTextview.setText(String.valueOf(currencyFormat.format(menuItemsModel.getPriceperkg())));

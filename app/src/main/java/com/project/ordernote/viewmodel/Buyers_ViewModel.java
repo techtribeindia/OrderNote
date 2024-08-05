@@ -44,7 +44,20 @@ public class Buyers_ViewModel extends AndroidViewModel {
 
     }
 
-    public void getBuyersListFromRepository(String vendorKey) {
+
+
+    public void clearSelectedLiveData() {
+        if(selectedBuyerLiveData != null){
+            selectedBuyerLiveData .setValue( new Buyers_Model());
+
+        }
+        if(selectedBuyerPositionStringLiveData != null){
+            selectedBuyerPositionStringLiveData .setValue("");
+
+        }
+    }
+
+        public void getBuyersListFromRepository(String vendorKey) {
         buyersListLiveData = repository.getBuyersList(vendorKey);
     }
 

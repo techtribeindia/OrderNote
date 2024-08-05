@@ -1,5 +1,6 @@
 package com.project.ordernote.ui.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,8 +8,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -19,24 +23,29 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.google.firebase.Timestamp;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.AppData_Model;
 import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
-import com.project.ordernote.data.model.OrderItemDetails_Model;
 
+import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.databinding.FragmentAddOrdersBinding;
 import com.project.ordernote.ui.adapter.CreateOrderCartItemAdapter;
+import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.ApiResponseState_Enum;
+import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.DateParserClass;
 import com.project.ordernote.utils.DecimalInputFilter;
+import com.project.ordernote.utils.SwipeToDeleteCallback;
 import com.project.ordernote.viewmodel.AppData_ViewModel;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 import com.project.ordernote.viewmodel.Counter_ViewModel;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
+import com.project.ordernote.viewmodel.OrderItemDetails_ViewModel;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -48,17 +57,21 @@ import java.util.regex.Pattern;
 
 public class CreateOrderFragment extends Fragment {
     private OrderDetails_ViewModel ordersViewModel;
+    private OrderItemDetails_ViewModel orderItemDetailsViewModel;
     private MenuItems_ViewModel menuItemsViewModel;
     private AppData_ViewModel appDataViewModel;
     private Buyers_ViewModel buyersViewModel;
     private Counter_ViewModel counterViewModel;
 
 
-    private List<String> paymentMode = new ArrayList<>();
+    private List<String> paymentModeStringArrayList = new ArrayList<>();
 
     AppData_Model appData_model;
 
-    boolean menuItemFetchedSuccesfully = false , buyerDetailsFetchedSuccessfully = false;
+    String selectedPaymentMode = "" , paymentDesc = "";
+    double receivedAmount = 0 ;
+    boolean menuItemFetchedSuccesfully = false , buyerDetailsFetchedSuccessfully = false ,
+            isPaymentModeSelected = false , isGenerateOrderClicked = false;
 
     private FragmentAddOrdersBinding binding;
     CreateOrderCartItemAdapter createOrderCartItemAdapter ;
@@ -82,8 +95,17 @@ public class CreateOrderFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
+            try{
+                orderItemDetailsViewModel = new ViewModelProvider(requireActivity()).get(OrderItemDetails_ViewModel.class);
+
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
             try {
                 ordersViewModel = new ViewModelProvider(requireActivity()).get(OrderDetails_ViewModel.class);
+                ordersViewModel.clearAllLiveData();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -111,7 +133,7 @@ public class CreateOrderFragment extends Fragment {
                     buyersViewModel.getBuyersListFromRepository("vendor_1");
                 }
 
-                buyersViewModel.setSelectedBuyerLiveData(new Buyers_Model());
+                buyersViewModel.clearSelectedLiveData();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -132,6 +154,7 @@ public class CreateOrderFragment extends Fragment {
                     menuItemsViewModel.FetchMenuItemByVendorKeyFromRepository("vendor_1");
                 }
 
+                menuItemsViewModel.updateSelectedMenuItemModel(new MenuItems_Model());
 
                // menuItemsViewModel = new ViewModelProvider(this).get(MenuItems_ViewModel.class);
 
@@ -150,7 +173,7 @@ public class CreateOrderFragment extends Fragment {
                 }
                 else{
 
-                    paymentMode = appData_model.getPaymentmode();
+                    paymentModeStringArrayList = appData_model.getPaymentmode();
 
 
                 }
@@ -170,7 +193,7 @@ public class CreateOrderFragment extends Fragment {
 
     private void setAdapterForPaymentList() {
 
-        paymentModeAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, paymentMode);
+        paymentModeAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, paymentModeStringArrayList);
         paymentModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         binding.paymentModeSpinner.setAdapter(paymentModeAdapter);
@@ -188,14 +211,24 @@ public class CreateOrderFragment extends Fragment {
         ordersViewModel.getItemDetailsArraylistViewModel().observeForever(itemAddedInCartObserver);
         ordersViewModel.getOrderDetailsCalculatedValueModel().observeForever(orderDetailCalculatedValueModelObserver);
         counterViewModel.getOrderNumberLiveData().observeForever(orderNoObserver);
+        binding.paymentModeOverlayTextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.paymentModeOverlayTextview.setVisibility(View.GONE);
+                binding.paymentModeSpinner.setVisibility(View.VISIBLE);
+                binding.paymentModeSpinner.performClick();
+
+            }
+        });
 
         binding.paymentModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Get the selected item as a String
-                String selectedItem = (String) parent.getItemAtPosition(position);
-                // Do something with the selected item
-                //Toast.makeText(requireContext(), "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+                isPaymentModeSelected  = true;
+                selectedPaymentMode = (String) parent.getItemAtPosition(position);
+                Toast.makeText(requireContext(), "Selected: " + selectedPaymentMode, Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -203,6 +236,9 @@ public class CreateOrderFragment extends Fragment {
                 // This can be left empty, or you can handle cases when nothing is selected
             }
         });
+
+
+
 
         binding.buyerselectionCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,9 +313,9 @@ public class CreateOrderFragment extends Fragment {
 
 
                 try {
-
+                    receivedAmount = enteredPrice;
                     balanceAmount = totalPrice - enteredPrice;
-                    binding.balanceAmountTextview.setText(String.valueOf(balanceAmount));
+                    binding.balanceAmountTextview.setText(String.valueOf(currencyFormat.format(balanceAmount)));
 
                 }
                 catch (Exception e){
@@ -288,7 +324,81 @@ public class CreateOrderFragment extends Fragment {
             }
         });
 
+        binding. paymentDescriptionEdittext.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                paymentDesc = editable.toString();
+
+
+
+            }
+        });
+
+
+
+        binding.createOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    if(ordersViewModel==null){
+                        Toast.makeText(requireActivity(), "Please add item in cart", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(ordersViewModel.getItemDetailsArraylistViewModel().getValue()==null){
+                        Toast.makeText(requireActivity(), "Please add item in cart", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if(buyersViewModel==null){
+                        Toast.makeText(requireActivity(), "Please select buyer", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue()==null){
+                        Toast.makeText(requireActivity(), "Please select buyer", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+
+                    if((!Objects.requireNonNull(ordersViewModel.getItemDetailsArraylistViewModel().getValue()).isEmpty() )){
+                            if(!buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getMobileno().equals("")){
+                                if(isPaymentModeSelected){
+                                    showProgressBar(true);
+                                    Toast.makeText(requireActivity(), "Dialog called", Toast.LENGTH_SHORT).show();
+                                    showConfirmationAlerDialog();
+                                }
+                                else{
+                                    Toast.makeText(requireActivity(), "Failed in payment selection", Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                            else{
+                                Toast.makeText(requireActivity(), "Failed in buyer selection", Toast.LENGTH_SHORT).show();
+
+                            }
+                    }
+                    else{
+                        Toast.makeText(requireActivity(), "Failed in AddItemDetails selection", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                catch (Exception e){
+                    Toast.makeText(requireActivity(), "Failed in OnClick", Toast.LENGTH_SHORT).show();
+
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
 
         menuItemsViewModel.getMenuItemsFromViewModel().observe(getViewLifecycleOwner(), resource -> {
@@ -349,12 +459,16 @@ public class CreateOrderFragment extends Fragment {
                     binding.selectedBuyerNameTextview.setText(String.valueOf(buyerData.getName()));
                     binding.selecedBuyerDetailsTextview.setText(String.valueOf(buyerData.getAddress1() +" , "+'\n'+buyerData.getAddress2()+" - "+""+buyerData.getPincode()+" . "+'\n'+"Ph:- +91"+buyerData.getMobileno()));
                 }
+                else{
+                    binding.selectedBuyerNameTextview.setText(String.valueOf("Select Buyer Name"));
+                    binding.selecedBuyerDetailsTextview.setText(String.valueOf("xx , xxxxx  xxx xxxx , \nxxxx - xxxx . \nPh : - +91798xxxxxxx"));
+
+                }
 
 
 
             }
         });
-
 
         appDataViewModel.getAppModelDataFromLiveModel().observe(getViewLifecycleOwner(), resource -> {
             if (resource != null) {
@@ -364,7 +478,7 @@ public class CreateOrderFragment extends Fragment {
                         break;
                     case SUCCESS:
                         //Toast.makeText(requireActivity(), " got payment mode ", Toast.LENGTH_SHORT).show();
-                        paymentMode = appData_model.getPaymentmode();
+                        paymentModeStringArrayList = appData_model.getPaymentmode();
                         setAdapterForPaymentList();
                         break;
                     case ERROR:
@@ -375,6 +489,264 @@ public class CreateOrderFragment extends Fragment {
         });
 
 
+    }
+
+    private void showConfirmationAlerDialog() {
+        try {
+            // Inside an Activity or Fragment
+            AlertDialogUtil.showCustomDialog(
+                    requireActivity(),
+                    "Create Order",
+                    "Do you want this create this order now.", "Create", "Not now","RED",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Handle positive button click
+                            isGenerateOrderClicked = true;
+                            counterViewModel.incrementOrderCounter("vendor_1");
+
+                            Toast.makeText(requireActivity(), "Create", Toast.LENGTH_SHORT).show();
+                        }
+                    },
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Handle negative button click
+                            isGenerateOrderClicked = false;
+                            Toast.makeText(requireActivity(), "NotNow", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+            );
+
+
+
+
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void CreateOrderInFirestore() {
+
+        try{
+            OrderDetails_Model orderDetailsModel = new OrderDetails_Model();
+            //buyer details
+            try{
+                orderDetailsModel.setBuyerkey(Objects.requireNonNull(buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getUniquekey());
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setBuyeraddress(buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress1()+" , "+buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress2());
+
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setBuyername(buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getName());
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setBuyermobileno(buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getMobileno());
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setBuyergstin(buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getGstin());
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setBuyerpincode(buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getPincode());
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+            //orderNO
+
+            try{
+
+                orderDetailsModel.setTokenno(String.valueOf(Objects.requireNonNull(counterViewModel.getOrderNumberLiveData().getValue()).data));
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setOrderid(String.valueOf(System.currentTimeMillis()));
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+
+            //ORDERDETAILS:
+
+            try{
+                orderDetailsModel.setItemdetails(ordersViewModel.getItemDetailsArraylistViewModel().getValue());
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setTotalquantity((double) (ordersViewModel.getTotalQtyFromItemDetailsArrayList()));
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            try{
+                orderDetailsModel.setTotalprice((ordersViewModel.getTotalPrice()));
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            try{
+                orderDetailsModel.setDiscount((ordersViewModel.getDiscountValue().getValue()));
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setPrice((ordersViewModel.getSubTotalPrice()));
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setOrderplaceddate(Timestamp.now());
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setVendorkey(("vendor_1"));
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setVendorname(("Ponrathi Traders"));
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setVendorname((orderDetailsModel.getVendorname()));
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+            try{
+                orderDetailsModel.setReceivedamount(receivedAmount);
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                orderDetailsModel.setDescription(paymentDesc);
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+
+                orderDetailsModel.setStatus(Constants.created_orderstatus);
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+
+
+
+            orderItemDetailsViewModel.addItemDetailsEntryInDBFromLOOP(ordersViewModel.getItemDetailsArraylistViewModel().getValue() , "vendor_1" , "Ponrathi Traders" , orderDetailsModel.getOrderid() , orderDetailsModel.getOrderplaceddate());
+
+            ordersViewModel.createOrderInDb(orderDetailsModel, new FirestoreService.FirestoreCallback<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    isGenerateOrderClicked = false;
+                    neutralizeEveryVariableAndUI();
+                    // Handle success
+                    // e.g., show a success message or update the UI
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    isGenerateOrderClicked = false;
+                    showProgressBar(false);
+                    // Handle failure
+                    // e.g., show an error message
+                }
+            });
+
+
+
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void neutralizeEveryVariableAndUI() {
+
+        receivedAmount = 0;
+         selectedPaymentMode = "";paymentDesc ="";
+         menuItemFetchedSuccesfully = false ; buyerDetailsFetchedSuccessfully = false ;
+         isPaymentModeSelected = false ; isGenerateOrderClicked = false;
+
+        binding.paymentModeOverlayTextview.setVisibility(View.VISIBLE);
+        binding.paymentModeSpinner.setVisibility(View.GONE);
+        binding.paymentDescriptionEdittext.setText("");
+        binding.receivedAmountEditText.setText("");
+        binding.balanceAmountTextview.setText(currencyFormat.format(0.00));
+
+
+        ordersViewModel.clearAllLiveData();
+        buyersViewModel.clearSelectedLiveData();
+        menuItemsViewModel.updateSelectedMenuItemModel(new MenuItems_Model());
+        counterViewModel.getOrderCounterAndIncrementLocally("vendor_1");
+        setObserver();
     }
 
     private void openApplyDiscountDialog() {
@@ -405,8 +777,16 @@ public class CreateOrderFragment extends Fragment {
                                    // Toast.makeText(requireActivity(), "Loading orderno", Toast.LENGTH_SHORT).show();
                                     break;
                                 case SUCCESS:
-                                    showProgressBar(false);
-                                    binding.ordernoValueTexview.setText(String.valueOf("# " + String.valueOf(resource.data)));
+                                    binding.ordernoValueTexview.setText(String.valueOf("" + String.valueOf(resource.data)));
+
+                                    if(isGenerateOrderClicked){
+                                        CreateOrderInFirestore();
+                                    }
+                                    else{
+                                        showProgressBar(false);
+
+                                    }
+
                                   //  Toast.makeText(requireActivity(), "Success in orderno", Toast.LENGTH_SHORT).show();
                                     break;
                                 case ERROR:
@@ -478,7 +858,12 @@ public class CreateOrderFragment extends Fragment {
             } else {
                 createOrderCartItemAdapter = new CreateOrderCartItemAdapter(data);
                 binding.itemDetailsRecyclerview.setAdapter(createOrderCartItemAdapter);
+                createOrderCartItemAdapter.setHandler( newHandler());
                 binding.itemDetailsRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(createOrderCartItemAdapter,getContext()));
+                itemTouchHelper.attachToRecyclerView(binding.itemDetailsRecyclerview);
 
             }
 
@@ -511,7 +896,7 @@ public class CreateOrderFragment extends Fragment {
 
         }
         else{
-            binding.itemDetailsRecyclerview.setVisibility(View.GONE);
+             binding.itemDetailsRecyclerview.setVisibility(View.GONE);
             binding.itemDetailsInstrucTextviewRecyclerview.setVisibility(View.VISIBLE);
         }
 
@@ -547,6 +932,70 @@ public class CreateOrderFragment extends Fragment {
         }
 
     }
+
+
+
+
+
+    private Handler newHandler() {
+        Handler.Callback callback = new Handler.Callback() {
+
+            @Override
+            public boolean handleMessage(Message msg) {
+                Bundle bundle = msg.getData();
+                String data = bundle.getString("fromadapter");
+
+
+                if(data.equals("CreateOrderItem_Delete")){
+                    try {
+                        int position = bundle.getInt("position");
+
+                        // Inside an Activity or Fragment
+                        AlertDialogUtil.showCustomDialog(
+                                requireActivity(),
+                                "Remove Item Cart ",
+                                "Do you want to Remove this item from cart .", "Remove", "Cancel","BLACK",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Handle positive button click
+
+                                        ordersViewModel.removeItemFromCart(position);
+                                        Toast.makeText(requireActivity(), "Remove", Toast.LENGTH_SHORT).show();
+                                    }
+                                },
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Handle negative button click
+                                        createOrderCartItemAdapter.notifyItemChanged(position);
+                                        Toast.makeText(requireActivity(), "Cancel", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                        );
+
+
+
+
+
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+
+
+
+
+                }
+
+                return false;
+            }
+        };
+        return new Handler(callback);
+    }
+
 
     private void showProgressBar(boolean show) {
 

@@ -122,7 +122,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="15dp"
                         android:layout_toEndOf="@+id/circleOrderImage"
-                        android:text="Order No : " />
+                        android:text="# Order No :" />
 
 
                     <TextView
@@ -134,7 +134,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="15dp"
                         android:layout_toEndOf="@+id/orderno_labelTexview"
-                        android:text=" #0000 " />
+                        android:text="0000 " />
 
 
                     <TextView
@@ -702,6 +702,7 @@
                             style="@style/GreyTextStyleSemiBold"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:visibility="gone"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="5dp"
@@ -716,6 +717,20 @@
                             android:alpha=".7"
                             android:src="@mipmap/downarrow" />
 
+                        <TextView
+                            android:id="@+id/paymentModeOverlay_Textview"
+                            style="@style/GreyTextStyleSemiBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="25dp"
+                            android:hint="Select payment mode"
+
+                            android:background="@color/grey"
+                            />
+
+
 
                     </RelativeLayout>
 
@@ -727,10 +742,9 @@
                         android:layout_height="120dp"
                         android:layout_below="@+id/paymentModeSelectionLayout"
                         android:layout_marginTop="15dp"
-
                         android:background="@drawable/rectangle_greybackground"
                         android:gravity="start"
-                        android:hint="Payment Description"
+                        android:hint="Order / Payment Description"
                         android:padding="10dp" />
 
 

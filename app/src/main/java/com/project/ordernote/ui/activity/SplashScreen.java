@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -68,18 +69,37 @@ public class SplashScreen extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                 // Check if the user is logged in
+                if (sessionManager.isLoggedIn()) {
+                    // Redirect to DashboardScreen if the user is logged in
 
-        // Initialize ViewModels
-        buyersViewModel = new ViewModelProvider(this).get(Buyers_ViewModel.class);
-        menuItemViewModel = new ViewModelProvider(this).get(MenuItems_ViewModel.class);
-        appDataViewModel = new ViewModelProvider(this).get(AppData_ViewModel.class);
-        fetchInitialData();
-        // Fetch data
-        setObserver();
+                    // Initialize ViewModels
+                    buyersViewModel = new ViewModelProvider(SplashScreen.this).get(Buyers_ViewModel.class);
+                    menuItemViewModel = new ViewModelProvider(SplashScreen.this).get(MenuItems_ViewModel.class);
+                    appDataViewModel = new ViewModelProvider(SplashScreen.this).get(AppData_ViewModel.class);
+                    fetchInitialData();
+                    // Fetch data
+                    setObserver();
 
-        buyersViewModel.getBuyersListFromViewModel().observeForever(buyerModelListObserver);
-        menuItemViewModel.getMenuItemsFromViewModel().observeForever(menuItemListObserver);
-        appDataViewModel.getAppModelDataFromLiveModel().observeForever(appDataModelObserver);
+                    buyersViewModel.getBuyersListFromViewModel().observeForever(buyerModelListObserver);
+                    menuItemViewModel.getMenuItemsFromViewModel().observeForever(menuItemListObserver);
+                    appDataViewModel.getAppModelDataFromLiveModel().observeForever(appDataModelObserver);
+
+
+                } else {
+                    // Redirect to LoginScreen if the user is not logged in
+                    Intent intent = new Intent(SplashScreen.this, LoginScreen.class);
+                    SplashScreen.this.startActivity(intent);
+                    SplashScreen.this.finish();
+                }
+
+
+            }
+        }, SPLASH_DISPLAY_LENGTH);
+
 
 
 
@@ -202,19 +222,55 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        buyersViewModel.getBuyersListFromViewModel().removeObserver(buyerModelListObserver);
+        try {
+            if(buyersViewModel!=null){
+                buyersViewModel.getBuyersListFromViewModel().removeObserver(buyerModelListObserver);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
+            if(menuItemViewModel!=null) {
+                menuItemViewModel.getMenuItemsFromViewModel().removeObserver(menuItemListObserver);
+            }
+        }
+        catch (Exception e ) {
+            e.printStackTrace();
+        }
+        try{
+            if(appDataViewModel!=null) {
+                appDataViewModel.getAppModelDataFromLiveModel().removeObserver(appDataModelObserver);
+            }
+        }
+        catch (Exception e ) {
+            e.printStackTrace();
+        }
 
-        menuItemViewModel.getMenuItemsFromViewModel().removeObserver(menuItemListObserver);
-        appDataViewModel.getAppModelDataFromLiveModel().removeObserver(appDataModelObserver);
 
     }
     private void checkAndProceed() {
         // Assuming both data fetches are done
-       /* if (buyersViewModel.getBuyersListFromViewModel().getValue() != null &&
-                menuItemViewModel.getMenuItemsFromViewModel().getValue() != null &&
-                appDataViewModel.getAppModelDataFromLiveModel() !=null ) {
 
-        */
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent;
+                // Check if the user is logged in
+                if (sessionManager.isLoggedIn()) {
+                    // Redirect to DashboardScreen if the user is logged in
+                    intent = new Intent(SplashScreen.this, Dashboard.class);
+                } else {
+                    // Redirect to LoginScreen if the user is not logged in
+                    intent = new Intent(SplashScreen.this, LoginScreen.class);
+                }
+
+                SplashScreen.this.startActivity(intent);
+                SplashScreen.this.finish();
+            }
+        }, SPLASH_DISPLAY_LENGTH);
+
 
         if(gotbuyerData  && gotMenuItemData && gotAppdata){
             // Proceed to the next activity
