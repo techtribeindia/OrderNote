@@ -51,7 +51,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
         holder.orderId.setText(order.getTokenno() != null ? order.getTokenno() : "N/A");
         holder.buyerName.setText(order.getBuyername() != null ? order.getBuyername() : "N/A");
         holder.buyerAddress.setText(order.getBuyeraddress() != null ? order.getBuyeraddress() : "N/A");
-        holder.orderQty.setText(String.valueOf(order.getTotalqty()));
+        holder.orderQty.setText(String.valueOf(order.getTotalquantity()));
         holder.orderPrice.setText(String.valueOf(order.getTotalprice()));
         List<ItemDetails_Model> itemDetailsList = order.getItemdetails();
         if (itemDetailsList != null && !itemDetailsList.isEmpty()) {
@@ -137,7 +137,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
         orderId.setText("Order ID: " + order.getTokenno());
         buyerName.setText("Buyer Name: " + order.getBuyername());
         buyerAddress.setText("Buyer Address: " + order.getBuyeraddress());
-        orderQty.setText("Order Quantity: " + order.getTotalqty());
+        orderQty.setText("Order Quantity: " + order.getTotalquantity());
         orderPrice.setText("Order Price: " + order.getTotalprice());
 
         // Build the dialog

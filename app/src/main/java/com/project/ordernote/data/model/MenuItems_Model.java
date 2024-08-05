@@ -10,6 +10,30 @@ public class MenuItems_Model {
     String vendorkey = "" , vendorname = "" , itemtype = "" , itemname = "" , portionsize = "" ,
             itemkey = "" , netweight = "";
 
+
+
+
+
+
+    //default constructor
+    public MenuItems_Model() {}
+
+    // Copy constructor
+    public MenuItems_Model(MenuItems_Model original) {
+        this.grossweight = original.grossweight;
+        this.quantity = original.quantity;
+        this.priceperkg = original.priceperkg;
+        this.unitprice = original.unitprice;
+        this.showforbilling = original.showforbilling;
+        this.vendorkey = original.vendorkey;
+        this.vendorname = original.vendorname;
+        this.itemtype = original.itemtype;
+        this.itemname = original.itemname;
+        this.portionsize = original.portionsize;
+        this.itemkey = original.itemkey;
+        this.netweight = original.netweight;
+    }
+
     public double getQuantity() {
         return (double) quantity;
     }
@@ -26,37 +50,10 @@ public class MenuItems_Model {
         this.netweight = netweight;
     }
 
-    public double getGrossweight() {
-        double grossweightinKg = 0;
-             try{
-                 grossweightinKg = Double.parseDouble(WeightConverter.ConvertGramsToKilograms(String.valueOf(grossweight)));
-                 return  grossweightinKg;
-
-             }
-            catch (Exception e){
-
-                e.printStackTrace();
-                return  grossweight;
-
-            }
-
+    public int getGrossweight() {
+        return grossweight;
     }
 
-    public void setGrossweightAndConvertItToGrams(double grossweightinKg) {
-        int grossweightingrams = 0;
-        try{
-            grossweightingrams = (int) (Double.parseDouble(WeightConverter.ConvertKilogramstoGrams(String.valueOf(grossweightinKg))));
-            this.grossweight = grossweightingrams;
-
-        }
-        catch (Exception e){
-
-            e.printStackTrace();
-            this.grossweight =(int) grossweightinKg;
-
-        }
-        //  this.grossweight =(int) grossweight;
-    }
 
 
     public void setGrossweight(double grossweight) {

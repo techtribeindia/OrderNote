@@ -22,7 +22,7 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
     private MutableLiveData<ApiResponseState_Enum<List<MenuItems_Model>>> menuItemsLiveData;
 
     private MutableLiveData<MenuItems_Model> selectedMenuItemModel;
-    private MutableLiveData<String> selectedMenuItemPosition;
+ //   private MutableLiveData<String> selectedMenuItemPosition;
 
 
 
@@ -41,10 +41,12 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
             selectedMenuItemModel = new MutableLiveData<>();
 
         }
-        if(selectedMenuItemPosition == null){
+       /* if(selectedMenuItemPosition == null){
             selectedMenuItemPosition = new MutableLiveData<>();
 
         }
+
+        */
 
     }
 
@@ -71,9 +73,16 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
         this.selectedMenuItemModel .setValue( selectedMenuItemModel);
     }
 
-    public LiveData<String> getSelectedMenuItemPositionFromViewModel() {
+ /*   public LiveData<String> getSelectedMenuItemPositionFromViewModel() {
         return selectedMenuItemPosition;
     }
+
+    public void setSelectedMenuItemPosition(String selectedMenuItemPosition) {
+        this.selectedMenuItemPosition.setValue(selectedMenuItemPosition);
+    }
+
+  */
+
     public LiveData<MenuItems_Model> getMenuItemForMenuItemKeyFromViewModel(String menuitemkey) {
        // selectedMenuItemModel. setValue(new MenuItems_Model());
        // selectedMenuItemPosition.setValue("");
@@ -85,10 +94,15 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
             if(menuItemsModel.getItemkey().equals(menuitemkey)){
 
                 isItemFound = true;
-                menuItemsModel.setQuantity(1);
-                 selectedMenuItemModel.setValue(menuItemsModel);
+                //menuItemsModel.setQuantity(1);
+                 //selectedMenuItemModel.setValue(menuItemsModel);
 
-                 selectedMenuItemPosition.setValue(String.valueOf(i));
+                // Create a deep copy of menuItemsModel using the copy constructor
+                MenuItems_Model copiedMenuItem = new MenuItems_Model(menuItemsModel);
+                copiedMenuItem.setQuantity(1);
+
+                selectedMenuItemModel.setValue(copiedMenuItem);
+             //    selectedMenuItemPosition.setValue(String.valueOf(i));
             }
 
             if((Objects.requireNonNull(menuItemsLiveData.getValue()).data.size() -1 )== i){

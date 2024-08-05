@@ -36,7 +36,11 @@ public class Counter_ViewModel extends ViewModel{
 
         public void incrementOrderCounter(String vendorkey) {
             try {
-                orderNumberLiveData = counterRepository.incrementOrderCounter(vendorkey);
+
+                LiveData<ApiResponseState_Enum<Long>> source =  counterRepository.incrementOrderCounter(vendorkey);
+                source.observeForever(orderNoObserver);
+
+             //   orderNumberLiveData = counterRepository.incrementOrderCounter(vendorkey);
             }
             catch (Exception e){
                 e.printStackTrace();

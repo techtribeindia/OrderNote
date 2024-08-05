@@ -4,9 +4,6 @@ package com.project.ordernote.data.model;
 
 import com.google.firebase.Timestamp;
 
-import org.json.JSONArray;
-
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -17,16 +14,22 @@ public class OrderDetails_Model {
     String buyeraddress ="";
     String buyergstin = "";
     String buyerkey = "";
+    String buyermobileno = "";
+    String buyerpincode = "";
+    String description = "";
+
     double discount =0;
     private List<ItemDetails_Model> itemdetails;
     Timestamp orderplaceddate;
     double price = 0 ;
+    double receivedamount = 0 ;
+
     String status = "";
     String tokenno = "";
     double totalprice =0;
     String vendorkey = "";
     String vendorname ="";
-    double totalqty = 0;
+    double totalquantity = 0;
     String transportname = "";
     String drivermobileno = "";
     String truckno = "";
@@ -49,7 +52,40 @@ public class OrderDetails_Model {
         this.totalprice = totalprice;
         this.vendorkey = vendorkey;
         this.vendorname = vendorname;
-        this.totalqty = totalqty;
+        this.totalquantity = totalqty;
+    }
+
+
+    public double getReceivedamount() {
+        return receivedamount;
+    }
+
+    public void setReceivedamount(double receivedamount) {
+        this.receivedamount = receivedamount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getBuyermobileno() {
+        return buyermobileno;
+    }
+
+    public void setBuyermobileno(String buyermobileno) {
+        this.buyermobileno = buyermobileno;
+    }
+
+    public String getBuyerpincode() {
+        return buyerpincode;
+    }
+
+    public void setBuyerpincode(String buyerpincode) {
+        this.buyerpincode = buyerpincode;
     }
 
     public boolean isEditrequest() {
@@ -96,12 +132,12 @@ public class OrderDetails_Model {
         return buyername;
     }
 
-    public double getTotalqty() {
-        return totalqty;
+    public double getTotalquantity() {
+        return totalquantity;
     }
 
-    public void setTotalqty(double totalqty) {
-        this.totalqty = totalqty;
+    public void setTotalquantity(double totalquantity) {
+        this.totalquantity = totalquantity;
     }
 
     public void setBuyername(String buyername) {
