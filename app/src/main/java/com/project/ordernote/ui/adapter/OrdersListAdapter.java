@@ -29,6 +29,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
     private String selectedScreen;
     Handler mHandler;
 
+
     public OrdersListAdapter(OrderDetails_ViewModel viewModel) {
         this.viewModel = viewModel;
     }
@@ -68,19 +69,20 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
         }
         holder.ViewBill.setOnClickListener(view -> {
             viewModel.setSelectedOrder(order);
-           // sendHandlerMessage(position);
+           sendHandlerMessage("Fetch");
         });
     }
 
-    private void sendHandlerMessage(int position) {
+    public void sendHandlerMessage(String status) {
+        if (mHandler != null) { // Null check to prevent NullPointerException
+            Message message = new Message();
+            Bundle bundle = new Bundle();
 
-
-        Message message = new Message();
-        Bundle bundle = new Bundle();
-        bundle.putString("fromadapter","openOrderDetailsDialog");
-        bundle.putInt("position" , position);
-        message.setData(bundle);
-        mHandler.sendMessage(message);
+            bundle.putString("fragment", selectedScreen);
+            bundle.putString("status", status);
+            message.setData(bundle);
+            mHandler.sendMessage(message);
+        }
     }
 
     @Override
@@ -121,6 +123,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
             ViewBill = itemView.findViewById(R.id.view_bill);
         }
     }
+
     private void showOrderDetailsDialog(Context context, OrderDetails_Model order) {
         // Create an instance of LayoutInflater
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -149,4 +152,5 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
         // Show the dialog
         builder.create().show();
     }
+
 }

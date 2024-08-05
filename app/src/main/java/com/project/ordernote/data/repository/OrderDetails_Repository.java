@@ -112,11 +112,11 @@ public class OrderDetails_Repository {
 
 
 
-    public MutableLiveData<ApiResponseState_Enum<String>> acceptOrder(String transporName,String driverMobieno,String truckNo, String orderid, String status) {
+    public MutableLiveData<ApiResponseState_Enum<String>> acceptOrder(String orderid, String status) {
         MutableLiveData<ApiResponseState_Enum<String>> ordersLiveData = new MutableLiveData<>();
         ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
 
-        firestoreService.acceptOrder(transporName,driverMobieno,truckNo,orderid,status, new FirestoreService.FirestoreCallback<String>() {
+        firestoreService.acceptOrder(orderid,status, new FirestoreService.FirestoreCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Log.d("orderdetails response   :  ", result.toString());
@@ -252,7 +252,38 @@ public class OrderDetails_Repository {
 
     }
 
+
+    public MutableLiveData<ApiResponseState_Enum<String>> updateBatchDetails( String orderid,String transporName, String driverMobieno, String truckNo) {
+        MutableLiveData<ApiResponseState_Enum<String>> ordersLiveData = new MutableLiveData<>();
+        ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
+
+        firestoreService.updateBatchDetails( orderid,transporName,driverMobieno,truckNo, new FirestoreService.FirestoreCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d("orderdetails response   :  ", result.toString());
+
+                if (result.isEmpty()) {
+                    ordersLiveData.postValue(ApiResponseState_Enum.error("No data available", result));
+                } else {
+                    ordersLiveData.postValue(ApiResponseState_Enum.success(result));
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                ordersLiveData.postValue(ApiResponseState_Enum.error(e.getMessage(), null));
+            }
+        });
+        Log.d("orderdetails ordersLiveData  :  ", ordersLiveData.toString());
+
+
+        return ordersLiveData;
+
+    }
+
+
     public void createOrder(OrderDetails_Model order, FirestoreService.FirestoreCallback<Void> callback) {
         firestoreService.createOrder(order, callback);
     }
+
 }

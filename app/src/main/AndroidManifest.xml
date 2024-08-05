@@ -14,10 +14,15 @@
         android:theme="@style/Theme.OrderNote"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.DatwWiseOrderScreen"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.LoginScreen"
             android:exported="false"
+
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
+
         <activity
             android:name=".ui.activity.SplashScreen"
             android:screenOrientation="portrait"
@@ -30,6 +35,7 @@
         </activity>
         <activity
             android:name=".ui.activity.Dashboard"
+
             android:exported="false"
             android:screenOrientation="portrait"
             />

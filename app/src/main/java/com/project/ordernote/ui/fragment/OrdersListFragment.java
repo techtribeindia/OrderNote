@@ -33,7 +33,7 @@ public class OrdersListFragment extends Fragment {
     private OrdersListAdapter ordersListAdapter;
     private FragmentOrdersBinding binding;
     private OrderListItemDescFragment orderListItemDescFragment;
-    private String selectedOrderButton = "ORDERCREATED";
+    private String selectedOrderButton = "CREATED";
     public OrdersListFragment() {
         // Required empty public constructor
     }
@@ -68,15 +68,9 @@ public class OrdersListFragment extends Fragment {
         binding.ordersRecyclerView.setAdapter(ordersListAdapter);
 
         setActiveButton(binding.pendingordersButton);
-        orderDetails_viewModel.getSelectedOrderJson().observe(getViewLifecycleOwner(), orderJson -> {
-            if (orderJson != null) {
-                OrderListItemDescFragment orderListItemDescFragment = OrderListItemDescFragment.newInstance(orderJson);
-                orderListItemDescFragment.setmHandler(newHandler(),selectedOrderButton);
-                orderListItemDescFragment.show(getParentFragmentManager(), "orderListItemDescFragment");
-            }
-        });
+
         try {
-            orderDetailViewModel("ORDERCREATED");
+            orderDetailViewModel("CREATED");
         }
         catch (Exception e ){
             e.printStackTrace();
@@ -87,8 +81,8 @@ public class OrdersListFragment extends Fragment {
             public void onClick(View view1) {
 
                 setActiveButton(binding.pendingordersButton);
-                orderDetailViewModel("ORDERCREATED");
-                selectedOrderButton = "ORDERCREATED";
+                orderDetailViewModel("CREATED");
+                selectedOrderButton = "CREATED";
             }
         });
 
@@ -97,18 +91,9 @@ public class OrdersListFragment extends Fragment {
             public void onClick(View view1) {
 
                 setActiveButton(binding.rejectedordersButton);
-                orderDetailViewModel("ORDERREJECTED");
+                orderDetailViewModel("REJECTED");
 
-                selectedOrderButton = "ORDERREJECTED";
-            }
-        });
-        binding.totayActivedordersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setActiveButton(binding.totayActivedordersButton);
-                orderDetailViewModel("ORDERPLACED");
-                selectedOrderButton = "ORDERPLACED";
-
+                selectedOrderButton = "REJECTED";
             }
         });
 
@@ -136,12 +121,20 @@ public class OrdersListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ordersListAdapter.clearOrders();
         observeOrderDetails();
-
+        orderDetails_viewModel.clearSelectedOrderJson();
+        orderDetails_viewModel.getSelectedOrderJson().observe(getViewLifecycleOwner(), orderJson -> {
+            if ((orderJson != null)&&(!orderJson.equals(""))) {
+                OrderListItemDescFragment orderListItemDescFragment = OrderListItemDescFragment.newInstance(orderJson);
+                orderListItemDescFragment.setmHandler(newHandler(),"DatwWiseOrderScreen");
+                orderListItemDescFragment.show(getParentFragmentManager(), "DatwWiseOrderScreen");
+            }
+        });
     }
 
     private void observeOrderDetails() {
+        orderDetails_viewModel.clearFromViewModel();
         orderDetails_viewModel.getOrdersByStatusFromViewModel().observe(getViewLifecycleOwner(), resource -> {
             ordersListAdapter.clearOrders();
             if (resource != null) {
@@ -162,7 +155,7 @@ public class OrdersListFragment extends Fragment {
     }
 
     private void orderDetailViewModel(String status) {
-        if (status == "ORDERPLACED")
+        if (status == " PLACED")
         {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -189,11 +182,11 @@ public class OrdersListFragment extends Fragment {
     private void setActiveButton(Button activeButton) {
         binding.pendingordersButton.setBackgroundResource(R.drawable.button_inactive);
         binding.rejectedordersButton.setBackgroundResource(R.drawable.button_inactive);
-        binding.totayActivedordersButton.setBackgroundResource(R.drawable.button_inactive);
+
 
         binding.pendingordersButton.setTextColor(getResources().getColor(R.color.black));
         binding.rejectedordersButton.setTextColor(getResources().getColor(R.color.black));
-        binding.totayActivedordersButton.setTextColor(getResources().getColor(R.color.black));
+
 
         activeButton.setBackgroundResource(R.drawable.button_active);
         activeButton.setTextColor(getResources().getColor(R.color.white));

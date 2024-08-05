@@ -557,9 +557,9 @@
 
 
                 <androidx.cardview.widget.CardView
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
@@ -567,8 +567,21 @@
                     android:visibility="visible"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
-
                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="vertical"
+                        >
+                        <ImageView
+                            android:id="@+id/dispatch_selection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:padding="10dp"
+                            android:src="@drawable/edit_icon"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/dispatch_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
@@ -580,9 +593,9 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
+                            android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
 
                             <TextView
@@ -590,39 +603,27 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="2.2"
-                                android:text="Transport Name" />
+                                android:text="Transport Name :" />
 
-                            <EditText
-                                android:id="@+id/dialog_transportname"
-                                style="@style/BlackTextStyleSemiBold"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:layout_margin="10dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/rectangle_greybackground"
-                                android:gravity="end|center"
-                                android:paddingEnd="10dp"
-                                android:hint="Enter the transport name"
-                                />
                             <TextView
                                 android:id="@+id/dialog_transportname_text"
                                 style="@style/BlackTextStyleSemiBold"
-                                android:background="@drawable/rectangle_greybackground"
+
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="end|center"
+
                                 android:paddingEnd="10dp"
                                 android:layout_margin="10dp"
-                                android:text=""
-                                android:visibility="gone"/>
+                                android:text="----"
+                                />
 
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
+                            android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
 
                             <TextView
@@ -630,39 +631,27 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="2.2"
-                                android:text="Driver Mobile.No" />
+                                android:text="Driver Mobile.No :" />
 
-                            <EditText
-                                android:id="@+id/dialog_driver_mobileno"
-                                style="@style/BlackTextStyleSemiBold"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:layout_margin="10dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/rectangle_greybackground"
-                                android:gravity="end|center"
-                                android:paddingEnd="10dp"
-                                android:hint="Enter the driver mobile no"
-                                />
                             <TextView
                                 android:id="@+id/dialog_driver_mobileno_text"
                                 style="@style/BlackTextStyleSemiBold"
-                                android:background="@drawable/rectangle_greybackground"
+
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="end|center"
+
                                 android:paddingEnd="10dp"
                                 android:layout_margin="10dp"
-                                android:text=""
-                                android:visibility="gone"/>
+                                android:text="----"
+                                />
 
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
+                            android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
 
                             <TextView
@@ -670,32 +659,20 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="2.2"
-                                android:text="Truck.No" />
+                                android:text="Truck.No :" />
 
-                            <EditText
-                                android:id="@+id/dialog_truckno"
-                                style="@style/BlackTextStyleSemiBold"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:layout_margin="10dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/rectangle_greybackground"
-                                android:gravity="end|center"
-                                android:paddingEnd="10dp"
-                                android:hint="Enter the truck number"
-                                />
                             <TextView
                                 android:id="@+id/dialog_truckno_text"
                                 style="@style/BlackTextStyleSemiBold"
-                                android:background="@drawable/rectangle_greybackground"
+
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="end|center"
+
                                 android:paddingEnd="10dp"
                                 android:layout_margin="10dp"
-                                android:text=""
-                                android:visibility="gone"/>
+                                android:text="----"
+                                />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -704,7 +681,8 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/dialog_orderstatus_card"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="80dp"
+                    android:padding="10dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
@@ -802,7 +780,49 @@
                             android:layout_margin="5dp"
                             style="@style/WhiteTextStyleBold"
                             android:background="@drawable/rectangle_redbackground"
-                            android:text="Please Again"/>
+                            android:text="Place Order"/>
+                    </RelativeLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/dialog_approve_and_deny_button_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:visibility="gone">
+                    <RelativeLayout
+                        android:id="@+id/dialog_cancel1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1.4">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            style="@style/WhiteTextStyleBold"
+                            android:background="@drawable/rectangle_blackbackground"
+                            android:text="Cancel"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/dialog_approve"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1.4">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            style="@style/WhiteTextStyleBold"
+                            android:background="@drawable/rectangle_redbackground"
+                            android:text="Perimission to Edit"/>
                     </RelativeLayout>
                 </LinearLayout>
                 <LinearLayout
