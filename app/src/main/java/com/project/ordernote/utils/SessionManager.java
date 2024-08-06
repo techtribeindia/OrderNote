@@ -8,12 +8,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 public class SessionManager {
     private static final String PREF_NAME = "UserSession";
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_MOBILE_NUMBER = "mobileno";
-    private static final String KEY_ROLE = "role";
+    private static final String KEY_NAME = DatabaseReference.name_UserDetails;
+    private static final String KEY_MOBILE_NUMBER = DatabaseReference.mobileno_UserDetails;
+    private static final String KEY_ROLE = DatabaseReference.role_UserDetails;
 
-    private static final String VENDORKEY = "vendorkey";
-    private static final String VENDORNAME = "vendorname";
+    private static final String VENDORKEY = DatabaseReference.vendorkey;
+    private static final String VENDORNAME = DatabaseReference.vendorname;
 
     // Add other keys as needed
 
@@ -39,6 +39,11 @@ public class SessionManager {
     public String getRole()
     {
         return  pref.getString(KEY_ROLE,"");
+    }
+
+    public String getVendorkey()
+    {
+        return pref.getString(VENDORKEY,"");
     }
 
     public void saveUserData(QueryDocumentSnapshot userDocument) {

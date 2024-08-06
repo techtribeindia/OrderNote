@@ -1,12 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+    android:id="@+id/motionLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/reddishgrey"
-    tools:context=".ui.fragment.OrderListItemDescFragment">
+    tools:context=".ui.fragment.OrderListItemDescFragment"
+    app:layoutDescription="@xml/fragment_order_list_item_desc_scene">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/red"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Staff requested access to edit Dispatch Details"
+            android:textColor="@android:color/white" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="end">
+                <Button
+                    android:id="@+id/deny_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Deny"/>
+                <Button
+                    android:id="@+id/approve_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Approve"
+                    android:layout_marginEnd="16dp"/>
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Existing content wrapped in a FrameLayout -->
+    <FrameLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/banner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -851,6 +906,32 @@
                             android:text="Request to Edit Dispatch Details"/>
                     </RelativeLayout>
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/dialog_cancel_only_button_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:id="@+id/dialog_cancel_only_but"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1.4">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            style="@style/WhiteTextStyleBold"
+                            android:background="@drawable/rectangle_blackbackground"
+                            android:text="cancel"/>
+                    </RelativeLayout>
+                </LinearLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="110dp"
@@ -880,5 +961,5 @@
 
     </RelativeLayout>
 
-
-</FrameLayout>
+    </FrameLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

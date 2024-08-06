@@ -168,7 +168,7 @@ public class CreateOrderFragment extends Fragment {
 
                 appData_model = LocalDataManager.getInstance().getAppData_model();
 
-                if(appData_model == null){
+                if(appData_model == null ){
                       appDataViewModel.FetchAppDataFromRepositoryAndSaveInLocalDataManager();
                 }
                 else{
@@ -192,11 +192,11 @@ public class CreateOrderFragment extends Fragment {
     }
 
     private void setAdapterForPaymentList() {
+        
+            paymentModeAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, paymentModeStringArrayList);
+            paymentModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        paymentModeAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, paymentModeStringArrayList);
-        paymentModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        binding.paymentModeSpinner.setAdapter(paymentModeAdapter);
+            binding.paymentModeSpinner.setAdapter(paymentModeAdapter);
 
     }
 
