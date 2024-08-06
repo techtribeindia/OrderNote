@@ -29,6 +29,8 @@ import android.widget.Toast;
 import com.google.firebase.Timestamp;
 import com.project.ordernote.R;
 import com.project.ordernote.ui.adapter.OrdersListAdapter;
+import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
 import java.text.ParseException;
@@ -52,6 +54,7 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
     private Date selectedDate;
     private TextView tvSelectedDate;
     private int year, month, day;
+    private SessionManager sessionManager;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -75,6 +78,7 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sessionManager = new SessionManager(requireActivity());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -103,8 +107,9 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
 
         orderListItemDescFragment = new OrderListItemDescFragment();
         orderDetails_viewModel = new ViewModelProvider(requireActivity()).get(OrderDetails_ViewModel.class);
+        orderDetails_viewModel.setUserDetails(sessionManager.getVendorkey());
         ordersListAdapter = new OrdersListAdapter(orderDetails_viewModel);
-
+        Toast.makeText(requireActivity(), sessionManager.getVendorkey(), Toast.LENGTH_SHORT).show();
         OrderRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         OrderRecyclerView.setAdapter(ordersListAdapter);
 
@@ -130,7 +135,7 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
         });
 
         try {
-            orderDetailViewModel("PLACED");
+            orderDetailViewModel(Constants.placed_status);
         }
         catch (Exception e ){
             e.printStackTrace();
@@ -156,7 +161,7 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
             try {
                  selectedDate = sdf.parse(selectedDate1);
 
-                orderDetailViewModel("PLACED");
+                orderDetailViewModel(Constants.placed_status);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

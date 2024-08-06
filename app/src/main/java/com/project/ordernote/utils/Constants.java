@@ -25,5 +25,22 @@ public class Constants{
     public static final String success = "SUCCESS";
     public static final String failed = "FAILED";
 
+    //UserDetails table
+    public static final String admin_role = "ADMIN";
+    public static final String staff_role = "STAFF";
+    public static final String blocked_role = "BLOCKED";
+    public static final boolean true_forcelogout = true;
+    public static final boolean false_forcelogout = false;
+    public static final String vendor_1_key_UserDetails = "vendor_1";
+    public static final String vendor_1_name_UserDetails = "Ponrathi Traders";
+
+    //orderdetails Table
+    public static final String created_status = "CREATED";
+    public static final String rejected_status = "REJECTED";
+    public static final String placed_status = "PLACED";
+    public static final String editapproved_dispatchstatus = "EDITAPPROVED";
+    public static final String dispatched_dispatchstatus = "DISPATCHED";
+    public static final String editrequested_dispatchstatus = "EDITREQUESTED";
+    public static final String cancelled_dispatchstatus = "CANCELLED";
 
 }

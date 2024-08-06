@@ -21,6 +21,8 @@ import com.google.firebase.Timestamp;
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.FragmentOrdersBinding;
 import com.project.ordernote.ui.adapter.OrdersListAdapter;
+import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
 import java.util.ArrayList;
@@ -33,7 +35,8 @@ public class OrdersListFragment extends Fragment {
     private OrdersListAdapter ordersListAdapter;
     private FragmentOrdersBinding binding;
     private OrderListItemDescFragment orderListItemDescFragment;
-    private String selectedOrderButton = "CREATED";
+    private String selectedOrderButton = Constants.created_status;
+    private SessionManager sessionManager;
     public OrdersListFragment() {
         // Required empty public constructor
     }
@@ -50,12 +53,13 @@ public class OrdersListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        sessionManager = new SessionManager(requireActivity());
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         orderDetails_viewModel = new ViewModelProvider(requireActivity()).get(OrderDetails_ViewModel.class);
+        orderDetails_viewModel.setUserDetails(sessionManager.getVendorkey());
         binding = FragmentOrdersBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
@@ -70,7 +74,7 @@ public class OrdersListFragment extends Fragment {
         setActiveButton(binding.pendingordersButton);
 
         try {
-            orderDetailViewModel("CREATED");
+            orderDetailViewModel(Constants.created_status);
         }
         catch (Exception e ){
             e.printStackTrace();
@@ -81,8 +85,8 @@ public class OrdersListFragment extends Fragment {
             public void onClick(View view1) {
 
                 setActiveButton(binding.pendingordersButton);
-                orderDetailViewModel("CREATED");
-                selectedOrderButton = "CREATED";
+                orderDetailViewModel(Constants.created_status);
+                selectedOrderButton = Constants.created_status;
             }
         });
 
@@ -91,9 +95,9 @@ public class OrdersListFragment extends Fragment {
             public void onClick(View view1) {
 
                 setActiveButton(binding.rejectedordersButton);
-                orderDetailViewModel("REJECTED");
+                orderDetailViewModel(Constants.rejected_status);
 
-                selectedOrderButton = "REJECTED";
+                selectedOrderButton = Constants.rejected_status;
             }
         });
 
@@ -155,7 +159,7 @@ public class OrdersListFragment extends Fragment {
     }
 
     private void orderDetailViewModel(String status) {
-        if (status == " PLACED")
+        if (Objects.equals(status, Constants.placed_status))
         {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, 0);

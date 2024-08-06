@@ -105,31 +105,13 @@ public class SplashScreen extends AppCompatActivity {
 
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent;
-                // Check if the user is logged in
-                if (sessionManager.isLoggedIn()) {
-                    // Redirect to DashboardScreen if the user is logged in
-                    intent = new Intent(SplashScreen.this, Dashboard.class);
-                } else {
-                    // Redirect to LoginScreen if the user is not logged in
-                    intent = new Intent(SplashScreen.this, LoginScreen.class);
-                }
-
-                SplashScreen.this.startActivity(intent);
-                SplashScreen.this.finish();
-            }
-        }, SPLASH_DISPLAY_LENGTH);
-
 
     }
 
 
     private void fetchInitialData() {
-        buyersViewModel.getBuyersListFromRepository("vendor_1");
-        menuItemViewModel.FetchMenuItemByVendorKeyFromRepository("vendor_1");
+        buyersViewModel.getBuyersListFromRepository(sessionManager.getVendorkey());
+        menuItemViewModel.FetchMenuItemByVendorKeyFromRepository(sessionManager.getVendorkey());
         appDataViewModel.FetchAppDataFromRepositoryAndSaveInLocalDataManager();
 
 

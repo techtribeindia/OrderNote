@@ -13,25 +13,31 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.ordernote.R;
 import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
+import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.OrderViewHolder> {
     private List<OrderDetails_Model> orders = new ArrayList<>();
     private OrderDetails_ViewModel viewModel;
     private String selectedScreen;
     Handler mHandler;
+    private SessionManager sessionManager;
 
 
     public OrdersListAdapter(OrderDetails_ViewModel viewModel) {
         this.viewModel = viewModel;
+
     }
 
     public OrdersListAdapter() {
@@ -43,6 +49,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
     @Override
     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.orderlist_items, parent, false);
+        sessionManager = new SessionManager(parent.getContext());
         return new OrderViewHolder(view);
     }
 
@@ -54,6 +61,11 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
         holder.buyerAddress.setText(order.getBuyeraddress() != null ? order.getBuyeraddress() : "N/A");
         holder.orderQty.setText(String.valueOf(order.getTotalquantity()));
         holder.orderPrice.setText(String.valueOf(order.getTotalprice()));
+        if ((Objects.equals(order.getDispatchstatus(), Constants.editrequested_dispatchstatus)  && sessionManager.getRole().equalsIgnoreCase(Constants.admin_role)) || (Objects.equals(order.getDispatchstatus(), Constants.editapproved_dispatchstatus)  && sessionManager.getRole().equalsIgnoreCase(Constants.staff_role)))
+        {
+            holder.itemCard.setBackgroundResource(R.color.backgroundred);
+        }
+
         List<ItemDetails_Model> itemDetailsList = order.getItemdetails();
         if (itemDetailsList != null && !itemDetailsList.isEmpty()) {
             for (ItemDetails_Model itemDetail : itemDetailsList) {
@@ -112,6 +124,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
     static class OrderViewHolder extends RecyclerView.ViewHolder {
         TextView orderId, orderStatus,buyerName,buyerAddress,orderQty,orderPrice;
         Button ViewBill;
+        CardView itemCard;
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -121,36 +134,8 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
             orderQty = itemView.findViewById(R.id.order_qty);
             orderPrice = itemView.findViewById(R.id.order_amount);
             ViewBill = itemView.findViewById(R.id.view_bill);
+            itemCard = itemView.findViewById(R.id.item_card);
         }
-    }
-
-    private void showOrderDetailsDialog(Context context, OrderDetails_Model order) {
-        // Create an instance of LayoutInflater
-        LayoutInflater inflater = LayoutInflater.from(context);
-        // Inflate the dialog layout from the XML file
-        View dialogView = inflater.inflate(R.layout.dialog_order_details, null);
-
-        // Find the TextViews in the dialog layout and set their text
-        TextView orderId = dialogView.findViewById(R.id.dialog_order_id);
-        TextView buyerName = dialogView.findViewById(R.id.dialog_buyer_name);
-        TextView buyerAddress = dialogView.findViewById(R.id.dialog_buyer_address);
-        TextView orderQty = dialogView.findViewById(R.id.dialog_order_qty);
-        TextView orderPrice = dialogView.findViewById(R.id.dialog_order_price);
-
-        orderId.setText("Order ID: " + order.getTokenno());
-        buyerName.setText("Buyer Name: " + order.getBuyername());
-        buyerAddress.setText("Buyer Address: " + order.getBuyeraddress());
-        orderQty.setText("Order Quantity: " + order.getTotalquantity());
-        orderPrice.setText("Order Price: " + order.getTotalprice());
-
-        // Build the dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Order Details")
-                .setView(dialogView)
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
-
-        // Show the dialog
-        builder.create().show();
     }
 
 }

@@ -20,7 +20,7 @@ import java.util.Map;
 public class OrderDetails_Repository {
 
     private final FirestoreService firestoreService;
-
+    public String vendorkey;
     public OrderDetails_Repository() {
         firestoreService = new FirestoreService();
     }
@@ -41,6 +41,11 @@ public class OrderDetails_Repository {
         return ordersLiveData;
     }
 
+    public  void setUserDetails(String vendorkey)
+    {
+        this.vendorkey = vendorkey;
+        firestoreService.setUserDetails(vendorkey);
+    }
 
     public MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersByStatus(String status) {
         MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersLiveData = new MutableLiveData<>();
@@ -224,11 +229,11 @@ public class OrderDetails_Repository {
 
     }
 
-    public MutableLiveData<ApiResponseState_Enum<String>> orderEditRequest( String orderid) {
+    public MutableLiveData<ApiResponseState_Enum<String>> orderEditRequest( String orderid, String DispatchStatus) {
         MutableLiveData<ApiResponseState_Enum<String>> ordersLiveData = new MutableLiveData<>();
         ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
 
-        firestoreService.EditRequest( orderid, new FirestoreService.FirestoreCallback<String>() {
+        firestoreService.EditRequest( orderid,DispatchStatus, new FirestoreService.FirestoreCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Log.d("orderdetails response   :  ", result.toString());

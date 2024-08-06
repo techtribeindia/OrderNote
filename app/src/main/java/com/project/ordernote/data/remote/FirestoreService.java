@@ -1,5 +1,6 @@
 package com.project.ordernote.data.remote;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +24,7 @@ import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.model.OrderItemDetails_Model;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.DatabaseReference;
+import com.project.ordernote.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +35,16 @@ import java.util.Objects;
 public class FirestoreService {
 
     private final FirebaseFirestore db;
+    private SessionManager sessionManager;
+    public String vendorkey;
 
     public FirestoreService() {
         db = FirebaseFirestore.getInstance();
 
+    }
+    public  void setUserDetails(String vendorkey)
+    {
+        this.vendorkey = vendorkey;
     }
 
     public void fetchBuyersListUsingVendorkey(String vendorKey, FirestoreCallback<List<Buyers_Model>> callback) {
@@ -86,53 +94,24 @@ public class FirestoreService {
 
 
 
-  //changes made by arun directlt
-    public void fetchOrdersByStatus(String status, FirestoreCallback<List<OrderDetails_Model>> callback)
-    {
-
-        db.collection("OrderDetails")
-                .whereEqualTo("status", status)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        if (!querySnapshot.isEmpty()) {
-                            List<OrderDetails_Model> orders = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : querySnapshot) {
-                                OrderDetails_Model order = document.toObject(OrderDetails_Model.class);
-                                orders.add(order);
-
-                            }
-                            Log.d("fetchOrdersByStatus", orders.toString());
-                            callback.onSuccess(orders);
-                        } else {
-                            // Handle empty result
-                            callback.onFailure(new Exception("No orders found with status: " + status));
-                        }
-                    } else {
-              
-                        callback.onFailure(task.getException());
-                    }
-                });
-    }
 
     public void userDetailsFetch(String mobileNumber, String password, LoginCallback callback) {
-        db.collection("UserDetails")
-                .whereEqualTo("mobileno", mobileNumber)
+        db.collection(DatabaseReference.UserDetails_TableName)
+                .whereEqualTo(DatabaseReference.mobileno_UserDetails, mobileNumber)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         QuerySnapshot querySnapshot = task.getResult();
                         if (!querySnapshot.isEmpty()) {
                             for (QueryDocumentSnapshot document : querySnapshot) {
-                                String dbPassword = document.getString("password");
-                                String dbRole = document.getString("role");
+                                String dbPassword = document.getString(DatabaseReference.password_UserDetails);
+                                String dbRole = document.getString(DatabaseReference.role_UserDetails);
                                 Boolean isBlocked = false;
                                 if(Objects.equals(dbRole, ""))
                                 {
                                     isBlocked  = true;
                                 }
-                                else if(Objects.requireNonNull(dbRole).toLowerCase().equals("BLOCKED"))
+                                else if(Objects.requireNonNull(dbRole).toLowerCase().equals(Constants.blocked_role))
                                 {
                                     isBlocked  = true;
                                 }
@@ -161,6 +140,7 @@ public class FirestoreService {
         db.collection("orders")
                 .whereGreaterThanOrEqualTo("orderDate", startDate)
                 .whereLessThanOrEqualTo("orderDate", endDate)
+                .whereEqualTo("vendorkey", vendorkey)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -178,14 +158,14 @@ public class FirestoreService {
 
     public void acceptOrder(String orderId, String status, FirestoreCallback<String> callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference orderRef = db.collection("OrderDetails").document(orderId);
+        DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderId);
 
         Map<String, Object> updates = new HashMap<>();
 
         if (status != null && !status.isEmpty()) {
-            updates.put("status", status);
+            updates.put(DatabaseReference.status_OrderDetails, status);
         }
-        updates.put("orderplaceddate", Timestamp.now());
+        updates.put(DatabaseReference.orderplaceddate_OrderDetails, Timestamp.now());
         // Check if there are any updates to make
         if (!updates.isEmpty()) {
             orderRef.update(updates)
@@ -203,21 +183,21 @@ public class FirestoreService {
 
     public void updateBatchDetails(String orderid,String transporName, String driverMobieno, String truckNo, FirestoreCallback<String> callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference orderRef = db.collection("OrderDetails").document(orderid);
+        DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
 
         Map<String, Object> updates = new HashMap<>();
 
         // Check if each parameter is not empty and add to the map if so
         if (transporName != null && !transporName.isEmpty()) {
-            updates.put("transportname", transporName);
+            updates.put(DatabaseReference.transportname_OrderDetails, transporName);
         }
         if (driverMobieno != null && !driverMobieno.isEmpty()) {
-            updates.put("drivermobileno", driverMobieno);
+            updates.put(DatabaseReference.drivermobileno_OrderDetails, driverMobieno);
         }
         if (truckNo != null && !truckNo.isEmpty()) {
-            updates.put("truckno", truckNo);
+            updates.put(DatabaseReference.truckno_OrderDetails, truckNo);
         }
-        updates.put("dispatchstatus", "DISPATCHED");
+        updates.put(DatabaseReference.dispatchstatus_OrderDetails, Constants.dispatched_dispatchstatus);
 
         // Check if there are any updates to make
         if (!updates.isEmpty()) {
@@ -237,9 +217,9 @@ public class FirestoreService {
 
     public void rejectOrder( String orderid,String status, FirestoreCallback<String> callback)
     {
-        DocumentReference orderRef = db.collection("OrderDetails").document(orderid);
+        DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
 
-        orderRef.update("status", status)
+        orderRef.update(DatabaseReference.status_OrderDetails, status)
                 .addOnSuccessListener(aVoid -> {
                     callback.onSuccess("The order status changed to rejected");
                     // Handle success, e.g., notify user, update UI
@@ -252,9 +232,9 @@ public class FirestoreService {
 
     public void cancelOrder( String orderid,String status, FirestoreCallback<String> callback)
     {
-        DocumentReference orderRef = db.collection("OrderDetails").document(orderid);
+        DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
 
-        orderRef.update("status", status)
+        orderRef.update(DatabaseReference.status_OrderDetails, status)
                 .addOnSuccessListener(aVoid -> {
                     callback.onSuccess("Order Cancelled");
                     // Handle success, e.g., notify user, update UI
@@ -267,9 +247,9 @@ public class FirestoreService {
 
     public void placeOrder( String orderid,String status, FirestoreCallback<String> callback)
     {
-        DocumentReference orderRef = db.collection("OrderDetails").document(orderid);
+        DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
 
-        orderRef.update("status", status)
+        orderRef.update(DatabaseReference.status_OrderDetails, status)
                 .addOnSuccessListener(aVoid -> {
                     callback.onSuccess("Order Placed");
                     // Handle success, e.g., notify user, update UI
@@ -280,11 +260,11 @@ public class FirestoreService {
                 });
     }
 
-    public void EditRequest( String orderid, FirestoreCallback<String> callback)
+    public void EditRequest( String orderid, String DispatchStatus, FirestoreCallback<String> callback)
     {
-        DocumentReference orderRef = db.collection("OrderDetails").document(orderid);
+        DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
 
-        orderRef.update("editrequest", true)
+        orderRef.update(DatabaseReference.dispatchstatus_OrderDetails, DispatchStatus)
                 .addOnSuccessListener(aVoid -> {
                     callback.onSuccess("Requested permission to edit the Dispatch Details");
                     // Handle success, e.g., notify user, update UI
@@ -298,8 +278,9 @@ public class FirestoreService {
     public void fetchOrdersByStatus(String status, FirestoreCallback<List<OrderDetails_Model>> callback)
     {
 
-        db.collection("OrderDetails")
-                .whereEqualTo("status", status)
+        db.collection(DatabaseReference.OrderDetails_TableName)
+                .whereEqualTo(DatabaseReference.status_OrderDetails, status)
+                .whereEqualTo(DatabaseReference.vendorkey, vendorkey)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
@@ -318,7 +299,7 @@ public class FirestoreService {
                             callback.onFailure(new Exception("No orders found with status: " + status));
                         }
                     } else {
-              
+
                         callback.onFailure(task.getException());
                     }
                 });
@@ -326,10 +307,11 @@ public class FirestoreService {
 
     public void getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp, FirestoreCallback<List<OrderDetails_Model>> callback)
     {
-        db.collection("OrderDetails")
-                .whereEqualTo("status", status)
-                .whereGreaterThanOrEqualTo("orderplaceddate", startTimestamp)
-                .whereLessThanOrEqualTo("orderplaceddate", endTimestamp)
+        db.collection(DatabaseReference.OrderDetails_TableName)
+                .whereEqualTo(DatabaseReference.status_OrderDetails, status)
+                .whereEqualTo(DatabaseReference.vendorkey, vendorkey)
+                .whereGreaterThanOrEqualTo(DatabaseReference.orderplaceddate_OrderDetails, startTimestamp)
+                .whereLessThanOrEqualTo(DatabaseReference.orderplaceddate_OrderDetails, endTimestamp)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
@@ -361,8 +343,9 @@ public class FirestoreService {
     }
 
     public void fetchOrdersByStatus1(String status, fetchOrdersWithStatusCallback callback) {
-        db.collection("OrderDetails")
-                .whereEqualTo("status", status)
+        db.collection(DatabaseReference.OrderDetails_TableName)
+                .whereEqualTo(DatabaseReference.status_OrderDetails, status)
+                .whereEqualTo(DatabaseReference.vendorkey, vendorkey)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {

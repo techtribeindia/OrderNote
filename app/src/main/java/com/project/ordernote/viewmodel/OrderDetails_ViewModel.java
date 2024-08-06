@@ -33,7 +33,7 @@ import java.util.Objects;
 
 public class OrderDetails_ViewModel extends AndroidViewModel {
     private final OrderDetails_Repository repository;
-
+    public String vendorkey="";
     private MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> orderDetailsLiveData;
     private MutableLiveData<String> selectedOrderJson;
 
@@ -53,6 +53,12 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         selectedOrderJson = new MutableLiveData<>();
         discountLiveData = new MutableLiveData<>();
         initObserver();
+    }
+
+    public  void setUserDetails(String vendorkey)
+    {
+        this.vendorkey = vendorkey;
+        repository.setUserDetails(vendorkey);
     }
 
     public void clearAllLiveData(){
@@ -216,8 +222,8 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         return resultLiveData;
     }
 
-    public MutableLiveData<ApiResponseState_Enum<String>> placeEditRequest(String orderId) {
-        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.orderEditRequest( orderId);
+    public MutableLiveData<ApiResponseState_Enum<String>> placeEditRequest(String orderId, String DispatchStatus) {
+        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.orderEditRequest( orderId,DispatchStatus);
         resultLiveData.observeForever(result -> {
             if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
                 editOrderDetails(orderId);
