@@ -92,9 +92,6 @@ public class FirestoreService {
     }
 
 
-
-
-
     public void userDetailsFetch(String mobileNumber, String password, LoginCallback callback) {
         db.collection(DatabaseReference.UserDetails_TableName)
                 .whereEqualTo(DatabaseReference.mobileno_UserDetails, mobileNumber)
