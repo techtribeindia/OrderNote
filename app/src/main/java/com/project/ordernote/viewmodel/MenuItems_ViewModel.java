@@ -8,8 +8,10 @@ import androidx.lifecycle.LiveData;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.Gson;
 import com.project.ordernote.data.model.MenuItems_Model;
 
+import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.repository.MenuItems_Repository;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 
@@ -20,7 +22,7 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
 
     private   MenuItems_Repository repository  = null;;
     private MutableLiveData<ApiResponseState_Enum<List<MenuItems_Model>>> menuItemsLiveData;
-
+    private MutableLiveData<String> selectedmenuJson;
     private MutableLiveData<MenuItems_Model> selectedMenuItemModel;
  //   private MutableLiveData<String> selectedMenuItemPosition;
 
@@ -39,6 +41,11 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
         }
         if(selectedMenuItemModel == null){
             selectedMenuItemModel = new MutableLiveData<>();
+
+        }
+
+        if(selectedmenuJson == null){
+            selectedmenuJson = new MutableLiveData<>();
 
         }
        /* if(selectedMenuItemPosition == null){
@@ -72,7 +79,11 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
     public void updateSelectedMenuItemModel(MenuItems_Model selectedMenuItemModel) {
         this.selectedMenuItemModel .setValue( selectedMenuItemModel);
     }
-
+    public void setSelectedMenu(MenuItems_Model order) {
+        Gson gson = new Gson();
+        String orderJson = gson.toJson(order);
+        selectedmenuJson.setValue(orderJson);
+    }
  /*   public LiveData<String> getSelectedMenuItemPositionFromViewModel() {
         return selectedMenuItemPosition;
     }

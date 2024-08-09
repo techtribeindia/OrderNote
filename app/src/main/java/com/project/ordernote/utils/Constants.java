@@ -43,4 +43,10 @@ public class Constants{
     public static final String editrequested_dispatchstatus = "EDITREQUESTED";
     public static final String cancelled_dispatchstatus = "CANCELLED";
 
+
+    //MenuItems table
+    public static final String unitprice_itemtype = "UNITPRICE";
+    public static final String priceperkg_itemtype = "PRICEPERKG";
+    public static final boolean true_showforbilling = true;
+    public static final boolean false_showforbilling = false;
 }

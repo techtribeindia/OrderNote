@@ -1,31 +1,34 @@
 package com.project.ordernote.ui.fragment;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.project.ordernote.R;
+import com.project.ordernote.databinding.FragmentManageMenuScreenBinding;
+import com.project.ordernote.databinding.FragmentMenuItemsDescBinding;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MenuItemsDescFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MenuItemsDescFragment extends Fragment {
+public class MenuItemsDescFragment extends DialogFragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    FragmentMenuItemsDescBinding binding;
+    private Handler mHandler;
+    private String selectedScreen;
     public MenuItemsDescFragment() {
         // Required empty public constructor
     }
@@ -42,25 +45,49 @@ public class MenuItemsDescFragment extends Fragment {
     public static MenuItemsDescFragment newInstance(String param1, String param2) {
         MenuItemsDescFragment fragment = new MenuItemsDescFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void setmHandler(Handler mHandler, String selectedOrderButton) {
+        this.mHandler = mHandler;
+        this.selectedScreen  = selectedOrderButton;
+        Log.d("selectedOrderButton", String.valueOf(selectedOrderButton));
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_menu_items_desc, container, false);
+
+        binding = FragmentMenuItemsDescBinding.inflate(inflater, container, false);
+        if(Objects.equals(selectedScreen, "add"))
+        {
+            binding.menuitemButton.setText("Add MenuItem");
+        }
+
+        binding.closeIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDialog().dismiss();
+            }
+        });
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Removes default background
+        }
     }
 }
