@@ -23,6 +23,17 @@ public class DatabaseReference{
 
     public static String OrderItemDetails_TableName = "OrderItemDetails";
 
+
+
+
+
+    //orderdetails Table name
+    public static String BuyerDetails_TableName = "BuyerDetails";
+    public static String MobileNo_BuyerDetails = "mobileno";
+    public static String Uniquekey_BuyerDetails = "uniquekey";
+
+
+
     //UserDetails table
     public static String UserDetails_TableName = "UserDetails";
     public static String vendorkey_UserDetails = "vendorkey";
@@ -36,4 +47,5 @@ public class DatabaseReference{
     public static String isloggedin_UserDetails = "isloggedin";
     public static String forcelogout_UserDetails = "forcelogout";
     public static String currentversionno_UserDetails = "currentversionno";
+
 }

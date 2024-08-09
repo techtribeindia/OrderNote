@@ -37,12 +37,28 @@
                 app:cardCornerRadius="25dp">
 
 
+
+
+                <TextView
+                    android:id="@+id/intial_textview"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="SN"
+                    style="@style/RedDialogTitleTextStyle"
+                    android:background="@color/backgroundred"
+                     />
+
+
                 <ImageView
+                    android:id="@+id/buyerIcon"
+
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center"
                     android:background="@color/backgroundred"
-
+                    android:visibility="gone"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/buyersiconred" />
 

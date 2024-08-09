@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.firebase.firestore.QuerySnapshot;
 
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Transaction;
 import com.project.ordernote.data.model.AppData_Model;
 import com.project.ordernote.data.model.Buyers_Model;
@@ -435,6 +436,35 @@ public class FirestoreService {
 
 
 
+    }
+
+    public void addBuyerInDB(Buyers_Model buyersModel, FirestoreCallback<Void> callback) {
+
+
+        db.collection(DatabaseReference.BuyerDetails_TableName)
+                .document(buyersModel.getUniquekey())
+                .set(buyersModel)
+                .addOnSuccessListener(documentReference -> callback.onSuccess(null))
+                .addOnFailureListener(callback::onFailure);
+
+    }
+
+    public void deleteBuyerDetails(String buyerkey, FirestoreCallback<Void> callback) {
+
+        db.collection(DatabaseReference.BuyerDetails_TableName)
+                .document(buyerkey)
+                .delete()
+                .addOnSuccessListener(aVoid -> callback.onSuccess(null))
+                .addOnFailureListener(callback::onFailure);
+
+    }
+
+    public void updateBuyerInDB(Buyers_Model buyersModel, FirestoreCallback<Void> callback) {
+        db.collection(DatabaseReference.BuyerDetails_TableName)
+                .document(buyersModel.getUniquekey())
+                .set(buyersModel, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> callback.onSuccess(null))
+                .addOnFailureListener(callback::onFailure);
     }
 
 

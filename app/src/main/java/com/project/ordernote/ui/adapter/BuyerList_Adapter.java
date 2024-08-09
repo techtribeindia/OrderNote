@@ -15,6 +15,7 @@ import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.databinding.BuyerdetailslistitemBinding;
 import com.project.ordernote.databinding.BuyerdetailslistitemBinding;
 import com.project.ordernote.utils.ItemTouchHelperAdapterInterface;
+import com.project.ordernote.utils.TextUtils;
 import com.project.ordernote.utils.WeightConverter;
 
 import java.text.NumberFormat;
@@ -39,7 +40,9 @@ public class BuyerList_Adapter extends RecyclerView.Adapter<BuyerList_Adapter.Bu
 
     @Override
     public void onItemDismiss(int position) {
-        sendHandlerMessage("BuyerDetailsList_Delete" , position);
+        String buyerKey = "";
+        buyerKey = buyerDetailsArrayList.get(position).getUniquekey();
+        sendHandlerMessage("BuyerDetailsList_Delete" , buyerKey);
         //this.buyerDetailsArrayList.remove(position);
         //  notifyItemRemoved(position);
     }
@@ -50,13 +53,13 @@ public class BuyerList_Adapter extends RecyclerView.Adapter<BuyerList_Adapter.Bu
 
 
 
-    private void sendHandlerMessage(String bundlestr, int pos) {
+    private void sendHandlerMessage(String bundlestr, String buyerKey ) {
         //Log.e(Constants.TAG, "createBillDetails in cartaItem 1");
 
         Message msg = new Message();
         Bundle bundle = new Bundle();
         bundle.putString("fromadapter", bundlestr);
-        bundle.putInt("position", pos);
+        bundle.putString("buyerkey", buyerKey);
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
@@ -86,15 +89,20 @@ public class BuyerList_Adapter extends RecyclerView.Adapter<BuyerList_Adapter.Bu
         Buyers_Model buyerData = buyerDetailsArrayList.get(position);
         // Additional binding setup for other views
         if (buyerData != null) {
+            String initials = TextUtils.getInitials(String.valueOf(buyerData.getName()));
 
             if(!buyerData.getName().equals("")){
                 holder. binding.selectedBuyerNameTextview.setText(String.valueOf(buyerData.getName()));
                 holder.binding.selecedBuyerDetailsTextview.setText(String.valueOf(buyerData.getAddress1() +" , "+'\n'+buyerData.getAddress2()+" - "+""+buyerData.getPincode()+" . "+'\n'+"Ph:- +91"+buyerData.getMobileno()));
+                holder.binding.intialTextview.setText(String.valueOf(initials));
+                holder.binding.buyerIcon.setVisibility(View.GONE);
+                holder.binding.intialTextview.setVisibility(View.VISIBLE);
             }
             else{
                 holder.binding.selectedBuyerNameTextview.setText(String.valueOf("Select Buyer Name"));
                 holder.binding.selecedBuyerDetailsTextview.setText(String.valueOf("xx , xxxxx  xxx xxxx , \nxxxx - xxxx . \nPh : - +91798xxxxxxx"));
-
+                holder.binding.buyerIcon.setVisibility(View.VISIBLE);
+                holder.binding.intialTextview.setVisibility(View.GONE);
             }
 
             if(position == (buyerDetailsArrayList.size() - 1)){
@@ -106,6 +114,16 @@ public class BuyerList_Adapter extends RecyclerView.Adapter<BuyerList_Adapter.Bu
             }
 
         }
+
+        holder.binding.buyerselectionCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String buyerKey = "";
+                buyerKey = buyerDetailsArrayList.get(position).getUniquekey();
+                sendHandlerMessage("BuyerDetailsList_Selected" , buyerKey);
+
+            }
+        });
     }
 
     @Override
