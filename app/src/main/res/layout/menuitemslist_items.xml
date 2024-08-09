@@ -1,7 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:orientation="vertical"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</LinearLayout>
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginTop="5dp"
+    android:visibility="visible"
+    app:cardCornerRadius="10dp"
+
+    android:id="@+id/menuselectionCardView"
+    app:cardElevation="0dp">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/circleBuyerImage"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:layout_marginBottom="25dp"-->
+<!--            app:cardBackgroundColor="@color/backgroundred"-->
+<!--            app:cardCornerRadius="25dp">-->
+
+
+<!--            <ImageView-->
+<!--                android:layout_width="25dp"-->
+<!--                android:layout_height="25dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:background="@color/backgroundred"-->
+
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@mipmap/buyersiconred" />-->
+
+
+<!--        </androidx.cardview.widget.CardView>-->
+
+        <TextView
+
+            android:id="@+id/menuItemName_textview"
+            style="@style/SubTitleTextStyle1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+
+            android:text="Menu item name" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="36dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/priceinfo"
+                style="@style/BlackTextStyleNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+
+                android:lineHeight="20dp"
+
+                android:text="300 / 500g" />
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
+
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+
+                android:layout_centerInParent="true"
+                android:alpha=".7"
+
+                android:src="@mipmap/right_arrow" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
+
+<View
+    android:id="@+id/buyerlistdivider"
+    android:layout_width="match_parent"
+    android:layout_height="5dp"
+    android:visibility="gone"
+    android:layout_below="@+id/buyerselectionCardView"
+    android:background="@color/reddishgrey"/>
+
+</RelativeLayout>

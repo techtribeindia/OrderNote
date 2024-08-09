@@ -45,6 +45,12 @@ public class Constants{
 
 
 
+    //MenuItems table
+    public static final String unitprice_itemtype = "UNITPRICE";
+    public static final String priceperkg_itemtype = "PRICEPERKG";
+    public static final boolean true_showforbilling = true;
+    public static final boolean false_showforbilling = false;
+
     // Constants for processing
     public static final String noDataAvailable = "No data available";
     public static final String createNewBuyer = "CreateNewBuyer";
