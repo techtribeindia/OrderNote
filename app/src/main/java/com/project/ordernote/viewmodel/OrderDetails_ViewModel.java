@@ -33,18 +33,16 @@ import java.util.Objects;
 
 public class OrderDetails_ViewModel extends AndroidViewModel {
     private final OrderDetails_Repository repository;
-
+    public String vendorkey="";
     private MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> orderDetailsLiveData;
     private MutableLiveData<String> selectedOrderJson;
 
     private Observer<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersObserver;
 
     private MutableLiveData<List<ItemDetails_Model>> itemDetailsArrayListLiveData;
+
     private MutableLiveData<OrderDetails_Model> ordersValueModel;
     private MutableLiveData<Double> discountLiveData;
-
-
-
 
     public OrderDetails_ViewModel(@NonNull Application application) {
         super(application);
@@ -55,6 +53,12 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         selectedOrderJson = new MutableLiveData<>();
         discountLiveData = new MutableLiveData<>();
         initObserver();
+    }
+
+    public  void setUserDetails(String vendorkey)
+    {
+        this.vendorkey = vendorkey;
+        repository.setUserDetails(vendorkey);
     }
 
     public void clearAllLiveData(){
@@ -96,12 +100,13 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
     public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersByStatusFromViewModel() {
         return orderDetailsLiveData;
     }
-    public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersListFromViewModel() {
-        if(orderDetailsLiveData == null){
-            orderDetailsLiveData = new MutableLiveData<>();
-        }
-        return orderDetailsLiveData;
+
+    public void clearFromViewModel()
+    {
+        List<OrderDetails_Model> updatedOrders = new ArrayList<>();
+        orderDetailsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
     }
+
     public LiveData<List<ItemDetails_Model>> getItemDetailsArraylistViewModel() {
         if(itemDetailsArrayListLiveData == null){
             itemDetailsArrayListLiveData = new MutableLiveData<>();
@@ -139,10 +144,18 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         return discountLiveData;
     }
 
- 
+
+    public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersListFromViewModel() {
+        if(orderDetailsLiveData == null){
+            orderDetailsLiveData = new MutableLiveData<>();
+             }
+        return orderDetailsLiveData;
+    }
+
     public void setDisountValue(double discountAmount) {
         if(discountLiveData == null){
             discountLiveData = new MutableLiveData<>();
+
         }
         discountLiveData.setValue(discountAmount);
         OrderDetails_Model orderDetailsModel = new OrderDetails_Model();
@@ -169,8 +182,8 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         selectedOrderJson.setValue(orderJson);
     }
 
-    public MutableLiveData<ApiResponseState_Enum<String>> acceptOrder(String transporName, String driverMobieno, String truckNo, String orderId, String status) {
-        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.acceptOrder(transporName, driverMobieno, truckNo, orderId, status);
+    public MutableLiveData<ApiResponseState_Enum<String>> acceptOrder(String orderId, String status) {
+        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.acceptOrder(orderId, status);
         resultLiveData.observeForever(result -> {
             if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
                 removeOrderFromLiveData(orderId);
@@ -209,8 +222,8 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         return resultLiveData;
     }
 
-    public MutableLiveData<ApiResponseState_Enum<String>> placeEditRequest(String orderId) {
-        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.orderEditRequest( orderId);
+    public MutableLiveData<ApiResponseState_Enum<String>> placeEditRequest(String orderId, String DispatchStatus) {
+        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.orderEditRequest( orderId,DispatchStatus);
         resultLiveData.observeForever(result -> {
             if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
                 editOrderDetails(orderId);
@@ -219,6 +232,37 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         return resultLiveData;
     }
 
+    public MutableLiveData<ApiResponseState_Enum<String>> updateBatchDetails(String orderid,String transporName, String driverMobieno, String truckNo) {
+        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.updateBatchDetails( orderid,transporName,driverMobieno,truckNo);
+        resultLiveData.observeForever(result -> {
+            if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
+                updateBatchDetailsData(orderid,transporName,driverMobieno,truckNo);
+            }
+        });
+        return resultLiveData;
+    }
+
+    public void  updateBatchDetailsData(String orderid,String transporName, String driverMobieno, String truckNo)
+    {
+        ApiResponseState_Enum<List<OrderDetails_Model>> currentData = orderDetailsLiveData.getValue();
+        if (currentData != null && currentData.data != null) {
+            List<OrderDetails_Model> updatedOrders = new ArrayList<>(currentData.data);
+            for (OrderDetails_Model order : updatedOrders) {
+                if (order.getOrderid().equals(orderid)) {
+                    order.setDispatchstatus("DISPATCHED");
+                    order.setTransportname(transporName);
+                    order.setDrivermobileno(driverMobieno);
+                    order.setTruckno(truckNo);
+                    break;
+                }
+            }
+
+            orderDetailsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
+            //  orderDetailsLiveData.observeForever(ordersObserver);
+
+            //orderDetailsLiveData.setValue(new ApiResponseState_Enum.Status.SUCCESS, updatedOrders, null));
+        }
+    }
     public void editOrderDetails(String orderId)
     {
         ApiResponseState_Enum<List<OrderDetails_Model>> currentData = orderDetailsLiveData.getValue();
@@ -226,7 +270,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             List<OrderDetails_Model> updatedOrders = new ArrayList<>(currentData.data);
             for (OrderDetails_Model order : updatedOrders) {
                 if (order.getOrderid().equals(orderId)) {
-                    order.setEditrequest(true);
+                    order.setDispatchstatus("EDITREQUESTED");
                     break;
                 }
             }
@@ -261,6 +305,10 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         }
     }
 
+    public void clearSelectedOrderJson()
+    {
+        selectedOrderJson.setValue("");
+    }
     public LiveData<String> getSelectedOrderJson() {
         return selectedOrderJson;
     }

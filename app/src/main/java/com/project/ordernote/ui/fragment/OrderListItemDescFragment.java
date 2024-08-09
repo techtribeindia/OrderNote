@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,23 +18,32 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.Timestamp;
 import com.google.gson.Gson;
 import com.project.ordernote.R;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.ui.adapter.OrderItemListAdapter;
 import com.project.ordernote.utils.ApiResponseState_Enum;
+import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.DatabaseReference;
+import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 /**
@@ -49,8 +59,14 @@ public class OrderListItemDescFragment extends DialogFragment {
     private Handler mHandler;
     CardView dialogOrderStatusCard;
     TextView dialogOrderStatusText;
-    LinearLayout dialogButtonLayout,dialogCancelAndPlaceAgainButtonLayout,dialogEditRequestButtonLayout;
+    LinearLayout dialogButtonLayout,dialogCancelAndPlaceAgainButtonLayout,dialogEditRequestButtonLayout,dialogCancelAndApproveLayout,dialogCancelOnlyButtonLayout;
     private String selectedScreen;
+    private SessionManager sessionManager;
+    private MotionLayout motionLayout;
+    private MaterialCardView banner;
+    TextView dialogTransportNameText;
+    TextView dialogMobileNoText;
+    TextView dialogTrucckNoText;
 
     public OrderListItemDescFragment() {
 
@@ -73,7 +89,8 @@ public class OrderListItemDescFragment extends DialogFragment {
         if (mHandler != null) { // Null check to prevent NullPointerException
             Message message = new Message();
             Bundle bundle = new Bundle();
-            bundle.putString("fragment", "OrderListItemDescFragment");
+
+            bundle.putString("fragment", selectedScreen);
             bundle.putString("status", status);
             message.setData(bundle);
             mHandler.sendMessage(message);
@@ -81,9 +98,29 @@ public class OrderListItemDescFragment extends DialogFragment {
             Log.e(TAG, "Handler is null, cannot send message");
         }
     }
+
+    private Handler newHandler() {
+        return new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message message) {
+                Bundle bundle = message.getData();
+                Toast.makeText(requireActivity(), String.valueOf(bundle.getString("DispatchFragment")), Toast.LENGTH_SHORT).show();
+                if (Objects.equals(bundle.getString("fragment"), "DispatchFragment"))
+                {
+                    dialogTransportNameText.setText(bundle.getString(DatabaseReference.transportname_OrderDetails) != null ? bundle.getString(DatabaseReference.transportname_OrderDetails) : "");
+                    dialogMobileNoText.setText(bundle.getString(DatabaseReference.drivermobileno_OrderDetails) != null ? bundle.getString(DatabaseReference.drivermobileno_OrderDetails) : "");
+                    dialogTrucckNoText.setText(bundle.getString(DatabaseReference.truckno_OrderDetails) != null ? bundle.getString(DatabaseReference.truckno_OrderDetails) : "");
+                }
+                return false;
+            }
+        });
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sessionManager = new SessionManager(requireActivity());
+
         if (getArguments() != null) {
             orderJson = getArguments().getString("order_json");
             Log.d(TAG, "Received order JSON: " + orderJson);
@@ -98,7 +135,9 @@ public class OrderListItemDescFragment extends DialogFragment {
         orderDetails_viewModel = new ViewModelProvider(requireActivity()).get(OrderDetails_ViewModel.class);
         View view = inflater.inflate(R.layout.fragment_order_list_item_desc, container, false);
         orderItemListAdapter = new OrderItemListAdapter();
-
+        motionLayout = view.findViewById(R.id.motionLayout);
+        banner = view.findViewById(R.id.banner);
+        hideBanner();
 
         // Parse the JSON data and set it to the respective UI components
         if (orderJson != null) {
@@ -106,21 +145,23 @@ public class OrderListItemDescFragment extends DialogFragment {
             OrderDetails_Model order = gson.fromJson(orderJson, OrderDetails_Model.class);
 
             if (order != null) {
+
+
+                ImageView dispatchSelection = view.findViewById(R.id.dispatch_selection);
+
                 TextView orderIdTextView = view.findViewById(R.id.dialog_orderid);
                 TextView buyerNameTextView = view.findViewById(R.id.dialog_buyername);
                 TextView buyerAddressTextView = view.findViewById(R.id.dialog_buyeraddress);
                 TextView orderPriceTextView = view.findViewById(R.id.dialog_total);
 
-                TextView dialogTransportNameText = view.findViewById(R.id.dialog_transportname_text);
-                TextView dialogMobileNoText = view.findViewById(R.id.dialog_driver_mobileno_text);
-                TextView dialogTrucckNoText = view.findViewById(R.id.dialog_truckno_text);
+                dialogTransportNameText = view.findViewById(R.id.dialog_transportname_text);
+                dialogMobileNoText = view.findViewById(R.id.dialog_driver_mobileno_text);
+                dialogTrucckNoText = view.findViewById(R.id.dialog_truckno_text);
 
                 RelativeLayout backbut = view.findViewById(R.id.dialog_back);
                 RelativeLayout rejectbut = view.findViewById(R.id.dialog_reject);
                 RelativeLayout accepttbut = view.findViewById(R.id.dialog_accept);
-                EditText transport_name = view.findViewById(R.id.dialog_transportname);
-                EditText driver_mobieno = view.findViewById(R.id.dialog_driver_mobileno);
-                EditText truck_no = view.findViewById(R.id.dialog_truckno);
+
                 dialogOrderStatusCard = view.findViewById(R.id.dialog_orderstatus_card);
                 dialogOrderStatusText = view.findViewById(R.id.dialog_orderstatus_text);
                 dialogButtonLayout = view.findViewById(R.id.dialog_button_layout);
@@ -129,51 +170,73 @@ public class OrderListItemDescFragment extends DialogFragment {
                 RelativeLayout dialogCancel = view.findViewById(R.id.dialog_cancel);
                 RelativeLayout dialogPlaceAgain = view.findViewById(R.id.dialog_place_again);
 
+                dialogCancelAndApproveLayout = view.findViewById(R.id.dialog_approve_and_deny_button_layout);
+                RelativeLayout dialogCancel1 = view.findViewById(R.id.dialog_cancel1);
+                RelativeLayout dialogApprove = view.findViewById(R.id.dialog_approve);
+
                 dialogEditRequestButtonLayout = view.findViewById(R.id.dialog_edit_request_button_layout);
                 RelativeLayout dialogEditRequest = view.findViewById(R.id.dialog_edit_request);
 
-                // Check for empty transport details
+                dialogCancelOnlyButtonLayout = view.findViewById(R.id.dialog_cancel_only_button_layout);
+                RelativeLayout dialogCancelOnlyBut = view.findViewById(R.id.dialog_cancel_only_but);
 
-                if (Objects.equals(selectedScreen, "ORDERCREATED"))
-                {
-                    dialogButtonLayout.setVisibility(View.VISIBLE);
-                }
-                else if (Objects.equals(selectedScreen, "ORDERREJECTED"))
-                {
-                    dialogCancelAndPlaceAgainButtonLayout.setVisibility(View.VISIBLE);
+                Button approveButton = view.findViewById(R.id.approve_button);
+                Button denyButton = view.findViewById(R.id.deny_button);
 
-                }
-                else
+                // Set up click listeners
+                approveButton.setOnClickListener(v -> {
+                    orderDetailEditRequestModel(order.getOrderid(),Constants.editapproved_dispatchstatus);
+                });
+
+                denyButton.setOnClickListener(v -> {
+                    orderDetailEditRequestModel(order.getOrderid(),Constants.dispatched_dispatchstatus);
+                });
+
+                if(order.getStatus().equalsIgnoreCase(Constants.created_status) )
                 {
-                    if (order.isEditrequest())
+                    if(sessionManager.getRole().equalsIgnoreCase(Constants.staff_role))
                     {
-                        dialogOrderStatusCard.setVisibility(View.VISIBLE);
-                        dialogOrderStatusText.setText(String.valueOf("The request to edit the dispatch details has already been submitted"));
+                        dialogButtonLayout.setVisibility(View.VISIBLE);
+
                     }
                     else
                     {
-                        dialogEditRequestButtonLayout.setVisibility(View.VISIBLE);
+                        dialogOrderStatusCard.setVisibility(View.VISIBLE);
+                        dialogOrderStatusText.setText(String.valueOf("Only staff can Accept or Reject the Order, you can cancel the order in \n settings -> Date Wise Orders"));
+                    }
+                }
+                if(order.getStatus().equalsIgnoreCase(Constants.rejected_status) && sessionManager.getRole().equalsIgnoreCase(Constants.admin_role))
+                {
+                    dialogCancelAndPlaceAgainButtonLayout.setVisibility(View.VISIBLE);
+                }
+                if(order.getStatus().equalsIgnoreCase(Constants.placed_status))
+                {
+
+                    if(sessionManager.getRole().equalsIgnoreCase(Constants.staff_role))
+                    {
+                        if (isToday(order.getOrderplaceddate()) && order.getDispatchstatus().equalsIgnoreCase(Constants.dispatched_dispatchstatus))
+                        {
+                            dialogEditRequestButtonLayout.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                    else if(sessionManager.getRole().equalsIgnoreCase(Constants.admin_role))
+                    {
+                        dialogCancelOnlyButtonLayout.setVisibility(View.VISIBLE);
+                        if(order.getDispatchstatus().equalsIgnoreCase(Constants.editrequested_dispatchstatus))
+                        {
+                            showBanner();
+                        }
                     }
 
-
                 }
 
-                if (!Objects.equals(selectedScreen, "ORDERCREATED"))
-                {
-                    dialogTransportNameText.setVisibility(View.VISIBLE);
-                    dialogMobileNoText.setVisibility(View.VISIBLE);
-                    dialogTrucckNoText.setVisibility(View.VISIBLE);
-
-                    transport_name.setVisibility(View.GONE);
-                    driver_mobieno.setVisibility(View.GONE);
-                    truck_no.setVisibility(View.GONE);
-                }
-                dialogTransportNameText.setText(order.getTransportname() != null ? order.getTransportname() : "");
-                dialogMobileNoText.setText(order.getDrivermobileno() != null ? order.getDrivermobileno() : "");
-                dialogTrucckNoText.setText(order.getTruckno() != null ? order.getTruckno() : "");
+                dialogTransportNameText.setText(order.getTransportname() != null && !Objects.equals(order.getTransportname(), "") ? order.getTransportname() : "----");
+                dialogMobileNoText.setText(order.getDrivermobileno() != null && !Objects.equals(order.getDrivermobileno(), "") ? order.getDrivermobileno() : "----");
+                dialogTrucckNoText.setText(order.getTruckno() != null && !Objects.equals(order.getTruckno(), "") ? order.getTruckno() : "----");
 
                 RecyclerView orderitem_recyclerView = view.findViewById(R.id.dialog_recycler_view);
-                orderitem_recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+                orderitem_recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 1));
                 orderitem_recyclerView.setAdapter(orderItemListAdapter);
 
                 orderIdTextView.setText(order.getOrderid());
@@ -182,13 +245,44 @@ public class OrderListItemDescFragment extends DialogFragment {
                 orderPriceTextView.setText(String.valueOf(order.getTotalprice()));
                 orderItemListAdapter.setOrders(order.getItemdetails());
 
-                // Back button dismiss dialog
+                dispatchSelection.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(sessionManager.getRole().equalsIgnoreCase(Constants.staff_role))
+                        {
+                            if(order.getDispatchstatus().equalsIgnoreCase(Constants.editapproved_dispatchstatus)||order.getStatus().equalsIgnoreCase(Constants.created_status))
+                            {
+                                openDispatchSelectionDialog(order.getOrderid(),order.getTransportname(),order.getDrivermobileno(),order.getTruckno(),order.getDispatchstatus());
+                            }
+                          else if(order.getDispatchstatus().equalsIgnoreCase(Constants.editrequested_dispatchstatus))
+                            {
+                                showSnackbar(view,"Admin yet to give access to edit");
+                            }
+                          else {
+                                if(isToday(order.getOrderplaceddate()))
+                                {
+                                    showSnackbar(view,"Please give a request to edit dispatch");
+                                }
+                                else
+                                {
+                                    showSnackbar(view,"only ask access to edit for the current date");
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            showSnackbar(view,"Only staff can update Dispatch Details");
+                        }
+
+                    }
+                });
 
                 backbut.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getDialog().dismiss();
-
+                        Objects.requireNonNull(getDialog()).dismiss();
+                        Toast.makeText(requireActivity(), "Back button clicked", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -196,32 +290,25 @@ public class OrderListItemDescFragment extends DialogFragment {
                 rejectbut.setOnClickListener(v -> showConfirmationDialog(
                         "Reject Order",
                         "Are you sure you want to reject this order?",
-                        () -> handleOrderRejection(order.getOrderid(),"ORDERREJECTED")  // Call handleOrderRejection() on Yes
+                        () -> handleOrderRejection(order.getOrderid(),Constants.rejected_status)  // Call handleOrderRejection() on Yes
                 ));
 
                 accepttbut.setOnClickListener(v -> {
-                    boolean Dispatchstatus = true;
+                    boolean acceptStatus = false;
+                    String TransportNameText = String.valueOf(dialogTransportNameText.getText());
+                    String DriverMobileNumber = String.valueOf(dialogMobileNoText.getText());
+                    String TruckNumber = String.valueOf(dialogTrucckNoText.getText());
 
-                    String transporName = transport_name.getText().toString();
-                    String driverMobieno = driver_mobieno.getText().toString();
-                    String truckNo = truck_no.getText().toString();
-
-                    if (transporName.isEmpty() && driverMobieno.isEmpty() && truckNo.isEmpty()) {
-                        Dispatchstatus = false;
-                    }
-
-                    if (!Dispatchstatus) {
-                        new AlertDialog.Builder(requireContext())
-                                .setTitle("Dispatch Details")
-                                .setMessage("Please enter Transport Name or Driver Mobile.No or Truck.No")
-                                .setNegativeButton("OK", (dialog, which) -> dialog.dismiss())
-                                .show();
+                    if ((TransportNameText.equals("----") && DriverMobileNumber.equals("----") && TruckNumber.equals("----")) || (TransportNameText.isEmpty() && DriverMobileNumber.isEmpty() && TruckNumber.isEmpty()))
+                    {
+                        showSnackbar(view,"Please update Dispatch Details");
                         return;
                     }
+
                     showConfirmationDialog(
                             "Accept Order",
                             "Are you sure you want to accept this order?",
-                            () -> handleOrderAcceptance(transporName,driverMobieno,truckNo,order.getOrderid(),"ORDERPLACED")
+                            () -> handleOrderAcceptance(order.getOrderid(),Constants.placed_status)
                     );
                 });
 
@@ -231,7 +318,27 @@ public class OrderListItemDescFragment extends DialogFragment {
                         showConfirmationDialog(
                                 "Order Cancellation",
                                 "Do you want to cancel the order? \n Order Cancellation cannot be reversed",
-                                () -> handleOrderCancellation(order.getOrderid(),"ORDERCANCELLED")
+                                () -> handleOrderCancellation(order.getOrderid(),Constants.cancelled_dispatchstatus)
+                        );
+                    }
+                });
+                dialogCancelOnlyBut.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showConfirmationDialog(
+                                "Order Cancellation",
+                                "Do you want to cancel the order? \n Order Cancellation cannot be reversed",
+                                () -> handleOrderCancellation(order.getOrderid(),Constants.cancelled_dispatchstatus)
+                        );
+                    }
+                });
+                dialogCancel1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showConfirmationDialog(
+                                "Order Cancellation",
+                                "Do you want to cancel the order? \n Order Cancellation cannot be reversed",
+                                () -> handleOrderCancellation(order.getOrderid(),Constants.cancelled_dispatchstatus)
                         );
                     }
                 });
@@ -241,18 +348,26 @@ public class OrderListItemDescFragment extends DialogFragment {
                     public void onClick(View view) {
                         showConfirmationDialog(
                                 "Accept Order",
-                                "Are you sure you want to accept this order?",
-                                () -> handleOrderPlace(order.getOrderid(),"ORDERCREATED")
+                                "Are you sure you want to place this order again?",
+                                () -> handleOrderPlace(order.getOrderid(),Constants.created_status)
                         );
                     }
                 });
+
+                dialogApprove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
                 dialogEditRequest.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         showConfirmationDialog(
                                 "Dispatch Edit Request",
                                 "Request Admin to edit the Dispatch Details",
-                                () -> handleEditRequest(order.getOrderid())
+                                () -> handleEditRequest(order.getOrderid(),Constants.editrequested_dispatchstatus)
                         );
                     }
                 });
@@ -277,6 +392,23 @@ public class OrderListItemDescFragment extends DialogFragment {
             getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Removes default background
         }
     }
+
+    private void openDispatchSelectionDialog(String orderid, String transportname, String drivermobileno, String truckno, String dispatchstatus) {
+
+        try{
+            Handler handler = newHandler();
+            DispatchFragment dialogFragment = new DispatchFragment();
+            dialogFragment.setDispatchDetails(orderid,transportname,drivermobileno,truckno,dispatchstatus);
+            dialogFragment.setmHandler(handler,selectedScreen);
+            dialogFragment.show(getParentFragmentManager(), "DispatchSelectionDialogFragment");
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
     private void showConfirmationDialog(String title, String message, Runnable onConfirm) {
         new AlertDialog.Builder(requireContext())
                 .setTitle(title)
@@ -286,9 +418,9 @@ public class OrderListItemDescFragment extends DialogFragment {
                 .show();
     }
 
-    public void handleOrderAcceptance(String transporName, String driverMobieno, String truckNo,String orderid,String status)
+    public void handleOrderAcceptance(String orderid,String status)
     {
-        orderDetailAcceptOrderModel(transporName, driverMobieno, truckNo,orderid,status);
+        orderDetailAcceptOrderModel(orderid,status);
     }
 
     public void handleOrderRejection(String orderid,String status)
@@ -305,13 +437,13 @@ public class OrderListItemDescFragment extends DialogFragment {
     {
         orderDetailPlaceOrderModel(orderid , ststus);
     }
-    public void handleEditRequest(String orderid)
+    public void handleEditRequest(String orderid, String DispatchStatus)
     {
-        orderDetailEditRequestModel(orderid);
+        orderDetailEditRequestModel(orderid,DispatchStatus);
     }
 
-    private void orderDetailAcceptOrderModel(String transporName, String driverMobieno, String truckNo, String orderid, String status) {
-        orderDetails_viewModel.acceptOrder(transporName, driverMobieno, truckNo,orderid,status).observe(this, this::observeOrderDetails);
+    private void orderDetailAcceptOrderModel(String orderid, String status) {
+        orderDetails_viewModel.acceptOrder(orderid,status).observe(this, this::observeOrderDetails);
     }
 
     private void orderDetailRejectOrderModel(String orderid, String status) {
@@ -328,9 +460,9 @@ public class OrderListItemDescFragment extends DialogFragment {
         orderDetails_viewModel.placeOrder( orderid,status).observe(this, this::observeOrderDetails);
     }
 
-    private void orderDetailEditRequestModel(String orderid)
+    private void orderDetailEditRequestModel(String orderid, String DispatchStatus)
     {
-        orderDetails_viewModel.placeEditRequest( orderid).observe(this, this::observeOrderDetails);
+        orderDetails_viewModel.placeEditRequest( orderid,DispatchStatus).observe(this, this::observeOrderDetails);
     }
 
     private void observeOrderDetails(ApiResponseState_Enum<String> resource) {
@@ -345,7 +477,9 @@ public class OrderListItemDescFragment extends DialogFragment {
                 dialogCancelAndPlaceAgainButtonLayout.setVisibility(View.GONE);
                 dialogEditRequestButtonLayout.setVisibility(View.GONE);
                 dialogOrderStatusCard.setVisibility(View.VISIBLE);
+                dialogCancelOnlyButtonLayout.setVisibility(View.VISIBLE);
                 dialogOrderStatusText.setText(String.valueOf(resource.data));
+                hideBanner();
                 Toast.makeText(requireActivity(), "Success in fetching orders", Toast.LENGTH_SHORT).show();
 //                        ordersListAdapter.setOrders(resource.data);
                 break;
@@ -353,5 +487,43 @@ public class OrderListItemDescFragment extends DialogFragment {
                 Toast.makeText(requireActivity(), "Error in fetching orders "+resource.data, Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void showSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        snackbar.setAction("X", v -> snackbar.dismiss());
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
+
+        // Get the Snackbar's layout view
+        View snackbarView = snackbar.getView();
+
+        // Change the Snackbar's position to top and add top margin
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+        params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+        int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 20dp to pixels
+        params.setMargins(0, marginInDp, 0, 0);
+        snackbarView.setLayoutParams(params);
+
+        snackbar.show();
+    }
+    private static boolean isToday(Timestamp timestamp) {
+        Calendar orderDate = Calendar.getInstance();
+        orderDate.setTime(timestamp.toDate());
+
+        Calendar today = Calendar.getInstance();
+
+        return orderDate.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                orderDate.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
+                orderDate.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH);
+    }
+    private void showBanner() {
+        Toast.makeText(requireActivity(), "Show Banner", Toast.LENGTH_SHORT).show();
+        motionLayout.setTransition(R.id.transition);
+        motionLayout.transitionToEnd();
+    }
+
+    private void hideBanner() {
+        motionLayout.setTransition(R.id.transition);
+        motionLayout.transitionToStart();
     }
 }

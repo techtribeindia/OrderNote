@@ -21,6 +21,8 @@ import com.google.firebase.Timestamp;
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.FragmentOrdersBinding;
 import com.project.ordernote.ui.adapter.OrdersListAdapter;
+import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
 import java.util.ArrayList;
@@ -33,7 +35,8 @@ public class OrdersListFragment extends Fragment {
     private OrdersListAdapter ordersListAdapter;
     private FragmentOrdersBinding binding;
     private OrderListItemDescFragment orderListItemDescFragment;
-    private String selectedOrderButton = "ORDERCREATED";
+    private String selectedOrderButton = Constants.created_status;
+    private SessionManager sessionManager;
     public OrdersListFragment() {
         // Required empty public constructor
     }
@@ -50,12 +53,13 @@ public class OrdersListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        sessionManager = new SessionManager(requireActivity());
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         orderDetails_viewModel = new ViewModelProvider(requireActivity()).get(OrderDetails_ViewModel.class);
+        orderDetails_viewModel.setUserDetails(sessionManager.getVendorkey());
         binding = FragmentOrdersBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
@@ -68,15 +72,9 @@ public class OrdersListFragment extends Fragment {
         binding.ordersRecyclerView.setAdapter(ordersListAdapter);
 
         setActiveButton(binding.pendingordersButton);
-        orderDetails_viewModel.getSelectedOrderJson().observe(getViewLifecycleOwner(), orderJson -> {
-            if (orderJson != null) {
-                OrderListItemDescFragment orderListItemDescFragment = OrderListItemDescFragment.newInstance(orderJson);
-                orderListItemDescFragment.setmHandler(newHandler(),selectedOrderButton);
-                orderListItemDescFragment.show(getParentFragmentManager(), "orderListItemDescFragment");
-            }
-        });
+
         try {
-            orderDetailViewModel("ORDERCREATED");
+            orderDetailViewModel(Constants.created_status);
         }
         catch (Exception e ){
             e.printStackTrace();
@@ -87,8 +85,8 @@ public class OrdersListFragment extends Fragment {
             public void onClick(View view1) {
 
                 setActiveButton(binding.pendingordersButton);
-                orderDetailViewModel("ORDERCREATED");
-                selectedOrderButton = "ORDERCREATED";
+                orderDetailViewModel(Constants.created_status);
+                selectedOrderButton = Constants.created_status;
             }
         });
 
@@ -97,18 +95,9 @@ public class OrdersListFragment extends Fragment {
             public void onClick(View view1) {
 
                 setActiveButton(binding.rejectedordersButton);
-                orderDetailViewModel("ORDERREJECTED");
+                orderDetailViewModel(Constants.rejected_status);
 
-                selectedOrderButton = "ORDERREJECTED";
-            }
-        });
-        binding.totayActivedordersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setActiveButton(binding.totayActivedordersButton);
-                orderDetailViewModel("ORDERPLACED");
-                selectedOrderButton = "ORDERPLACED";
-
+                selectedOrderButton = Constants.rejected_status;
             }
         });
 
@@ -136,12 +125,20 @@ public class OrdersListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ordersListAdapter.clearOrders();
         observeOrderDetails();
-
+        orderDetails_viewModel.clearSelectedOrderJson();
+        orderDetails_viewModel.getSelectedOrderJson().observe(getViewLifecycleOwner(), orderJson -> {
+            if ((orderJson != null)&&(!orderJson.equals(""))) {
+                OrderListItemDescFragment orderListItemDescFragment = OrderListItemDescFragment.newInstance(orderJson);
+                orderListItemDescFragment.setmHandler(newHandler(),"DatwWiseOrderScreen");
+                orderListItemDescFragment.show(getParentFragmentManager(), "DatwWiseOrderScreen");
+            }
+        });
     }
 
     private void observeOrderDetails() {
+        orderDetails_viewModel.clearFromViewModel();
         orderDetails_viewModel.getOrdersByStatusFromViewModel().observe(getViewLifecycleOwner(), resource -> {
             ordersListAdapter.clearOrders();
             if (resource != null) {
@@ -162,7 +159,7 @@ public class OrdersListFragment extends Fragment {
     }
 
     private void orderDetailViewModel(String status) {
-        if (status == "ORDERPLACED")
+        if (Objects.equals(status, Constants.placed_status))
         {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -189,11 +186,11 @@ public class OrdersListFragment extends Fragment {
     private void setActiveButton(Button activeButton) {
         binding.pendingordersButton.setBackgroundResource(R.drawable.button_inactive);
         binding.rejectedordersButton.setBackgroundResource(R.drawable.button_inactive);
-        binding.totayActivedordersButton.setBackgroundResource(R.drawable.button_inactive);
+
 
         binding.pendingordersButton.setTextColor(getResources().getColor(R.color.black));
         binding.rejectedordersButton.setTextColor(getResources().getColor(R.color.black));
-        binding.totayActivedordersButton.setTextColor(getResources().getColor(R.color.black));
+
 
         activeButton.setBackgroundResource(R.drawable.button_active);
         activeButton.setTextColor(getResources().getColor(R.color.white));

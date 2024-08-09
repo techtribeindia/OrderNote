@@ -33,7 +33,7 @@ public class OrderDetails_Model {
     String transportname = "";
     String drivermobileno = "";
     String truckno = "";
-    boolean editrequest;
+    String dispatchstatus="";
 
     public OrderDetails_Model()
     {
@@ -88,12 +88,12 @@ public class OrderDetails_Model {
         this.buyerpincode = buyerpincode;
     }
 
-    public boolean isEditrequest() {
-        return editrequest;
+    public String getDispatchstatus() {
+        return dispatchstatus;
     }
 
-    public void setEditrequest(boolean editrequest) {
-        this.editrequest = editrequest;
+    public void setDispatchstatus(String dispatchstatus) {
+        this.dispatchstatus = dispatchstatus;
     }
 
     public String getTransportname() {
