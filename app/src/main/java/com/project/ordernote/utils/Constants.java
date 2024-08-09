@@ -26,4 +26,16 @@ public class Constants{
     public static final String failed = "FAILED";
 
 
+
+
+    // Constants for processing
+    public static final String noDataAvailable = "No data available";
+    public static final String createNewBuyer = "CreateNewBuyer";
+    public static final String updateOldBuyer = "UpdateOldBuyer";
+    public static final String processtodo = "ProcessToDo";
+
+    public static final String  buyerkey = "BuyerKey";
+    public static final String add = "ADD";
+    public static final String update = "UPDATE";
+
 }

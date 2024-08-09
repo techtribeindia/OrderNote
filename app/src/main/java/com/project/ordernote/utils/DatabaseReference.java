@@ -13,4 +13,13 @@ public class DatabaseReference{
     public static String OrderItemDetails_TableName = "OrderItemDetails";
 
 
+
+
+
+    //orderdetails Table name
+    public static String BuyerDetails_TableName = "BuyerDetails";
+    public static String MobileNo_BuyerDetails = "mobileno";
+    public static String Uniquekey_BuyerDetails = "uniquekey";
+
+
 }

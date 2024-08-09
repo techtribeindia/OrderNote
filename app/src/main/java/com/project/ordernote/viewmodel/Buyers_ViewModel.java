@@ -8,7 +8,9 @@ import androidx.lifecycle.LiveData;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.Buyers_Model;
+import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.data.repository.Buyers_Repository;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 
@@ -114,7 +116,121 @@ public class Buyers_ViewModel extends AndroidViewModel {
         return new Buyers_Model();
     }
 
-    public void deleteBuyerDetailsFromDB(int position) {
+
+
+    public Buyers_Model getBuyerDataFromViewModelUsingBuyerKey(String selectedBuyerKey) {
+        if(buyersListLiveData == null){
+            buyersListLiveData = new MutableLiveData<>();
+        }
+        List<Buyers_Model> buyersModelList = new ArrayList<>(Objects.requireNonNull(buyersListLiveData.getValue()).data);
+        if(buyersModelList.size()>0){
+            for(int itera = 0 ; itera < buyersModelList.size(); itera++){
+                if(selectedBuyerKey .equals(buyersModelList.get(itera).getUniquekey())){
+
+                    return buyersModelList.get(itera);
+
+                }
+            }
+
+        }
+        return new Buyers_Model();
+    }
+
+
+    public void deleteBuyerDetailsFromDB(String buyerkey, FirestoreService.FirestoreCallback<Void> firestoreCallback) {
+
+        repository.deleteBuyerDetails(buyerkey, firestoreCallback);
+
+    }
+
+
+
+    public void addBuyerInDB(Buyers_Model buyersModel , FirestoreService.FirestoreCallback<Void> callback) {
+        repository.addBuyerInDB(buyersModel, callback);
+
+    }
+
+
+    public boolean checkIfBuyerIsPresentInViewModelBuyerList(String mobileNo) {
+
+        if(buyersListLiveData.getValue()!=null){
+            if(buyersListLiveData.getValue().data!=null){
+                if(!buyersListLiveData.getValue().data.isEmpty()){
+
+                    for(int i = 0 ; i < buyersListLiveData.getValue().data.size() ; i++) {
+                        if (mobileNo.equals(buyersListLiveData.getValue().data.get(i).getMobileno())) {
+                            return true;
+
+                        }
+                        else {
+                            if ((buyersListLiveData.getValue().data.size() - 1) == i) {
+                                return false;
+                            }
+                        }
+
+
+                    }
+                }
+                else{
+                    return false;
+                }
+            }
+
+        }
+
+        return false;
+
+
+    }
+
+    public void updateBuyerDataInViewModelAndLocalArray(Buyers_Model buyersModel) {
+
+        if(buyersListLiveData == null){
+            buyersListLiveData = new MutableLiveData<>();
+
+        }
+        if(Objects.requireNonNull(buyersListLiveData.getValue()).data==null){
+            buyersListLiveData.setValue(ApiResponseState_Enum.success(new ArrayList<>()));
+        }
+
+            List<Buyers_Model> buyersModelArrayList = new ArrayList<>(Objects.requireNonNull(buyersListLiveData.getValue().data));
+           // buyersListLiveData.getValue().data.add(buyersModel);
+             buyersModelArrayList.add(buyersModel);
+            buyersListLiveData.setValue(ApiResponseState_Enum.success(buyersModelArrayList));
+            LocalDataManager.getInstance().setBuyers(buyersModelArrayList);
+
+
+    }
+
+    public void deleteBuyerDetailsFromViewModelAndDB(String buyerkey) {
+        if(buyersListLiveData == null){
+            buyersListLiveData = new MutableLiveData<>();
+
+        }
+        if(buyersListLiveData.getValue().data==null){
+            buyersListLiveData.setValue(ApiResponseState_Enum.success(new ArrayList<>()));
+        }
+
+        if(buyersListLiveData.getValue().data.size() > 0) {
+            List<Buyers_Model> buyersModelArrayList = new ArrayList<>(Objects.requireNonNull(buyersListLiveData.getValue().data));
+            for(int i = 0 ; i < buyersModelArrayList.size(); i++){
+                if(buyersModelArrayList.get(i).getUniquekey().equals(buyerkey)){
+                    buyersModelArrayList.remove(i);
+                    buyersListLiveData.setValue(ApiResponseState_Enum.success(buyersModelArrayList));
+                    LocalDataManager.getInstance().setBuyers(buyersModelArrayList);
+                }
+            }
+
+        }
+        else{
+            buyersListLiveData.setValue(ApiResponseState_Enum.success(new ArrayList<>()));
+        }
+
+    }
+
+    public void updateBuyerInDB(Buyers_Model buyersModel, FirestoreService.FirestoreCallback<Void> callback) {
+        repository.updateBuyerInDB(buyersModel, callback);
+
 
     }
 }

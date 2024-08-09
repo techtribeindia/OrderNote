@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
@@ -23,11 +24,13 @@ import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.utils.ApiResponseState_Enum;
+import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.AppData_ViewModel;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -174,6 +177,26 @@ public class SplashScreen extends AppCompatActivity {
                         gotbuyerData = true;
                         checkAndProceed();
                     }
+                    else{
+
+                        if(buyersResponse.message != null){
+                            if(buyersResponse.message.equals(Constants.noDataAvailable)){
+                                LocalDataManager.getInstance().setBuyers(new ArrayList<>());
+                                gotbuyerData = true;
+                                checkAndProceed();
+                            }
+                            else{
+                                Toast.makeText(SplashScreen.this, "Error in fetching Buyer 1 Splash ", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                        else{
+                            Toast.makeText(SplashScreen.this, "Error in fetching Buyer 2 Splash ", Toast.LENGTH_SHORT).show();
+
+                        }
+
+
+                    }
 
                 }
             };
@@ -251,32 +274,13 @@ public class SplashScreen extends AppCompatActivity {
     }
     private void checkAndProceed() {
         // Assuming both data fetches are done
-
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent;
-                // Check if the user is logged in
-                if (sessionManager.isLoggedIn()) {
-                    // Redirect to DashboardScreen if the user is logged in
-                    intent = new Intent(SplashScreen.this, Dashboard.class);
-                } else {
-                    // Redirect to LoginScreen if the user is not logged in
-                    intent = new Intent(SplashScreen.this, LoginScreen.class);
-                }
-
-                SplashScreen.this.startActivity(intent);
-                SplashScreen.this.finish();
-            }
-        }, SPLASH_DISPLAY_LENGTH);
-
-
         if(gotbuyerData  && gotMenuItemData && gotAppdata){
             // Proceed to the next activity
             startActivity(new Intent(SplashScreen.this, Dashboard.class));
-            finish();
+
+            SplashScreen.this.finish();
         }
+
 
     }
 }

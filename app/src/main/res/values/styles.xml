@@ -47,6 +47,13 @@
         <item name="android:textColor">@color/black</item> <!-- Example: red color -->
     </style>
 
+    <style name="RedTextStyleSmall">
+        u
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/red</item> <!-- Example: red color -->
+    </style>
+
 
     <style name="BlackTextStyleSemiBold">
 

@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingBottom="130dp"
-    android:background="@color/reddishgrey"
+     android:background="@color/reddishgrey"
     tools:context=".ui.fragment.BuyersFragment">
 
     <LinearLayout
@@ -32,19 +31,35 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="5dp"
-            android:layout_weight="3"
+            android:layout_weight="5"
             android:text="@string/manage_buyers"
             android:layout_marginStart="20dp"
             style="@style/ScreenTitleTextStyle"
 
             />
+
+
+        <TextView
+            android:id="@+id/addBuyerTextview"
+            android:layout_width="95dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center_vertical|right"
+            android:layout_marginEnd="5dp"
+            android:text="Add Buyer"
+            style="@style/RedTextStyleSmall"
+
+            />
+
         <RelativeLayout
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:visibility="visible"
             android:layout_weight="1"
+            android:id="@+id/addBuyerDetailLayout"
             android:layout_height="match_parent">
             <ImageView
-                android:layout_width="35dp"
+                android:layout_width="40dp"
                 android:layout_height="35dp"
                 android:alpha=".7"
                 android:layout_centerInParent="true"
@@ -53,15 +68,18 @@
 
     </LinearLayout>
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_below="@+id/titleBarLayout"
+     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:layout_marginTop="70dp"
-        android:layout_width="match_parent"
+         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
           app:cardCornerRadius="20dp"
-        app:cardElevation="5dp"
-        android:layout_marginEnd="15dp">
+        app:cardElevation="0dp"
+         android:layout_marginEnd="15dp">
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -69,7 +87,7 @@
             android:layout_height="match_parent"
              android:paddingTop="10dp"
             android:paddingBottom="1dp"
-             android:id="@+id/buyerListRecyclerview"/>
+            android:id="@+id/buyerListRecyclerview"/>
 
         <TextView
             android:layout_marginTop="60dp"
@@ -87,6 +105,7 @@
 
 
     </androidx.cardview.widget.CardView>
+</ScrollView>
 
 
 
