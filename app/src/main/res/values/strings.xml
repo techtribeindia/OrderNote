@@ -7,6 +7,8 @@
 
     <string name="buyer_details">Buyer Details</string>
     <string name="enter_buyer_name_amp_choose_a_buyer"><![CDATA[Enter Buyer Name & choose a buyer]]></string>
+    <string name="enter_buyer_name"><![CDATA[Enter Buyer Name]]></string>
+
     <string name="sample_phoneno">+919394247523</string>
     <string name="address">Address</string>
     <string name="select_buyer">Select Buyer</string>
@@ -16,6 +18,15 @@
     <string name="item_name">Item name</string>
     <string name="apply_discount">Apply Discount</string>
     <string name="manage_buyers">Manage Buyers</string>
-
+    <string name="enter_mobile_no">Enter Mobile no</string>
+    <string name="address_line_1">Address line 1</string>
+    <string name="address_line_2">Address line 2</string>
+    <string name="pincode">Pincode</string>
+    <string name="enter_pincode_optional">Enter Pincode(Optional)</string>
+    <string name="add">Add</string>
+    <string name="gstin">GSTIN</string>
+    <string name="add_new_buyer">Add New Buyer</string>
+    <string name="update">Update </string>
+    <string name="update_buyer">Update Buyer</string>
 
 </resources>

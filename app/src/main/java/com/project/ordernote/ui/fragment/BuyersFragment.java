@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,14 +20,21 @@ import android.widget.Toast;
 
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.Buyers_Model;
+import com.project.ordernote.data.model.ItemDetails_Model;
+import com.project.ordernote.data.model.OrderDetails_Model;
+import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.databinding.FragmentBuyersBinding;
 import com.project.ordernote.ui.adapter.BuyerList_Adapter;
 import com.project.ordernote.ui.adapter.CreateOrderCartItemAdapter;
 import com.project.ordernote.utils.AlertDialogUtil;
+import com.project.ordernote.utils.ApiResponseState_Enum;
+import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SwipeToDeleteCallback;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class BuyersFragment extends Fragment {
@@ -37,9 +45,10 @@ public class BuyersFragment extends Fragment {
     Buyers_ViewModel buyersViewModel ;
 
     BuyerList_Adapter buyerListAdapter;
+    private Observer<ApiResponseState_Enum<List<Buyers_Model>>> buyersListObserver;
 
 
-    boolean buyerDetailsFetchedSuccessfully = false;
+    boolean buyerDetailsFetchedSuccessfully = false , isDeleteBuyerCalled = false;
 
     public BuyersFragment() {
         // Required empty public constructor
@@ -57,6 +66,26 @@ public class BuyersFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        try {
+            // Initialize ViewModels
+            buyersViewModel = new ViewModelProvider(requireActivity()).get(Buyers_ViewModel.class);
+
+            List<Buyers_Model> buyersList = LocalDataManager.getInstance().getBuyers();
+
+            if(buyersList.size() > 0){
+
+                buyersViewModel.setBuyersListinMutableLiveData(buyersList);
+            }
+            else{
+                buyersViewModel.getBuyersListFromRepository("vendor_1");
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -73,54 +102,38 @@ public class BuyersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        try {
-            // Initialize ViewModels
-            buyersViewModel = new ViewModelProvider(this).get(Buyers_ViewModel.class);
+        setObserver();
+        buyersViewModel.getBuyersListFromViewModel().observeForever(buyersListObserver);
 
-             List<Buyers_Model> buyersList = LocalDataManager.getInstance().getBuyers();
 
-            if(buyersList.size() > 0){
 
-                buyersViewModel.setBuyersListinMutableLiveData(buyersList);
+        binding.addBuyerTextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.addBuyerDetailLayout.performClick();
             }
-            else{
-                buyersViewModel.getBuyersListFromRepository("vendor_1");
-            }
+        });
+        binding.addBuyerDetailLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
 
+                    String dataToSend = Constants.createNewBuyer;
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.processtodo, dataToSend);
 
+                    AddBuyerDetails_DialogFragment dialogFragment = new AddBuyerDetails_DialogFragment();
+                    dialogFragment.setArguments(bundle);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
-        buyersViewModel.getBuyersListFromViewModel().observe(getViewLifecycleOwner(),  resource -> {
-            if (resource != null) {
-                switch (resource.status) {
-                    case LOADING:
-                        buyerDetailsFetchedSuccessfully = false;
-                        showProgressBar(true);
-                        //Toast.makeText(requireActivity(), "Loading Buyer", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SUCCESS:
-                        setAdapterForBuyersRecyclerview(resource.data);
-                        buyerDetailsFetchedSuccessfully = true;
-                        showProgressBar(false);
-
-
-                        //Toast.makeText(requireActivity(), "Success in fetching Buyer", Toast.LENGTH_SHORT).show();
-                        break;
-                    case ERROR:
-                        buyerDetailsFetchedSuccessfully = false;
-                        Toast.makeText(requireActivity(), "Error in fetching Buyer", Toast.LENGTH_SHORT).show();
-                        showProgressBar(false);
-                        break;
+                    // dialogFragment.setBuyerSelectionListener(this); // Set the listener
+                    dialogFragment.show(getParentFragmentManager(), "AddBuyerDetails_DialogFragment");
+                    setObserver();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         });
-
-
     }
 
     private void setAdapterForBuyersRecyclerview(List<Buyers_Model> data) {
@@ -177,6 +190,80 @@ public class BuyersFragment extends Fragment {
 
     }
 
+
+    private void setObserver() {
+
+
+
+        try{
+            buyersListObserver = new Observer<ApiResponseState_Enum<List<Buyers_Model>>>() {
+                @Override
+                public void onChanged(@Nullable ApiResponseState_Enum<List<Buyers_Model>> resource) {
+                    // Update your UI or perform any actions based on the updated data
+                    try {
+
+                        if (resource != null) {
+                            switch (resource.status) {
+                                case LOADING:
+                                    buyerDetailsFetchedSuccessfully = false;
+                                    showProgressBar(true);
+                                    //Toast.makeText(requireActivity(), "Loading Buyer", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case SUCCESS:
+
+                                    setAdapterForBuyersRecyclerview(resource.data);
+                                    buyerDetailsFetchedSuccessfully = true;
+                                    showProgressBar(false);
+                                    Toast.makeText(requireActivity(), "sizze from observer: "+String.valueOf(resource.data.size()), Toast.LENGTH_SHORT).show();
+
+
+                                    //Toast.makeText(requireActivity(), "Success in fetching Buyer", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case ERROR:
+                                    buyerDetailsFetchedSuccessfully = false;
+                                    if(resource.message != null){
+                                        if(resource.message.equals(Constants.noDataAvailable)){
+                                            setAdapterForBuyersRecyclerview(new ArrayList<>());
+                                        }
+                                        else{
+                                            Toast.makeText(requireActivity(), "Error in fetching Buyer ", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }
+                                    else{
+                                        Toast.makeText(requireActivity(), "Error in fetching Buyer ", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                    showProgressBar(false);
+                                    break;
+                            }
+                        }
+
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Remove the observer when the Fragment is destroyed
+        buyersViewModel.getBuyersListFromViewModel().removeObserver(buyersListObserver);
+
+
+    }
+
+
     private Handler newHandler() {
         Handler.Callback callback = new Handler.Callback() {
 
@@ -188,7 +275,11 @@ public class BuyersFragment extends Fragment {
 
                 if(data.equals("BuyerDetailsList_Delete")){
                     try {
-                        int position = bundle.getInt("position");
+                        String buyerkey = bundle.getString("buyerkey");
+
+
+
+
 
                         // Inside an Activity or Fragment
                         AlertDialogUtil.showCustomDialog(
@@ -200,7 +291,8 @@ public class BuyersFragment extends Fragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // Handle positive button click
 
-                                        buyersViewModel.deleteBuyerDetailsFromDB(position);
+                                        deleteBuyerDetails(buyerkey);
+
                                         Toast.makeText(requireActivity(), "Remove", Toast.LENGTH_SHORT).show();
                                     }
                                 },
@@ -208,7 +300,7 @@ public class BuyersFragment extends Fragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         // Handle negative button click
-                                        buyerListAdapter.notifyItemChanged(position);
+                                        buyerListAdapter.notifyDataSetChanged();
                                         Toast.makeText(requireActivity(), "Cancel", Toast.LENGTH_SHORT).show();
 
                                     }
@@ -229,11 +321,70 @@ public class BuyersFragment extends Fragment {
 
 
                 }
+                else if(data.equals("BuyerDetailsList_Selected")){
+                    String buyerkey = bundle.getString("buyerkey");
+
+
+
+                    String dataToSend = Constants.updateOldBuyer;
+                    Bundle bundleupdateOldBuyer = new Bundle();
+                    bundleupdateOldBuyer.putString(Constants.processtodo, dataToSend);
+                    bundleupdateOldBuyer.putString(Constants.buyerkey, buyerkey);
+
+                    AddBuyerDetails_DialogFragment dialogFragment = new AddBuyerDetails_DialogFragment();
+                    dialogFragment.setArguments(bundle);
+
+                    // dialogFragment.setBuyerSelectionListener(this); // Set the listener
+                    dialogFragment.show(getParentFragmentManager(), "AddBuyerDetails_DialogFragment");
+
+                }
+
+
 
                 return false;
             }
         };
         return new Handler(callback);
+    }
+
+    private void deleteBuyerDetails(String buyerkey) {
+
+
+        showProgressBar(true);
+        if(isDeleteBuyerCalled){
+            return;
+        }
+
+        isDeleteBuyerCalled = true;
+        buyersViewModel.deleteBuyerDetailsFromDB(buyerkey, new FirestoreService.FirestoreCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                isDeleteBuyerCalled = false;
+
+                buyersViewModel.deleteBuyerDetailsFromViewModelAndDB(buyerkey);
+                showProgressBar(false);
+
+                Toast.makeText(requireActivity(), "Deleted", Toast.LENGTH_SHORT).show();
+
+                //   neutralizeEveryVariableAndUI();
+                // Handle success
+                // e.g., show a success message or update the UI
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                isDeleteBuyerCalled = false;
+                showProgressBar(false);
+                Toast.makeText(requireActivity(), "Cannot Delete", Toast.LENGTH_SHORT).show();
+                buyerListAdapter.notifyDataSetChanged();
+                // Handle failure
+                // e.g., show an error message
+            }
+        });
+
+
+
+
     }
 
 

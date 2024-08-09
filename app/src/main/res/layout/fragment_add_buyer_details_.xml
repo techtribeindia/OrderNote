@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragment.AddBuyerDetails_DialogFragment">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/rounded_dialog_background"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+
+        <TextView
+            android:id="@+id/titleForDialog"
+            style="@style/RedDialogTitleTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="1dp"
+            android:gravity="center"
+            android:text="@string/add_new_buyer"
+
+            />
+
+        <TextView
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="25dp"
+            android:text="@string/name" />
+
+        <EditText
+            android:id="@+id/buyernameEdittext"
+            style="@style/BlackEditTextStyleSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+             android:singleLine="true"
+            android:background="@drawable/rectangle_greybackground"
+            android:gravity="center_vertical"
+            android:hint="@string/enter_buyer_name" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/BlackTextStyleSemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/mobile_no" />
+
+                <EditText
+                    android:id="@+id/mobileNoEdittext"
+                    style="@style/BlackEditTextStyleSemiBold"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:digits="0987654321"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:background="@drawable/rectangle_greybackground"
+                    android:gravity="center_vertical"
+                    android:hint="@string/enter_mobile_no" />
+
+
+
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+
+                android:orientation="vertical">
+
+
+
+                <TextView
+                    style="@style/BlackTextStyleSemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/pincode" />
+
+                <EditText
+                    android:id="@+id/pincodeEdittext"
+                    style="@style/BlackEditTextStyleSemiBold"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rectangle_greybackground"
+                    android:gravity="center_vertical"
+                     android:singleLine="true"
+                    android:digits="0987654321"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:hint="@string/enter_pincode_optional" />
+
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+        <TextView
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/address_line_1" />
+
+        <EditText
+            android:id="@+id/addressLine1Edittext"
+            style="@style/BlackEditTextStyleSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+
+            android:background="@drawable/rectangle_greybackground"
+            android:gravity="center_vertical"
+            android:hint="Enter address line 1  " />
+
+        <TextView
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/address_line_2" />
+
+        <EditText
+            android:id="@+id/addressLine2Edittext"
+            style="@style/BlackEditTextStyleSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/rectangle_greybackground"
+
+            android:gravity="center_vertical"
+            android:hint="Enter address line 2 (Optional)  " />
+
+
+        <TextView
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/gstin" />
+
+        <EditText
+            android:id="@+id/gstinEdittext"
+            style="@style/BlackEditTextStyleSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:digits="0987654321"
+            android:inputType="number"
+             android:layout_marginTop="5dp"
+            android:background="@drawable/rectangle_greybackground"
+            android:gravity="center_vertical"
+            android:hint="Enter Buyer Gstin (Optional)  " />
+
+
+
+        <Button
+            android:id="@+id/addBuyer_button"
+            style="@style/WhiteTextStyleBold"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rectangle_redbackground"
+            android:text="@string/add" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/closeIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        android:padding="8dp"
+        android:layout_marginEnd="25dp"
+        android:src="@mipmap/closewithcircle"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/progressbar_backlayout"
+        android:alpha=".6"
+        android:background="@color/progressbar_grey"
+        android:visibility="gone"/>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/progressbar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_centerInParent="true"
+        app:lottie_fileName="dotanimator.json"
+        android:visibility="gone" />
+
+</RelativeLayout>

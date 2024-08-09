@@ -9,7 +9,25 @@ public class Buyers_Model {
     String address2 ="";
     String pincode ="";
     String uniquekey = "";
+    String vendorkey  = "";
+    String vendorName = "";
 
+
+    public String getVendorkey() {
+        return vendorkey;
+    }
+
+    public void setVendorkey(String vendorkey) {
+        this.vendorkey = vendorkey;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
 
     public String getUniquekey() {
         return uniquekey;

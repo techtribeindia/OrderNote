@@ -44,9 +44,21 @@ public class Constants{
     public static final String cancelled_dispatchstatus = "CANCELLED";
 
 
+
     //MenuItems table
     public static final String unitprice_itemtype = "UNITPRICE";
     public static final String priceperkg_itemtype = "PRICEPERKG";
     public static final boolean true_showforbilling = true;
     public static final boolean false_showforbilling = false;
+
+    // Constants for processing
+    public static final String noDataAvailable = "No data available";
+    public static final String createNewBuyer = "CreateNewBuyer";
+    public static final String updateOldBuyer = "UpdateOldBuyer";
+    public static final String processtodo = "ProcessToDo";
+
+    public static final String  buyerkey = "BuyerKey";
+    public static final String add = "ADD";
+    public static final String update = "UPDATE";
+
 }

@@ -102,14 +102,14 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
             int iconMargin = (itemView.getHeight() - mDeleteIconBitmap.getHeight()) / 2;
             int iconTop = itemView.getTop() + iconMargin;
             int iconBottom = iconTop + mDeleteIconBitmap.getHeight();
-            int iconLeft = itemView.getLeft() + iconMargin - 40;
+            int iconLeft = itemView.getLeft() + iconMargin - 60;
             int iconRight = iconLeft + mDeleteIconBitmap.getWidth();
             canvas.drawBitmap(mDeleteIconBitmap, iconLeft, iconTop, null);
         }
 
         // Draw the text
         String text = "Remove";
-        canvas.drawText(text, itemView.getLeft() + 120, itemView.getTop()+16 + itemView.getHeight() / 2, mTextPaint);
+        canvas.drawText(text, itemView.getLeft() + 140, itemView.getTop()+16 + itemView.getHeight() / 2, mTextPaint);
     }
 
     private Bitmap drawableToBitmap(Drawable drawable) {

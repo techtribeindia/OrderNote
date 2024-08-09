@@ -23,6 +23,17 @@ public class DatabaseReference{
 
     public static String OrderItemDetails_TableName = "OrderItemDetails";
 
+
+
+
+
+    //orderdetails Table name
+    public static String BuyerDetails_TableName = "BuyerDetails";
+    public static String MobileNo_BuyerDetails = "mobileno";
+    public static String Uniquekey_BuyerDetails = "uniquekey";
+
+
+
     //UserDetails table
     public static String UserDetails_TableName = "UserDetails";
     public static String vendorkey_UserDetails = "vendorkey";
@@ -37,6 +48,7 @@ public class DatabaseReference{
     public static String forcelogout_UserDetails = "forcelogout";
     public static String currentversionno_UserDetails = "currentversionno";
 
+
     //MenuItems table
     public static String MenuItems_TableName = "MenuItems";
     public static String grossweight_MenuItems = "grossweight";
@@ -49,4 +61,6 @@ public class DatabaseReference{
     public static String unitprice_MenuItems = "unitprice";
     public static String vendorkey_MenuItems = "vendorkey";
     public static String vendorname_MenuItems = "vendorname";
+=======
+
 }
