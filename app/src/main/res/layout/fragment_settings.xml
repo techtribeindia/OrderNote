@@ -46,6 +46,41 @@
                 android:src="@drawable/right_arrow"/>
         </LinearLayout>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/manage_menu_label_textview"
+            style="@style/SubTitleGreyTextStyle1"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="3dp"
+            android:gravity="center"
+            android:text="Manage Menu" />
+        <LinearLayout
+            android:id="@+id/manage_menu_screen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:gravity="center"
+            android:padding="10dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage Menu"
+                android:layout_weight="1"
+                android:textColor="@color/black"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/right_arrow"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
 
 </FrameLayout>
