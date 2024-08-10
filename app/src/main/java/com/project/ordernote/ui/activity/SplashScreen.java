@@ -160,24 +160,23 @@ public class SplashScreen extends AppCompatActivity {
                         checkAndProceed();
                     }
                     else{
+                        if (Objects.requireNonNull(buyersResponse).status != ApiResponseState_Enum.Status.LOADING) {
 
-                        if(buyersResponse.message != null){
-                            if(buyersResponse.message.equals(Constants.noDataAvailable)){
-                                LocalDataManager.getInstance().setBuyers(new ArrayList<>());
-                                gotbuyerData = true;
-                                checkAndProceed();
+                            if (buyersResponse.message != null) {
+                                if (buyersResponse.message.equals(Constants.noDataAvailable)) {
+                                    LocalDataManager.getInstance().setBuyers(new ArrayList<>());
+                                    gotbuyerData = true;
+                                    checkAndProceed();
+                                } else {
+                                    Toast.makeText(SplashScreen.this, "Error in fetching Buyer 1 Splash ", Toast.LENGTH_SHORT).show();
+
+                                }
+                            } else {
+                                Toast.makeText(SplashScreen.this, "Error in fetching Buyer 2 Splash ", Toast.LENGTH_SHORT).show();
+
                             }
-                            else{
-                                Toast.makeText(SplashScreen.this, "Error in fetching Buyer 1 Splash ", Toast.LENGTH_SHORT).show();
-
-                            }
-                        }
-                        else{
-                            Toast.makeText(SplashScreen.this, "Error in fetching Buyer 2 Splash ", Toast.LENGTH_SHORT).show();
 
                         }
-
-
                     }
 
                 }

@@ -33,6 +33,7 @@ import com.project.ordernote.data.model.OrderDetails_Model;
 
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.databinding.FragmentAddOrdersBinding;
+import com.project.ordernote.ui.activity.SplashScreen;
 import com.project.ordernote.ui.adapter.CreateOrderCartItemAdapter;
 import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.ApiResponseState_Enum;
@@ -445,7 +446,23 @@ public class CreateOrderFragment extends Fragment {
                         break;
                     case ERROR:
                         buyerDetailsFetchedSuccessfully = false;
-                        Toast.makeText(requireActivity(), "Error in fetching Buyer", Toast.LENGTH_SHORT).show();
+
+
+                        if (resource.message != null) {
+                            if (resource.message.equals(Constants.noDataAvailable)) {
+                                LocalDataManager.getInstance().setBuyers(new ArrayList<>());
+
+                            } else {
+                                Toast.makeText(requireActivity(), "Error in fetching Buyer ", Toast.LENGTH_SHORT).show();
+
+                            }
+                        } else {
+                            Toast.makeText(requireActivity(), "Error in fetching Buyer  ", Toast.LENGTH_SHORT).show();
+
+                        }
+
+
+                      ///  Toast.makeText(requireActivity(), "Error in fetching Buyer create order 2 ", Toast.LENGTH_SHORT).show();
                         showProgressBar(false);
                         break;
                 }

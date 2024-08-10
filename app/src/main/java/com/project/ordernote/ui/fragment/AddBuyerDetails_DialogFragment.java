@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -38,7 +37,7 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
     Buyers_ViewModel buyers_viewModel;
 
     boolean isAddBuyerCalled = false , isFragmentOpenedToAddNewBuyer = false , isUpdateBuyerCalled = false;
-
+    String buyerkeyFromAnotherFragment = "";
 
     public AddBuyerDetails_DialogFragment() {
         // Required empty public constructor
@@ -114,9 +113,10 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
             else  if(processtodo.equals(Constants.updateOldBuyer)){
                 binding.titleForDialog.setText(getString(R.string.update_buyer));
                 binding.addBuyerButton.setText(getString(R.string.update));
-                String buyerkey = bundle.getString(Constants.buyerkey);
+                buyerkeyFromAnotherFragment = bundle.getString(Constants.buyerkey);
+
                 isFragmentOpenedToAddNewBuyer = false;
-                updateUIWithSelecctedBuyerData(buyers_viewModel.getBuyerDataFromViewModelUsingBuyerKey(buyerkey));
+                updateUIWithSelecctedBuyerData(buyers_viewModel.getBuyerDataFromViewModelUsingBuyerKey(buyerkeyFromAnotherFragment));
             }
 
 
@@ -137,30 +137,35 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
                     if(!binding.mobileNoEdittext.getText().toString().equals("")){
                         if(binding.mobileNoEdittext.getText().toString().length()==10) {
                             if (!binding.addressLine1Edittext.getText().toString().equals("")) {
-                                    if(!buyers_viewModel.checkIfBuyerIsPresentInViewModelBuyerList(binding.mobileNoEdittext.getText().toString())){
-                                        buyersModel.setName(TextUtils.capitalizeWords(binding.buyernameEdittext.getText().toString()));
-                                        buyersModel.setMobileno(binding.mobileNoEdittext.getText().toString());
-                                        buyersModel.setAddress1(TextUtils.capitalizeWords(binding.addressLine1Edittext.getText().toString()));
-                                        buyersModel.setAddress2(TextUtils.capitalizeWords(binding.addressLine2Edittext.getText().toString()));
-                                        buyersModel.setPincode(binding.pincodeEdittext.getText().toString());
-                                        buyersModel.setGstin(binding.gstinEdittext.getText().toString());
-                                        buyersModel.setUniquekey(String.valueOf(UUID.randomUUID()));
-                                        buyersModel.setVendorkey("vendor_1");
-                                        buyersModel.setVendorName("Ponrathi Travels");
-                                        if(isFragmentOpenedToAddNewBuyer) {
-                                            callAddBuyerAndAddListener(buyersModel);
-                                        }
-                                        else{
-                                            callUpdateBuyerAndAddListener(buyersModel);
-                                        }
-                                        // Proceed with your logic (e.g., saving the buyer)
 
+                                buyersModel.setName(TextUtils.capitalizeWords(binding.buyernameEdittext.getText().toString()));
+                                buyersModel.setMobileno(binding.mobileNoEdittext.getText().toString());
+                                buyersModel.setAddress1(TextUtils.capitalizeWords(binding.addressLine1Edittext.getText().toString()));
+                                buyersModel.setAddress2(TextUtils.capitalizeWords(binding.addressLine2Edittext.getText().toString()));
+                                buyersModel.setPincode(binding.pincodeEdittext.getText().toString());
+                                buyersModel.setGstin(binding.gstinEdittext.getText().toString());
+
+                                buyersModel.setVendorkey("vendor_1");
+                                buyersModel.setVendorName("Ponrathi Travels");
+                                if(isFragmentOpenedToAddNewBuyer) {
+                                    if(!buyers_viewModel.checkIfBuyerIsPresentInViewModelBuyerList(binding.mobileNoEdittext.getText().toString())){
+                                        buyersModel.setUniquekey(String.valueOf(UUID.randomUUID()));
+                                        callAddBuyerAndAddListener(buyersModel);
 
                                     }
                                     else{
                                         Snackbar.make(view, "Buyer with this mobile no is already added ", Snackbar.LENGTH_LONG).show();
 
                                     }
+
+                                }
+                                else{
+                                    buyersModel.setUniquekey(String.valueOf(buyerkeyFromAnotherFragment));
+                                    callUpdateBuyerAndAddListener(buyersModel);
+                                }
+                                        // Proceed with your logic (e.g., saving the buyer)
+
+
 
                             } else {
                                 // Show Snackbar for missing address line 1
@@ -246,7 +251,7 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
             public void onSuccess(Void result) {
                 isAddBuyerCalled = false;
 
-                buyers_viewModel.updateBuyerDataInViewModelAndLocalArray(buyersModel);
+                buyers_viewModel.addBuyerDataItemInViewModelAndLocalArray(buyersModel);
                 showProgressBar(false);
                 onDismiss(requireDialog());
                 Toast.makeText(requireActivity(), "Success", Toast.LENGTH_SHORT).show();

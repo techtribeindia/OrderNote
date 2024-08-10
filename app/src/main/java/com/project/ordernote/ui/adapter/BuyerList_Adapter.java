@@ -85,7 +85,7 @@ public class BuyerList_Adapter extends RecyclerView.Adapter<BuyerList_Adapter.Bu
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(BuyerList_Adapter.BuyerItemViewHolder holder, int position) {
+    public void onBindViewHolder(BuyerList_Adapter.BuyerItemViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Buyers_Model buyerData = buyerDetailsArrayList.get(position);
         // Additional binding setup for other views
         if (buyerData != null) {

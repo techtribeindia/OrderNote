@@ -68,10 +68,14 @@
 
     </LinearLayout>
 
-<ScrollView
+<androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_below="@+id/titleBarLayout"
      android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
          android:layout_width="match_parent"
@@ -80,6 +84,7 @@
           app:cardCornerRadius="20dp"
         app:cardElevation="0dp"
          android:layout_marginEnd="15dp">
+
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -98,14 +103,19 @@
             android:gravity="center"
             style="@style/BlackTextStyleSemiBold"
             android:visibility="gone"
-            android:layout_marginBottom="75dp"
             android:text="There is no buyer details , Please add one !!"
-
+            android:layout_marginBottom="60dp"
             android:id="@+id/instructionTextviewBuyerListRecyclerview"/>
 
 
     </androidx.cardview.widget.CardView>
-</ScrollView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/reddishgrey"/>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
 
 
 
