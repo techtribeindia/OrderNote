@@ -332,7 +332,7 @@ public class BuyersFragment extends Fragment {
                     bundleupdateOldBuyer.putString(Constants.buyerkey, buyerkey);
 
                     AddBuyerDetails_DialogFragment dialogFragment = new AddBuyerDetails_DialogFragment();
-                    dialogFragment.setArguments(bundle);
+                    dialogFragment.setArguments(bundleupdateOldBuyer);
 
                     // dialogFragment.setBuyerSelectionListener(this); // Set the listener
                     dialogFragment.show(getParentFragmentManager(), "AddBuyerDetails_DialogFragment");
