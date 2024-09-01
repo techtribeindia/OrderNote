@@ -51,5 +51,31 @@ public class MenuItems_Repository {
         });
         return menuItemLiveData;
     }
+    public MutableLiveData<ApiResponseState_Enum<String>> updateInsertUpdateMenu( MenuItems_Model menuItemsModel, String process) {
+        MutableLiveData<ApiResponseState_Enum<String>> ordersLiveData = new MutableLiveData<>();
+        ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
 
+        firestoreService.updateInsertUpdateMenu( menuItemsModel,process, new FirestoreService.FirestoreCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d("orderdetails response   :  ", result.toString());
+
+                if (result.isEmpty()) {
+                    ordersLiveData.postValue(ApiResponseState_Enum.error("No data available", result));
+                } else {
+                    ordersLiveData.postValue(ApiResponseState_Enum.success(result));
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                ordersLiveData.postValue(ApiResponseState_Enum.error(e.getMessage(), null));
+            }
+        });
+        Log.d("orderdetails ordersLiveData  :  ", ordersLiveData.toString());
+
+
+        return ordersLiveData;
+
+    }
 }

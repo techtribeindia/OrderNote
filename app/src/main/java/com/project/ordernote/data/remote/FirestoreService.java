@@ -1,6 +1,7 @@
 package com.project.ordernote.data.remote;
 
 import android.app.Activity;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -330,7 +331,38 @@ public class FirestoreService {
                 });
     }
 
+    public void updateInsertUpdateMenu(MenuItems_Model menuItemsModel, String process,   FirestoreService.FirestoreCallback <String>callback) {
+        Map<String, Object> updates = new HashMap<>();
+        if(Objects.equals(process, "add"))
+        {
+            db.collection(DatabaseReference.MenuItems_TableName)
+                    .document(menuItemsModel.getItemkey())
+                    .set(menuItemsModel)
+                    .addOnSuccessListener(documentReference -> callback.onSuccess("Menu Item added Successfully"))
+                    .addOnFailureListener(callback::onFailure);
+        }
+        else {
+            updates.put(DatabaseReference.itemname_MenuItems,menuItemsModel.getItemname());
+            updates.put(DatabaseReference.itemkey_MenuItems,menuItemsModel.getItemtype());
+            updates.put(DatabaseReference.grossweight_MenuItems,menuItemsModel.getGrossweight());
+            updates.put(DatabaseReference.portionsize_MenuItems,menuItemsModel.getPortionsize());
+            updates.put(DatabaseReference.unitprice_MenuItems,menuItemsModel.getUnitprice());
 
+            DocumentReference orderRef = db.collection(DatabaseReference.MenuItems_TableName).document(menuItemsModel.getItemkey());
+            orderRef.update(updates)
+                    .addOnSuccessListener(aVoid -> {
+                        callback.onSuccess("Menu Item updated Successfully");
+                        // Handle success, e.g., notify user, update UI
+                    })
+                    .addOnFailureListener(e -> {
+                        callback.onFailure(e);
+                        // Handle failure, e.g., notify user, retry
+                    });
+
+        }
+
+
+    }
     public void createOrder(OrderDetails_Model orderDetailsModel,   FirestoreService.FirestoreCallback <Void>callback) {
         db.collection(DatabaseReference.OrderDetails_TableName)
                 .document(orderDetailsModel.getOrderid())

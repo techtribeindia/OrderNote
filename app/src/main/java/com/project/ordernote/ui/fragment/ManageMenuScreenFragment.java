@@ -117,7 +117,16 @@ public class ManageMenuScreenFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        menuItemListAdapter.clearOrders();
         observeOrderDetails();
+        menuItemsViewModel.clearSelecteMenuJson();
+        menuItemsViewModel.getSelecteMenuJson().observe(getViewLifecycleOwner(), orderJson -> {
+            if ((orderJson != null)&&(!orderJson.equals(""))) {
+                MenuItemsDescFragment menuItemsDescFragment1 = MenuItemsDescFragment.newInstance(orderJson);
+                menuItemsDescFragment1.setmHandler(newHandler(),"ManageMenuScreenFragment");
+                menuItemsDescFragment1.show(getParentFragmentManager(), "ManageMenuScreenFragment");
+            }
+        });
     }
 
     private void observeOrderDetails() {
