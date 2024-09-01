@@ -15,6 +15,7 @@ import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.repository.MenuItems_Repository;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -84,6 +85,51 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
         String orderJson = gson.toJson(order);
         selectedmenuJson.setValue(orderJson);
     }
+
+    public void clearSelecteMenuJson()
+    {
+        selectedmenuJson.setValue("");
+    }
+    public LiveData<String> getSelecteMenuJson() {
+        return selectedmenuJson;
+    }
+
+    public MutableLiveData<ApiResponseState_Enum<String>> updateInsertUpdateMenu(MenuItems_Model menuItemsModel, String process) {
+        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.updateInsertUpdateMenu( menuItemsModel,process);
+        resultLiveData.observeForever(result -> {
+            if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
+                updateInsertUpdateMenuData(menuItemsModel,process);
+            }
+        });
+        return resultLiveData;
+    }
+
+    public  void updateInsertUpdateMenuData(MenuItems_Model menuItemsModel, String process)
+    {
+        ApiResponseState_Enum<List<MenuItems_Model>> currentData = menuItemsLiveData.getValue();
+        if (currentData != null && currentData.data != null) {
+            List<MenuItems_Model> updatedOrders = new ArrayList<>(currentData.data);
+            if(Objects.equals(process, "add"))
+            {
+                updatedOrders.add(menuItemsModel);
+                return;
+            }
+
+            for (MenuItems_Model order : updatedOrders) {
+                if (order.getItemkey().equals(menuItemsModel.getItemkey())) {
+                    order.setItemname(menuItemsModel.getItemname());
+
+                    break;
+                }
+            }
+
+            menuItemsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
+            //  orderDetailsLiveData.observeForever(ordersObserver);
+
+            //orderDetailsLiveData.setValue(new ApiResponseState_Enum.Status.SUCCESS, updatedOrders, null));
+        }
+    }
+
  /*   public LiveData<String> getSelectedMenuItemPositionFromViewModel() {
         return selectedMenuItemPosition;
     }
