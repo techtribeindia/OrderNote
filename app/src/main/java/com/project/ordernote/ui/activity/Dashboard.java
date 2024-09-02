@@ -77,7 +77,7 @@ public class Dashboard extends AppCompatActivity {
        */
 
 
-         dashboardViewModel = new ViewModelProvider(this).get(Dashboard_ViewModel.class);
+        dashboardViewModel = new ViewModelProvider(this).get(Dashboard_ViewModel.class);
 
         activityDashboardBinding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
@@ -105,7 +105,6 @@ public class Dashboard extends AppCompatActivity {
 
             return true;
         });
-
 
         activityDashboardBinding.addOrderFabButton.setOnClickListener(v -> {
 

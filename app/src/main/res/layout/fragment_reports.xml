@@ -1,16 +1,756 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/reddishgrey"
+     tools:context=".ui.fragment.ReportsFragment">
 
-    tools:context=".ui.fragment.ReportsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/titleBarLayout"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+
+
+        <RelativeLayout
+            android:layout_width="40dp"
+            android:visibility="gone"
+            android:layout_height="40dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:alpha=".7"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/back"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="40dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/reports"
+            android:layout_marginStart="10dp"
+            style="@style/ScreenTitleTextStyle"
+
+            />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="40dp"
+             android:layout_height="40dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:alpha=".7"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/refresh"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp">
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:alpha=".7"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/download"/>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/name_filterLayout"
+        android:layout_marginTop="60dp"
+          android:orientation="horizontal">
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:text="Ponrathi Traders  , "
+                android:layout_marginStart="20dp"
+                style="@style/SubTitleTextStyle1"
+
+                />
+
+
+
+
+            <TextView
+                android:id="@+id/date_time_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="as in Fri, 23 Aug 24 - 12:50Pm"
+                android:layout_marginStart="20dp"
+                style="@style/SubTitleGreyTextStyle1"
+
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:elevation="5dp"
+            android:layout_weight="2"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="3dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/round_lightredbackground"
+            >
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Today"
+                android:layout_weight=".9"
+                android:padding="3dp"
+                android:textSize="12sp"
+
+                android:textColor="@color/white"
+                style="@style/WhiteTextStyleNormal"
+                android:gravity="center"
+                android:background="@drawable/round_redbackground_withoutpadding"
+                />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Week"
+                android:gravity="center"
+                android:padding="3dp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:background="@drawable/round_lightredbackground"
+                style="@style/WhiteTextStyleNormal"
+
+                />
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/name_filterLayout"
+                android:orientation="vertical"
+                 >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     android:orientation="horizontal"
+                    >
+
+
+                    <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="35dp"
+                            android:layout_centerHorizontal="true"
+                            app:cardCornerRadius="15dp"
+                            android:layout_weight="1"
+                            app:cardElevation="6dp"
+                            android:layout_margin="10dp"
+                            android:layout_height="140dp">
+
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@color/backgroundyellow"
+
+                                >
+
+
+                                <View
+                                    android:layout_width="90dp"
+                                    android:layout_height="75dp"
+                                     android:layout_alignParentEnd="true"
+                                    android:layout_marginTop="-35dp"
+                                    android:layout_marginEnd="-35dp"
+                                    android:rotation="40"
+                                    android:background="@drawable/oval_yellow_background"/>
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="15dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_alignParentEnd="true"
+                                     android:layout_marginEnd="10dp"
+                                    android:src="@mipmap/yellow_right_arrow" />
+
+
+                                <androidx.cardview.widget.CardView
+                                     android:id="@+id/circlePendingOrderImage"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="12dp"
+                                      android:layout_marginStart="10dp"
+                                      app:cardBackgroundColor="@color/yellow"
+                                    app:cardCornerRadius="25dp">
+
+
+                                    <ImageView
+                                        android:layout_width="25dp"
+                                        android:layout_height="23dp"
+                                        android:layout_gravity="center"
+                                        android:background="@color/yellow"
+                                        android:scaleType="centerCrop"
+                                        android:src="@mipmap/white_pending_orders" />
+
+
+                                </androidx.cardview.widget.CardView>
+
+                                <TextView
+                                    android:id="@+id/pendingOrdersCountTextview"
+                                    style="@style/BlackTextStyleNormal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="25dp"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_toEndOf="@+id/circlePendingOrderImage"
+                                    android:layout_weight="1"
+                                    android:text="34 Orders" />
+
+
+
+                                <TextView
+                                    android:id="@+id/totalpendingorderPriceTextview"
+                                    style="@style/BlackTextStyleNormal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="14dp"
+                                    android:layout_below="@+id/circlePendingOrderImage"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/price_sample" />
+
+
+                                <TextView
+                                    android:id="@+id/title_pendingorder_textview"
+                                    style="@style/BlackTextStyleSemiBold"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginTop="9dp"
+                                     android:layout_below="@+id/totalpendingorderPriceTextview"
+                                     android:layout_marginEnd="5dp"
+                                    android:text="Pending Orders "  />
+
+
+                            </RelativeLayout>
+
+
+
+
+                        </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="35dp"
+                        android:layout_centerHorizontal="true"
+                        app:cardCornerRadius="15dp"
+                        android:layout_weight="1"
+                        app:cardElevation="6dp"
+                        android:layout_margin="10dp"
+                        android:layout_height="140dp">
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/backgroundgreen"
+
+                            >
+
+
+                            <View
+                                android:layout_width="90dp"
+                                android:layout_height="75dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="-35dp"
+                                android:layout_marginEnd="-35dp"
+                                android:rotation="40"
+                                android:background="@drawable/oval_green_background"/>
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="15dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginEnd="10dp"
+                                android:src="@mipmap/greenrightarrowthick" />
+
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/circleAcceptedOrderImage"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="12dp"
+                                android:layout_marginStart="10dp"
+                                app:cardBackgroundColor="@color/green"
+                                app:cardCornerRadius="25dp">
+
+
+                                <ImageView
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/green"
+                                    android:scaleType="centerCrop"
+                                    android:src="@mipmap/white_accepted_orders" />
+
+
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:id="@+id/acceptedOrdersCountTextview"
+                                style="@style/BlackTextStyleNormal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="25dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_toEndOf="@+id/circleAcceptedOrderImage"
+                                android:layout_weight="1"
+                                android:text="34 Orders" />
+
+
+
+                            <TextView
+                                android:id="@+id/totalAcceptedOrdersPriceTextview"
+                                style="@style/BlackTextStyleNormal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="14dp"
+                                android:layout_below="@+id/circleAcceptedOrderImage"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
+                                android:text="@string/price_sample" />
+
+
+                            <TextView
+                                android:id="@+id/title_acceptedOrderstextview"
+                                style="@style/BlackTextStyleSemiBold"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="9dp"
+                                android:layout_below="@+id/totalAcceptedOrdersPriceTextview"
+                                android:layout_marginEnd="5dp"
+                                android:text="Accepted Orders "  />
+
+
+                        </RelativeLayout>
+
+
+
+
+                    </androidx.cardview.widget.CardView>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="35dp"
+                        android:layout_centerHorizontal="true"
+                        app:cardCornerRadius="15dp"
+                        android:layout_weight="1"
+                        app:cardElevation="6dp"
+                        android:layout_margin="10dp"
+                        android:layout_height="140dp">
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/backgroundred"
+
+                            >
+
+
+                            <View
+                                android:layout_width="90dp"
+                                android:layout_height="75dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="-35dp"
+                                android:layout_marginEnd="-35dp"
+                                android:rotation="40"
+                                android:background="@drawable/oval_red_background"/>
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="15dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginEnd="10dp"
+                                android:src="@mipmap/red_right_arrow" />
+
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/circleRejectedOrderImage"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="12dp"
+                                 android:layout_marginStart="10dp"
+                                 app:cardBackgroundColor="@color/red"
+                                app:cardCornerRadius="25dp">
+
+
+                                <ImageView
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:alpha=".7"
+                                    android:layout_gravity="center"
+                                    android:background="@color/red"
+                                    android:scaleType="centerCrop"
+                                    android:padding="1.4dp"
+                                    android:src="@mipmap/white_rejected_orders" />
+
+
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:id="@+id/ordersRejectedCountTextview"
+                                style="@style/BlackTextStyleNormal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="25dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_toEndOf="@+id/circleRejectedOrderImage"
+                                android:layout_weight="1"
+                                android:text="34 Orders" />
+
+
+
+                            <TextView
+                                android:id="@+id/totalRejectedPriceTextview"
+                                style="@style/BlackTextStyleNormal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="14dp"
+                                android:layout_below="@+id/circleRejectedOrderImage"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
+                                android:text="@string/price_sample" />
+
+
+                            <TextView
+                                android:id="@+id/rejectedOrders_title_textview"
+                                style="@style/BlackTextStyleSemiBold"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="9dp"
+                                android:layout_below="@+id/totalRejectedPriceTextview"
+                                android:layout_marginEnd="5dp"
+                                android:text="Rejected Orders "  />
+
+
+                        </RelativeLayout>
+
+
+
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="35dp"
+                        android:layout_centerHorizontal="true"
+                        app:cardCornerRadius="15dp"
+                        android:layout_weight="1"
+                        app:cardElevation="6dp"
+                        android:layout_margin="10dp"
+                        android:layout_height="140dp">
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/backgroundpurple"
+
+                            >
+
+
+                            <View
+                                android:layout_width="90dp"
+                                android:layout_height="75dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="-35dp"
+                                android:layout_marginEnd="-35dp"
+                                android:rotation="40"
+                                android:background="@drawable/oval_purple_background"/>
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="15dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginEnd="10dp"
+                                android:src="@mipmap/purple_right_arrow" />
+
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/circleCancelledOrderImage"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="12dp"
+                                android:layout_marginStart="10dp"
+                                app:cardBackgroundColor="@color/purple"
+                                app:cardCornerRadius="25dp">
+
+
+                                <ImageView
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/purple"
+                                    android:scaleType="centerCrop"
+                                    android:src="@mipmap/white_cancelled_order" />
+
+
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:id="@+id/ordersCancelledCountTextview"
+                                style="@style/BlackTextStyleNormal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="25dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_toEndOf="@+id/circleCancelledOrderImage"
+                                android:layout_weight="1"
+                                android:text="34 Orders" />
+
+
+
+                            <TextView
+                                android:id="@+id/totalCancelledPriceTextview"
+                                style="@style/BlackTextStyleNormal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="14dp"
+                                android:layout_below="@+id/circleCancelledOrderImage"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
+                                android:text="@string/price_sample" />
+
+
+                            <TextView
+                                android:id="@+id/titleCancelled_textview"
+                                style="@style/BlackTextStyleSemiBold"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="9dp"
+                                android:layout_below="@+id/totalCancelledPriceTextview"
+                                android:layout_marginEnd="5dp"
+                                android:text="Cancelled Orders "  />
+
+
+                        </RelativeLayout>
+
+
+
+
+                    </androidx.cardview.widget.CardView>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="bottom"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:background="@color/grey"
+                     android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="You can generate the sales data here using filter"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        style="@style/BlackTextStyleNormal"/>
+
+                </LinearLayout>
+
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                android:id="@+id/customSalesReportCardView"
+
+
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                     android:background="@drawable/rectangle_white_blueborderwithoutpadding"
+
+                    >
+
+
+
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/salesDetailsImage"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                         android:layout_marginStart="10dp"
+                        app:cardBackgroundColor="@color/blue"
+                        app:cardCornerRadius="35dp">
+
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                             android:layout_margin="10dp"
+                            android:layout_gravity="center"
+                            android:background="@color/blue"
+                            android:scaleType="centerCrop"
+                             android:src="@mipmap/whitesalesreporticon" />
+
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/salesReportInstructionTextview"
+                        style="@style/BlackTextStyleSemiBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@+id/salesDetailsImage"
+                        android:layout_weight="1"
+                        android:text="Custom Sales Report" />
+
+                    <TextView
+                        android:id="@+id/salesReportInstruction2Textview"
+                        style="@style/BlackTextStyleNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                         android:layout_marginStart="10dp"
+                        android:layout_below="@+id/salesReportInstructionTextview"
+                        android:layout_toEndOf="@+id/salesDetailsImage"
+                        android:layout_weight="1"
+                        android:text="Tap to select filter" />
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                         android:src="@mipmap/right_arrow_blue" />
+
+
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Reports Fragment" />
+        android:id="@+id/progressbar_backlayout"
+        android:alpha=".6"
+        android:background="@color/progressbar_grey"
+        android:visibility="gone"/>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/progressbar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_centerInParent="true"
+        app:lottie_fileName="dotanimator.json"
+        android:visibility="gone" />
 
-</FrameLayout>
+
+</RelativeLayout>

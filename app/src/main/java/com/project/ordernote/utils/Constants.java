@@ -2,23 +2,37 @@ package com.project.ordernote.utils;
 
 
 public class Constants{
+    public static String TAG = "TAG";
 
     //DecimalFormat
     public static String threeDecimalPattern = "###.###";
     public static String twoDecimalPattern = "#.##";
     public static String oneDecimalPattern = "###.#";
-    public static String twoDecimalWithCommaPattern = "##,##,##,##,##0.00";
+    public static String twoDecimalWithCommaPattern = "##,##,##,##,###.00";
 
     //Date
-    public static String readableDate_Format = "EEE, d MMM yyyy";
-    public static String timeZone_Format = "Asia/Kolkata";
+     public static String timeZone_Format = "Asia/Kolkata";
+     public static String standardDateFormat = "dd/MM/yyyy";
+
+     public static String dateMonth = "ddMMM";
 
 
+    public static String newDate_Time_Format = "yyyy-MM-dd HH:mm:ss";
 
     public static final String unitprice_pricetype = "UNITPRICE";
     public static final String priceperkg_pricetype = "PRICEPERKG";
 
     public static final String created_orderstatus = "CREATED";
+
+    public static final String pdf_filetype = "PDF";
+    public static final String xls_filetype = "XLS";
+
+
+    public static final String today_filter = "TODAY";
+    public static final String yesterday_filter = "YESTERDAY";
+    public static final String last7day_filter = "LAST7DAY";
+    public static final String buyerwise_filter = "YESTERDAY";
+    public static final String customdatewise_filter = "YESTERDAY";
 
 
 

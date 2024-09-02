@@ -35,7 +35,7 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
     private ArrayAdapter<String> buyerAdapter;
 
     private Buyers_Model buyersModel = new Buyers_Model();
-
+    String address  = "";
     String selectedBuyerPositionString = "";
     @Nullable
     @Override
@@ -70,9 +70,34 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
 
         // Initialize ViewModel
         buyerViewModel = new ViewModelProvider(requireActivity()).get(Buyers_ViewModel.class);
-            try{
+             try{
                 binding.buyerMobileNoTextview.setText(String.valueOf(Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getMobileno()));
-                binding.buyerAddressTextview.setText(String.valueOf (Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress1() +" , "+'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress2()+" - "+""+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getPincode()+" . "));
+                if(!buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress1().equals("")){
+                     address = Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress1());
+                }
+                if(!buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress2().equals("")){
+                    if(!address.equals("")){
+                        address = address +" , " +'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress1());
+                    }
+                    else{
+                        address = Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress2());
+
+                    }
+                }
+
+                if(!buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getPincode().equals("")){
+                    if(!address.equals("")){
+                        address = address +" - " +'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getPincode());
+                    }
+                    else{
+                        address = Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getPincode());
+
+                    }
+                }
+                binding.buyerAddressTextview.setText(String.valueOf(address));
+                   // binding.buyerAddressTextview.setText(String.valueOf (Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress1() +" , "+'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress2()+" - "+""+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getPincode()+" . "));
+
+
 
             }
             catch (Exception e){
@@ -94,7 +119,43 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
            try {
                if (buyerList.getName() != null) {
                    binding.buyerMobileNoTextview.setText(String.valueOf(Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getMobileno()));
-                   binding.buyerAddressTextview.setText(String.valueOf (Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress1() +" , "+'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress2()+" - "+""+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getPincode()+" . "));
+                 //  binding.buyerAddressTextview.setText(String.valueOf (Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress1() +" , "+'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress2()+" - "+""+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getPincode()+" . "));
+
+                    address = "";
+                   try{
+                       binding.buyerMobileNoTextview.setText(String.valueOf(Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getMobileno()));
+                       if(!buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress1().equals("")){
+                           address = Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress1());
+                       }
+                       if(!buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress2().equals("")){
+                           if(!address.equals("")){
+                               address = address +" , " +'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress1());
+                           }
+                           else{
+                               address = Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress2());
+
+                           }
+                       }
+
+                       if(!buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getPincode().equals("")){
+                           if(!address.equals("")){
+                               address = address +" - " +'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getPincode());
+                           }
+                           else{
+                               address = Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getPincode());
+
+                           }
+                       }
+                       binding.buyerAddressTextview.setText(String.valueOf(address));
+                       // binding.buyerAddressTextview.setText(String.valueOf (Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress1() +" , "+'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress2()+" - "+""+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getPincode()+" . "));
+
+
+
+                   }
+                   catch (Exception e){
+                       e.printStackTrace();
+                   }
+                   
                    int selectedBuyerPositionInt = 0;
                    try {
                        if (!Objects.equals(buyerViewModel.getSelectedBuyerPositionStringLiveData().getValue(), "")) {
@@ -120,7 +181,42 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
             // Handle the selected buyer
             buyersModel = (buyerViewModel.getBuyerDataFromViewModelUsingBuyerName(selectedBuyer));
             binding.buyerMobileNoTextview.setText(String.valueOf(buyersModel.getMobileno()));
-            binding.buyerAddressTextview.setText(String.valueOf (buyersModel.getAddress1() +" , "+'\n'+buyersModel.getAddress2()+" - "+""+buyersModel.getPincode()+" . "));
+              address ="";
+            try{
+                binding.buyerMobileNoTextview.setText(String.valueOf(Objects.requireNonNull(buyersModel.getMobileno())));
+                if(!buyersModel.getAddress1().equals("")){
+                    address = Objects.requireNonNull(buyersModel.getAddress1());
+                }
+                if(!buyersModel.getAddress2().equals("")){
+                    if(!address.equals("")){
+                        address = address +" , " +'\n'+Objects.requireNonNull(buyersModel.getAddress1());
+                    }
+                    else{
+                        address = Objects.requireNonNull(buyersModel.getAddress2());
+
+                    }
+                }
+
+                if(!buyersModel.getPincode().equals("")){
+                    if(!address.equals("")){
+                        address = address +" - " +'\n'+Objects.requireNonNull(buyersModel.getPincode());
+                    }
+                    else{
+                        address = Objects.requireNonNull(buyersModel.getPincode());
+
+                    }
+                }
+                binding.buyerAddressTextview.setText(String.valueOf(address));
+                // binding.buyerAddressTextview.setText(String.valueOf (Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress1() +" , "+'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress2()+" - "+""+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getPincode()+" . "));
+
+
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            binding.buyerAddressTextview.setText(String.valueOf(address));
+          //  binding.buyerAddressTextview.setText(String.valueOf (buyersModel.getAddress1() +" , "+'\n'+buyersModel.getAddress2()+" - "+""+buyersModel.getPincode()+" . "));
             buyerViewModel.setSelectedBuyerPositionStringLiveData( String.valueOf(position));
             Toast.makeText(requireContext(), "Selected: " + selectedBuyer, Toast.LENGTH_SHORT).show();
         });
@@ -129,8 +225,14 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
         binding.selectBuyerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buyerViewModel.setSelectedBuyerLiveData(buyersModel);
-                dismiss();
+                if(buyersModel.getUniquekey().length()>0) {
+                    buyerViewModel.setSelectedBuyerLiveData(buyersModel);
+
+                    dismiss();
+                }
+                else {
+                    Toast.makeText(requireActivity(), "Please select a buyer", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

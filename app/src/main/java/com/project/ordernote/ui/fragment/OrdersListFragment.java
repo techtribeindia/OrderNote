@@ -4,11 +4,10 @@ import android.os.Bundle;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +24,6 @@ import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -176,14 +174,14 @@ public class OrdersListFragment extends Fragment {
             Date endDate = calendar.getTime();
             Timestamp endTimestamp = new Timestamp(endDate);
 
-            orderDetails_viewModel.getOrdersByStatusAndDate(status, startTimestamp, endTimestamp);
+            orderDetails_viewModel.getOrdersByStatus_DateAndVendorKey(status, startTimestamp, endTimestamp,"vendor_1");
 
             return;
         }
         orderDetails_viewModel.getOrdersByStatus(status);
     }
 
-    private void setActiveButton(Button activeButton) {
+    private void setActiveButton(TextView activeButton) {
         binding.pendingordersButton.setBackgroundResource(R.drawable.button_inactive);
         binding.rejectedordersButton.setBackgroundResource(R.drawable.button_inactive);
 

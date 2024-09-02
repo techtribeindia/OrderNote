@@ -1,7 +1,6 @@
 package com.project.ordernote.ui.fragment;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -20,7 +19,6 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -43,10 +41,10 @@ import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DatwWiseOrderScreenFragment#newInstance} factory method to
+ * Use the {@link DateWiseOrderScreenFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DatwWiseOrderScreenFragment extends DialogFragment {
+public class DateWiseOrderScreenFragment extends DialogFragment {
     private OrderDetails_ViewModel orderDetails_viewModel;
     private OrdersListAdapter ordersListAdapter;
     private OrderListItemDescFragment orderListItemDescFragment;
@@ -59,13 +57,13 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
     CardView dialogOrderStatusCard;
     TextView dialogOrderStatusText;
 
-    public DatwWiseOrderScreenFragment() {
+    public DateWiseOrderScreenFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static DatwWiseOrderScreenFragment newInstance() {
-        DatwWiseOrderScreenFragment fragment = new DatwWiseOrderScreenFragment();
+    public static DateWiseOrderScreenFragment newInstance() {
+        DateWiseOrderScreenFragment fragment = new DateWiseOrderScreenFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -92,7 +90,7 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_datw_wise_order_screen, container, false);
+        View view = inflater.inflate(R.layout.fragment_date_wise_order_screen, container, false);
 
 
         RelativeLayout backbut = view.findViewById(R.id.dialog_back);
@@ -195,7 +193,7 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
             Timestamp endTimestamp = new Timestamp(endDate);
 
             // Fetch data with the exact timestamps for the selected date
-            orderDetails_viewModel.getOrdersByStatusAndDate(status, startTimestamp, endTimestamp);
+            orderDetails_viewModel.getOrdersByStatus_DateAndVendorKey(status, startTimestamp, endTimestamp,"vendor_1");
 
     }
 
