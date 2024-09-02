@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -55,7 +56,8 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
     private TextView tvSelectedDate;
     private int year, month, day;
     private SessionManager sessionManager;
-
+    CardView dialogOrderStatusCard;
+    TextView dialogOrderStatusText;
 
     public DatwWiseOrderScreenFragment() {
         // Required empty public constructor
@@ -98,6 +100,8 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
         LinearLayout dateLayout = view.findViewById(R.id.date_layout);
         LinearLayout fetchDataLayout = view.findViewById(R.id.fetch_data_layout);
         RecyclerView OrderRecyclerView = view.findViewById(R.id.orders_recycler_view);
+        dialogOrderStatusCard = view.findViewById(R.id.dialog_orderstatus_card);
+        dialogOrderStatusText = view.findViewById(R.id.dialog_orderstatus_text);
 
         orderListItemDescFragment = new OrderListItemDescFragment();
         orderDetails_viewModel = new ViewModelProvider(requireActivity()).get(OrderDetails_ViewModel.class);
@@ -122,10 +126,14 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
             }
         });
         fetchDataLayout.setOnClickListener(v -> {
-            if (Objects.equals(selectedDate, ""))
+            if ((Objects.equals(selectedDate, ""))||(Objects.equals(selectedDate, null)))
             {
                 Toast.makeText(requireActivity(), "Please select order placed date", Toast.LENGTH_SHORT).show();
+                dialogOrderStatusCard.setVisibility(View.VISIBLE);
+                dialogOrderStatusText.setText(String.valueOf("Please select the Date and click on the Fetch Button to fetch the orders"));
+                return;
             }
+            orderDetailViewModel(Constants.placed_status);
         });
 
         try {
@@ -155,7 +163,7 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
             try {
                  selectedDate = sdf.parse(selectedDate1);
 
-                orderDetailViewModel(Constants.placed_status);
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -215,10 +223,22 @@ public class DatwWiseOrderScreenFragment extends DialogFragment {
                         Toast.makeText(requireActivity(), "Loading Orders", Toast.LENGTH_SHORT).show();
                         break;
                     case SUCCESS:
+                        if ((Objects.equals(selectedDate, ""))||(Objects.equals(selectedDate, null)))
+                        {
+                            dialogOrderStatusCard.setVisibility(View.VISIBLE);
+                            dialogOrderStatusText.setText(String.valueOf("Please select the Date and click on the Fetch Button to fetch the orders"));
+                        }
+                        else
+                        {
+                            dialogOrderStatusCard.setVisibility(View.GONE);
+                        }
+
                         Toast.makeText(requireActivity(), "Success in fetching orders", Toast.LENGTH_SHORT).show();
                         ordersListAdapter.setOrders(resource.data,"DatwWiseOrderScreen");
                         break;
                     case ERROR:
+                        dialogOrderStatusCard.setVisibility(View.VISIBLE);
+                        dialogOrderStatusText.setText(String.valueOf("There is no orders for the selected Date"));
                         Toast.makeText(requireActivity(), "Error in fetching orders", Toast.LENGTH_SHORT).show();
                         break;
                 }

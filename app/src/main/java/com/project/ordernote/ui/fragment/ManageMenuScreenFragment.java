@@ -91,6 +91,13 @@ public class ManageMenuScreenFragment extends DialogFragment {
             }
         });
 
+        binding.dialogBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDialog().dismiss();
+            }
+        });
+
         return binding.getRoot();
     }
 

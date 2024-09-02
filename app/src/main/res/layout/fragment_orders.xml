@@ -85,5 +85,12 @@
             android:layout_weight="1"
             android:padding="8dp"
             android:scrollbars="vertical" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_below="@+id/createOrder_button"
+            android:layout_marginTop="10dp"
+            android:background="@color/reddishgrey" />
     </LinearLayout>
+
 </FrameLayout>

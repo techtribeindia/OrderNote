@@ -82,6 +82,7 @@
                     android:textColor="@color/active_button_color"/>
             </LinearLayout>
         </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/orders_recycler_view"
             android:layout_width="match_parent"
@@ -89,6 +90,32 @@
             android:layout_weight="1"
             android:padding="8dp"
             android:scrollbars="vertical" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/dialog_orderstatus_card"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:padding="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            >
+            <TextView
+                android:id="@+id/dialog_orderstatus_text"
+                style="@style/SubTitleTextStyle1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Order Status Changed"
+                android:gravity="center"
+                />
+        </androidx.cardview.widget.CardView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_below="@+id/createOrder_button"
+            android:layout_marginTop="10dp"
+            android:background="@color/reddishgrey" />
     </LinearLayout>
 
 </FrameLayout>
