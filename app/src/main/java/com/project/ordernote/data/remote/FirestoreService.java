@@ -389,8 +389,6 @@ public class FirestoreService {
 
 
     public void fetchMenuItemsUsingVendorkey(String vendorkey, FirestoreCallback<List<MenuItems_Model>> callback) {
-
-
         db.collection(DatabaseReference.MenuItems_TableName)
                 .whereEqualTo(DatabaseReference.vendorkey_MenuItems, vendorkey)
                 .get()
