@@ -1,7 +1,6 @@
 package com.project.ordernote.data.model;
 
 import com.google.firebase.Timestamp;
-import com.project.ordernote.utils.WeightConverter;
 
 
 public class OrderItemDetails_Model {
@@ -14,7 +13,7 @@ public class OrderItemDetails_Model {
     String vendorkey ="";
     String vendorname = "";
     String orderid = "";
-    Timestamp orderplacedtime = null;
+    Timestamp orderplaceddate = null;
 
     double menuitemprice = 0 ;
     double totalprice = 0 ;
@@ -142,11 +141,11 @@ public class OrderItemDetails_Model {
         }
     }
 
-    public Timestamp getOrderplacedtime() {
-        return orderplacedtime;
+    public Timestamp getOrderplaceddate() {
+        return orderplaceddate;
     }
 
-    public void setOrderplacedtime(Timestamp orderplacedtime) {
-        this.orderplacedtime = orderplacedtime;
+    public void setOrderplaceddate(Timestamp orderplaceddate) {
+        this.orderplaceddate = orderplaceddate;
     }
 }

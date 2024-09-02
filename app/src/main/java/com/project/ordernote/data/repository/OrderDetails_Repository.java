@@ -6,12 +6,12 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.utils.ApiResponseState_Enum;
+import com.project.ordernote.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,11 +78,34 @@ public class OrderDetails_Repository {
 
     }
 
-    public MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp) {
+    public MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersByStatus_DateAndVendorKey(String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey) {
         MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersLiveData = new MutableLiveData<>();
         ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
 
-        firestoreService.getOrdersByStatusAndDate(status, startTimestamp, endTimestamp, new FirestoreService.FirestoreCallback<List<OrderDetails_Model>>() {
+        firestoreService.getOrdersByStatus_DateAndVendorKey(status, startTimestamp, endTimestamp,vendorkey, new FirestoreService.FirestoreCallback<List<OrderDetails_Model>>() {
+            @Override
+            public void onSuccess(List<OrderDetails_Model> result) {
+                if (result.isEmpty()) {
+                    ordersLiveData.postValue(ApiResponseState_Enum.error(Constants.noDataAvailable, result));
+                } else {
+                    ordersLiveData.postValue(ApiResponseState_Enum.success(result));
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                ordersLiveData.postValue(ApiResponseState_Enum.error(e.getMessage(), null));
+            }
+        });
+
+        return ordersLiveData;
+    }
+
+    public MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersByBuyerKey_Status_DateAndVendorKey(String buyerkey, String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey) {
+        MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersLiveData = new MutableLiveData<>();
+        ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
+
+        firestoreService.getOrdersByBuyerKey_Status_DateAndVendorKey(buyerkey ,status, startTimestamp, endTimestamp,vendorkey, new FirestoreService.FirestoreCallback<List<OrderDetails_Model>>() {
             @Override
             public void onSuccess(List<OrderDetails_Model> result) {
                 if (result.isEmpty()) {

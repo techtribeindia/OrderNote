@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.Firebase;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -295,7 +293,8 @@ public class FirestoreService {
                             callback.onSuccess(orders);
                         } else {
                             // Handle empty result
-                            callback.onFailure(new Exception("No orders found with status: " + status));
+                            callback.onSuccess(new ArrayList<>());
+                           // callback.onFailure(new Exception("No orders found with status: " + status));
                         }
                     } else {
 
@@ -304,7 +303,7 @@ public class FirestoreService {
                 });
     }
 
-    public void getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp, FirestoreCallback<List<OrderDetails_Model>> callback)
+    public void getOrdersByStatus_DateAndVendorKey(String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderDetails_Model>> callback)
     {
         db.collection(DatabaseReference.OrderDetails_TableName)
                 .whereEqualTo(DatabaseReference.status_OrderDetails, status)
@@ -323,7 +322,37 @@ public class FirestoreService {
                             }
                             callback.onSuccess(orders);
                         } else {
-                            callback.onFailure(new Exception("No orders found with status: " + status + " and date range."));
+                            callback.onSuccess(new ArrayList<>());
+                         //   callback.onFailure(new Exception("No orders found with status: " + status + " and date range."));
+                        }
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+    }
+
+    public void getOrdersByBuyerKey_Status_DateAndVendorKey(String buyerkey,String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderDetails_Model>> callback)
+    {
+        db.collection(DatabaseReference.OrderDetails_TableName)
+                .whereEqualTo(DatabaseReference.status_OrderDetails, status)
+                .whereEqualTo(DatabaseReference.buyerkey_OrderDetails, buyerkey)
+                .whereEqualTo(DatabaseReference.vendorkey, vendorkey)
+                .whereGreaterThanOrEqualTo(DatabaseReference.orderplaceddate_OrderDetails, startTimestamp)
+                .whereLessThanOrEqualTo(DatabaseReference.orderplaceddate_OrderDetails, endTimestamp)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            List<OrderDetails_Model> orders = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : querySnapshot) {
+                                OrderDetails_Model order = document.toObject(OrderDetails_Model.class);
+                                orders.add(order);
+                            }
+                            callback.onSuccess(orders);
+                        } else {
+                            callback.onSuccess(new ArrayList<>());
+                            //callback.onFailure(new Exception("No orders found with status: " + status + " and date range."));
                         }
                     } else {
                         callback.onFailure(task.getException());
@@ -393,10 +422,8 @@ public class FirestoreService {
 
 
     public void fetchMenuItemsUsingVendorkey(String vendorkey, FirestoreCallback<List<MenuItems_Model>> callback) {
-
-
-        db.collection("MenuItems")
-                .whereEqualTo("vendorkey", vendorkey)
+        db.collection(DatabaseReference.MenuItems_TableName)
+                .whereEqualTo(DatabaseReference.vendorkey_MenuItems, vendorkey)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -497,6 +524,70 @@ public class FirestoreService {
                 .set(buyersModel, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> callback.onSuccess(null))
                 .addOnFailureListener(callback::onFailure);
+    }
+
+    public void getOrderItemsByStatus_VendorAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderItemDetails_Model>> callback) {
+
+        db.collection(DatabaseReference.OrderItemDetails_TableName)
+                .whereEqualTo(DatabaseReference.vendorkey_OrderItemDetails, vendorkey)
+                .whereEqualTo(DatabaseReference.status_OrderDetails, status)
+                .whereGreaterThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, startTimestamp)
+                .whereLessThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, endTimestamp)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            List<OrderItemDetails_Model> orders = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : querySnapshot) {
+                                OrderItemDetails_Model orderItemDetailsModel = document.toObject(OrderItemDetails_Model.class);
+                                orders.add(orderItemDetailsModel);
+                            }
+                            callback.onSuccess(orders);
+                        } else {
+                            callback.onSuccess(new ArrayList<>());
+                           // callback.onFailure(new Exception("No orders found with status: " + status + " and date range."));
+                        }
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+
+
+    }
+
+    public void getOrderItemsByBuyerKeyStatus_DateAndVendorKey(String selectedBuyerKey, String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderItemDetails_Model>> callback) {
+
+
+        db.collection(DatabaseReference.OrderItemDetails_TableName)
+                .whereEqualTo(DatabaseReference.vendorkey_MenuItems, vendorkey)
+                .whereEqualTo(DatabaseReference.buyerkey_OrderItemDetails, selectedBuyerKey)
+                .whereGreaterThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, startTimestamp)
+                .whereLessThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, endTimestamp)
+                .whereEqualTo(DatabaseReference.status_OrderDetails, status)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            List<OrderItemDetails_Model> orders = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : querySnapshot) {
+                                OrderItemDetails_Model orderItemDetailsModel = document.toObject(OrderItemDetails_Model.class);
+                                orders.add(orderItemDetailsModel);
+                            }
+                            callback.onSuccess(orders);
+                        } else {
+                            callback.onSuccess(new ArrayList<>());
+                          //  callback.onFailure(new Exception("No orders found with status: " + status + " and date range."));
+                        }
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+
+
+
+
     }
 
 

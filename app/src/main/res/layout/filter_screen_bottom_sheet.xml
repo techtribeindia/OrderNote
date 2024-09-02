@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    tools:context=".ui.fragment.FilterScreenBottomSheetFragment">
+
+
+    <RelativeLayout
+        android:id="@+id/dialogContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+          android:background="@drawable/bottomsheet_dialog"
+        android:paddingTop="10dp">
+
+        <RelativeLayout
+            android:id="@+id/firstHeadinglayout"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginBottom="20dp"
+            android:paddingStart="17dp"
+            android:paddingEnd="17dp">
+
+            <View
+                android:id="@+id/overlayview_forswipe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:alpha=".7"
+                android:background="@color/transparent"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="40dp"
+                android:layout_height="4dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:alpha=".7"
+                android:background="@color/black" />
+
+
+            <TextView
+                android:id="@+id/itemType_Textview_bottomsheet"
+                style="@style/ScreenTitleTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider"
+                android:layout_marginTop="40dp"
+                android:text="Generate Sales Report" />
+
+            <TextView
+                android:id="@+id/firstInstruction_textview"
+                style="@style/GreyTextStyleSemiBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/itemType_Textview_bottomsheet"
+                android:layout_marginTop="4dp"
+                android:text="Select report type &amp; filter"
+                android:textSize="12sp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/closeImage_cardview"
+                android:layout_width="30dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="25dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha=".7"
+                    android:padding="8dp"
+                    android:src="@mipmap/close" />
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <View
+                android:id="@+id/first_divider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/firstInstruction_textview"
+                android:layout_marginTop="10dp"
+                android:background="@color/black" />
+
+
+        </RelativeLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/firstHeadinglayout"
+            android:layout_marginBottom="10dp"
+            android:scrollbars="none">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/name_filterLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="5dp"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="bottom"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/date_time_details"
+                            style="@style/SubTitleGreyTextStyle1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:text="Please select a file type"
+
+                            />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/round_lightredbackground"
+                        android:elevation="5dp">
+
+
+                        <TextView
+                            android:id="@+id/pdf_fileTypeTextview"
+                            style="@style/WhiteTextStyleNormal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".9"
+                            android:background="@drawable/round_redbackground_withoutpadding"
+                            android:gravity="center"
+                            android:padding="3dp"
+                            android:text="PDF"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+
+                        <TextView
+                            android:id="@+id/xls_fileTypeTextview"
+
+                            style="@style/WhiteTextStyleNormal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/round_lightredbackground"
+                            android:gravity="center"
+                            android:padding="3dp"
+                            android:text="XLS"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+
+                            />
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/filterSelectionLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/name_filterLayout"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <RadioGroup
+                            android:id="@+id/filterRadioGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:animateLayoutChanges="false"
+                             android:orientation="vertical">
+
+                            <RadioButton
+                                android:id="@+id/today_radiobutton"
+                                style="@style/BlackTextStyleBold_notosansmedium"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginTop="5dp"
+                                android:buttonTint="@color/red"
+                                android:text="Today (12AM - Now)" />
+
+                            <RadioButton
+                                android:id="@+id/yesterday_radiobutton"
+                                style="@style/BlackTextStyleBold_notosansmedium"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginTop="5dp"
+                                android:buttonTint="@color/red"
+                                android:text="Yesterday" />
+
+
+                            <RadioButton
+                                android:id="@+id/last7days_radiobutton"
+                                style="@style/BlackTextStyleBold_notosansmedium"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginTop="5dp"
+                                android:buttonTint="@color/red"                                android:checked="false"
+                                android:text="Last 7 Days (Aug19 - Aug25)" />
+
+
+                            <RadioButton
+                                android:id="@+id/buyerwise_radiobutton"
+                                style="@style/BlackTextStyleBold_notosansmedium"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginTop="5dp"
+                                android:buttonTint="@color/red"
+                                android:checked="false"
+                                android:text="Buyerwise report" />
+
+                            <LinearLayout
+                                android:id="@+id/buyer_and_date_SelectionLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+                                <LinearLayout
+                                    android:id="@+id/buyer_SelectionLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="58dp"
+                                        android:layout_marginStart="10dp"
+                                        android:layout_marginEnd="50dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:gravity="bottom"
+
+                                        >
+
+
+                                        <TextView
+                                            android:id="@+id/buyernameTextview"
+                                            style="@style/BlackEditTextStyleSemiBold"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="47dp"
+                                            android:gravity="center_vertical"
+
+                                            android:background="@drawable/rectangle_whitebackground_blackborder"
+                                            android:hint=" "
+                                            android:text="" />
+
+                                        <TextView
+                                            style="@style/GreyTextStyleSemiBold"
+                                            android:layout_width="105dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="20dp"
+                                            android:layout_marginTop="-10dp"
+                                            android:background="@color/white"
+                                            android:paddingStart="5dp"
+                                            android:text="Select Buyer"
+                                            android:translationZ="90dp" />
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/buyerwiseDateRangeSelectionLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:layout_width="160dp"
+                                        android:layout_height="58dp"
+                                        android:layout_marginStart="10dp"
+                                        android:layout_marginEnd="23dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:gravity="bottom"
+                                        android:id="@+id/startDatebuyerwiselayout"
+
+                                        >
+
+
+                                        <TextView
+                                            android:id="@+id/buyerwise_startDate"
+                                            style="@style/BlackEditTextStyleSemiBold"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="47dp"
+                                            android:background="@drawable/rectangle_whitebackground_blackborder"
+                                            android:hint=" "
+                                            android:gravity="center_vertical"
+                                            android:text=" " />
+
+                                        <TextView
+                                            style="@style/GreyTextStyleSemiBold"
+                                            android:layout_width="85dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="20dp"
+                                            android:layout_marginTop="-10dp"
+                                            android:background="@color/white"
+                                            android:paddingStart="5dp"
+                                            android:text="Start Date"
+                                            android:translationZ="90dp" />
+                                    </RelativeLayout>
+
+
+                                    <RelativeLayout
+                                        android:layout_width="160dp"
+                                        android:layout_height="58dp"
+                                        android:layout_marginEnd="40dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:gravity="bottom"
+                                        android:id="@+id/endDatebuyerwiselayout"
+
+                                        >
+
+
+                                        <TextView
+                                            android:id="@+id/buyerwise_endDate"
+                                            android:gravity="center_vertical"
+
+                                            style="@style/BlackEditTextStyleSemiBold"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="47dp"
+                                            android:background="@drawable/rectangle_whitebackground_blackborder"
+                                            android:hint=" "
+                                            android:text="" />
+
+                                        <TextView
+                                            style="@style/GreyTextStyleSemiBold"
+                                            android:layout_width="85dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="20dp"
+                                            android:layout_marginTop="-10dp"
+                                            android:background="@color/white"
+                                            android:paddingStart="5dp"
+                                            android:text="End Date"
+                                            android:translationZ="90dp" />
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <RadioButton
+                                android:id="@+id/customDateRangeRadioButton"
+                                style="@style/BlackTextStyleBold_notosansmedium"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginTop="5dp"
+                                android:buttonTint="@color/red"
+                                android:checked="false"
+                                android:text="Custom Date range" />
+
+                            <LinearLayout
+                                android:id="@+id/customDateRangeSelectionLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:visibility="visible">
+
+                                <RelativeLayout
+                                    android:layout_width="160dp"
+                                    android:layout_height="58dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:gravity="bottom"
+                                    android:id="@+id/startDateCustomDateRangelayout"
+                                    >
+
+
+                                    <TextView
+                                        android:id="@+id/customDate_startDate"
+                                        android:gravity="center_vertical"
+
+                                        style="@style/BlackEditTextStyleSemiBold"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="47dp"
+                                        android:background="@drawable/rectangle_whitebackground_blackborder"
+                                        android:hint=" "
+                                        android:text="" />
+
+                                    <TextView
+                                        style="@style/GreyTextStyleSemiBold"
+                                        android:layout_width="85dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="20dp"
+                                        android:layout_marginTop="-10dp"
+                                        android:background="@color/white"
+                                        android:paddingStart="5dp"
+                                        android:text="Start Date"
+                                        android:translationZ="90dp" />
+                                </RelativeLayout>
+
+
+                                <RelativeLayout
+                                    android:layout_width="160dp"
+                                    android:layout_height="58dp"
+                                    android:layout_marginEnd="40dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:gravity="bottom"
+                                    android:id="@+id/endDateCustomDateRangelayout"
+
+                                    >
+
+
+                                    <TextView
+                                        android:id="@+id/customDate_endDate"
+                                        android:gravity="center_vertical"
+
+                                        style="@style/BlackEditTextStyleSemiBold"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="47dp"
+                                        android:background="@drawable/rectangle_whitebackground_blackborder"
+                                        android:hint=" "
+                                        android:text="" />
+
+                                    <TextView
+                                        style="@style/GreyTextStyleSemiBold"
+                                        android:layout_width="85dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="20dp"
+                                        android:layout_marginTop="-10dp"
+                                        android:background="@color/white"
+                                        android:paddingStart="5dp"
+                                        android:text="End Date"
+                                        android:translationZ="90dp" />
+                                </RelativeLayout>
+
+
+                            </LinearLayout>
+
+                        </RadioGroup>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/generateButtonLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_below="@+id/filterSelectionLayout"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/rectangle_redbackground">
+
+                    <TextView
+                        style="@style/WhiteTextStyleBold"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Generate"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+
+
+</RelativeLayout>

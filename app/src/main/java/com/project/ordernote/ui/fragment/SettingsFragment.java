@@ -10,15 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.FragmentSettingsBinding;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
-
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,8 +59,8 @@ public class SettingsFragment extends Fragment {
         binding.dateWiseOrderScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatwWiseOrderScreenFragment datwWiseOrderScreenFragment = DatwWiseOrderScreenFragment.newInstance();
-                datwWiseOrderScreenFragment.show(getParentFragmentManager(),"");
+                DateWiseOrderScreenFragment dateWiseOrderScreenFragment = DateWiseOrderScreenFragment.newInstance();
+                dateWiseOrderScreenFragment.show(getParentFragmentManager(),"");
             }
         });
         binding.manageMenuScreen.setOnClickListener(new View.OnClickListener() {

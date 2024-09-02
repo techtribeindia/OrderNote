@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- State for checked radio button -->
+    <item android:state_checked="true">
+        <shape android:shape="oval">
+            <solid android:color="@color/red" /> <!-- Red when selected -->
+            <size android:width="24dp" android:height="24dp" />
+            <stroke android:width="2dp" android:color="@color/red" /> <!-- Optional border -->
+        </shape>
+    </item>
+
+    <!-- State for unchecked radio button -->
+    <item android:state_checked="false">
+        <shape android:shape="oval">
+            <solid android:color="@color/white" /> <!-- Gray when unselected -->
+            <size android:width="24dp" android:height="24dp" />
+            <stroke android:width=".3dp" android:color="@color/red" /> <!-- Optional border -->
+        </shape>
+    </item>
+
+</selector>

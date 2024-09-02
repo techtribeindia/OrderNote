@@ -24,6 +24,8 @@
         <item name="android:textColor">@color/black</item> <!-- Example: red color -->
     </style>
 
+
+
     <style name="RedDialogTitleTextStyle">
         <item name="android:fontFamily">@font/open_sans_bold</item>
         <item name="android:textSize">20sp</item>
@@ -46,6 +48,28 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item> <!-- Example: red color -->
     </style>
+
+    <style name="LargeBlackTextStyleBold_notosansextrabold">
+        <item name="android:fontFamily">@font/noto_sans_extrabold</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/black</item> <!-- Example: red color -->
+    </style>
+
+    <style name="BlackTextStyleBold_notosansmedium">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item> <!-- Example: red color -->
+    </style>
+
+
+
+    <style name="BlackText_noto_sans_regular">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item> <!-- Example: red color -->
+    </style>
+
+
 
     <style name="RedTextStyleSmall">
         u
@@ -83,5 +107,63 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/white</item> <!-- Example: red color -->
     </style>
+
+
+    <style name="WhiteTextStyleNormal">
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item> <!-- Example: red color -->
+    </style>
+
+
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/rise_up</item>
+        <item name="android:windowExitAnimation">@anim/rise_down</item>
+
+        <item name="android:background">@android:color/transparent</item>
+
+    </style>
+
+
+    <!-- Custom DatePickerDialog style -->
+    <style name="CustomDatePickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <!-- Customize the colors for the dialog -->
+        <item name="colorAccent">@color/red</item> <!-- Accent color for dialog -->
+        <item name="colorPrimary">@color/red</item> <!-- Color for dialog title and header -->
+        <item name="android:textColorPrimary">@color/black</item> <!-- Primary text color -->
+        <item name="android:textColorSecondary">#757575</item> <!-- Secondary text color -->
+
+        <!-- Custom button styles for OK and Cancel buttons -->
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+
+        <!-- Apply the custom DatePicker style -->
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerStyle</item>
+    </style>
+
+    <!-- Customize DatePicker itself -->
+    <style name="CustomDatePickerStyle" parent="android:Widget.Material.DatePicker">
+        <!-- Customize DatePicker header background -->
+        <item name="android:headerBackground">@color/red</item>
+        <!-- Apply custom text appearance for date picker -->
+        <item name="android:dateTextAppearance">@style/DateTextAppearance</item>
+    </style>
+
+    <!-- Text appearance for the dates in DatePicker -->
+    <style name="DateTextAppearance" parent="android:TextAppearance.Material">
+        <item name="android:textColor">@color/black</item> <!-- Date text color -->
+    </style>
+
+    <!-- Style for the positive button (OK button) -->
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/red</item> <!-- OK button text color -->
+    </style>
+
+    <!-- Style for the negative button (Cancel button) -->
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">#757575</item> <!-- Cancel button text color -->
+    </style>
+
 
 </resources>
