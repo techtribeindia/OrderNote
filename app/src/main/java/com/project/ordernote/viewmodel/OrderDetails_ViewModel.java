@@ -24,7 +24,6 @@ import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.calculations.MenuItemValueCalculator;
 import com.project.ordernote.utils.calculations.OrderValueCalculator;
 
-import java.text.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,6 +93,10 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
     }
 
     private void initObserver() {
+        if(orderDetailsLiveData == null){
+            orderDetailsLiveData = new MutableLiveData<>();
+
+        }
         ordersObserver = state -> orderDetailsLiveData.setValue(state);
     }
 
@@ -165,10 +168,14 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
 
  
   
-    public void getOrdersByStatusAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp) {
+    public void getOrdersByStatus_DateAndVendorKey(String status, Timestamp startTimestamp, Timestamp endTimestamp , String vendorkey) {
+        try {
 
-        LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> source = repository.getOrdersByStatusAndDate(status, startTimestamp, endTimestamp);
-        source.observeForever(ordersObserver);
+            LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> source = repository.getOrdersByStatus_DateAndVendorKey(status, startTimestamp, endTimestamp, vendorkey);
+            source.observeForever(ordersObserver);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -192,14 +199,8 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         return resultLiveData;
     }
 
-    public MutableLiveData<ApiResponseState_Enum<String>> rejectOrder(String orderId,String status) {
-        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.rejectOrder( orderId,status);
-        resultLiveData.observeForever(result -> {
-            if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
-                removeOrderFromLiveData(orderId);
-            }
-        });
-        return resultLiveData;
+    public MutableLiveData<ApiResponseState_Enum<String>> rejectOrder(String orderId, String status) {
+        return null;
     }
 
     public MutableLiveData<ApiResponseState_Enum<String>> cancelOrder(String orderId,String status) {
@@ -529,5 +530,11 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         }
 
 
+    }
+
+    public void getOrdersByBuyerKeyStatus_DateAndVendorKey(String selectedBuyerKey, String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey) {
+
+        LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> source = repository.getOrdersByBuyerKey_Status_DateAndVendorKey(selectedBuyerKey , status, startTimestamp, endTimestamp , vendorkey);
+        source.observeForever(ordersObserver);
     }
 }

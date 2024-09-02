@@ -206,7 +206,7 @@ public class CreateOrderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        binding.dateValueTextview.setText(String.valueOf(DateParserClass.getDate_ReadableFormat()));
+        binding.dateValueTextview.setText(String.valueOf(DateParserClass.getDateInStandardFormat()));
         setObserver();
         setAdapterForPaymentList();
         ordersViewModel.getItemDetailsArraylistViewModel().observeForever(itemAddedInCartObserver);

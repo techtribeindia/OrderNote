@@ -28,5 +28,8 @@
     <string name="add_new_buyer">Add New Buyer</string>
     <string name="update">Update </string>
     <string name="update_buyer">Update Buyer</string>
+    <string name="reports">Reports</string>
+    <string name="rupees_symbol">₹</string>
+    <string name="price_sample">₹ 0,00,000.00</string>
 
 </resources>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/reddishgrey"
-    tools:context=".ui.fragment.DatwWiseOrderScreenFragment">
+    tools:context=".ui.fragment.DateWiseOrderScreenFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

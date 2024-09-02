@@ -14,9 +14,27 @@
     <color name="transparentgrey">#EFEFFF</color>
     <color name="colorAccent">#2196F3</color>
     <color name="green">#2C9F1C</color>
-    <color name="backgroundgreen">#c4f4be</color>
+    <color name="lightgreen">#b0f0a8</color>
+    <color name="backgroundgreen">#ebfbe9</color>
+
+
+    <color name="yellow">#fd910e</color>
+    <color name="lightyellow">#fed966</color>
+    <color name="backgroundyellow">#fff4e6</color>
+
+
+    <color name="lightpurple">#bea6d9</color>
+    <color name="backgroundpurple">#eeebf4</color>
+    <color name="purple">#663f92</color>
+
+    <color name="lightblue">#f1f9fc</color>
+    <color name="blue">#2864e6</color>
+
+
+    <color name="lightred">#ea857b</color>
     <color name="backgroundred">#fbebe9</color>
     <color name="red">#d43122</color>
+    <color name="pinkishred">#d52048</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>

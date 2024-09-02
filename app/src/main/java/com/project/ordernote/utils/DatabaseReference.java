@@ -20,14 +20,32 @@ public class DatabaseReference{
     public static String truckno_OrderDetails = "truckno";
     public static String dispatchstatus_OrderDetails = "dispatchstatus";
     public static String orderplaceddate_OrderDetails = "orderplaceddate";
+    public static String buyerkey_OrderDetails= "buyerkey";
 
+
+    //orderItemDetails Table name
     public static String OrderItemDetails_TableName = "OrderItemDetails";
+    public static String quantity_OrderItemDetails = "quantity";
+    public static String grossweight_OrderItemDetails= "grossweight";
+    public static String price_OrderItemDetails = "price";
+    public static String totalprice_OrderDetailsOrderItemDetails = "totalprice";
+    public static String menuitemprice_OrderItemDetails = "menuitemprice";
+    public static String orderplacedDate_OrderItemDetails = "orderplaceddate";
+    public static String orderid_OrderItemDetails = "orderid";
+    public static String buyerkey_OrderItemDetails= "buyerkey";
+
+    public static String vendorname_OrderItemDetails = "vendorname";
+    public static String vendorkey_OrderItemDetails = "vendorkey";
+    public static String portionsize_OrderItemDetails = "portionsize";
+    public static String netweight_OrderItemDetails = "netweight";
+    public static String menutype_OrderItemDetails = "menutype";
+
+    public static String unqiuekey_OrderItemDetails = "unqiuekey";
+    public static String menuitemkey_OrderItemDetails = "menuitemkey";
+    public static String itemname_OrderItemDetails = "itemname";
 
 
-
-
-
-    //orderdetails Table name
+    //  Table name
     public static String BuyerDetails_TableName = "BuyerDetails";
     public static String MobileNo_BuyerDetails = "mobileno";
     public static String Uniquekey_BuyerDetails = "uniquekey";
@@ -61,6 +79,5 @@ public class DatabaseReference{
     public static String unitprice_MenuItems = "unitprice";
     public static String vendorkey_MenuItems = "vendorkey";
     public static String vendorname_MenuItems = "vendorname";
-=======
 
 }
