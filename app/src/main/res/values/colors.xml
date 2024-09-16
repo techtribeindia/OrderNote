@@ -10,6 +10,10 @@
     <color name="lavender">#d43122</color>
     <color name="transparent">#00000000</color>
 
+    <color name="colorTransparent">#CC000000</color>
+
+    <color name="TMCTransparentColor">#80000000</color>
+    <color name="TMCTransparentColor_Plain">#09000000</color>
 
     <color name="transparentgrey">#EFEFFF</color>
     <color name="colorAccent">#2196F3</color>

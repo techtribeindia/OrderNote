@@ -5,7 +5,7 @@ import com.google.firebase.Timestamp;
 public class ReportsFilterDetails_Model {
 
 
-    private String selectedBuyer =""  ;
+    private String selectedBuyerKey =""   ,selectedBuyerName = "" ;
     private String vendorkey =""  ;
     private String selectedFilterType =""  ;
     private String selectedFileType =""  ;
@@ -13,12 +13,20 @@ public class ReportsFilterDetails_Model {
     Timestamp endDate;
 
 
-    public String getSelectedBuyerKey() {
-        return selectedBuyer;
+    public String getSelectedBuyerName() {
+        return selectedBuyerName;
     }
 
-    public void setSelectedBuyer(String selectedBuyer) {
-        this.selectedBuyer = selectedBuyer;
+    public void setSelectedBuyerName(String selectedBuyerName) {
+        this.selectedBuyerName = selectedBuyerName;
+    }
+
+    public String getSelectedBuyerKey() {
+        return selectedBuyerKey;
+    }
+
+    public void setSelectedBuyerKey(String selectedBuyerKey) {
+        this.selectedBuyerKey = selectedBuyerKey;
     }
 
     public String getVendorkey() {
