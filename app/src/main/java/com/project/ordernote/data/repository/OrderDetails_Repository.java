@@ -77,6 +77,30 @@ public class OrderDetails_Repository {
         return ordersLiveData;
 
     }
+    public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersByDateAndVendorKey(Timestamp startdatee, Timestamp endDatee, String vendorkey) {
+        MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersLiveData = new MutableLiveData<>();
+        ordersLiveData.postValue(ApiResponseState_Enum.loading(null));
+
+        firestoreService.getOrdersByDateAndVendorKey( startdatee, endDatee,vendorkey, new FirestoreService.FirestoreCallback<List<OrderDetails_Model>>() {
+            @Override
+            public void onSuccess(List<OrderDetails_Model> result) {
+                if (result.isEmpty()) {
+                    ordersLiveData.postValue(ApiResponseState_Enum.error(Constants.noDataAvailable, result));
+                } else {
+                    ordersLiveData.postValue(ApiResponseState_Enum.success(result));
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                ordersLiveData.postValue(ApiResponseState_Enum.error(e.getMessage(), null));
+            }
+        });
+
+        return ordersLiveData;
+
+
+    }
 
     public MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersByStatus_DateAndVendorKey(String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey) {
         MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersLiveData = new MutableLiveData<>();
@@ -313,5 +337,6 @@ public class OrderDetails_Repository {
     public void createOrder(OrderDetails_Model order, FirestoreService.FirestoreCallback<Void> callback) {
         firestoreService.createOrder(order, callback);
     }
+
 
 }

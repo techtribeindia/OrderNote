@@ -86,6 +86,16 @@
         <item name="android:textColor">@color/black</item> <!-- Example: red color -->
     </style>
 
+
+
+    <style name="BlackTextStyleSemiBold_10sp">
+
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/black</item> <!-- Example: red color -->
+    </style>
+
+
     <style name="BlackEditTextStyleSemiBold">
 
         <item name="android:fontFamily">@font/open_sans_semibold</item>

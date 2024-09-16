@@ -2,7 +2,10 @@ package com.project.ordernote.utils;
 
 import static com.project.ordernote.utils.Constants.dateMonth;
 import static com.project.ordernote.utils.Constants.newDate_Time_Format;
+import static com.project.ordernote.utils.Constants.readableDateTimeFormat;
 import static com.project.ordernote.utils.Constants.standardDateFormat;
+import static com.project.ordernote.utils.Constants.standardDateTimeFormat;
+import static com.project.ordernote.utils.Constants.standardTimeFormat;
 import static com.project.ordernote.utils.Constants.timeZone_Format;
 
 import android.app.DatePickerDialog;
@@ -30,7 +33,14 @@ import java.util.TimeZone;
 public class DateParserClass {
 
 
-
+    public static String getDateTimeInReadableFormat()
+    {
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat(readableDateTimeFormat,Locale.ENGLISH);
+        df.setTimeZone(TimeZone.getTimeZone(timeZone_Format));
+        String CurrentDate_time = df.format(c);
+        return CurrentDate_time;
+    }
     public static String getDateInStandardFormat()
     {
         Date c = Calendar.getInstance().getTime();
@@ -41,6 +51,16 @@ public class DateParserClass {
     }
 
 
+    public static String getTime_newFormat() {
+
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat(standardTimeFormat,Locale.ENGLISH);
+        df.setTimeZone(TimeZone.getTimeZone(timeZone_Format));
+        String CurrentDate_time = df.format(c);
+        return CurrentDate_time;
+
+    }
+
     public static String getCurrentDateAndMonth()
     {
         Date c = Calendar.getInstance().getTime();
@@ -50,17 +70,30 @@ public class DateParserClass {
         return CurrentDate_time;
     }
 
+    public static String convertGivenTimeStampToDate(Timestamp date) {
+        Date datevalue = date.toDate();
+
+        // Optionally, format the Date to a specific string format if needed
+        SimpleDateFormat sdf = new SimpleDateFormat(standardDateFormat, Locale.getDefault());
+        String formattedDate = sdf.format(datevalue);
+
+        System.out.println("Formatted Date: " + formattedDate);
+        return formattedDate;
+    }
+
+
 
     public static Timestamp convertGivenDateToTimeStamp(String date)
     {
-        SimpleDateFormat sdf = new SimpleDateFormat(standardDateFormat, Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat(standardDateTimeFormat, Locale.getDefault());
         Date selectedDate = null;
         try {
             selectedDate = sdf.parse(date);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
+        Timestamp startTimestamp = new Timestamp(selectedDate);
+        return startTimestamp;
      //   Calendar calendar = Calendar.getInstance();
      //   calendar.setTime(selectedDate);
 
@@ -70,8 +103,8 @@ public class DateParserClass {
      //   calendar.set(Calendar.SECOND, 0);
      //   calendar.set(Calendar.MILLISECOND, 0);
        // Date startDate = calendar.getTime();
-        Timestamp startTimestamp = new Timestamp(selectedDate);
-        return startTimestamp;
+       // Timestamp startTimestamp = new Timestamp(selectedDate);
+      //  return startTimestamp;
     }
 
 
@@ -101,7 +134,37 @@ public class DateParserClass {
          return df1.format(c1);
     }
 
+    public static String getFirstDayOfWeek(String inputDate) {
 
+        SimpleDateFormat outputFormat = new SimpleDateFormat(standardDateFormat);
+
+        SimpleDateFormat sdf = new SimpleDateFormat(standardDateFormat);
+        Calendar calendar = Calendar.getInstance();
+        try {
+            Date date = sdf.parse(inputDate);
+
+            // Get the first day of the week
+
+        calendar.setTime(date);
+
+        // Set the first day of the week as per your locale or preference
+        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+
+        // Get the first day of the current week
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+
+
+
+
+
+            return outputFormat.format(calendar.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return outputFormat.format(calendar.getTime());
+
+
+        }
+    }
     public static  String getDayString(int value) {
         if (value == 1) {
             return "Sun";
@@ -249,6 +312,8 @@ public class DateParserClass {
         }
         return "";
     }
+
+
 
 
 /*

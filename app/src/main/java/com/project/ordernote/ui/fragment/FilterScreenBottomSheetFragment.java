@@ -385,43 +385,44 @@ public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  
 
                  if(todayFilterOptionSelected){
                      filterValue.setSelectedFilterType(Constants.today_filter);
-                    filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateInStandardFormat()));
-                     filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateTextFor_OldDaysfrom_given(-1, DateParserClass.getDateInStandardFormat())));
+                    // Log.i("Today  - Start Date : ",String.valueOf(DateParserClass.getDateInStandardFormat()));
+                    //Log.i("Today  - End Date : ",String.valueOf(DateParserClass.getDateInStandardFormat()));
+                    filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateInStandardFormat()+" 00:00:00"));
+                     filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateInStandardFormat()+" 23:59:59"));
                  //   Toast.makeText(requireContext(), " Today ", Toast.LENGTH_SHORT).show();
 
                 }
                 else if (yesterdayFilterOptionSelected) {
-                    filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateTextFor_OldDaysfrom_given(1,DateParserClass.getDateInStandardFormat())));
-                    filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateTextFor_OldDaysfrom_given(1, DateParserClass.getDateInStandardFormat())));
+
+                     filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateTextFor_OldDaysfrom_given(1,DateParserClass.getDateInStandardFormat())+" 00:00:00"));
+                    filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateTextFor_OldDaysfrom_given(1, DateParserClass.getDateInStandardFormat())+" 23:59:59"));
                      filterValue.setSelectedFilterType(Constants.yesterday_filter);
                    // Toast.makeText(requireContext(), " Yesterday ", Toast.LENGTH_SHORT).show();
 
                 }
                 else if (last7daysFilterOptionSelected) {
 
-                    filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateTextFor_OldDaysfrom_given(8 ,  DateParserClass.getDateInStandardFormat())));
-                    filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateInStandardFormat()));
+                    filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateTextFor_OldDaysfrom_given(8 ,  DateParserClass.getDateInStandardFormat())+" 00:00:00"));
+                    filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateInStandardFormat()+" 23:59:59"));
 
                      filterValue.setSelectedFilterType(Constants.last7day_filter);
                     //Toast.makeText(requireContext(), " last7days ", Toast.LENGTH_SHORT).show();
 
                 }
                 else if (buyerAndDateFilterOptionSelected) {
-                    filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(startDate));
-                    filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(endDate));
+                    filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(startDate+" 00:00:00"));
+                    filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(endDate+" 23:59:59"));
                     filterValue.setSelectedFilterType(Constants.buyerwise_filter);
-                    filterValue.setSelectedBuyer(buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getUniquekey());
-                 //   Toast.makeText(requireContext(), " Buyer wise  ", Toast.LENGTH_SHORT).show();
-                 //   Toast.makeText(requireContext(), " start date  "+startDate +"end date "+endDate, Toast.LENGTH_SHORT).show();
-                 //   Toast.makeText(requireContext(), " buyer  "+buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getName()  , Toast.LENGTH_SHORT).show();
+                    filterValue.setSelectedBuyerKey(buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getUniquekey());
+                     filterValue.setSelectedBuyerName(buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getName());
 
                 }
                 else if (customDateFilterOptionSelected) {
                   //  Toast.makeText(requireContext(), " Custom date  ", Toast.LENGTH_SHORT).show();
                 //   Toast.makeText(requireContext(), " start date  "+startDate +"end date "+endDate, Toast.LENGTH_SHORT).show();
                     filterValue.setSelectedFilterType(Constants.customdatewise_filter);
-                    filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(startDate));
-                    filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(endDate));
+                    filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(startDate+" 00:00:00"));
+                    filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(endDate+" 23:59:59"));
                 }
                 if (filterListener != null) {
                     filterListener.onApplyFilters(filterValue);
@@ -515,7 +516,7 @@ public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  
 
             }
         });
-
+        pdf_fileTypeText.performClick();
         xls_fileTypeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

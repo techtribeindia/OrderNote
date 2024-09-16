@@ -13,6 +13,9 @@ public class Constants{
     //Date
      public static String timeZone_Format = "Asia/Kolkata";
      public static String standardDateFormat = "dd/MM/yyyy";
+    public static String standardDateTimeFormat = "dd/MM/yyyy HH:mm:ss";
+    public static String standardTimeFormat = "HH:mm:ss";
+    public static String readableDateTimeFormat = "EEE, d MMM yyyy HH:mm:ss";
 
      public static String dateMonth = "ddMMM";
 
@@ -31,8 +34,8 @@ public class Constants{
     public static final String today_filter = "TODAY";
     public static final String yesterday_filter = "YESTERDAY";
     public static final String last7day_filter = "LAST7DAY";
-    public static final String buyerwise_filter = "YESTERDAY";
-    public static final String customdatewise_filter = "YESTERDAY";
+    public static final String buyerwise_filter = "BUYERWISE";
+    public static final String customdatewise_filter = "CUSTOMDATE";
 
 
 
@@ -52,18 +55,36 @@ public class Constants{
     public static final String created_status = "CREATED";
     public static final String rejected_status = "REJECTED";
     public static final String placed_status = "PLACED";
+    public static final String cancelled_status = "CANCELLED";
+
     public static final String editapproved_dispatchstatus = "EDITAPPROVED";
     public static final String dispatched_dispatchstatus = "DISPATCHED";
     public static final String editrequested_dispatchstatus = "EDITREQUESTED";
     public static final String cancelled_dispatchstatus = "CANCELLED";
 
-
+    public static final String share_file = "SHARE";
+    public static final String view_file = "VIEW";
 
     //MenuItems table
     public static final String unitprice_itemtype = "UNITPRICE";
     public static final String priceperkg_itemtype = "PRICEPERKG";
     public static final boolean true_showforbilling = true;
     public static final boolean false_showforbilling = false;
+
+
+
+    //reports feature
+    public static final String datewiseConsolidatedPDF = "DATEWISE_CONSOLIDATED_PDF";
+    public static final String buyerwiseConsolidatedPDF = "BUYERWISE_CONSOLIDATED_PDF";
+
+
+    public static final String today_statuswise_pdf = "TODAY_STATUSWISE_PDF";
+    public static final String week_statuswise_pdf = "WEEK_STATUSWISE_PDF";
+
+
+    public static final String datewiseConsolidatedXLS = "DATEWISE_CONSOLIDATED_XLS";
+    public static final String buyerwiseConsolidatedXLS = "BUYERWISE_CONSOLIDATED_XLS";
+
 
     // Constants for processing
     public static final String noDataAvailable = "No data available";
@@ -74,5 +95,8 @@ public class Constants{
     public static final String  buyerkey = "BuyerKey";
     public static final String add = "ADD";
     public static final String update = "UPDATE";
+
+
+
 
 }
