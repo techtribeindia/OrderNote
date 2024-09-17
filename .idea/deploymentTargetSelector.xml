@@ -4,21 +4,14 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-
-
-
-        <DropdownSelection timestamp="2024-08-06T06:35:40.804374400Z">
-
-        <option name="selectionMode" value="DIALOG" />
-
-        <DropdownSelection timestamp="2024-08-07T15:25:12.058150700Z">
-
+        <DropdownSelection timestamp="2024-09-02T17:53:45.673199400Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=510240912096" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=RZCW12KVFTP" />
             </handle>
           </Target>
         </DropdownSelection>
+
         <DialogSelection>
           <targets>
             <Target type="DEFAULT_BOOT">
@@ -35,6 +28,7 @@
         </DialogSelection>
 
        </SelectionState>
+
     </selectionStates>
   </component>
 </project>
