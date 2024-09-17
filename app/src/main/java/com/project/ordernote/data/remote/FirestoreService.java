@@ -1,7 +1,5 @@
 package com.project.ordernote.data.remote;
 
-import android.app.Activity;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.firebase.Timestamp;
@@ -303,6 +301,34 @@ public class FirestoreService {
                 });
     }
 
+
+    public void getOrdersByDateAndVendorKey(Timestamp startdatee, Timestamp endDatee, String vendorkey, FirestoreCallback<List<OrderDetails_Model>> callback) {
+        {
+            db.collection(DatabaseReference.OrderDetails_TableName)
+                     .whereEqualTo(DatabaseReference.vendorkey, vendorkey)
+                    .whereGreaterThanOrEqualTo(DatabaseReference.orderplaceddate_OrderDetails, startdatee)
+                    .whereLessThanOrEqualTo(DatabaseReference.orderplaceddate_OrderDetails, endDatee)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            QuerySnapshot querySnapshot = task.getResult();
+                            if (!querySnapshot.isEmpty()) {
+                                List<OrderDetails_Model> orders = new ArrayList<>();
+                                for (QueryDocumentSnapshot document : querySnapshot) {
+                                    OrderDetails_Model order = document.toObject(OrderDetails_Model.class);
+                                    orders.add(order);
+                                }
+                                callback.onSuccess(orders);
+                            } else {
+                                callback.onSuccess(new ArrayList<>());
+                                //   callback.onFailure(new Exception("No orders found with status: " + status + " and date range."));
+                            }
+                        } else {
+                            callback.onFailure(task.getException());
+                        }
+                    });
+        }
+    }
     public void getOrdersByStatus_DateAndVendorKey(String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderDetails_Model>> callback)
     {
         db.collection(DatabaseReference.OrderDetails_TableName)
@@ -330,7 +356,6 @@ public class FirestoreService {
                     }
                 });
     }
-
     public void getOrdersByBuyerKey_Status_DateAndVendorKey(String buyerkey,String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderDetails_Model>> callback)
     {
         db.collection(DatabaseReference.OrderDetails_TableName)
@@ -525,13 +550,38 @@ public class FirestoreService {
                 .addOnSuccessListener(aVoid -> callback.onSuccess(null))
                 .addOnFailureListener(callback::onFailure);
     }
+    public void getOrderItemsByDateAndVendorKey(Timestamp startdatee, Timestamp endDatee, String vendorkey, FirestoreCallback<List<OrderItemDetails_Model>> callback) {
 
-    public void getOrderItemsByStatus_VendorAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderItemDetails_Model>> callback) {
+        db.collection(DatabaseReference.OrderItemDetails_TableName)
+                 .whereGreaterThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, startdatee)
+                .whereLessThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, endDatee)
+                .whereEqualTo(DatabaseReference.vendorkey_OrderItemDetails, vendorkey)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            List<OrderItemDetails_Model> orders = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : querySnapshot) {
+                                OrderItemDetails_Model orderItemDetailsModel = document.toObject(OrderItemDetails_Model.class);
+                                orders.add(orderItemDetailsModel);
+                            }
+                            callback.onSuccess(orders);
+                        } else {
+                            callback.onSuccess(new ArrayList<>());
+                            // callback.onFailure(new Exception("No orders found with status: " + status + " and date range."));
+                        }
+                    } else {
+                          callback.onFailure(task.getException());
+                    }
+                });
+
+    }
+   /* public void getOrderItemsByVendorAndDate(Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderItemDetails_Model>> callback) {
 
         db.collection(DatabaseReference.OrderItemDetails_TableName)
                 .whereEqualTo(DatabaseReference.vendorkey_OrderItemDetails, vendorkey)
-                .whereEqualTo(DatabaseReference.status_OrderDetails, status)
-                .whereGreaterThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, startTimestamp)
+                 .whereGreaterThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, startTimestamp)
                 .whereLessThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, endTimestamp)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -556,16 +606,14 @@ public class FirestoreService {
 
     }
 
-    public void getOrderItemsByBuyerKeyStatus_DateAndVendorKey(String selectedBuyerKey, String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderItemDetails_Model>> callback) {
+    public void getOrderItemsByDateAndVendorKey( Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderItemDetails_Model>> callback) {
 
 
         db.collection(DatabaseReference.OrderItemDetails_TableName)
-                .whereEqualTo(DatabaseReference.vendorkey_MenuItems, vendorkey)
-                .whereEqualTo(DatabaseReference.buyerkey_OrderItemDetails, selectedBuyerKey)
-                .whereGreaterThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, startTimestamp)
+                 .whereGreaterThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, startTimestamp)
                 .whereLessThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, endTimestamp)
-                .whereEqualTo(DatabaseReference.status_OrderDetails, status)
-                .get()
+                .whereEqualTo(DatabaseReference.vendorkey_MenuItems, vendorkey)
+                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         QuerySnapshot querySnapshot = task.getResult();
@@ -589,6 +637,10 @@ public class FirestoreService {
 
 
     }
+
+    */
+
+
 
 
     public interface FirestoreCallback<T> {

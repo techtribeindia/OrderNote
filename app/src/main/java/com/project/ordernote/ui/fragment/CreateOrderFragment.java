@@ -714,7 +714,7 @@ public class CreateOrderFragment extends Fragment {
 
 
 
-            orderItemDetailsViewModel.addItemDetailsEntryInDBFromLOOP(ordersViewModel.getItemDetailsArraylistViewModel().getValue() , "vendor_1" , "Ponrathi Traders" , orderDetailsModel.getOrderid() , orderDetailsModel.getOrderplaceddate());
+            orderItemDetailsViewModel.addItemDetailsEntryInDBFromLOOP(ordersViewModel.getItemDetailsArraylistViewModel().getValue() , "vendor_1" , "Ponrathi Traders" , orderDetailsModel.getOrderid() , orderDetailsModel.getOrderplaceddate() , buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue());
 
             ordersViewModel.createOrderInDb(orderDetailsModel, new FirestoreService.FirestoreCallback<Void>() {
                 @Override
@@ -896,7 +896,7 @@ public class CreateOrderFragment extends Fragment {
                 for (int i = 0; i < totalItems; i++) {
                     View listItem = createOrderCartItemAdapter.createViewHolder(binding.itemDetailsRecyclerview, createOrderCartItemAdapter.getItemViewType(i)).itemView;
                     listItem.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                    totalHeight += listItem.getMeasuredHeight()+50;
+                    totalHeight += listItem.getMeasuredHeight()+10;
                 }
 
                 // Add some padding or spacing if needed

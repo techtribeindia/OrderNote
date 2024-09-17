@@ -17,14 +17,18 @@
         android:layout_marginEnd="10dp"
         android:padding="5dp"
         android:orientation="horizontal">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    android:orientation="horizontal"></LinearLayout>
      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
          android:orientation="vertical">
 
-            <LinearLayout
+         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -39,7 +43,7 @@
 
 
     </LinearLayout>
-           <LinearLayout
+          <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -109,14 +113,15 @@
 
     </LinearLayout>
 
+
+
+    </LinearLayout>
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:layout_marginTop="15dp"
-        android:visibility="gone"
+        android:layout_marginTop="5dp"
+        android:visibility="visible"
         android:background="@color/reddishgrey"/>
-
-    </LinearLayout>
 </LinearLayout>
 

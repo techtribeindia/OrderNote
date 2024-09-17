@@ -11,8 +11,24 @@
             </handle>
           </Target>
         </DropdownSelection>
-        <DialogSelection />
-      </SelectionState>
+
+        <DialogSelection>
+          <targets>
+            <Target type="DEFAULT_BOOT">
+              <handle>
+                <DeviceId pluginId="PhysicalDevice" identifier="serial=RZCW12KVFTP" />
+              </handle>
+            </Target>
+            <Target type="DEFAULT_BOOT">
+              <handle>
+                <DeviceId pluginId="PhysicalDevice" identifier="serial=510240912096" />
+              </handle>
+            </Target>
+          </targets>
+        </DialogSelection>
+
+       </SelectionState>
+
     </selectionStates>
   </component>
 </project>

@@ -12,6 +12,16 @@ public class OrderItemDetails_Model {
     String portionsize = "" ;
     String vendorkey ="";
     String vendorname = "";
+
+  /*  String buyername ="";
+    String buyeraddress ="";
+     String buyerkey = "";
+    String buyermobileno = "";
+    String status = "";
+
+   */
+
+
     String orderid = "";
     Timestamp orderplaceddate = null;
 
@@ -22,6 +32,50 @@ public class OrderItemDetails_Model {
     int quantity = 0;
 
 
+    /*
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getBuyername() {
+        return buyername;
+    }
+
+    public void setBuyername(String buyername) {
+        this.buyername = buyername;
+    }
+
+    public String getBuyeraddress() {
+        return buyeraddress;
+    }
+
+    public void setBuyeraddress(String buyeraddress) {
+        this.buyeraddress = buyeraddress;
+    }
+
+    public String getBuyermobileno() {
+        return buyermobileno;
+    }
+
+    public void setBuyermobileno(String buyermobileno) {
+        this.buyermobileno = buyermobileno;
+    }
+
+
+    public String getBuyerkey() {
+        return buyerkey;
+    }
+
+    public void setBuyerkey(String buyerkey) {
+        this.buyerkey = buyerkey;
+    }
+
+
+     */
     public double getMenuitemprice() {
         return menuitemprice;
     }

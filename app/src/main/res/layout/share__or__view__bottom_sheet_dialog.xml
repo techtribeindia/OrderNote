@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorTransparent"
+
+    tools:context=".ui.fragment.Share_Or_View_BottomSheetDialogFragment">
+
+
+    <LinearLayout
+        android:id="@+id/dialogContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+          android:paddingBottom="50dp"
+        android:background="@drawable/bottomsheet_dialog"
+        android:paddingTop="10dp">
+
+
+        <LinearLayout
+            android:id="@+id/fileTypeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:visibility="gone"
+            android:layout_marginEnd="5dp"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/date_time_details"
+                    style="@style/GreyTextStyleSemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:text="Please select a file type"
+
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="2"
+                android:background="@drawable/round_lightredbackground"
+                android:padding="6dp"
+                android:elevation="5dp">
+
+
+                <TextView
+                    android:id="@+id/pdf_fileTypeTextview"
+                    style="@style/WhiteTextStyleNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".9"
+                    android:background="@drawable/round_redbackground_withoutpadding"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:text="PDF"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+
+                <TextView
+                    android:id="@+id/xls_fileTypeTextview"
+
+                    style="@style/WhiteTextStyleNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_lightredbackground"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:text="XLS"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+
+                    />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/circlePendingOrderImage"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="22dp"
+            android:layout_gravity="center"
+             app:cardBackgroundColor="@color/lightgreen"
+            app:cardCornerRadius="35dp">
+
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:background="@color/lightgreen"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/tickmark" />
+
+
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="Report downloaded"
+            style="@style/BlackTextStyleSemiBold"
+            android:textSize="15sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="7dp"
+            android:layout_gravity="center"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_marginTop="10dp"
+            android:alpha=".9"
+            android:textSize="12sp"
+            android:text="File is saved on your device. You can view this from\n anytime using a PDF viewer ."
+            android:gravity="center"
+             android:layout_marginStart="7dp"
+            android:layout_gravity="center"
+            />
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/viewFileButton"
+                android:background="@drawable/round_redbackground_withoutpadding"
+                android:orientation="horizontal">
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:text="View file"
+                     style="@style/WhiteTextStyleBold"
+                    android:textSize="12sp"
+                     android:layout_gravity="center"
+                    />
+
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:id="@+id/shareFileButton"
+
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="30dp"
+                android:background="@drawable/round_whitebackground_withblackborder"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                     android:scaleType="fitCenter"
+                    android:src="@mipmap/shareicon" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:text="Share file"
+                    android:layout_marginStart="8dp"
+                    style="@style/BlackTextStyleSemiBold"
+                    android:textSize="12sp"
+
+                    android:layout_gravity="center"/>
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

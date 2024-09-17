@@ -34,9 +34,12 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
     private final OrderDetails_Repository repository;
     public String vendorkey="";
     private MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> orderDetailsLiveData;
+    private MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> orderDetailsForReportScreenData;
+
     private MutableLiveData<String> selectedOrderJson;
 
     private Observer<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersObserver;
+    private Observer<ApiResponseState_Enum<List<OrderDetails_Model>>> ordersforReportScreenObserver;
 
     private MutableLiveData<List<ItemDetails_Model>> itemDetailsArrayListLiveData;
 
@@ -92,17 +95,42 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         }
     }
 
-    private void initObserver() {
+      private void initObserver() {
         if(orderDetailsLiveData == null){
             orderDetailsLiveData = new MutableLiveData<>();
 
         }
         ordersObserver = state -> orderDetailsLiveData.setValue(state);
+        if(orderDetailsForReportScreenData == null){
+            orderDetailsForReportScreenData = new MutableLiveData<>();
+        }
+        ordersforReportScreenObserver = reportScreenstate -> orderDetailsForReportScreenData.setValue(reportScreenstate);
     }
 
     public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersByStatusFromViewModel() {
         return orderDetailsLiveData;
     }
+
+
+
+
+    public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersListFromViewModel() {
+        if(orderDetailsLiveData == null){
+            orderDetailsLiveData = new MutableLiveData<>();
+        }
+        return orderDetailsLiveData;
+    }
+
+
+
+    public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersListForReportDetailsFromViewModel() {
+        if(orderDetailsForReportScreenData == null){
+            orderDetailsForReportScreenData = new MutableLiveData<>();
+        }
+        return orderDetailsForReportScreenData;
+    }
+
+
 
     public void clearFromViewModel()
     {
@@ -148,13 +176,6 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
     }
 
 
-    public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrdersListFromViewModel() {
-        if(orderDetailsLiveData == null){
-            orderDetailsLiveData = new MutableLiveData<>();
-             }
-        return orderDetailsLiveData;
-    }
-
     public void setDisountValue(double discountAmount) {
         if(discountLiveData == null){
             discountLiveData = new MutableLiveData<>();
@@ -177,11 +198,6 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
-
-
-
-
-
 
     public void setSelectedOrder(OrderDetails_Model order) {
         Gson gson = new Gson();
@@ -536,5 +552,11 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
 
         LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> source = repository.getOrdersByBuyerKey_Status_DateAndVendorKey(selectedBuyerKey , status, startTimestamp, endTimestamp , vendorkey);
         source.observeForever(ordersObserver);
+    }
+
+    public void getOrdersByDateAndVendorKey(Timestamp startdatee, Timestamp endDatee, String vendorkey) {
+
+        LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> source = repository.getOrdersByDateAndVendorKey(startdatee , endDatee, vendorkey);
+        source.observeForever(ordersforReportScreenObserver);
     }
 }

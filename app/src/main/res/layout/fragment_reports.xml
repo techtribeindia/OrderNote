@@ -8,6 +8,17 @@
      tools:context=".ui.fragment.ReportsFragment">
 
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:paddingBottom="160dp"
+
+        android:layout_height="match_parent">
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -48,6 +59,7 @@
 
         <RelativeLayout
             android:layout_width="40dp"
+            android:id="@+id/refreshLayout"
              android:layout_height="40dp">
             <ImageView
                 android:layout_width="20dp"
@@ -60,6 +72,7 @@
 
         <RelativeLayout
             android:layout_width="40dp"
+            android:id="@+id/downloadReportScrenData"
             android:layout_height="40dp">
             <ImageView
                 android:layout_width="26dp"
@@ -119,7 +132,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="44dp"
             android:elevation="5dp"
             android:layout_weight="2"
             android:layout_marginTop="3dp"
@@ -132,12 +145,14 @@
 
 
             <TextView
+                android:id="@+id/today_CommonFilter"
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Today"
                 android:layout_weight=".9"
                 android:padding="3dp"
-                android:textSize="12sp"
+                android:textSize="10sp"
 
                 android:textColor="@color/white"
                 style="@style/WhiteTextStyleNormal"
@@ -147,6 +162,7 @@
 
 
             <TextView
+                android:id="@+id/week_CommonFilter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Week"
@@ -154,7 +170,7 @@
                 android:padding="3dp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:background="@drawable/round_lightredbackground"
                 style="@style/WhiteTextStyleNormal"
 
@@ -221,6 +237,7 @@
                                     android:layout_width="20dp"
                                     android:layout_height="15dp"
                                     android:layout_marginTop="10dp"
+                                    android:visibility="gone"
                                     android:layout_alignParentEnd="true"
                                      android:layout_marginEnd="10dp"
                                     android:src="@mipmap/yellow_right_arrow" />
@@ -256,7 +273,7 @@
                                     android:layout_marginStart="5dp"
                                     android:layout_toEndOf="@+id/circlePendingOrderImage"
                                     android:layout_weight="1"
-                                    android:text="34 Orders" />
+                                    android:text="0 Orders" />
 
 
 
@@ -322,10 +339,11 @@
                                 android:background="@drawable/oval_green_background"/>
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="15dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_width="19dp"
+                                android:layout_height="9dp"
                                 android:layout_alignParentEnd="true"
+                                android:layout_marginTop="10dp"
+                                android:visibility="gone"
                                 android:layout_marginEnd="10dp"
                                 android:src="@mipmap/greenrightarrowthick" />
 
@@ -360,7 +378,7 @@
                                 android:layout_marginStart="5dp"
                                 android:layout_toEndOf="@+id/circleAcceptedOrderImage"
                                 android:layout_weight="1"
-                                android:text="34 Orders" />
+                                android:text="0 Orders" />
 
 
 
@@ -441,6 +459,8 @@
                                 android:layout_marginTop="10dp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginEnd="10dp"
+                                android:visibility="gone"
+
                                 android:src="@mipmap/red_right_arrow" />
 
 
@@ -476,7 +496,7 @@
                                 android:layout_marginStart="5dp"
                                 android:layout_toEndOf="@+id/circleRejectedOrderImage"
                                 android:layout_weight="1"
-                                android:text="34 Orders" />
+                                android:text="0 Orders" />
 
 
 
@@ -545,6 +565,8 @@
                                 android:layout_width="20dp"
                                 android:layout_height="15dp"
                                 android:layout_marginTop="10dp"
+                                android:visibility="gone"
+
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginEnd="10dp"
                                 android:src="@mipmap/purple_right_arrow" />
@@ -580,7 +602,7 @@
                                 android:layout_marginStart="5dp"
                                 android:layout_toEndOf="@+id/circleCancelledOrderImage"
                                 android:layout_weight="1"
-                                android:text="34 Orders" />
+                                android:text="0 Orders" />
 
 
 
@@ -710,6 +732,7 @@
                         android:layout_height="20dp"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="20dp"
+
                         android:layout_marginEnd="20dp"
                          android:src="@mipmap/right_arrow_blue" />
 
@@ -728,8 +751,10 @@
     </LinearLayout>
 
 
+    </RelativeLayout>
 
 
+    </androidx.core.widget.NestedScrollView>
 
 
 

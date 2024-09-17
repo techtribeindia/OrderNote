@@ -1,5 +1,8 @@
 package com.project.ordernote.ui.activity;
 
+import static com.project.ordernote.utils.Constants.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -14,10 +17,15 @@ import android.graphics.drawable.Drawable;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.ActivityDashboardBinding;
 import com.project.ordernote.ui.fragment.CreateOrderFragment;
@@ -76,7 +84,18 @@ public class Dashboard extends AppCompatActivity {
 
        */
 
-
+        FirebaseMessaging.getInstance().subscribeToTopic("admin_vendor_1")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Subscribed";
+                        if (!task.isSuccessful()) {
+                            msg = "Subscribe failed";
+                        }
+                        Log.d(TAG, msg);
+                        Toast.makeText(Dashboard.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
         dashboardViewModel = new ViewModelProvider(this).get(Dashboard_ViewModel.class);
 
         activityDashboardBinding.bottomNavigationView.setOnItemSelectedListener(item -> {

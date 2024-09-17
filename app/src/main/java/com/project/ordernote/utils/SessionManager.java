@@ -45,6 +45,10 @@ public class SessionManager {
     {
         return pref.getString(VENDORKEY,"");
     }
+    public String getVendorname()
+    {
+        return pref.getString(VENDORNAME,"");
+    }
 
     public void saveUserData(QueryDocumentSnapshot userDocument) {
         editor.putString(KEY_NAME, userDocument.getString(KEY_NAME));

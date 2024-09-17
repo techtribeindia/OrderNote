@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.google.firebase.Timestamp;
+import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.OrderItemDetails_Model;
 import com.project.ordernote.data.repository.OrderItemDetails_Repository;
@@ -24,6 +25,8 @@ public class OrderItemDetails_ViewModel extends AndroidViewModel {
     private Observer<ApiResponseState_Enum<List<OrderItemDetails_Model>>> ordersItemDetailsObserver;
      private MutableLiveData<ApiResponseState_Enum<List<OrderItemDetails_Model>>> orderItemDetailsModelMutableLiveData;
 
+    private Observer<ApiResponseState_Enum<List<OrderItemDetails_Model>>> ordersItemDetailsReportScreenObserver;
+    private MutableLiveData<ApiResponseState_Enum<List<OrderItemDetails_Model>>> orderItemDetailsReportScreenMutableLiveData;
 
 
     public OrderItemDetails_ViewModel(@NonNull Application application) {
@@ -42,9 +45,19 @@ public class OrderItemDetails_ViewModel extends AndroidViewModel {
             orderItemDetailsModelMutableLiveData = new MutableLiveData<>();
         }
         ordersItemDetailsObserver = state -> orderItemDetailsModelMutableLiveData.setValue(state);
+        if(orderItemDetailsReportScreenMutableLiveData == null){
+            orderItemDetailsReportScreenMutableLiveData = new MutableLiveData<>();
+        }
+        ordersItemDetailsReportScreenObserver = state -> orderItemDetailsReportScreenMutableLiveData.setValue(state);
     }
 
 
+    public LiveData<ApiResponseState_Enum<List<OrderItemDetails_Model>>> getOrdersItemDetailsReportScreenFromViewModel() {
+        if(orderItemDetailsReportScreenMutableLiveData == null){
+            orderItemDetailsReportScreenMutableLiveData = new MutableLiveData<>();
+        }
+        return orderItemDetailsReportScreenMutableLiveData;
+    }
 
     public LiveData<ApiResponseState_Enum<List<OrderItemDetails_Model>>> getOrdersItemDetailsListFromViewModel() {
         if(orderItemDetailsModelMutableLiveData == null){
@@ -53,16 +66,8 @@ public class OrderItemDetails_ViewModel extends AndroidViewModel {
         return orderItemDetailsModelMutableLiveData;
     }
 
-    public void getOrderItemsByStatus_VendorAndDate(String status, Timestamp startTimestamp, Timestamp endTimestamp , String vendorkey) {
-        try {
-            LiveData<ApiResponseState_Enum<List<OrderItemDetails_Model>>> source = repository.getOrderItemsByStatus_VendorAndDate(status, startTimestamp, endTimestamp, vendorkey);
-            source.observeForever(ordersItemDetailsObserver);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    public void addItemDetailsEntryInDBFromLOOP(List<ItemDetails_Model> itemDetailsModelList , String vendorkey , String vendorName , String orderid, Timestamp orderplaceddate){
+
+    public void addItemDetailsEntryInDBFromLOOP(List<ItemDetails_Model> itemDetailsModelList , String vendorkey , String vendorName , String orderid, Timestamp orderplaceddate, Buyers_Model buyersModel){
 
         for(int i = 0 ; i < itemDetailsModelList.size(); i ++){
             OrderItemDetails_Model orderItemDetailsModel = new OrderItemDetails_Model();
@@ -79,7 +84,6 @@ public class OrderItemDetails_ViewModel extends AndroidViewModel {
             orderItemDetailsModel.setUnqiuekey(String.valueOf(UUID.randomUUID()));
             orderItemDetailsModel.setMenuitemprice(itemDetailsModelList.get(i).getMenuitemprice());
 
-
             orderItemDetailsModel.setVendorkey(vendorkey);
             orderItemDetailsModel.setVendorname(vendorName);
             orderItemDetailsModel.setOrderplaceddate(orderplaceddate);
@@ -94,10 +98,19 @@ public class OrderItemDetails_ViewModel extends AndroidViewModel {
 
     }
 
-    public void getOrderItemsByBuyerKeyStatus_DateAndVendorKey(String selectedBuyerKey, String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey) {
+    public void getOrderItemsByDateAndVendorKey( Timestamp startTimestamp, Timestamp endTimestamp , String vendorkey) {
+        try {
+            LiveData<ApiResponseState_Enum<List<OrderItemDetails_Model>>> source = repository.getOrderItemsByDateAndVendorKey( startTimestamp, endTimestamp, vendorkey);
+            source.observeForever(ordersItemDetailsObserver);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void getOrderItemsByDateAndVendorKey_ReportScreenObserver(Timestamp startdatee, Timestamp endDatee, String vendorkey) {
 
-        LiveData<ApiResponseState_Enum<List<OrderItemDetails_Model>>> source = repository.getOrderItemsByBuyerKeyStatus_DateAndVendorKey(selectedBuyerKey , status, startTimestamp, endTimestamp , vendorkey);
-        source.observeForever(ordersItemDetailsObserver);
+        LiveData<ApiResponseState_Enum<List<OrderItemDetails_Model>>> source = repository.getOrderItemsByDateAndVendorKey(startdatee , endDatee , vendorkey);
+        source.observeForever(ordersItemDetailsReportScreenObserver);
 
     }
 }
