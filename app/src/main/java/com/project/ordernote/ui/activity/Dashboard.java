@@ -33,17 +33,21 @@ import com.project.ordernote.ui.fragment.BuyersFragment;
 import com.project.ordernote.ui.fragment.OrdersListFragment;
 import com.project.ordernote.ui.fragment.ReportsFragment;
 import com.project.ordernote.ui.fragment.SettingsFragment;
+import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.Dashboard_ViewModel;
 
 public class Dashboard extends AppCompatActivity {
     ActivityDashboardBinding activityDashboardBinding;
      private Dashboard_ViewModel dashboardViewModel;
 
+    private SessionManager sessionManager;
 
     @SuppressLint({"NonConstantResourceId", "UseCompatLoadingForColorStateLists"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sessionManager = new SessionManager(this);
 
 
 
@@ -84,7 +88,9 @@ public class Dashboard extends AppCompatActivity {
 
        */
 
-        FirebaseMessaging.getInstance().subscribeToTopic("admin_vendor_1")
+
+
+        FirebaseMessaging.getInstance().subscribeToTopic(sessionManager.getRole()+"_"+sessionManager.getVendorkey())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -96,10 +102,12 @@ public class Dashboard extends AppCompatActivity {
                         Toast.makeText(Dashboard.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
         dashboardViewModel = new ViewModelProvider(this).get(Dashboard_ViewModel.class);
 
         activityDashboardBinding.bottomNavigationView.setOnItemSelectedListener(item -> {
-
+            if(sessionManager.getRole().equals(Constants.staff_role)||sessionManager.getRole().equals(Constants.admin_role)){
             Fragment selectedFragment = new Fragment();
             int id = item.getItemId();
                 //aDDED BY ARUN USING GIT
@@ -123,6 +131,14 @@ public class Dashboard extends AppCompatActivity {
             DrawableCompat.setTint(wrappedDrawable, ContextCompat.getColor(Dashboard.this, R.color.darkgrey));
 
             return true;
+            }
+            else{
+
+                    Toast.makeText(this, "Sorry, you don't have enough permission to access this app ", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+
         });
 
         activityDashboardBinding.addOrderFabButton.setOnClickListener(v -> {
@@ -148,8 +164,18 @@ public class Dashboard extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.addOrders);
-            activityDashboardBinding.addOrderFabButton.performClick();
+            if(sessionManager.getRole().equals(Constants.staff_role)){
+                activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.orderslist);
+
+            }
+            else if(sessionManager.getRole().equals(Constants.admin_role)){
+                activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.addOrders);
+                activityDashboardBinding.addOrderFabButton.performClick();
+            }
+            else{
+                Toast.makeText(this, "Sorry, you don't have enough permission to access this app ", Toast.LENGTH_SHORT).show();
+            }
+
         }
         dashboardViewModel.getSelectedFragment().observe(this, fragment -> {
             if (fragment != null) {
@@ -176,3 +202,6 @@ public class Dashboard extends AppCompatActivity {
 
 
 }
+
+
+

@@ -257,9 +257,24 @@ public class SplashScreen extends AppCompatActivity {
         // Assuming both data fetches are done
         if(gotbuyerData  && gotMenuItemData && gotAppdata){
             // Proceed to the next activity
-            startActivity(new Intent(SplashScreen.this, Dashboard.class));
+            if(sessionManager.isLoggedIn()){
+             if(sessionManager.getRole().equals(Constants.staff_role)||sessionManager.getRole().equals(Constants.admin_role)){
+                 startActivity(new Intent(SplashScreen.this, Dashboard.class));
 
-            SplashScreen.this.finish();
+                 SplashScreen.this.finish();
+             }
+             else{
+
+                 Toast.makeText(this, "Sorry, you don't have enough permission to access this app ", Toast.LENGTH_SHORT).show();
+
+              }
+            }
+            else{
+
+                Toast.makeText(this, "Sorry, you don't have enough permission to access this app ", Toast.LENGTH_SHORT).show();
+
+            }
+
         }
 
 
