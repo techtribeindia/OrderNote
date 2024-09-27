@@ -57,9 +57,9 @@ public class OrderDetails_Repository {
             Log.d("orderdetails response   :  ", result.toString());
 
             if (result.isEmpty()) {
-                ordersLiveData.postValue(ApiResponseState_Enum.error("No data available", result));
+                ordersLiveData.postValue(ApiResponseState_Enum.successwithmessage(result, "There is Orders for the selected status"));
             } else {
-                ordersLiveData.postValue(ApiResponseState_Enum.success(result));
+                ordersLiveData.postValue(ApiResponseState_Enum.successwithmessage(result,""));
 
             }
         }
@@ -110,9 +110,9 @@ public class OrderDetails_Repository {
             @Override
             public void onSuccess(List<OrderDetails_Model> result) {
                 if (result.isEmpty()) {
-                    ordersLiveData.postValue(ApiResponseState_Enum.error(Constants.noDataAvailable, result));
+                    ordersLiveData.postValue(ApiResponseState_Enum.successwithmessage(result, "There is no orders right now"));
                 } else {
-                    ordersLiveData.postValue(ApiResponseState_Enum.success(result));
+                    ordersLiveData.postValue(ApiResponseState_Enum.successwithmessage(result,""));
                 }
             }
 

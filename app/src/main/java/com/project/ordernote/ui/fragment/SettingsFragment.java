@@ -1,5 +1,9 @@
 package com.project.ordernote.ui.fragment;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -12,8 +16,13 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+
+
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.FragmentSettingsBinding;
+import com.project.ordernote.ui.activity.LoginScreen;
+import com.project.ordernote.ui.activity.SplashScreen;
+import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 
@@ -52,10 +61,49 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
 
+        try {
+            PackageInfo pInfo = requireContext().getPackageManager().getPackageInfo(requireContext().getPackageName(), 0);
+            String version = pInfo.versionName;
+            binding.appversion.setText("Version: "+version);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        binding.logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                AlertDialogUtil.showCustomDialog(
+                        requireActivity(),
+                        "Logout",
+                        "Do you want to logout from the device .", "Yes", "No","RED",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Handle positive button click
+
+                                logoutFun();
+
+
+                            }
+                        },
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Handle negative button click
+                                dialog.dismiss();
+
+
+                            }
+                        }
+                );
+
+            }
+        });
         binding.dateWiseOrderScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,5 +151,11 @@ public class SettingsFragment extends Fragment {
 
         snackbar.show();
     }
-
+public void  logoutFun()
+{
+    Intent intent  = new Intent(requireActivity(), LoginScreen.class);
+    requireActivity().startActivity(intent);
+    requireActivity().finish();
+    sessionManager.logout();
+}
 }

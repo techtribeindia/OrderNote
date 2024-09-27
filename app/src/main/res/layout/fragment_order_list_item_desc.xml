@@ -277,6 +277,7 @@
                     android:layout_marginBottom="10dp"
                     android:visibility="visible"
                     app:cardCornerRadius="10dp"
+
                     android:id="@+id/buyerselectionCardView"
                     app:cardElevation="5dp">
 
@@ -316,7 +317,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="20dp"
                             android:layout_toEndOf="@+id/circleBuyerImage"
                             android:text="Buyer name" />
                         <LinearLayout
@@ -468,18 +469,6 @@
 
                                     android:text="Discount" />
 
-                                <TextView
-                                    style="@style/BlackTextStyleNormal"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginStart="5dp"
-                                    android:layout_marginTop="15dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:layout_toEndOf="@+id/addItem_imageView"
-                                    android:layout_weight="1"
-                                    android:gravity="left"
-                                    android:text=" ( 10% )" />
 
                                 <TextView
                                     android:id="@+id/dialog_discount"
@@ -494,56 +483,6 @@
                                     android:layout_weight="1"
                                     android:gravity="right"
                                     android:text="- ₹ 2,000.00" />
-
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="35dp"
-                                android:orientation="horizontal">
-
-
-                                <TextView
-                                    style="@style/GreyTextStyleSemiBold"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginStart="15dp"
-                                    android:layout_marginTop="15dp"
-                                    android:layout_toEndOf="@+id/addItem_imageView"
-
-                                    android:text="Tax" />
-
-                                <TextView
-                                    style="@style/BlackTextStyleNormal"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginStart="5dp"
-                                    android:layout_marginTop="15dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:layout_toEndOf="@+id/addItem_imageView"
-                                    android:layout_weight="1"
-                                    android:gravity="left"
-                                    android:text=" ( 10% )" />
-
-                                <TextView
-                                    android:id="@+id/dialog_tax"
-                                    style="@style/BlackTextStyleNormal"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginStart="15dp"
-                                    android:layout_marginTop="15dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:layout_toEndOf="@+id/addItem_imageView"
-                                    android:layout_weight="1"
-                                    android:gravity="right"
-                                    android:text="₹ 250.00" />
-
 
 
                             </LinearLayout>
@@ -751,6 +690,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="Order Status Changed"
+                        android:justificationMode="inter_word"
+                        android:padding="10dp"
                         android:gravity="center"
                         />
                 </androidx.cardview.widget.CardView>

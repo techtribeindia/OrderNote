@@ -7,12 +7,17 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.os.Message;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -32,7 +37,7 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
 
 
     FragmentAddBuyerDetailsBinding binding;
-
+    Handler mHandler;
 
     Buyers_ViewModel buyers_viewModel;
 
@@ -41,6 +46,21 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
 
     public AddBuyerDetails_DialogFragment() {
         // Required empty public constructor
+    }
+
+    public void setHandler(Handler handler) {
+        this.mHandler = handler;
+    }
+
+    private void sendHandlerMessage(String bundlestr, String buyerKey ) {
+        //Log.e(Constants.TAG, "createBillDetails in cartaItem 1");
+
+        Message msg = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putString("fromadapter", bundlestr);
+        bundle.putString("buyerkey", buyerKey);
+        msg.setData(bundle);
+        mHandler.sendMessage(msg);
     }
 
     public static AddBuyerDetails_DialogFragment newInstance(String param1, String param2) {
@@ -204,8 +224,8 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
                 buyers_viewModel.updateBuyerDataInViewModelAndLocalArray(buyersModel);
                 showProgressBar(false);
                 onDismiss(requireDialog());
-                Toast.makeText(requireActivity(), "Success", Toast.LENGTH_SHORT).show();
-
+                showSnackbar(requireView(),"Buyer updated successfully");
+                sendHandlerMessage("updated","");
                 //   neutralizeEveryVariableAndUI();
                 // Handle success
                 // e.g., show a success message or update the UI
@@ -215,7 +235,7 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
             public void onFailure(Exception e) {
                 isUpdateBuyerCalled = false;
                 showProgressBar(false);
-                Toast.makeText(requireActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                showSnackbar(requireView(),e.getMessage());
 
                 // Handle failure
                 // e.g., show an error message
@@ -254,8 +274,8 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
                 buyers_viewModel.addBuyerDataItemInViewModelAndLocalArray(buyersModel);
                 showProgressBar(false);
                 onDismiss(requireDialog());
-                Toast.makeText(requireActivity(), "Success", Toast.LENGTH_SHORT).show();
-
+                showSnackbar(requireView(),"Buyer Added Sucessfully");
+                sendHandlerMessage("added","");
              //   neutralizeEveryVariableAndUI();
                 // Handle success
                 // e.g., show a success message or update the UI
@@ -265,7 +285,7 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
             public void onFailure(Exception e) {
                 isAddBuyerCalled = false;
                 showProgressBar(false);
-                Toast.makeText(requireActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                showSnackbar(requireView(),e.getMessage());
 
                 // Handle failure
                 // e.g., show an error message
@@ -297,7 +317,32 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
         }
     }
 
+    private void showSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        snackbar.setAction("X", v -> snackbar.dismiss());
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
 
+        // Get the Snackbar's layout view
+        View snackbarView = snackbar.getView();
+
+        // Check if the parent is CoordinatorLayout
+        if (snackbarView.getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        } else if (snackbarView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+            // If it's a FrameLayout, handle it like before
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        }
+
+        snackbar.show();
+    }
 
 
 }
