@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/reddishgrey"
     tools:context=".ui.fragment.DateWiseOrderScreenFragment">
     <LinearLayout
@@ -35,8 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginTop="5dp"
-            android:text="Order Details"
-            android:layout_marginStart="20dp"
+            android:text="Orders By Date"
+
             style="@style/ScreenTitleTextStyle"
 
             />
@@ -54,19 +55,20 @@
                 android:layout_marginTop="16dp"
                 android:layout_weight="1">
                 <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Date"
-                    android:textColor="@color/active_button_color"
-                    />
-                <TextView
                     android:id="@+id/tvSelectedDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Selected Date: "
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:background="@drawable/borderwithred"
+                    android:text="Select Date"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:textColor="@color/red"
+                    android:drawableRight="@drawable/arrowdownwithred"
                     />
+
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/fetch_data_layout"
                 android:layout_width="wrap_content"
@@ -76,13 +78,46 @@
                 android:gravity="bottom">
                 <TextView
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="@drawable/button_active"
                     android:text="Fetch Data"
-                    android:textColor="@color/active_button_color"/>
-            </LinearLayout>
-        </LinearLayout>
+                    android:minWidth="120dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:textColor="@color/white" />
 
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:padding="8dp">
+
+            <EditText
+                android:id="@+id/search_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:hint="Enter the buyer name"
+                android:padding="8dp"
+
+                android:drawablePadding="5dp"
+                android:background="@drawable/edit_text_background"
+                android:paddingLeft="40dp"
+                android:paddingStart="40dp"
+                android:paddingRight="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/darker_gray"/>
+
+        </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/orders_recycler_view"
             android:layout_width="match_parent"
@@ -104,6 +139,7 @@
             <TextView
                 android:id="@+id/dialog_orderstatus_text"
                 style="@style/SubTitleTextStyle1"
+                android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Order Status Changed"
@@ -117,5 +153,22 @@
             android:layout_marginTop="10dp"
             android:background="@color/reddishgrey" />
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/progressbar_backlayout"
+        android:alpha=".6"
+        android:background="@color/progressbar_grey"
+        android:visibility="gone"
+        />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/progressbar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:lottie_fileName="dotanimator.json"
+        />
 </FrameLayout>
