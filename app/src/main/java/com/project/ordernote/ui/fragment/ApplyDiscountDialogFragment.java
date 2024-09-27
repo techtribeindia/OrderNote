@@ -6,15 +6,19 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.FragmentAddMenuItemInCartBinding;
 import com.project.ordernote.databinding.FragmentApplyDiscountDialogBinding;
@@ -93,12 +97,14 @@ public class ApplyDiscountDialogFragment extends DialogFragment {
                             dismiss();
                         }
                         else{
-                            Toast.makeText(requireActivity(), "Discount value should be  greater than or equals to subtotal value", Toast.LENGTH_SHORT).show();
+                            showSnackbar(requireView(), "Discount value should be  greater than or equals to subtotal value");
+
                         }
 
                     }
                     else{
-                        Toast.makeText(requireActivity(), "Please enter discount value before applying ", Toast.LENGTH_SHORT).show();
+                        showSnackbar(requireView(), "Please enter discount value before applying");
+
                     }
                 }
                 catch (Exception e){
@@ -133,5 +139,32 @@ public class ApplyDiscountDialogFragment extends DialogFragment {
         double numericValue = Double.parseDouble(value);
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
         return decimalFormat.format(numericValue);
+    }
+
+    private void showSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        snackbar.setAction("X", v -> snackbar.dismiss());
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
+
+        // Get the Snackbar's layout view
+        View snackbarView = snackbar.getView();
+
+        // Check if the parent is CoordinatorLayout
+        if (snackbarView.getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        } else if (snackbarView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+            // If it's a FrameLayout, handle it like before
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        }
+
+        snackbar.show();
     }
 }

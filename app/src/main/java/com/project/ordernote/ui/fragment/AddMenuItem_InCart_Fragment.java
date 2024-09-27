@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,12 +16,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.databinding.FragmentAddMenuItemInCartBinding;
@@ -134,17 +139,18 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
                     case LOADING:
                         menuItemFetchedSuccesfully = false;
                         showProgressBar(true);
-                        Toast.makeText(requireActivity(), "Loading Menu", Toast.LENGTH_SHORT).show();
+
                         break;
                     case SUCCESS:
                         menuItemFetchedSuccesfully = true;
                         showProgressBar(false);
-                        Toast.makeText(requireActivity(), "Success in fetching menu", Toast.LENGTH_SHORT).show();
+
 
                         setAdapterForAutoCompleteWithMenuItem(resource.data);
                         break;
                     case ERROR:
-                        Toast.makeText(requireActivity(), "Error in fetching menu", Toast.LENGTH_SHORT).show();
+
+                        showSnackbar(requireView(), resource.message);
                         menuItemFetchedSuccesfully = false;
                         showProgressBar(false);
                         break;
@@ -314,7 +320,8 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
                         }
                     }
                     else{
-                        Toast.makeText(requireActivity(), "Can't reduce quantity less than 1", Toast.LENGTH_SHORT).show();
+                        showSnackbar(requireView(), "Can't reduce quantity less than 1");
+
                     }
 
                 }
@@ -335,7 +342,8 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
                         menuItemsViewModel.updateSelectedMenuItemModel(new MenuItems_Model());
                     }
                     else{
-                        Toast.makeText(requireActivity(), "Please select an menu item from the list", Toast.LENGTH_SHORT).show();
+                        showSnackbar(requireView(), "Please select an menu item from the list");
+
                     }
 
 
@@ -642,5 +650,31 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
         super.onDestroy();
         // Remove the observer when the Fragment is destroyed
         menuItemsViewModel.getSelectedMenuItemsFromViewModel().removeObserver(selectedMenuItemObserver);
+    }
+    private void showSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        snackbar.setAction("X", v -> snackbar.dismiss());
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
+
+        // Get the Snackbar's layout view
+        View snackbarView = snackbar.getView();
+
+        // Check if the parent is CoordinatorLayout
+        if (snackbarView.getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        } else if (snackbarView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+            // If it's a FrameLayout, handle it like before
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        }
+
+        snackbar.show();
     }
 }

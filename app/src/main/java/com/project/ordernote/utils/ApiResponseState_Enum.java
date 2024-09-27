@@ -22,6 +22,10 @@ public class ApiResponseState_Enum<T> {
         return new ApiResponseState_Enum<>(Status.SUCCESS, data, null);
     }
 
+    public static <T> ApiResponseState_Enum<T> successwithmessage(T data, String message) {
+        return new ApiResponseState_Enum<>(Status.SUCCESS, data, message);
+    }
+
     public static <T> ApiResponseState_Enum<T> error(String message, T data) {
         return new ApiResponseState_Enum<>(Status.ERROR, data, message);
     }

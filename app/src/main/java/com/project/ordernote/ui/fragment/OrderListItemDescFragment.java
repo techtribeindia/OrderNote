@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
@@ -43,7 +45,10 @@ import com.project.ordernote.utils.DatabaseReference;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -66,7 +71,10 @@ public class OrderListItemDescFragment extends DialogFragment {
     private MaterialCardView banner;
     TextView dialogTransportNameText;
     TextView dialogMobileNoText;
+    TextView buyerMobileNo;
     TextView dialogTrucckNoText;
+    View progressbarBacklayout;
+    LottieAnimationView progressbar;
 
     public OrderListItemDescFragment() {
 
@@ -104,7 +112,7 @@ public class OrderListItemDescFragment extends DialogFragment {
             @Override
             public boolean handleMessage(@NonNull Message message) {
                 Bundle bundle = message.getData();
-                Toast.makeText(requireActivity(), String.valueOf(bundle.getString("DispatchFragment")), Toast.LENGTH_SHORT).show();
+
                 if (Objects.equals(bundle.getString("fragment"), "DispatchFragment"))
                 {
                     dialogTransportNameText.setText(bundle.getString(DatabaseReference.transportname_OrderDetails) != null ? bundle.getString(DatabaseReference.transportname_OrderDetails) : "");
@@ -145,14 +153,21 @@ public class OrderListItemDescFragment extends DialogFragment {
             OrderDetails_Model order = gson.fromJson(orderJson, OrderDetails_Model.class);
 
             if (order != null) {
-
+                progressbarBacklayout  =view.findViewById(R.id.progressbar_backlayout);
+                progressbar = view.findViewById(R.id.progressbar);
 
                 ImageView dispatchSelection = view.findViewById(R.id.dispatch_selection);
 
                 TextView orderIdTextView = view.findViewById(R.id.dialog_orderid);
+                TextView orderPlacedDate = view.findViewById(R.id.dialog_orderplaceddate);
                 TextView buyerNameTextView = view.findViewById(R.id.dialog_buyername);
                 TextView buyerAddressTextView = view.findViewById(R.id.dialog_buyeraddress);
-                TextView orderPriceTextView = view.findViewById(R.id.dialog_total);
+                buyerMobileNo = view.findViewById(R.id.dialog_mobileno);
+
+
+                TextView subTotal = view.findViewById(R.id.dialog_subtotal);
+                TextView Discount = view.findViewById(R.id.dialog_discount);
+                TextView Total = view.findViewById(R.id.dialog_total);
 
                 dialogTransportNameText = view.findViewById(R.id.dialog_transportname_text);
                 dialogMobileNoText = view.findViewById(R.id.dialog_driver_mobileno_text);
@@ -183,6 +198,17 @@ public class OrderListItemDescFragment extends DialogFragment {
                 Button approveButton = view.findViewById(R.id.approve_button);
                 Button denyButton = view.findViewById(R.id.deny_button);
 
+                Timestamp timestamp = order.getOrderplaceddate();
+                Date date = timestamp.toDate();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault());
+                String formattedDate = dateFormat.format(date);
+
+
+
+
+                buyerMobileNo.setText(order.getBuyermobileno());
+                orderPlacedDate.setText(formattedDate);
+
                 // Set up click listeners
                 approveButton.setOnClickListener(v -> {
                     orderDetailEditRequestModel(order.getOrderid(),Constants.editapproved_dispatchstatus);
@@ -202,7 +228,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                     else
                     {
                         dialogOrderStatusCard.setVisibility(View.VISIBLE);
-                        dialogOrderStatusText.setText(String.valueOf("Only staff can Accept or Reject the Order, you can cancel the order in \n settings -> Date Wise Orders"));
+                        dialogOrderStatusText.setText(String.valueOf("Only staff can Accept or Reject the Order, you can cancel the order in settings -> Date Wise Orders"));
                     }
                 }
                 if(order.getStatus().equalsIgnoreCase(Constants.rejected_status) && sessionManager.getRole().equalsIgnoreCase(Constants.admin_role))
@@ -242,9 +268,15 @@ public class OrderListItemDescFragment extends DialogFragment {
                 orderIdTextView.setText(order.getOrderid());
                 buyerNameTextView.setText(order.getBuyername());
                 buyerAddressTextView.setText(order.getBuyeraddress());
-                orderPriceTextView.setText(String.valueOf(order.getTotalprice()));
+                subTotal.setText("₹"+String.valueOf(order.getPrice()));
+                Discount.setText("₹"+String.valueOf(order.getDiscount()));
+                Total.setText("₹"+String.valueOf(order.getTotalprice()));
                 orderItemListAdapter.setOrders(order.getItemdetails());
 
+                if(sessionManager.getRole().equalsIgnoreCase(Constants.admin_role))
+                {
+                    dispatchSelection.setVisibility(View.GONE);
+                }
                 dispatchSelection.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -272,6 +304,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                         }
                         else
                         {
+
                             showSnackbar(view,"Only staff can update Dispatch Details");
                         }
 
@@ -282,7 +315,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                     @Override
                     public void onClick(View view) {
                         Objects.requireNonNull(getDialog()).dismiss();
-                        Toast.makeText(requireActivity(), "Back button clicked", Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
@@ -469,7 +502,8 @@ public class OrderListItemDescFragment extends DialogFragment {
 
         switch (resource.status) {
             case LOADING:
-                Toast.makeText(requireActivity(), "Loading Orders", Toast.LENGTH_SHORT).show();
+                showProgressBar(true);
+
                 break;
             case SUCCESS:
                 sendHandlerMessage("success");
@@ -480,11 +514,14 @@ public class OrderListItemDescFragment extends DialogFragment {
                 dialogCancelOnlyButtonLayout.setVisibility(View.VISIBLE);
                 dialogOrderStatusText.setText(String.valueOf(resource.data));
                 hideBanner();
-                Toast.makeText(requireActivity(), "Success in fetching orders", Toast.LENGTH_SHORT).show();
-//                        ordersListAdapter.setOrders(resource.data);
+
+                showProgressBar(false);
                 break;
             case ERROR:
-                Toast.makeText(requireActivity(), "Error in fetching orders "+resource.data, Toast.LENGTH_SHORT).show();
+                dialogOrderStatusText.setText(String.valueOf(resource.data));
+                showProgressBar(false);
+                showSnackbar(requireView(), resource.message);
+
                 break;
         }
     }
@@ -497,12 +534,21 @@ public class OrderListItemDescFragment extends DialogFragment {
         // Get the Snackbar's layout view
         View snackbarView = snackbar.getView();
 
-        // Change the Snackbar's position to top and add top margin
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
-        params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-        int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 20dp to pixels
-        params.setMargins(0, marginInDp, 0, 0);
-        snackbarView.setLayoutParams(params);
+        // Check if the parent is CoordinatorLayout
+        if (snackbarView.getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        } else if (snackbarView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+            // If it's a FrameLayout, handle it like before
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        }
 
         snackbar.show();
     }
@@ -517,7 +563,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                 orderDate.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH);
     }
     private void showBanner() {
-        Toast.makeText(requireActivity(), "Show Banner", Toast.LENGTH_SHORT).show();
+
         motionLayout.setTransition(R.id.transition);
         motionLayout.transitionToEnd();
     }
@@ -525,5 +571,24 @@ public class OrderListItemDescFragment extends DialogFragment {
     private void hideBanner() {
         motionLayout.setTransition(R.id.transition);
         motionLayout.transitionToStart();
+    }
+
+    private void showProgressBar(boolean show) {
+
+        try {
+            if (show) {
+                progressbar.playAnimation();
+                progressbar.setVisibility(View.VISIBLE);
+                progressbarBacklayout.setVisibility(View.VISIBLE);
+            } else {
+                progressbar.cancelAnimation();
+                progressbar.setVisibility(View.GONE);
+                progressbarBacklayout.setVisibility(View.GONE);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+        }
     }
 }

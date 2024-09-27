@@ -1,39 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/buyer_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
      android:background="@color/reddishgrey"
-    tools:context=".ui.fragment.BuyersFragment">
+    tools:context=".ui.fragment.BuyersFragment"
+    android:orientation="vertical"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:id="@+id/titleBarLayout"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center"
         android:orientation="horizontal">
-        <RelativeLayout
-            android:layout_width="40dp"
-            android:visibility="gone"
-            android:layout_height="40dp">
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:alpha=".7"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/back"/>
-        </RelativeLayout>
-
-
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="5dp"
+
             android:layout_weight="5"
             android:text="@string/manage_buyers"
             android:layout_marginStart="20dp"
+
+            android:gravity="center_vertical|left"
             style="@style/ScreenTitleTextStyle"
 
             />
@@ -67,7 +63,31 @@
         </RelativeLayout>
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:padding="8dp">
 
+        <EditText
+            android:id="@+id/search_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:hint="Enter the buyer name"
+            android:padding="8dp"
+
+            android:drawablePadding="5dp"
+            android:background="@drawable/edit_text_background"
+            android:paddingLeft="40dp"
+            android:paddingStart="40dp"
+            android:paddingRight="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"/>
+
+    </LinearLayout>
 <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_below="@+id/titleBarLayout"
@@ -153,4 +173,4 @@
 
 
 
-</RelativeLayout>
+</LinearLayout>

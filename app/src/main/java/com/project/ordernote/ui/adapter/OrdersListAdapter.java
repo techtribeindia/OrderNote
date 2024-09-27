@@ -56,11 +56,11 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         OrderDetails_Model order = orders.get(position);
-        holder.orderId.setText(order.getTokenno() != null ? order.getTokenno() : "N/A");
+        holder.orderId.setText("# "+(order.getTokenno() != null ? order.getTokenno() : "N/A"));
         holder.buyerName.setText(order.getBuyername() != null ? order.getBuyername() : "N/A");
         holder.buyerAddress.setText(order.getBuyeraddress() != null ? order.getBuyeraddress() : "N/A");
-        holder.orderQty.setText(String.valueOf(order.getTotalquantity()));
-        holder.orderPrice.setText(String.valueOf(order.getTotalprice()));
+
+        holder.orderPrice.setText("₹"+String.valueOf(order.getTotalprice()));
         if ((Objects.equals(order.getDispatchstatus(), Constants.editrequested_dispatchstatus)  && sessionManager.getRole().equalsIgnoreCase(Constants.admin_role)) || (Objects.equals(order.getDispatchstatus(), Constants.editapproved_dispatchstatus)  && sessionManager.getRole().equalsIgnoreCase(Constants.staff_role)))
         {
             holder.itemCard.setBackgroundResource(R.color.backgroundred);
@@ -122,7 +122,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
     }
 
     static class OrderViewHolder extends RecyclerView.ViewHolder {
-        TextView orderId, orderStatus,buyerName,buyerAddress,orderQty,orderPrice;
+        TextView orderId, orderStatus,buyerName,buyerAddress,orderPrice;
         Button ViewBill;
         CardView itemCard;
 
@@ -131,7 +131,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
             orderId = itemView.findViewById(R.id.invoice_number);
             buyerName = itemView.findViewById(R.id.buyer_name);
             buyerAddress = itemView.findViewById(R.id.buyer_address);
-            orderQty = itemView.findViewById(R.id.order_qty);
+
             orderPrice = itemView.findViewById(R.id.order_amount);
             ViewBill = itemView.findViewById(R.id.view_bill);
             itemCard = itemView.findViewById(R.id.item_card);

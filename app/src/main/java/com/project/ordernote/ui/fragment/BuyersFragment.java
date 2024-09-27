@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,11 +14,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.ItemDetails_Model;
@@ -105,7 +112,25 @@ public class BuyersFragment extends Fragment {
         setObserver();
         buyersViewModel.getBuyersListFromViewModel().observeForever(buyersListObserver);
 
+        binding.searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String buyerName = charSequence.toString();
+
+                buyersViewModel.filterBuyerListWithBuyerName(buyerName);
+                showProgressBar(true);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         binding.addBuyerTextview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +148,7 @@ public class BuyersFragment extends Fragment {
                     bundle.putString(Constants.processtodo, dataToSend);
 
                     AddBuyerDetails_DialogFragment dialogFragment = new AddBuyerDetails_DialogFragment();
+                    dialogFragment.setHandler(newHandler());
                     dialogFragment.setArguments(bundle);
 
                     // dialogFragment.setBuyerSelectionListener(this); // Set the listener
@@ -210,11 +236,11 @@ public class BuyersFragment extends Fragment {
                                     //Toast.makeText(requireActivity(), "Loading Buyer", Toast.LENGTH_SHORT).show();
                                     break;
                                 case SUCCESS:
-
+                                    buyersViewModel.setBuyerDetails(resource);
                                     setAdapterForBuyersRecyclerview(resource.data);
                                     buyerDetailsFetchedSuccessfully = true;
                                     showProgressBar(false);
-                                    Toast.makeText(requireActivity(), "sizze from observer: "+String.valueOf(resource.data.size()), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(requireActivity(), "sizze from observer: "+String.valueOf(resource.data.size()), Toast.LENGTH_SHORT).show();
 
 
                                     //Toast.makeText(requireActivity(), "Success in fetching Buyer", Toast.LENGTH_SHORT).show();
@@ -226,12 +252,13 @@ public class BuyersFragment extends Fragment {
                                             setAdapterForBuyersRecyclerview(new ArrayList<>());
                                         }
                                         else{
-                                            Toast.makeText(requireActivity(), "Error in fetching Buyer ", Toast.LENGTH_SHORT).show();
 
+                                            showSnackbar(requireView(), resource.message);
                                         }
                                     }
                                     else{
-                                        Toast.makeText(requireActivity(), "Error in fetching Buyer ", Toast.LENGTH_SHORT).show();
+                                        showSnackbar(requireView(), resource.message);
+
 
                                     }
 
@@ -272,7 +299,9 @@ public class BuyersFragment extends Fragment {
                 Bundle bundle = msg.getData();
                 String data = bundle.getString("fromadapter");
 
-
+                if(data.equals("added")){
+                    binding.searchEditText.setText("");
+                }
                 if(data.equals("BuyerDetailsList_Delete")){
                     try {
                         String buyerkey = bundle.getString("buyerkey");
@@ -293,7 +322,7 @@ public class BuyersFragment extends Fragment {
 
                                         deleteBuyerDetails(buyerkey);
 
-                                        Toast.makeText(requireActivity(), "Remove", Toast.LENGTH_SHORT).show();
+
                                     }
                                 },
                                 new DialogInterface.OnClickListener() {
@@ -301,7 +330,7 @@ public class BuyersFragment extends Fragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // Handle negative button click
                                         buyerListAdapter.notifyDataSetChanged();
-                                        Toast.makeText(requireActivity(), "Cancel", Toast.LENGTH_SHORT).show();
+
 
                                     }
                                 }
@@ -332,6 +361,7 @@ public class BuyersFragment extends Fragment {
                     bundleupdateOldBuyer.putString(Constants.buyerkey, buyerkey);
 
                     AddBuyerDetails_DialogFragment dialogFragment = new AddBuyerDetails_DialogFragment();
+                    dialogFragment.setHandler(newHandler());
                     dialogFragment.setArguments(bundleupdateOldBuyer);
 
                     // dialogFragment.setBuyerSelectionListener(this); // Set the listener
@@ -364,7 +394,7 @@ public class BuyersFragment extends Fragment {
                 buyersViewModel.deleteBuyerDetailsFromViewModelAndDB(buyerkey);
                 showProgressBar(false);
 
-                Toast.makeText(requireActivity(), "Deleted", Toast.LENGTH_SHORT).show();
+                showSnackbar(requireView(),"Buyer removed successfully");
 
                 //   neutralizeEveryVariableAndUI();
                 // Handle success
@@ -375,7 +405,8 @@ public class BuyersFragment extends Fragment {
             public void onFailure(Exception e) {
                 isDeleteBuyerCalled = false;
                 showProgressBar(false);
-                Toast.makeText(requireActivity(), "Cannot Delete", Toast.LENGTH_SHORT).show();
+                showSnackbar(requireView(),e.getMessage());
+
                 buyerListAdapter.notifyDataSetChanged();
                 // Handle failure
                 // e.g., show an error message
@@ -404,5 +435,31 @@ public class BuyersFragment extends Fragment {
             e.printStackTrace();
 
         }
+    }
+    private void showSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        snackbar.setAction("X", v -> snackbar.dismiss());
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
+
+        // Get the Snackbar's layout view
+        View snackbarView = snackbar.getView();
+
+        // Check if the parent is CoordinatorLayout
+        if (snackbarView.getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        } else if (snackbarView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+            // If it's a FrameLayout, handle it like before
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        }
+
+        snackbar.show();
     }
 }

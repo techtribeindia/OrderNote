@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,14 +17,18 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
+import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.AppData_Model;
 import com.project.ordernote.data.model.Buyers_Model;
@@ -263,7 +268,8 @@ public class CreateOrderFragment extends Fragment {
                     openApplyDiscountDialog();
                 }
                 else{
-                    //Toast.makeText(requireActivity(), "Before applying discount total value should be greater than zero", Toast.LENGTH_SHORT).show();
+                    showSnackbar(view,"Before applying discount total value should be greater than zero");
+
                 }
             }
         });
@@ -352,20 +358,24 @@ public class CreateOrderFragment extends Fragment {
             public void onClick(View view) {
                 try{
                     if(ordersViewModel==null){
-                        Toast.makeText(requireActivity(), "Please add item in cart", Toast.LENGTH_SHORT).show();
+                        showSnackbar(view,"Please add item in cart");
+
                         return;
                     }
                     if(ordersViewModel.getItemDetailsArraylistViewModel().getValue()==null){
-                        Toast.makeText(requireActivity(), "Please add item in cart", Toast.LENGTH_SHORT).show();
+                        showSnackbar(view,"Please add item in cart");
+
                         return;
                     }
 
                     if(buyersViewModel==null){
-                        Toast.makeText(requireActivity(), "Please select buyer", Toast.LENGTH_SHORT).show();
+                        showSnackbar(view,"Please select buyer");
+
                         return;
                     }
                     if(buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue()==null){
-                        Toast.makeText(requireActivity(), "Please select buyer", Toast.LENGTH_SHORT).show();
+                        showSnackbar(view,"Please select buyer");
+
                         return;
                     }
 
@@ -374,25 +384,30 @@ public class CreateOrderFragment extends Fragment {
                             if(!buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getMobileno().equals("")){
                                 if(isPaymentModeSelected){
                                     showProgressBar(true);
-                                    Toast.makeText(requireActivity(), "Dialog called", Toast.LENGTH_SHORT).show();
+
+
                                     showConfirmationAlerDialog();
                                 }
                                 else{
-                                    Toast.makeText(requireActivity(), "Failed in payment selection", Toast.LENGTH_SHORT).show();
+                                    showSnackbar(view,"Failed in payment selection");
+
 
                                 }
                             }
                             else{
-                                Toast.makeText(requireActivity(), "Failed in buyer selection", Toast.LENGTH_SHORT).show();
+                                showSnackbar(view,"Failed in buyer selection");
+
 
                             }
                     }
                     else{
-                        Toast.makeText(requireActivity(), "Failed in AddItemDetails selection", Toast.LENGTH_SHORT).show();
+                        showSnackbar(view,"Failed in AddItemDetails selection");
+
 
                     }
                 }
                 catch (Exception e){
+
                     Toast.makeText(requireActivity(), "Failed in OnClick", Toast.LENGTH_SHORT).show();
 
                     e.printStackTrace();
@@ -408,6 +423,7 @@ public class CreateOrderFragment extends Fragment {
                     case LOADING:
                         menuItemFetchedSuccesfully = false;
                         showProgressBar(true);
+
                         //Toast.makeText(requireActivity(), "Loading Menu", Toast.LENGTH_SHORT).show();
                         break;
                     case SUCCESS:
@@ -420,7 +436,8 @@ public class CreateOrderFragment extends Fragment {
                         // adapter.setMenuItems(resource.data);
                         break;
                     case ERROR:
-                        Toast.makeText(requireActivity(), "Error in fetching menu", Toast.LENGTH_SHORT).show();
+                        showSnackbar(view,resource.message);
+
                         menuItemFetchedSuccesfully = false;
                         showProgressBar(false);
                         break;
@@ -453,12 +470,10 @@ public class CreateOrderFragment extends Fragment {
                                 LocalDataManager.getInstance().setBuyers(new ArrayList<>());
 
                             } else {
-                                Toast.makeText(requireActivity(), "Error in fetching Buyer ", Toast.LENGTH_SHORT).show();
-
+                                showSnackbar(view,resource.message);
                             }
                         } else {
-                            Toast.makeText(requireActivity(), "Error in fetching Buyer  ", Toast.LENGTH_SHORT).show();
-
+                            showSnackbar(view,resource.message);
                         }
 
 
@@ -499,7 +514,7 @@ public class CreateOrderFragment extends Fragment {
                         setAdapterForPaymentList();
                         break;
                     case ERROR:
-                        Toast.makeText(requireActivity(), " error ", Toast.LENGTH_SHORT).show();
+                        showSnackbar(view, resource.message);
                         break;
                 }
             }
@@ -522,7 +537,7 @@ public class CreateOrderFragment extends Fragment {
                             isGenerateOrderClicked = true;
                             counterViewModel.incrementOrderCounter("vendor_1");
 
-                            Toast.makeText(requireActivity(), "Create", Toast.LENGTH_SHORT).show();
+
                         }
                     },
                     new DialogInterface.OnClickListener() {
@@ -530,7 +545,7 @@ public class CreateOrderFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             // Handle negative button click
                             isGenerateOrderClicked = false;
-                            Toast.makeText(requireActivity(), "NotNow", Toast.LENGTH_SHORT).show();
+
 
                         }
                     }
@@ -807,7 +822,7 @@ public class CreateOrderFragment extends Fragment {
                                   //  Toast.makeText(requireActivity(), "Success in orderno", Toast.LENGTH_SHORT).show();
                                     break;
                                 case ERROR:
-                                   Toast.makeText(requireActivity(), "Error in orderno ," + String.valueOf(resource.message), Toast.LENGTH_SHORT).show();
+                                    showSnackbar(requireView(), resource.message);
                                     showProgressBar(false);
                                     break;
                             }
@@ -978,7 +993,7 @@ public class CreateOrderFragment extends Fragment {
                                         // Handle positive button click
 
                                         ordersViewModel.removeItemFromCart(position);
-                                        Toast.makeText(requireActivity(), "Remove", Toast.LENGTH_SHORT).show();
+
                                     }
                                 },
                                 new DialogInterface.OnClickListener() {
@@ -986,7 +1001,7 @@ public class CreateOrderFragment extends Fragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // Handle negative button click
                                         createOrderCartItemAdapter.notifyItemChanged(position);
-                                        Toast.makeText(requireActivity(), "Cancel", Toast.LENGTH_SHORT).show();
+
 
                                     }
                                 }
@@ -1043,6 +1058,31 @@ public class CreateOrderFragment extends Fragment {
             return "0"; // Return "0" if no numeric part is found
         }
     }
+    private void showSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        snackbar.setAction("X", v -> snackbar.dismiss());
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
 
+        // Get the Snackbar's layout view
+        View snackbarView = snackbar.getView();
+
+        // Check if the parent is CoordinatorLayout
+        if (snackbarView.getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        } else if (snackbarView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+            // If it's a FrameLayout, handle it like before
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        }
+
+        snackbar.show();
+    }
 
 }

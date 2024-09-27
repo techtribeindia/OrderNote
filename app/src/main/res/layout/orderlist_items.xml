@@ -15,24 +15,35 @@
         android:gravity="center"
         android:padding="16dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:paddingTop="8dp"
             android:paddingBottom="8dp">
 
             <TextView
                 android:id="@+id/invoice_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:text="Order ID"
-                android:textSize="14sp"
+                android:layout_weight="1"
+
+                android:textStyle="bold"
+                android:textSize="15sp"
                 android:textColor="@android:color/black" />
 
+            <TextView
+                android:id="@+id/order_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
 
-
-        </RelativeLayout>
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
         <TextView
             android:id="@+id/buyer_name"
             android:layout_width="wrap_content"
@@ -62,32 +73,7 @@
                 android:layout_height="1dp"
                 android:background="@color/grey" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                android:paddingTop="8dp">
 
-                <TextView
-                    android:id="@+id/order_qty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="1 PC"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/order_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="2000"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/black" />
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

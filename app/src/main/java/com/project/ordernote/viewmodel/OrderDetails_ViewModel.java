@@ -34,6 +34,8 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
     private final OrderDetails_Repository repository;
     public String vendorkey="";
     private MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> orderDetailsLiveData;
+    private List<OrderDetails_Model> orderDetailsLiveDataOriginal = new ArrayList<>();
+
     private MutableLiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> orderDetailsForReportScreenData;
 
     private MutableLiveData<String> selectedOrderJson;
@@ -50,12 +52,30 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         super(application);
         repository = new OrderDetails_Repository();
         orderDetailsLiveData = new MutableLiveData<>();
+
         itemDetailsArrayListLiveData = new MutableLiveData<>();
         ordersValueModel = new MutableLiveData<>();
         selectedOrderJson = new MutableLiveData<>();
         discountLiveData = new MutableLiveData<>();
         initObserver();
     }
+    public LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> getOrderDetails() {
+        return orderDetailsLiveData;
+    }
+    public void setOrderDetails(ApiResponseState_Enum<List<OrderDetails_Model>> response) {
+        if (response != null && response.data != null) {
+            if (orderDetailsLiveDataOriginal == null || orderDetailsLiveDataOriginal.isEmpty()) {
+
+                orderDetailsLiveDataOriginal = new ArrayList<>(response.data);
+            }
+        }
+    }
+
+    public void clearOrderDetails() {
+        orderDetailsLiveDataOriginal = new ArrayList<>(new ArrayList<>());
+    }
+
+
 
     public  void setUserDetails(String vendorkey)
     {
@@ -71,7 +91,6 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             if (orderDetailsLiveData.getValue() != null) {
                 orderDetailsLiveData.setValue(ApiResponseState_Enum.success(new ArrayList<>()));
             }
-
 
             if (selectedOrderJson.getValue() != null) {
                 selectedOrderJson.setValue("");
@@ -100,6 +119,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             orderDetailsLiveData = new MutableLiveData<>();
 
         }
+
         ordersObserver = state -> orderDetailsLiveData.setValue(state);
         if(orderDetailsForReportScreenData == null){
             orderDetailsForReportScreenData = new MutableLiveData<>();
@@ -118,6 +138,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         if(orderDetailsLiveData == null){
             orderDetailsLiveData = new MutableLiveData<>();
         }
+
         return orderDetailsLiveData;
     }
 
@@ -136,6 +157,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
     {
         List<OrderDetails_Model> updatedOrders = new ArrayList<>();
         orderDetailsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
+
     }
 
     public LiveData<List<ItemDetails_Model>> getItemDetailsArraylistViewModel() {
@@ -259,9 +281,29 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
         return resultLiveData;
     }
 
+    public void filterOrderWithBuyerName(String buyername) {
+
+            List<OrderDetails_Model> filteredOrders = new ArrayList<>();
+            for (OrderDetails_Model order : orderDetailsLiveDataOriginal) {
+                if (order.getBuyername().toLowerCase().contains(buyername.toLowerCase()) || buyername == null || buyername.trim().isEmpty()) {
+                    filteredOrders.add(order);
+                }
+            }
+            String message = "";
+            if(filteredOrders.isEmpty())
+            {
+                message = "There is Orders for the entered buyer name";
+            }
+            orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(filteredOrders,message));
+
+    }
+
+
     public void  updateBatchDetailsData(String orderid,String transporName, String driverMobieno, String truckNo)
     {
         ApiResponseState_Enum<List<OrderDetails_Model>> currentData = orderDetailsLiveData.getValue();
+        List<OrderDetails_Model> originalData = orderDetailsLiveDataOriginal;
+
         if (currentData != null && currentData.data != null) {
             List<OrderDetails_Model> updatedOrders = new ArrayList<>(currentData.data);
             for (OrderDetails_Model order : updatedOrders) {
@@ -274,15 +316,35 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
                 }
             }
 
+
+
             orderDetailsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
+
             //  orderDetailsLiveData.observeForever(ordersObserver);
 
             //orderDetailsLiveData.setValue(new ApiResponseState_Enum.Status.SUCCESS, updatedOrders, null));
         }
+
+        if (originalData != null ) {
+            List<OrderDetails_Model> originalupdatedOrders = new ArrayList<>(originalData);
+            for (OrderDetails_Model originalorder : originalupdatedOrders) {
+                if (originalorder.getOrderid().equals(orderid)) {
+                    originalorder.setDispatchstatus("DISPATCHED");
+                    originalorder.setTransportname(transporName);
+                    originalorder.setDrivermobileno(driverMobieno);
+                    originalorder.setTruckno(truckNo);
+                    break;
+                }
+            }
+            orderDetailsLiveDataOriginal = new ArrayList<>(originalupdatedOrders);
+        }
+
     }
     public void editOrderDetails(String orderId)
     {
         ApiResponseState_Enum<List<OrderDetails_Model>> currentData = orderDetailsLiveData.getValue();
+        List<OrderDetails_Model> originalData = orderDetailsLiveDataOriginal;
+
         if (currentData != null && currentData.data != null) {
             List<OrderDetails_Model> updatedOrders = new ArrayList<>(currentData.data);
             for (OrderDetails_Model order : updatedOrders) {
@@ -293,19 +355,29 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             }
 
             orderDetailsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
+
             //  orderDetailsLiveData.observeForever(ordersObserver);
 
             //orderDetailsLiveData.setValue(new ApiResponseState_Enum.Status.SUCCESS, updatedOrders, null));
+        }
+
+        if (originalData != null ) {
+            List<OrderDetails_Model> originalupdatedOrders = new ArrayList<>(originalData);
+            for (OrderDetails_Model originalorder : originalupdatedOrders) {
+                if (originalorder.getOrderid().equals(orderId)) {
+                    originalorder.setDispatchstatus("EDITREQUESTED");
+                    break;
+                }
+            }
+            orderDetailsLiveDataOriginal = new ArrayList<>(originalupdatedOrders);
         }
     }
 
     public void removeOrderFromLiveData(String orderId) {
 
-  
- 
-
-
         ApiResponseState_Enum<List<OrderDetails_Model>> currentData = orderDetailsLiveData.getValue();
+        List<OrderDetails_Model> originalData = orderDetailsLiveDataOriginal;
+
         if (currentData != null && currentData.data != null) {
             List<OrderDetails_Model> updatedOrders = new ArrayList<>(currentData.data);
             for (OrderDetails_Model order : updatedOrders) {
@@ -316,9 +388,20 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             }
 
             orderDetailsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
+
           //  orderDetailsLiveData.observeForever(ordersObserver);
 
             //orderDetailsLiveData.setValue(new ApiResponseState_Enum.Status.SUCCESS, updatedOrders, null));
+        }
+        if (originalData != null ) {
+            List<OrderDetails_Model> originalupdatedOrders = new ArrayList<>(originalData);
+            for (OrderDetails_Model originalorder : originalupdatedOrders) {
+                if (originalorder.getOrderid().equals(orderId)) {
+                    originalupdatedOrders.remove(originalorder);
+                    break;
+                }
+            }
+            orderDetailsLiveDataOriginal = new ArrayList<>(originalupdatedOrders);
         }
     }
 

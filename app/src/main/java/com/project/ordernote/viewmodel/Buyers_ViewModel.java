@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.Buyers_Model;
+import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.data.repository.Buyers_Repository;
 import com.project.ordernote.utils.ApiResponseState_Enum;
@@ -22,6 +23,7 @@ public class Buyers_ViewModel extends AndroidViewModel {
 
     private  Buyers_Repository repository = null;
     private MutableLiveData<ApiResponseState_Enum<List<Buyers_Model>>> buyersListLiveData;
+    private List<Buyers_Model> buyersListLiveDataOriginal = new ArrayList<>();
     private MutableLiveData<Buyers_Model> selectedBuyerLiveData;
     private MutableLiveData<String> selectedBuyerPositionStringLiveData;
 
@@ -58,7 +60,33 @@ public class Buyers_ViewModel extends AndroidViewModel {
 
         }
     }
+    public void setBuyerDetails(ApiResponseState_Enum<List<Buyers_Model>> response) {
+        if (response != null && response.data != null) {
 
+            if (buyersListLiveDataOriginal == null || buyersListLiveDataOriginal.isEmpty()) {
+                buyersListLiveDataOriginal = new ArrayList<>(response.data);
+            }
+        }
+    }
+    public void clearbuyerDetails() {
+        buyersListLiveDataOriginal = new ArrayList<>(new ArrayList<>());
+    }
+    public void filterBuyerListWithBuyerName(String buyername) {
+
+        List<Buyers_Model> filteredBuyers = new ArrayList<>();
+        for (Buyers_Model buyers : buyersListLiveDataOriginal) {
+            if (buyers.getName().toLowerCase().contains(buyername.toLowerCase()) || buyername == null || buyername.trim().isEmpty()) {
+                filteredBuyers.add(buyers);
+            }
+        }
+        String message = "";
+        if(filteredBuyers.isEmpty())
+        {
+            message = "There is Orders for the entered buyer name";
+        }
+        buyersListLiveData.setValue(ApiResponseState_Enum.successwithmessage(filteredBuyers,message));
+
+    }
         public void getBuyersListFromRepository(String vendorKey) {
         buyersListLiveData = repository.getBuyersList(vendorKey);
     }
@@ -119,6 +147,7 @@ public class Buyers_ViewModel extends AndroidViewModel {
 
 
     public Buyers_Model getBuyerDataFromViewModelUsingBuyerKey(String selectedBuyerKey) {
+
         if(buyersListLiveData == null){
             buyersListLiveData = new MutableLiveData<>();
         }
@@ -133,6 +162,9 @@ public class Buyers_ViewModel extends AndroidViewModel {
             }
 
         }
+
+
+
         return new Buyers_Model();
     }
 
@@ -195,14 +227,20 @@ public class Buyers_ViewModel extends AndroidViewModel {
 
             List<Buyers_Model> buyersModelArrayList = new ArrayList<>(Objects.requireNonNull(buyersListLiveData.getValue().data));
            // buyersListLiveData.getValue().data.add(buyersModel);
-             buyersModelArrayList.add(buyersModel);
-            buyersListLiveData.setValue(ApiResponseState_Enum.success(buyersModelArrayList));
+
             LocalDataManager.getInstance().setBuyers(buyersModelArrayList);
 
-
+        List<Buyers_Model> originalData = buyersListLiveDataOriginal;
+        if (originalData != null ) {
+            originalData.add(buyersModel);
+            LocalDataManager.getInstance().setBuyers(originalData);
+            buyersListLiveDataOriginal = new ArrayList<>(originalData);
+            buyersListLiveData.setValue(ApiResponseState_Enum.success(originalData));
+        }
     }
 
     public void deleteBuyerDetailsFromViewModelAndDB(String buyerkey) {
+        List<Buyers_Model> originalData = buyersListLiveDataOriginal;
         if(buyersListLiveData == null){
             buyersListLiveData = new MutableLiveData<>();
 
@@ -225,7 +263,15 @@ public class Buyers_ViewModel extends AndroidViewModel {
         else{
             buyersListLiveData.setValue(ApiResponseState_Enum.success(new ArrayList<>()));
         }
-
+        if (originalData != null ) {
+            for(int i = 0 ; i < originalData.size(); i++){
+                if(originalData.get(i).getUniquekey().equals(buyerkey)){
+                    originalData.remove(i);
+                    buyersListLiveDataOriginal = new ArrayList<>(originalData);
+                    LocalDataManager.getInstance().setBuyers(originalData);
+                }
+            }
+        }
     }
 
     public void updateBuyerInDB(Buyers_Model buyersModel, FirestoreService.FirestoreCallback<Void> callback) {
@@ -252,6 +298,18 @@ public class Buyers_ViewModel extends AndroidViewModel {
                 LocalDataManager.getInstance().setBuyers(buyersModelArrayList);
             }
         }
+
+        List<Buyers_Model> originalData = buyersListLiveDataOriginal;
+        if (originalData != null ) {
+            for(int i = 0 ; i < originalData.size(); i++){
+                if(buyersModelArrayList.get(i).getUniquekey().equals(buyersModel.getUniquekey())){
+                    buyersModelArrayList.set(i,buyersModel);
+                    buyersListLiveData.setValue(ApiResponseState_Enum.success(buyersModelArrayList));
+                    LocalDataManager.getInstance().setBuyers(buyersModelArrayList);
+                }
+            }
+        }
+
     }
 }
 

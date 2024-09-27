@@ -61,4 +61,8 @@ public class SessionManager {
         // Add other fields as needed
         editor.apply();
     }
+    public void logout() {
+        editor.clear(); // Clears all session data
+        editor.apply(); // Apply the changes
+    }
 }
