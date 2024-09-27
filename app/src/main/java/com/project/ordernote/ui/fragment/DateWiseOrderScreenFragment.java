@@ -16,15 +16,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.Timestamp;
 import com.project.ordernote.R;
 import com.project.ordernote.ui.adapter.OrdersListAdapter;
@@ -56,6 +60,11 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
     private SessionManager sessionManager;
     CardView dialogOrderStatusCard;
     TextView dialogOrderStatusText;
+    RecyclerView OrderRecyclerView;
+    View progressbarLayout;
+    LottieAnimationView progressbar;
+    LinearLayout searchLayout;
+    EditText searchInput;
 
     public DateWiseOrderScreenFragment() {
         // Required empty public constructor
@@ -92,12 +101,17 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_date_wise_order_screen, container, false);
 
+        progressbarLayout = view.findViewById(R.id.progressbar_backlayout);
+        progressbar = view.findViewById(R.id.progressbar);
+
+        searchLayout = view.findViewById(R.id.search_layout);
+        searchInput = view.findViewById(R.id.search_edit_text);
 
         RelativeLayout backbut = view.findViewById(R.id.dialog_back);
         tvSelectedDate = view.findViewById(R.id.tvSelectedDate);
         LinearLayout dateLayout = view.findViewById(R.id.date_layout);
         LinearLayout fetchDataLayout = view.findViewById(R.id.fetch_data_layout);
-        RecyclerView OrderRecyclerView = view.findViewById(R.id.orders_recycler_view);
+        OrderRecyclerView = view.findViewById(R.id.orders_recycler_view);
         dialogOrderStatusCard = view.findViewById(R.id.dialog_orderstatus_card);
         dialogOrderStatusText = view.findViewById(R.id.dialog_orderstatus_text);
 
@@ -112,7 +126,7 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
 
 
 
-        tvSelectedDate.setText("--//--//----");
+
         dateLayout.setOnClickListener(v -> {
             showDatePickerDialog();
         });
@@ -126,20 +140,35 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
         fetchDataLayout.setOnClickListener(v -> {
             if ((Objects.equals(selectedDate, ""))||(Objects.equals(selectedDate, null)))
             {
-                Toast.makeText(requireActivity(), "Please select order placed date", Toast.LENGTH_SHORT).show();
+
+                OrderRecyclerView.setVisibility(View.GONE);
                 dialogOrderStatusCard.setVisibility(View.VISIBLE);
-                dialogOrderStatusText.setText(String.valueOf("Please select the Date and click on the Fetch Button to fetch the orders"));
+                searchLayout.setVisibility(View.GONE);
+                dialogOrderStatusText.setText(String.valueOf("Please select the Date by clicking the select date button and then click on the Fetch Button to fetch the orders"));
                 return;
             }
             orderDetailViewModel(Constants.placed_status);
         });
 
-        try {
-            orderDetailViewModel(Constants.placed_status);
-        }
-        catch (Exception e ){
-            e.printStackTrace();
-        }
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String buyerName = charSequence.toString();
+
+                orderDetails_viewModel.filterOrderWithBuyerName(buyerName);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         return view;
     }
@@ -152,11 +181,11 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
 
         // Create a new instance of DatePickerDialog and show it
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(), (view, year1, month1, dayOfMonth) -> {
-            // month1 is 0-based, so add 1
+            searchInput.setText("");
             String selectedDate1 = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
             tvSelectedDate.setText(selectedDate1);
-
-            // Convert selectedDate1 to a Date object
+            orderDetails_viewModel.clearOrderDetails();
+            orderDetails_viewModel.clearFromViewModel();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             try {
                  selectedDate = sdf.parse(selectedDate1);
@@ -192,8 +221,8 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
             Date endDate = calendar.getTime();
             Timestamp endTimestamp = new Timestamp(endDate);
 
-            // Fetch data with the exact timestamps for the selected date
-            orderDetails_viewModel.getOrdersByStatus_DateAndVendorKey(status, startTimestamp, endTimestamp,"vendor_1");
+            searchInput.setText("");
+            orderDetails_viewModel.getOrdersByStatus_DateAndVendorKey(status, startTimestamp, endTimestamp,sessionManager.getVendorkey());
 
     }
 
@@ -218,26 +247,51 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
             if (resource != null) {
                 switch (resource.status) {
                     case LOADING:
-                        Toast.makeText(requireActivity(), "Loading Orders", Toast.LENGTH_SHORT).show();
+                        showProgressBar(true);
                         break;
                     case SUCCESS:
+                        showProgressBar(false);
+                        orderDetails_viewModel.setOrderDetails(resource);
                         if ((Objects.equals(selectedDate, ""))||(Objects.equals(selectedDate, null)))
                         {
                             dialogOrderStatusCard.setVisibility(View.VISIBLE);
-                            dialogOrderStatusText.setText(String.valueOf("Please select the Date and click on the Fetch Button to fetch the orders"));
+                            OrderRecyclerView.setVisibility(View.GONE);
+                            searchLayout.setVisibility(View.GONE);
+                            dialogOrderStatusText.setText(String.valueOf("Please select the Date by clicking the select date button and then click on the Fetch Button to fetch the orders"));
                         }
                         else
                         {
-                            dialogOrderStatusCard.setVisibility(View.GONE);
+                            if(resource.message == null )
+                            {
+                                dialogOrderStatusCard.setVisibility(View.VISIBLE);
+                                OrderRecyclerView.setVisibility(View.GONE);
+                                searchLayout.setVisibility(View.GONE);
+                                dialogOrderStatusText.setText(String.valueOf("Please click the Fetch Data button to load the orders"));
+                            }
+                            else if(resource.message == "" )
+                            {
+                                dialogOrderStatusCard.setVisibility(View.GONE);
+                                OrderRecyclerView.setVisibility(View.VISIBLE);
+                                searchLayout.setVisibility(View.VISIBLE);
+                            }
+                            else
+                            {
+                                dialogOrderStatusCard.setVisibility(View.VISIBLE);
+                                OrderRecyclerView.setVisibility(View.GONE);
+                                searchLayout.setVisibility(View.VISIBLE);
+                                dialogOrderStatusText.setText(String.valueOf(resource.message));
+                            }
+
                         }
 
-                        Toast.makeText(requireActivity(), "Success in fetching orders", Toast.LENGTH_SHORT).show();
+
                         ordersListAdapter.setOrders(resource.data,"DatwWiseOrderScreen");
                         break;
                     case ERROR:
+                        showProgressBar(false);
                         dialogOrderStatusCard.setVisibility(View.VISIBLE);
                         dialogOrderStatusText.setText(String.valueOf("There is no orders for the selected Date"));
-                        Toast.makeText(requireActivity(), "Error in fetching orders", Toast.LENGTH_SHORT).show();
+
                         break;
                 }
             }
@@ -259,5 +313,23 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
                 return false;
             }
         });
+    }
+    private void showProgressBar(boolean show) {
+
+        try {
+            if (show) {
+                progressbar.playAnimation();
+                progressbar.setVisibility(View.VISIBLE);
+                progressbarLayout.setVisibility(View.VISIBLE);
+            } else {
+                progressbar.cancelAnimation();
+                progressbar.setVisibility(View.GONE);
+                progressbarLayout.setVisibility(View.GONE);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+        }
     }
 }
