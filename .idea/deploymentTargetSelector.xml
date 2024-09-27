@@ -4,7 +4,8 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-09-02T17:53:45.673199400Z">
+       </SelectionState>
+         <DropdownSelection timestamp="2024-09-02T17:53:45.673199400Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="PhysicalDevice" identifier="serial=RZCW12KVFTP" />
@@ -29,6 +30,6 @@
 
        </SelectionState>
 
-    </selectionStates>
+     </selectionStates>
   </component>
 </project>
