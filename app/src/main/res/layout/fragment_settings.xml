@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/reddishgrey"
-
-    tools:context=".ui.fragment.SettingsFragment">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginTop="20dp">
+    tools:context=".ui.fragment.SettingsFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:id="@+id/titleBarLayout"
+        android:layout_marginTop="2dp"
         android:orientation="horizontal"
         android:layout_gravity="center">
 
@@ -28,6 +25,12 @@
 
             />
     </LinearLayout>
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="50dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,10 +41,10 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_centerVertical="true"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="3dp"
-        android:gravity="center"
-        android:text="Order Info " />
+        android:gravity="center|bottom"
+        android:text="Order Details " />
         <LinearLayout
             android:id="@+id/date_wise_order_screen"
             android:layout_width="match_parent"
@@ -55,7 +58,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Datewise Orders"
+                android:layout_marginStart="6dp"
                 android:layout_weight="1"
+                style="@style/BlackTextStyleSemiBold"
                 android:textColor="@color/black"/>
             <ImageView
                 android:layout_width="wrap_content"
@@ -72,11 +77,11 @@
             style="@style/SubTitleGreyTextStyle1"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="5dp"
+             android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
             android:layout_marginBottom="3dp"
-            android:gravity="center"
-            android:text="Manage Menu" />
+            android:gravity="center|bottom"
+            android:text="Menu" />
         <LinearLayout
             android:id="@+id/manage_menu_screen"
             android:layout_width="match_parent"
@@ -91,6 +96,9 @@
                 android:layout_height="wrap_content"
                 android:text="Manage Menu"
                 android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                style="@style/BlackTextStyleSemiBold"
+
                 android:textColor="@color/black"/>
             <ImageView
                 android:layout_width="wrap_content"
@@ -98,12 +106,15 @@
                 android:src="@drawable/right_arrow"/>
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
+</LinearLayout>
+<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="50dp"
-        android:gravity="center"
-        android:background="@color/white"
+        android:gravity="center|bottom"
+        android:layout_marginBottom="110dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:orientation="vertical">
 
         <TextView
@@ -122,13 +133,13 @@
         <TextView
             android:id="@+id/appversion"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="20dp"
             android:layout_gravity="center"
             android:gravity="center"
+            android:layout_marginBottom="10dp"
             android:text="Version: 0.0.0"
             android:fontFamily="@font/open_sans_bold"
             />
     </LinearLayout>
-</LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>

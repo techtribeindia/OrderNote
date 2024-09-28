@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -123,9 +124,9 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
 
     static class OrderViewHolder extends RecyclerView.ViewHolder {
         TextView orderId, orderStatus,buyerName,buyerAddress,orderPrice;
-        Button ViewBill;
+        //Button ViewBill;
         CardView itemCard;
-
+        LinearLayout ViewBill;
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
             orderId = itemView.findViewById(R.id.invoice_number);

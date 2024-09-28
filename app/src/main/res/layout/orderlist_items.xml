@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="16dp">
+        android:id="@+id/view_bill"
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,23 +45,29 @@
                 android:textSize="15sp"
                 android:textColor="@android:color/black" />
         </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingTop="8dp">
+
         <TextView
-            android:id="@+id/buyer_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Buyer Name"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black" />
-        <TextView
-            android:id="@+id/buyer_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Address"
-            android:textSize="14sp"
-            android:textColor="@android:color/black" />
+                android:id="@+id/buyer_name"
+                android:layout_weight="1"
+                   android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Buyer Name"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="15dp"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,9 +84,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_gravity="end"
+
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/buyer_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Address"
+                    android:textSize="14sp"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/black" />
+
+
                 <Button
-                    android:id="@+id/view_bill"
+                    android:visibility="gone"
+
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:background="@drawable/ovel_shaped_button"
