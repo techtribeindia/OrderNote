@@ -21,7 +21,9 @@ Customize your light theme here.
     <item name="colorOnSecondary">@color/black</item>
 
      <!-- If you want light content (dark icons) in the status bar -->
-    <item name="android:windowLightStatusBar">true</item>
+
+    <item name="android:windowTranslucentStatus">false</item>
+
     <!-- Status bar color.-->
     <item name="android:statusBarColor">?attr/colorSecondary </item>
 </style>
