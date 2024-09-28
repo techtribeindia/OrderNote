@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
+import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 
 import com.project.ordernote.data.model.OrderDetails_Model;
@@ -25,7 +26,7 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
     private MutableLiveData<ApiResponseState_Enum<List<MenuItems_Model>>> menuItemsLiveData;
     private MutableLiveData<String> selectedmenuJson;
     private MutableLiveData<MenuItems_Model> selectedMenuItemModel;
- //   private MutableLiveData<String> selectedMenuItemPosition;
+    private List<MenuItems_Model> menuItemsLiveDataOriginal = new ArrayList<>();
 
 
 
@@ -58,13 +59,44 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
 
     }
 
+
+    public void setOrderDetails(ApiResponseState_Enum<List<MenuItems_Model>> response) {
+        if (response != null && response.data != null) {
+            if (menuItemsLiveDataOriginal == null || menuItemsLiveDataOriginal.isEmpty()) {
+
+                menuItemsLiveDataOriginal = new ArrayList<>(response.data);
+            }
+        }
+    }
+
+    public void clearOrderDetails() {
+        menuItemsLiveDataOriginal = new ArrayList<>(new ArrayList<>());
+    }
+
+    public void filterOrderWithMenuName(String itemname) {
+
+        List<MenuItems_Model> filteredOrders = new ArrayList<>();
+        for (MenuItems_Model order : menuItemsLiveDataOriginal) {
+            if (order.getItemname().toLowerCase().contains(itemname.toLowerCase()) || itemname == null || itemname.trim().isEmpty()) {
+                filteredOrders.add(order);
+            }
+        }
+        String message = "";
+        if(filteredOrders.isEmpty())
+        {
+            message = "There is menus for the entered Menu name";
+        }
+        menuItemsLiveData.setValue(ApiResponseState_Enum.successwithmessage(filteredOrders,message));
+
+    }
+
     public void FetchMenuItemByVendorKeyFromRepository(String vendorKey) {
         menuItemsLiveData = repository.fetchMenuItemsUsingVendorkey(vendorKey);
     }
 
 
     public void setMenuListinMutableLiveData(List<MenuItems_Model> menuItems_List) {
-        menuItemsLiveData.setValue(ApiResponseState_Enum.success(menuItems_List));
+        menuItemsLiveData.setValue(ApiResponseState_Enum.successwithmessage(menuItems_List,""));
 
     }
 
@@ -107,23 +139,43 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
     public  void updateInsertUpdateMenuData(MenuItems_Model menuItemsModel, String process)
     {
         ApiResponseState_Enum<List<MenuItems_Model>> currentData = menuItemsLiveData.getValue();
-        if (currentData != null && currentData.data != null) {
-            List<MenuItems_Model> updatedOrders = new ArrayList<>(currentData.data);
-            if(Objects.equals(process, "add"))
-            {
-                updatedOrders.add(menuItemsModel);
-                return;
-            }
+        List<MenuItems_Model> originalData = menuItemsLiveDataOriginal;
 
+        if(Objects.equals(process, "add"))
+        {
+            if (originalData != null) {
+
+                originalData.add(menuItemsModel);
+                menuItemsLiveDataOriginal = new ArrayList<>(originalData);
+                    menuItemsLiveData.setValue(ApiResponseState_Enum.successwithmessage(originalData,""));
+
+
+            }
+            return;
+        }
+        if (originalData != null) {
+            List<MenuItems_Model> updatedOrders = new ArrayList<>(menuItemsLiveDataOriginal);
             for (MenuItems_Model order : updatedOrders) {
                 if (order.getItemkey().equals(menuItemsModel.getItemkey())) {
                     order.setItemname(menuItemsModel.getItemname());
 
                     break;
                 }
+
+            }
+        }
+        if (currentData != null && currentData.data != null) {
+            List<MenuItems_Model> updatedOrders = new ArrayList<>(currentData.data);
+            for (MenuItems_Model order : updatedOrders) {
+                if (order.getItemkey().equals(menuItemsModel.getItemkey())) {
+                    order.setItemname(menuItemsModel.getItemname());
+
+                    break;
+                }
+
             }
 
-            menuItemsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
+            menuItemsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,""));
             //  orderDetailsLiveData.observeForever(ordersObserver);
 
             //orderDetailsLiveData.setValue(new ApiResponseState_Enum.Status.SUCCESS, updatedOrders, null));

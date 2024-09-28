@@ -146,12 +146,7 @@
                 android:gravity="center"
                 />
         </androidx.cardview.widget.CardView>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:layout_below="@+id/createOrder_button"
-            android:layout_marginTop="10dp"
-            android:background="@color/reddishgrey" />
+
     </LinearLayout>
     <View
         android:layout_width="match_parent"

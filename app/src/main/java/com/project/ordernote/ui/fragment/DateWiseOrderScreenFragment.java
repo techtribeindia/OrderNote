@@ -290,7 +290,10 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
                     case ERROR:
                         showProgressBar(false);
                         dialogOrderStatusCard.setVisibility(View.VISIBLE);
-                        dialogOrderStatusText.setText(String.valueOf("There is no orders for the selected Date"));
+                        OrderRecyclerView.setVisibility(View.GONE);
+                        searchLayout.setVisibility(View.GONE);
+                        dialogOrderStatusText.setText(String.valueOf(resource.message));
+
 
                         break;
                 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/transparent"
     tools:context=".ui.fragment.MenuItemsDescFragment">
     <LinearLayout
@@ -57,16 +58,19 @@
 
 
         <RadioGroup
+            android:id="@+id/itemtype"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <RadioButton android:id="@+id/priceperkg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:buttonTint="@color/red"
                 android:text="PRICEPERKG"/>
             <RadioButton android:id="@+id/unitprice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:buttonTint="@color/red"
                 android:text="UNITPRICE"/>
         </RadioGroup>
         <TextView
@@ -75,12 +79,13 @@
             android:layout_height="20dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="15dp"
-            android:text="GrossWeight" />
+            android:text="GrossWeight in KG" />
 
 
         <EditText
             android:id="@+id/grossweight"
             style="@style/BlackTextStyleSemiBold"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginStart="1dp"
@@ -102,6 +107,7 @@
         <EditText
             android:id="@+id/portionsize"
             style="@style/BlackTextStyleSemiBold"
+
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginStart="1dp"
@@ -111,6 +117,7 @@
             android:gravity="center_vertical"
             android:hint="eg:- 1 PC" />
         <TextView
+            android:id="@+id/price_textview"
             style="@style/BlackTextStyleSemiBold"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
@@ -122,6 +129,7 @@
         <EditText
             android:id="@+id/price"
             style="@style/BlackTextStyleSemiBold"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginStart="1dp"
@@ -130,6 +138,31 @@
             android:elevation="5dp"
             android:gravity="center_vertical"
             android:hint="eg:- ₹ 500" />
+        <TextView
+            android:id="@+id/selling_price_textview"
+            style="@style/BlackTextStyleSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="15dp"
+            android:text="Selling Price"
+            android:visibility="gone"/>
+
+
+        <EditText
+
+            android:id="@+id/selling_price_input"
+            style="@style/BlackTextStyleSemiBold"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/rectangle_greybackground"
+            android:elevation="5dp"
+            android:gravity="center_vertical"
+            android:hint="eg:- ₹ 500"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/menuitem_button"
@@ -154,5 +187,20 @@
         android:padding="8dp"
         android:layout_marginEnd="25dp"
         android:src="@mipmap/closewithcircle"/>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/progressbar_backlayout"
+        android:alpha=".6"
+        android:background="@color/progressbar_grey"
+        android:visibility="gone"/>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/progressbar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_centerInParent="true"
+        app:lottie_fileName="dotanimator.json"
+        android:visibility="gone" />
 </RelativeLayout>

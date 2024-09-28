@@ -401,6 +401,7 @@ public class FirestoreService {
             updates.put(DatabaseReference.grossweight_MenuItems,menuItemsModel.getGrossweight());
             updates.put(DatabaseReference.portionsize_MenuItems,menuItemsModel.getPortionsize());
             updates.put(DatabaseReference.unitprice_MenuItems,menuItemsModel.getUnitprice());
+            updates.put(DatabaseReference.priceperkg_MenuItems,menuItemsModel.getPriceperkg());
 
             DocumentReference orderRef = db.collection(DatabaseReference.MenuItems_TableName).document(menuItemsModel.getItemkey());
             orderRef.update(updates)

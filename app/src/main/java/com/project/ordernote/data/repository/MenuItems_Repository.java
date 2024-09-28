@@ -32,12 +32,12 @@ public class MenuItems_Repository {
             public void onSuccess(List<MenuItems_Model> result) {
                 if (result.isEmpty()) {
 
-                    Log.i("Repository Log: ", "MenuItemSuccesfully Fetched but empty" );
-                    menuItemLiveData.postValue(ApiResponseState_Enum.error("No data available", result));
-                } else {
-                    Log.i("Repository Log: ", "MenuItemSuccesfully Fetched" );
 
-                    menuItemLiveData.postValue(ApiResponseState_Enum.success(result));
+                    menuItemLiveData.postValue(ApiResponseState_Enum.successwithmessage(result,"Menu Items not available"));
+                } else {
+
+
+                    menuItemLiveData.postValue(ApiResponseState_Enum.successwithmessage(result,""));
                 }
             }
 
@@ -63,7 +63,7 @@ public class MenuItems_Repository {
                 if (result.isEmpty()) {
                     ordersLiveData.postValue(ApiResponseState_Enum.error("No data available", result));
                 } else {
-                    ordersLiveData.postValue(ApiResponseState_Enum.success(result));
+                    ordersLiveData.postValue(ApiResponseState_Enum.successwithmessage(result,""));
                 }
             }
 

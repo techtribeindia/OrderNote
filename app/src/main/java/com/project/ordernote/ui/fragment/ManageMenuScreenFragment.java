@@ -13,11 +13,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.MenuItems_Model;
@@ -42,6 +47,7 @@ public class ManageMenuScreenFragment extends DialogFragment {
     private MenuItems_ViewModel menuItemsViewModel;
     private MenuItemListAdapter menuItemListAdapter;
     List<MenuItems_Model> menuItemsList;
+
     public ManageMenuScreenFragment() {
         // Required empty public constructor
     }
@@ -98,6 +104,26 @@ public class ManageMenuScreenFragment extends DialogFragment {
             }
         });
 
+        binding.searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String menuName = charSequence.toString();
+
+                menuItemsViewModel.filterOrderWithMenuName(menuName);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         return binding.getRoot();
     }
 
@@ -106,6 +132,12 @@ public class ManageMenuScreenFragment extends DialogFragment {
             @Override
             public boolean handleMessage(@NonNull Message message) {
                 Bundle bundle = message.getData();
+                String data = bundle.getString("function");
+
+                if(data.equals("add")){
+                    binding.searchEditText.setText("");
+
+                }
 
                 return false;
             }
@@ -143,20 +175,55 @@ public class ManageMenuScreenFragment extends DialogFragment {
                 switch (resource.status) {
                     case LOADING:
 
-                        Toast.makeText(requireActivity(), "Loading Menu", Toast.LENGTH_SHORT).show();
+                        showProgressBar(true);
                         break;
                     case SUCCESS:
+                        showProgressBar(false);
+                        menuItemsViewModel.setOrderDetails(resource);
                         menuItemListAdapter.setOrders(resource.data,"ManageMenuScreenFragment");
-                        Toast.makeText(requireActivity(), "Success in fetching menu", Toast.LENGTH_SHORT).show();
-
-
+                         if(resource.message == "" )
+                    {
+                        binding.dialogOrderstatusCard.setVisibility(View.GONE);
+                        binding.menuRecyclerView.setVisibility(View.VISIBLE);
+                        binding.searchLayout.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        binding.dialogOrderstatusCard.setVisibility(View.VISIBLE);
+                        binding.menuRecyclerView.setVisibility(View.GONE);
+                        binding.searchLayout.setVisibility(View.VISIBLE);
+                        binding.dialogOrderstatusText.setText(String.valueOf(resource.message));
+                    }
                         break;
                     case ERROR:
-                        Toast.makeText(requireActivity(), "Error in fetching menu", Toast.LENGTH_SHORT).show();
+                        showProgressBar(false);
+                        binding.dialogOrderstatusCard.setVisibility(View.VISIBLE);
+                        binding.menuRecyclerView.setVisibility(View.GONE);
+                        binding.searchLayout.setVisibility(View.GONE);
+                        binding.dialogOrderstatusText.setText(String.valueOf(resource.message));
 
                         break;
                 }
             }
         });
+    }
+
+    private void showProgressBar(boolean show) {
+
+        try {
+            if (show) {
+                binding.progressbar.playAnimation();
+                binding.progressbar.setVisibility(View.VISIBLE);
+                binding.progressbarBacklayout.setVisibility(View.VISIBLE);
+            } else {
+                binding.progressbar.cancelAnimation();
+                binding.progressbar.setVisibility(View.GONE);
+                binding.progressbarBacklayout.setVisibility(View.GONE);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+        }
     }
 }
