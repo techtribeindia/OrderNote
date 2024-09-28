@@ -102,7 +102,7 @@ public class LoginScreen extends AppCompatActivity {
 
             loginViewModel.loginUser(mobileNumber, password).observe(this, loginResult -> {
                 if (loginResult.getLoginResult()) {
-                    Intent intent  = new Intent(LoginScreen.this,SplashScreen.class);
+                    Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
                     LoginScreen.this.startActivity(intent);
                     LoginScreen.this.finish();
                     // Navigate to the next screen

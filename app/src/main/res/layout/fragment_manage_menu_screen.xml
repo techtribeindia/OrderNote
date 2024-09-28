@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/reddishgrey"
     tools:context=".ui.fragment.ManageMenuScreenFragment">
     <LinearLayout
@@ -37,25 +38,63 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:text="Manage Menu"
-                android:layout_marginStart="20dp"
+
                 style="@style/ScreenTitleTextStyle"
 
                 />
-            <RelativeLayout
-                android:id="@+id/add_menuitem"
-                android:layout_width="40dp"
-                android:visibility="visible"
 
+            <LinearLayout
+                android:id="@+id/add_menuitem"
+                android:layout_width="wrap_content"
+                android:visibility="visible"
+                android:orientation="horizontal"
                 android:layout_height="match_parent">
+                <TextView
+
+                    android:layout_width="95dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical|right"
+                    android:layout_marginEnd="5dp"
+                    android:text="Add Menu"
+                    style="@style/RedTextStyleSmall"
+
+                    />
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:alpha=".7"
                     android:layout_centerInParent="true"
                     android:src="@drawable/add_plus"/>
-            </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:padding="8dp">
 
+            <EditText
+                android:id="@+id/search_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:hint="Enter the Menu name"
+                android:padding="8dp"
+
+                android:drawablePadding="5dp"
+                android:background="@drawable/edit_text_background"
+                android:paddingLeft="40dp"
+                android:paddingStart="40dp"
+                android:paddingRight="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/darker_gray"/>
+
+        </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/menu_recycler_view"
             android:layout_width="match_parent"
@@ -63,5 +102,45 @@
             android:layout_weight="1"
             android:padding="8dp"
             android:scrollbars="vertical" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/dialog_orderstatus_card"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:padding="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            >
+            <TextView
+                android:id="@+id/dialog_orderstatus_text"
+                style="@style/SubTitleTextStyle1"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Order Status Changed"
+                android:gravity="center"
+                />
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/progressbar_backlayout"
+        android:alpha=".6"
+        android:background="@color/progressbar_grey"
+        android:visibility="gone"
+        />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/progressbar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:lottie_fileName="dotanimator.json"
+        />
 </FrameLayout>
