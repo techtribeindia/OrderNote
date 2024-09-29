@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -39,6 +40,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  {
@@ -66,7 +68,7 @@ public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  
     TextView buyernameTextview , pdf_fileTypeText , xls_fileTypeText;
     TextView buyerwise_startDate , buyerwise_endDate , customDate_startDate, customDate_endDate;
 
-
+    CardView closeImage_cardview;
 
 
 
@@ -99,7 +101,7 @@ public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  
         buyernameTextview = view.findViewById(R.id.buyernameTextview);
         xls_fileTypeText  = view.findViewById(R.id.xls_fileTypeTextview);
         pdf_fileTypeText  = view.findViewById(R.id.pdf_fileTypeTextview);
-
+        closeImage_cardview = view.findViewById(R.id.closeImage_cardview);
 
         startDatebuyerwiselayout = view.findViewById(R.id.startDatebuyerwiselayout);
         endDatebuyerwiselayout = view.findViewById(R.id.endDatebuyerwiselayout);
@@ -138,7 +140,12 @@ public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  
         }
 
 
-
+        closeImage_cardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
 
 
 

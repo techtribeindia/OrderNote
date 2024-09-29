@@ -47,7 +47,14 @@ public class SessionManager {
     {
         return  pref.getString(KEY_ROLE,"");
     }
-
+    public String getVUserName()
+    {
+        return pref.getString(KEY_NAME,"");
+    }
+    public String getUserMobileNumber()
+    {
+        return pref.getString(KEY_MOBILE_NUMBER,"");
+    }
     public String getVendorkey()
     {
         return pref.getString(VENDORKEY,"");

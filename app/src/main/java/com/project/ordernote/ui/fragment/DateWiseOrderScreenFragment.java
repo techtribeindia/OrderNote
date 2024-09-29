@@ -3,11 +3,13 @@ package com.project.ordernote.ui.fragment;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,6 +23,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -180,7 +184,7 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and show it
-        DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(), (view, year1, month1, dayOfMonth) -> {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity() ,R.style.CustomDatePickerDialog, (view, year1, month1, dayOfMonth) -> {
             searchInput.setText("");
             String selectedDate1 = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
             tvSelectedDate.setText(selectedDate1);
@@ -229,6 +233,8 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         ordersListAdapter.clearOrders();
         observeOrderDetails();
         orderDetails_viewModel.clearSelectedOrderJson();
@@ -317,6 +323,22 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
             }
         });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = requireActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.reddishgrey)); // Use a different color if needed
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decor = requireActivity().getWindow().getDecorView();
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // Adjust as needed
+        }
+    }
+
     private void showProgressBar(boolean show) {
 
         try {

@@ -16,6 +16,7 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -48,6 +49,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.15.1")
     implementation("androidx.activity:activity:1.9.1")
     implementation ("com.airbnb.android:lottie:4.2.0")
+    implementation ("androidx.multidex:multidex:2.0.1")
 
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation ("com.itextpdf:layout:7.1.14")
