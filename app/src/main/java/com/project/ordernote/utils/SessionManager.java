@@ -35,7 +35,14 @@ public class SessionManager {
     public boolean isLoggedIn() {
         return pref.getBoolean(KEY_IS_LOGGED_IN, false);
     }
-
+    public String getVUserName()
+    {
+        return pref.getString(KEY_NAME,"");
+    }
+    public String getUserMobileNumber()
+    {
+        return pref.getString(KEY_MOBILE_NUMBER,"");
+    }
     public String getRole()
     {
         return  pref.getString(KEY_ROLE,"");

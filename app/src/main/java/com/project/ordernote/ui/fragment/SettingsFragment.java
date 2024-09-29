@@ -26,6 +26,8 @@ import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 
+import java.util.Objects;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SettingsFragment#newInstance} factory method to
@@ -63,7 +65,33 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
+        if(!Objects.equals(sessionManager.getRole(), Constants.admin_role))
+        {
+            binding.managemenuLayout.setVisibility(View.GONE);
+        }
+        if(sessionManager.getVUserName() != null)
+        {
+            binding.userName.setText(sessionManager.getVUserName());
+        }
+        else {
+            binding.userName.setText(" ----- ");
+        }
 
+        if(sessionManager.getUserMobileNumber() != null)
+        {
+            binding.userMobileNumber.setText(sessionManager.getUserMobileNumber());
+        }
+        else {
+            binding.userMobileNumber.setText(" ----- ");
+        }
+
+        if(sessionManager.getRole() != null)
+        {
+            binding.userRole.setText(sessionManager.getRole());
+        }
+        else {
+            binding.userRole.setText(" ----- ");
+        }
         try {
             PackageInfo pInfo = requireContext().getPackageManager().getPackageInfo(requireContext().getPackageName(), 0);
             String version = pInfo.versionName;

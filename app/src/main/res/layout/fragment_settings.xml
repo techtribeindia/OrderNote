@@ -64,6 +64,7 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/managemenu_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -73,10 +74,10 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="16dp"
             android:layout_marginBottom="3dp"
-            android:gravity="center"
-            android:text="Manage Menu" />
+            android:gravity="center|bottom"
+            android:text="Menu" />
         <LinearLayout
             android:id="@+id/manage_menu_screen"
             android:layout_width="match_parent"
@@ -91,11 +92,89 @@
                 android:layout_height="wrap_content"
                 android:text="Manage Menu"
                 android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                style="@style/BlackTextStyleSemiBold"
+
                 android:textColor="@color/black"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/right_arrow"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+
+            style="@style/SubTitleGreyTextStyle1"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="3dp"
+            android:gravity="center"
+            android:text="General" />
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+
+            android:padding="10dp"
+            >
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User Name:"
+                android:layout_weight="1"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/user_name"
+                style="@style/SubTitleGreyTextStyle1"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:text="name" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User Mobile Number:"
+                android:layout_weight="1"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/user_mobile_number"
+                style="@style/SubTitleGreyTextStyle1"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:text="+91 xx xx xx" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User Role:"
+                android:layout_weight="1"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/user_role"
+                style="@style/SubTitleGreyTextStyle1"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:text="role" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
