@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
@@ -14,10 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.FragmentSettingsBinding;
 import com.project.ordernote.ui.activity.LoginScreen;
@@ -181,6 +186,19 @@ public class SettingsFragment extends Fragment {
     }
 public void  logoutFun()
 {
+    FirebaseMessaging.getInstance().unsubscribeFromTopic(sessionManager.getRole()+"_"+sessionManager.getVendorkey())
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    String msg = "Unsubscribed";
+                    if (!task.isSuccessful()) {
+                        msg = "Unsubscribe failed";
+                    }
+
+                    Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
     Intent intent  = new Intent(requireActivity(), LoginScreen.class);
     requireActivity().startActivity(intent);
     requireActivity().finish();
