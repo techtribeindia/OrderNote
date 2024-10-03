@@ -7,9 +7,7 @@
         motion:constraintSetStart="@id/start"
         motion:constraintSetEnd="@id/end"
         motion:duration="300">
-        <OnSwipe
-            motion:dragDirection="dragUp"
-            motion:touchAnchorId="@id/banner" />
+
     </Transition>
 
     <ConstraintSet android:id="@+id/start">

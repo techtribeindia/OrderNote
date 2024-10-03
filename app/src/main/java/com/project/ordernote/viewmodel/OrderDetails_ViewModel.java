@@ -238,7 +238,13 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<ApiResponseState_Enum<String>> rejectOrder(String orderId, String status) {
-        return null;
+        MutableLiveData<ApiResponseState_Enum<String>> resultLiveData = repository.rejectOrder(orderId, status);
+        resultLiveData.observeForever(result -> {
+            if (result != null && result.status == ApiResponseState_Enum.Status.SUCCESS) {
+                removeOrderFromLiveData(orderId);
+            }
+        });
+        return resultLiveData;
     }
 
     public MutableLiveData<ApiResponseState_Enum<String>> cancelOrder(String orderId,String status) {
@@ -387,7 +393,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
                 }
             }
 
-            orderDetailsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
+            orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,""));
 
           //  orderDetailsLiveData.observeForever(ordersObserver);
 
