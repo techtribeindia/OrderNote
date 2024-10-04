@@ -25,7 +25,6 @@ public class Constants{
     public static final String unitprice_pricetype = "UNITPRICE";
     public static final String priceperkg_pricetype = "PRICEPERKG";
 
-    public static final String created_orderstatus = "CREATED";
 
     public static final String pdf_filetype = "PDF";
     public static final String xls_filetype = "XLS";

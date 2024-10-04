@@ -26,7 +26,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.FragmentSettingsBinding;
 import com.project.ordernote.ui.activity.LoginScreen;
-import com.project.ordernote.ui.activity.SplashScreen;
 import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
@@ -113,7 +112,7 @@ public class SettingsFragment extends Fragment {
                 AlertDialogUtil.showCustomDialog(
                         requireActivity(),
                         "Logout",
-                        "Do you want to logout from the device .", "Yes", "No","RED",
+                        "Do you want to logout from the device .", "Yes", "No", "RED",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -130,6 +129,13 @@ public class SettingsFragment extends Fragment {
                                 // Handle negative button click
                                 dialog.dismiss();
 
+
+                            }
+                        },
+                        new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialogInterface) {
+                                dialogInterface.dismiss();
 
                             }
                         }

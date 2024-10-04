@@ -16,9 +16,10 @@ public class AlertDialogUtil {
 
 
 
-    public static void showCustomDialog(Context context, String title, String message, String positiveButtonText , String negativeButtonText,String positiveButtonColor,
-                                                     DialogInterface.OnClickListener positiveClickListener,
-                                                     DialogInterface.OnClickListener negativeClickListener ) {
+    public static void showCustomDialog(Context context, String title, String message, String positiveButtonText , String negativeButtonText, String positiveButtonColor,
+                                        DialogInterface.OnClickListener positiveClickListener,
+                                        DialogInterface.OnClickListener negativeClickListener, DialogInterface.OnCancelListener cancelListener)
+     {
         // Inflate the custom layout
         LayoutInflater inflater = LayoutInflater.from(context);
         View customView = inflater.inflate(R.layout.alertdialog_custom, null);
@@ -81,6 +82,8 @@ public class AlertDialogUtil {
             }
             dialog.dismiss();
         });
+
+        dialog.setOnCancelListener(cancelListener);
 
         // Show the dialog
         dialog.show();

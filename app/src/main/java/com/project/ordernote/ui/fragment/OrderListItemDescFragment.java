@@ -145,9 +145,8 @@ public class OrderListItemDescFragment extends DialogFragment {
         orderItemListAdapter = new OrderItemListAdapter();
         motionLayout = view.findViewById(R.id.motionLayout);
         banner = view.findViewById(R.id.banner);
-        hideBanner();
-
-        // Parse the JSON data and set it to the respective UI components
+         hideBanner();
+         // Parse the JSON data and set it to the respective UI components
         if (orderJson != null) {
             Gson gson = new Gson();
             OrderDetails_Model order = gson.fromJson(orderJson, OrderDetails_Model.class);
@@ -195,8 +194,8 @@ public class OrderListItemDescFragment extends DialogFragment {
                 dialogCancelOnlyButtonLayout = view.findViewById(R.id.dialog_cancel_only_button_layout);
                 RelativeLayout dialogCancelOnlyBut = view.findViewById(R.id.dialog_cancel_only_but);
 
-                Button approveButton = view.findViewById(R.id.approve_button);
-                Button denyButton = view.findViewById(R.id.deny_button);
+                TextView approveButton = view.findViewById(R.id.approve_button);
+                TextView denyButton = view.findViewById(R.id.deny_button);
 
                 Timestamp timestamp = order.getOrderplaceddate();
                 Date date = timestamp.toDate();

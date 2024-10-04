@@ -38,7 +38,6 @@ import com.project.ordernote.data.model.OrderDetails_Model;
 
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.databinding.FragmentAddOrdersBinding;
-import com.project.ordernote.ui.activity.SplashScreen;
 import com.project.ordernote.ui.adapter.CreateOrderCartItemAdapter;
 import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.ApiResponseState_Enum;
@@ -529,7 +528,7 @@ public class CreateOrderFragment extends Fragment {
             AlertDialogUtil.showCustomDialog(
                     requireActivity(),
                     "Create Order",
-                    "Do you want this create this order now.", "Create", "Not now","RED",
+                    "Do you want this create this order now.", "Create", "Not now", "RED",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -548,7 +547,13 @@ public class CreateOrderFragment extends Fragment {
 
 
                         }
+                    }, new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+                            isGenerateOrderClicked = false;
+                        }
                     }
+
             );
 
 
@@ -718,7 +723,7 @@ public class CreateOrderFragment extends Fragment {
             }
             try{
 
-                orderDetailsModel.setStatus(Constants.created_orderstatus);
+                orderDetailsModel.setStatus(Constants.created_status);
 
             }
             catch (Exception e){
@@ -985,7 +990,7 @@ public class CreateOrderFragment extends Fragment {
                         // Inside an Activity or Fragment
                         AlertDialogUtil.showCustomDialog(
                                 requireActivity(),
-                                "Remove Item Cart ",
+                                "Remove Item From Cart ",
                                 "Do you want to Remove this item from cart .", "Remove", "Cancel","BLACK",
                                 new DialogInterface.OnClickListener() {
                                     @Override
@@ -1004,7 +1009,14 @@ public class CreateOrderFragment extends Fragment {
 
 
                                     }
+                                },
+                                 new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(DialogInterface dialogInterface) {
+                                        createOrderCartItemAdapter.notifyItemChanged(position);
+                                    }
                                 }
+
                         );
 
 
