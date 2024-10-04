@@ -1,6 +1,8 @@
 package com.project.ordernote.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -89,6 +91,7 @@ public class Buyers_ViewModel extends AndroidViewModel {
     }
         public void getBuyersListFromRepository(String vendorKey) {
         buyersListLiveData = repository.getBuyersList(vendorKey);
+            Log.d("SplashScreen","Got buyer");
     }
 
     public void setBuyersListinMutableLiveData(List<Buyers_Model> buyerlist) {

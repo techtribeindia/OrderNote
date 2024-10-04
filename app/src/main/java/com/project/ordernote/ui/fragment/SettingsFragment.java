@@ -194,8 +194,8 @@ public void  logoutFun()
                     if (!task.isSuccessful()) {
                         msg = "Unsubscribe failed";
                     }
+                    Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                 }
             });
 
