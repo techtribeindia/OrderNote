@@ -92,8 +92,12 @@ public class BuyerList_Adapter extends RecyclerView.Adapter<BuyerList_Adapter.Bu
             String initials = TextUtils.getInitials(String.valueOf(buyerData.getName()));
 
             if(!buyerData.getName().equals("")){
+                String pincode = buyerData.getPincode();
+                if(!pincode.equals("")){
+                    pincode = " - "+pincode+" . "+'\n';
+                }
                 holder. binding.selectedBuyerNameTextview.setText(String.valueOf(buyerData.getName()));
-                holder.binding.selecedBuyerDetailsTextview.setText(String.valueOf(buyerData.getAddress1() +" , "+'\n'+buyerData.getAddress2()+" - "+""+buyerData.getPincode()+" . "+'\n'+"Ph:- +91"+buyerData.getMobileno()));
+                holder.binding.selecedBuyerDetailsTextview.setText(String.valueOf(buyerData.getAddress1() +" , "+'\n'+buyerData.getAddress2()+pincode+"Ph:- +91"+buyerData.getMobileno()));
                 holder.binding.intialTextview.setText(String.valueOf(initials));
                 holder.binding.buyerIcon.setVisibility(View.GONE);
                 holder.binding.intialTextview.setVisibility(View.VISIBLE);
