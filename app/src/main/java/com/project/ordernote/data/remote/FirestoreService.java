@@ -120,7 +120,7 @@ public class FirestoreService {
                                     }
                                 }
                                 else {
-                                    callback.onLoginResult(false,"Please enter the currect password", null);
+                                    callback.onLoginResult(false,"Please enter the correct password", null);
                                 }
                             }
                         } else {
