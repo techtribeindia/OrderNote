@@ -354,7 +354,6 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
         }
         catch (Exception e){
             e.printStackTrace();
-
         }
     }
 }

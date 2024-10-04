@@ -644,29 +644,30 @@ public class ReportsFragment extends Fragment {
 
 
 
+                                    if(!resource.data.isEmpty()) {
+                                        if (Objects.requireNonNull(reportsViewModel.getFilteredReports().getValue()).getSelectedFileType().equals(Constants.pdf_filetype)) {
+                                            if (reportsViewModel.getFilteredReports().getValue().getSelectedBuyerKey().isEmpty()) {
+                                                setListenerAndGenerateReport(Constants.datewiseConsolidatedPDF);
+                                            } else {
+                                                setListenerAndGenerateReport(Constants.buyerwiseConsolidatedPDF);
 
-                                    if(Objects.requireNonNull(reportsViewModel.getFilteredReports().getValue()).getSelectedFileType().equals(Constants.pdf_filetype)){
-                                        if(reportsViewModel.getFilteredReports().getValue().getSelectedBuyerKey().isEmpty()){
-                                            setListenerAndGenerateReport(Constants.datewiseConsolidatedPDF);
-                                        }
-                                        else{
-                                            setListenerAndGenerateReport(Constants.buyerwiseConsolidatedPDF);
+                                            }
+
+                                        } else if (reportsViewModel.getFilteredReports().getValue().getSelectedFileType().equals(Constants.xls_filetype)) {
+
+                                            if (reportsViewModel.getFilteredReports().getValue().getSelectedBuyerKey().isEmpty()) {
+                                                setListenerAndGenerateReport(Constants.datewiseConsolidatedXLS);
+                                            } else {
+                                                setListenerAndGenerateReport(Constants.buyerwiseConsolidatedXLS);
+
+                                            }
 
                                         }
 
                                     }
-                                    else if(reportsViewModel.getFilteredReports().getValue().getSelectedFileType().equals(Constants.xls_filetype)) {
-
-                                        if(reportsViewModel.getFilteredReports().getValue().getSelectedBuyerKey().isEmpty()){
-                                            setListenerAndGenerateReport(Constants.datewiseConsolidatedXLS);
-                                        }
-                                        else{
-                                            setListenerAndGenerateReport(Constants.buyerwiseConsolidatedXLS);
-
-                                        }
-
+                                    else{
+                                        Toast.makeText(requireActivity(), "No Orders found (orderdetails)", Toast.LENGTH_SHORT).show();
                                     }
-
 
                                 }
 
@@ -680,6 +681,7 @@ public class ReportsFragment extends Fragment {
                                     }
                                 }
                                 else{
+                                    showProgressBar(false);
                                     Toast.makeText(requireActivity(), "Error while fetching order details  ," + String.valueOf(resource.message), Toast.LENGTH_SHORT).show();
 
                                 }
@@ -709,29 +711,37 @@ public class ReportsFragment extends Fragment {
 
                                   //  Toast.makeText(requireActivity(), "hii"+Objects.requireNonNull(reportsViewModel.getFilteredReports().getValue()).getSelectedFileType()+"090", Toast.LENGTH_SHORT).show();
 
-                                    if(Objects.requireNonNull(reportsViewModel.getFilteredReports().getValue()).getSelectedFileType().equals(Constants.pdf_filetype)){
-                                        if(reportsViewModel.getFilteredReports().getValue().getSelectedBuyerKey().isEmpty()){
-                                            setListenerAndGenerateReport(Constants.datewiseConsolidatedPDF);
-                                        }
-                                        else{
-                                            setListenerAndGenerateReport(Constants.buyerwiseConsolidatedPDF);
+                                    if(!resource.data.isEmpty()) {
+
+                                        if(Objects.requireNonNull(reportsViewModel.getFilteredReports().getValue()).getSelectedFileType().equals(Constants.pdf_filetype)){
+                                            if(reportsViewModel.getFilteredReports().getValue().getSelectedBuyerKey().isEmpty()){
+                                                setListenerAndGenerateReport(Constants.datewiseConsolidatedPDF);
+                                            }
+                                            else{
+                                                setListenerAndGenerateReport(Constants.buyerwiseConsolidatedPDF);
+
+                                            }
 
                                         }
+                                        else if(reportsViewModel.getFilteredReports().getValue().getSelectedFileType().equals(Constants.xls_filetype)) {
+
+                                            if(reportsViewModel.getFilteredReports().getValue().getSelectedBuyerKey().isEmpty()){
+                                                setListenerAndGenerateReport(Constants.datewiseConsolidatedXLS);
+                                            }
+                                            else{
+                                                setListenerAndGenerateReport(Constants.buyerwiseConsolidatedXLS);
+
+                                            }
+
+                                        }
+
+                                        Toast.makeText(requireActivity(), "Successfully fetched the order Item details", Toast.LENGTH_SHORT).show();
 
                                     }
-                                    else if(reportsViewModel.getFilteredReports().getValue().getSelectedFileType().equals(Constants.xls_filetype)) {
-
-                                        if(reportsViewModel.getFilteredReports().getValue().getSelectedBuyerKey().isEmpty()){
-                                            setListenerAndGenerateReport(Constants.datewiseConsolidatedXLS);
-                                        }
-                                        else{
-                                            setListenerAndGenerateReport(Constants.buyerwiseConsolidatedXLS);
-
-                                        }
-
+                                    else{
+                                        showProgressBar(false);
+                                        Toast.makeText(requireActivity(), "No Orders found (orderItemdetails)", Toast.LENGTH_SHORT).show();
                                     }
-
-                                    Toast.makeText(requireActivity(), "Successfully fetched the order Item details", Toast.LENGTH_SHORT).show();
                                 }
 
                                 break;

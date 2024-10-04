@@ -21,18 +21,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.Buyers_Model;
-import com.project.ordernote.data.model.ItemDetails_Model;
-import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.databinding.FragmentBuyersBinding;
 import com.project.ordernote.ui.adapter.BuyerList_Adapter;
-import com.project.ordernote.ui.adapter.CreateOrderCartItemAdapter;
 import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.utils.Constants;
@@ -41,7 +37,6 @@ import com.project.ordernote.viewmodel.Buyers_ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class BuyersFragment extends Fragment {
@@ -314,7 +309,7 @@ public class BuyersFragment extends Fragment {
                         AlertDialogUtil.showCustomDialog(
                                 requireActivity(),
                                 "Delete Buyer ",
-                                "Do you want to delete this buyer details permenantly .", "Delete", "No , Keep it","RED",
+                                "Do you want to delete this buyer details permenantly .", "Delete", "No , Keep it", "RED",
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -332,6 +327,12 @@ public class BuyersFragment extends Fragment {
                                         buyerListAdapter.notifyDataSetChanged();
 
 
+                                    }
+                                },
+                                new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(DialogInterface dialogInterface) {
+                                        buyerListAdapter.notifyDataSetChanged();
                                     }
                                 }
                         );

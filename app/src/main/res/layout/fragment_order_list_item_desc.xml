@@ -9,49 +9,65 @@
     android:background="@color/reddishgrey"
     tools:context=".ui.fragment.OrderListItemDescFragment"
     app:layoutDescription="@xml/fragment_order_list_item_desc_scene">
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/red"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_chainStyle="packed">
+        android:background="@color/reddishgrey"
+
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+             android:background="@color/backgroundred"
+            android:padding="5dp"
             android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Staff requested access to edit Dispatch Details"
-            android:textColor="@android:color/white" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textSize="16sp"
+                style="@style/WhiteTextStyleBold"
+                android:text="Staff requested to edit Dispatch Details"
+                android:textColor="@color/black" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
+                android:gravity="end"
                 android:layout_gravity="end">
-                <Button
+                <TextView
                     android:id="@+id/deny_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_height="40dp"
+                    style="@style/BlackTextStyleSemiBold"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rectangle_whitebackground"
+
                     android:text="Deny"/>
-                <Button
+                <TextView
                     android:id="@+id/approve_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
                     android:text="Approve"
-                    android:layout_marginEnd="16dp"/>
+                    style="@style/WhiteTextStyleBold"
+                    android:background="@drawable/round_redbackground"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_margin="5dp"
+                    />
 
 
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+
 
     <!-- Existing content wrapped in a FrameLayout -->
     <FrameLayout
@@ -95,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginTop="5dp"
-                android:text="Order Details"
+                android:text="Order Details "
                 android:layout_marginStart="20dp"
                 style="@style/ScreenTitleTextStyle"
 
