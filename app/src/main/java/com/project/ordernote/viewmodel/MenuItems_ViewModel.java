@@ -1,6 +1,8 @@
 package com.project.ordernote.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -92,6 +94,8 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
 
     public void FetchMenuItemByVendorKeyFromRepository(String vendorKey) {
         menuItemsLiveData = repository.fetchMenuItemsUsingVendorkey(vendorKey);
+
+        Log.d("SplashScreen","Got menu item");
     }
 
 

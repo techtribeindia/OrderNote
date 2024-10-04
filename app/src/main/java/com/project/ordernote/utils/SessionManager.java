@@ -2,6 +2,7 @@ package com.project.ordernote.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -58,6 +59,7 @@ public class SessionManager {
     }
 
     public void saveUserData(QueryDocumentSnapshot userDocument) {
+        Log.d("SessionManager","AppData updated");
         editor.putString(KEY_NAME, userDocument.getString(KEY_NAME));
         editor.putString(KEY_MOBILE_NUMBER, userDocument.getString(KEY_MOBILE_NUMBER));
         editor.putString(KEY_ROLE, userDocument.getString(KEY_ROLE));
