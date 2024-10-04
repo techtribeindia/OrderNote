@@ -695,6 +695,9 @@ public class ReportsFragment extends Fragment {
                 }
             };
 
+
+
+
             orderItemDetailsSalesDataObserver = resource -> {
                 // Update your UI or perform any actions based on the updated data
                 try {
