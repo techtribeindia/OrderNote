@@ -1,6 +1,8 @@
 package com.project.ordernote.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -89,6 +91,7 @@ public class Buyers_ViewModel extends AndroidViewModel {
     }
         public void getBuyersListFromRepository(String vendorKey) {
         buyersListLiveData = repository.getBuyersList(vendorKey);
+
     }
 
     public void setBuyersListinMutableLiveData(List<Buyers_Model> buyerlist) {
@@ -302,9 +305,9 @@ public class Buyers_ViewModel extends AndroidViewModel {
         List<Buyers_Model> originalData = buyersListLiveDataOriginal;
         if (originalData != null ) {
             for(int i = 0 ; i < originalData.size(); i++){
-                if(buyersModelArrayList.get(i).getUniquekey().equals(buyersModel.getUniquekey())){
-                    buyersModelArrayList.set(i,buyersModel);
-                    buyersListLiveData.setValue(ApiResponseState_Enum.success(buyersModelArrayList));
+                if(originalData.get(i).getUniquekey().equals(buyersModel.getUniquekey())){
+                    originalData.set(i,buyersModel);
+                    buyersListLiveDataOriginal=new ArrayList<>(originalData);
                     LocalDataManager.getInstance().setBuyers(buyersModelArrayList);
                 }
             }

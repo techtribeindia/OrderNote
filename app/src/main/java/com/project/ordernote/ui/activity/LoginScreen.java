@@ -24,6 +24,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -35,6 +36,8 @@ public class LoginScreen extends AppCompatActivity {
     private LoginViewModel loginViewModel;
     private LinearLayout loginMain;
     private ScrollView scrollView;
+    private View backlayout;
+    private LottieAnimationView progressbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,8 @@ public class LoginScreen extends AppCompatActivity {
         EditText etMobileNumber = findViewById(R.id.et_name);
         EditText etPassword = findViewById(R.id.et_password);
         Button btnLogin = findViewById(R.id.btn_create);
+        backlayout = findViewById(R.id.progressbar_backlayout);
+        progressbar = findViewById(R.id.progressbar);
         final View rootView = findViewById(R.id.login_main);
         final ScrollView scrollView = findViewById(R.id.scroll_view);
 
@@ -99,8 +104,9 @@ public class LoginScreen extends AppCompatActivity {
                 showSnackbar(v, "Please enter the Password");
                 return;
             }
-
+            showProgressBar(true);
             loginViewModel.loginUser(mobileNumber, password).observe(this, loginResult -> {
+                showProgressBar(false);
                 if (loginResult.getLoginResult()) {
                     Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
                     LoginScreen.this.startActivity(intent);
@@ -129,6 +135,23 @@ public class LoginScreen extends AppCompatActivity {
 
         snackbar.show();
     }
+    private void showProgressBar(boolean show) {
 
+        try {
+            if (show) {
+                progressbar.playAnimation();
+                progressbar.setVisibility(View.VISIBLE);
+                backlayout.setVisibility(View.VISIBLE);
+            } else {
+                progressbar.cancelAnimation();
+                progressbar.setVisibility(View.GONE);
+                backlayout.setVisibility(View.GONE);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+        }
+    }
 
 }

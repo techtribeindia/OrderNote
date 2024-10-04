@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -78,7 +79,7 @@ public class SplashScreen extends AppCompatActivity {
                  // Check if the user is logged in
                 if (sessionManager.isLoggedIn()) {
                     // Redirect to DashboardScreen if the user is logged in
-
+                    Log.d("SplashScreen","Logged in");
                     // Initialize ViewModels
                     buyersViewModel = new ViewModelProvider(SplashScreen.this).get(Buyers_ViewModel.class);
                     menuItemViewModel = new ViewModelProvider(SplashScreen.this).get(MenuItems_ViewModel.class);
@@ -93,7 +94,8 @@ public class SplashScreen extends AppCompatActivity {
 
 
                 } else {
-                    // Redirect to LoginScreen if the user is not logged in
+                    Log.d("SplashScreen","Not Logged in");
+
                     Intent intent = new Intent(SplashScreen.this, LoginScreen.class);
                     SplashScreen.this.startActivity(intent);
                     SplashScreen.this.finish();

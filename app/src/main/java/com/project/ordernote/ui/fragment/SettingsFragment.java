@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
@@ -14,16 +15,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.FragmentSettingsBinding;
 import com.project.ordernote.ui.activity.LoginScreen;
 import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,7 +69,33 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
+        if(!Objects.equals(sessionManager.getRole(), Constants.admin_role))
+        {
+            binding.managemenuLayout.setVisibility(View.GONE);
+        }
+        if(sessionManager.getVUserName() != null)
+        {
+            binding.userName.setText(sessionManager.getVUserName());
+        }
+        else {
+            binding.userName.setText(" ----- ");
+        }
 
+        if(sessionManager.getUserMobileNumber() != null)
+        {
+            binding.userMobileNumber.setText(sessionManager.getUserMobileNumber());
+        }
+        else {
+            binding.userMobileNumber.setText(" ----- ");
+        }
+
+        if(sessionManager.getRole() != null)
+        {
+            binding.userRole.setText(sessionManager.getRole());
+        }
+        else {
+            binding.userRole.setText(" ----- ");
+        }
         try {
             PackageInfo pInfo = requireContext().getPackageManager().getPackageInfo(requireContext().getPackageName(), 0);
             String version = pInfo.versionName;
@@ -159,6 +192,19 @@ public class SettingsFragment extends Fragment {
     }
 public void  logoutFun()
 {
+    FirebaseMessaging.getInstance().unsubscribeFromTopic(sessionManager.getRole()+"_"+sessionManager.getVendorkey())
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    String msg = "Unsubscribed";
+                    if (!task.isSuccessful()) {
+                        msg = "Unsubscribe failed";
+                    }
+
+
+                }
+            });
+
     Intent intent  = new Intent(requireActivity(), LoginScreen.class);
     requireActivity().startActivity(intent);
     requireActivity().finish();

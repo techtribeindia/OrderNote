@@ -510,7 +510,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                 dialogCancelAndPlaceAgainButtonLayout.setVisibility(View.GONE);
                 dialogEditRequestButtonLayout.setVisibility(View.GONE);
                 dialogOrderStatusCard.setVisibility(View.VISIBLE);
-                dialogCancelOnlyButtonLayout.setVisibility(View.VISIBLE);
+//                dialogCancelOnlyButtonLayout.setVisibility(View.VISIBLE);
                 dialogOrderStatusText.setText(String.valueOf(resource.data));
                 hideBanner();
 
@@ -562,13 +562,11 @@ public class OrderListItemDescFragment extends DialogFragment {
                 orderDate.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH);
     }
     private void showBanner() {
-
-        motionLayout.setTransition(R.id.transition);
+        Toast.makeText(requireActivity(), "Show banner", Toast.LENGTH_SHORT).show();
         motionLayout.transitionToEnd();
     }
 
     private void hideBanner() {
-        motionLayout.setTransition(R.id.transition);
         motionLayout.transitionToStart();
     }
 
