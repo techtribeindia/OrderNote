@@ -564,7 +564,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="3dp"
                     android:gravity="center"
-                    android:text="Dispatch Info" />
+                    android:text="Dispatch Info ( optional )"/>
 
 
                 <androidx.cardview.widget.CardView

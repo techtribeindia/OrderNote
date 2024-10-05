@@ -331,11 +331,26 @@ public class OrderListItemDescFragment extends DialogFragment {
                     String DriverMobileNumber = String.valueOf(dialogMobileNoText.getText());
                     String TruckNumber = String.valueOf(dialogTrucckNoText.getText());
 
-                    if ((TransportNameText.equals("----") && DriverMobileNumber.equals("----") && TruckNumber.equals("----")) || (TransportNameText.isEmpty() && DriverMobileNumber.isEmpty() && TruckNumber.isEmpty()))
+                    if(TransportNameText.equals("----"))
                     {
-                        showSnackbar(view,"Please update Dispatch Details");
-                        return;
+                        TransportNameText = "";
                     }
+
+                    if(DriverMobileNumber.equals("----"))
+                    {
+                        DriverMobileNumber = "";
+                    }
+
+                    if(TruckNumber.equals("----"))
+                    {
+                        DriverMobileNumber="";
+                    }
+//
+//                    if ((TransportNameText.equals("----") && DriverMobileNumber.equals("----") && TruckNumber.equals("----")) || (TransportNameText.isEmpty() && DriverMobileNumber.isEmpty() && TruckNumber.isEmpty()))
+//                    {
+//                        showSnackbar(view,"Please update Dispatch Details");
+//                        return;
+//                    }
 
                     showConfirmationDialog(
                             "Accept Order",
