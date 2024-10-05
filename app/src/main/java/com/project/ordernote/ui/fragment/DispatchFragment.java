@@ -124,19 +124,19 @@ public class DispatchFragment extends DialogFragment {
             String truckNo = binding.truckNo.getText().toString();
 
 
-
-            if (transporName.isEmpty() && driverMobieno.isEmpty() && truckNo.isEmpty()) {
-                Dispatchstatus = false;
-            }
-
-            if (!Dispatchstatus) {
-                new AlertDialog.Builder(requireContext())
-                        .setTitle("Dispatch Details")
-                        .setMessage("Please enter Transport Name or Driver Mobile.No or Truck.No")
-                        .setNegativeButton("OK", (dialog, which) -> dialog.dismiss())
-                        .show();
-                return;
-            }
+//
+//            if (transporName.isEmpty() && driverMobieno.isEmpty() && truckNo.isEmpty()) {
+//                Dispatchstatus = false;
+//            }
+//
+//            if (!Dispatchstatus) {
+//                new AlertDialog.Builder(requireContext())
+//                        .setTitle("Dispatch Details")
+//                        .setMessage("Please enter Transport Name or Driver Mobile.No or Truck.No")
+//                        .setNegativeButton("OK", (dialog, which) -> dialog.dismiss())
+//                        .show();
+//                return;
+//            }
             transportname=transporName;
             drivermobileno=driverMobieno;
             truckno=truckNo;
