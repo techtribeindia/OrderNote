@@ -36,6 +36,8 @@ import com.project.ordernote.utils.SwipeToDeleteCallback;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -159,7 +161,13 @@ public class BuyersFragment extends Fragment {
 
     private void setAdapterForBuyersRecyclerview(List<Buyers_Model> data) {
         if (!data.isEmpty()) {
-
+            // Sort the data by buyerName before setting the adapter
+            Collections.sort(data, new Comparator<Buyers_Model>() {
+                @Override
+                public int compare(Buyers_Model b1, Buyers_Model b2) {
+                    return b1.getName().compareToIgnoreCase(b2.getName());
+                }
+            });
             binding.buyerListRecyclerview.setVisibility(View.VISIBLE);
             binding.instructionTextviewBuyerListRecyclerview.setVisibility(View.GONE);
             if (buyerListAdapter != null) {

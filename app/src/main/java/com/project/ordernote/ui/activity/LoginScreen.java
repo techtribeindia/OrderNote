@@ -1,7 +1,6 @@
 package com.project.ordernote.ui.activity;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,14 +24,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.project.ordernote.R;
-import com.project.ordernote.viewmodel.LoginViewModel;
+import com.project.ordernote.viewmodel.UserDetailsViewModel;
 
 public class LoginScreen extends AppCompatActivity {
-    private LoginViewModel loginViewModel;
+    private UserDetailsViewModel userDetailsViewModel;
     private LinearLayout loginMain;
     private ScrollView scrollView;
     private View backlayout;
@@ -49,7 +44,7 @@ public class LoginScreen extends AppCompatActivity {
             return insets;
         });
 
-        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        userDetailsViewModel = new ViewModelProvider(this).get(UserDetailsViewModel.class);
         EditText etMobileNumber = findViewById(R.id.et_name);
         EditText etPassword = findViewById(R.id.et_password);
         Button btnLogin = findViewById(R.id.btn_create);
@@ -105,7 +100,7 @@ public class LoginScreen extends AppCompatActivity {
                 return;
             }
             showProgressBar(true);
-            loginViewModel.loginUser(mobileNumber, password).observe(this, loginResult -> {
+            userDetailsViewModel.loginUser(mobileNumber, password).observe(this, loginResult -> {
                 showProgressBar(false);
                 if (loginResult.getLoginResult()) {
                     Intent intent = new Intent(LoginScreen.this, SplashScreen.class);

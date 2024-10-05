@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.project.ordernote.data.model.Users_Model;
 
 public class SessionManager {
     private static final String PREF_NAME = "UserSession";
@@ -73,5 +74,18 @@ public class SessionManager {
     public void logout() {
         editor.clear(); // Clears all session data
         editor.apply(); // Apply the changes
+    }
+
+    public void saveUserDataUsingModel(Users_Model usersModel) {
+        editor.putString(KEY_NAME, usersModel.getName());
+        editor.putString(KEY_MOBILE_NUMBER, usersModel.getMobileno());
+        editor.putString(KEY_ROLE, usersModel.getRole());
+        editor.putString(VENDORKEY, usersModel.getVendorkey());
+        editor.putString(VENDORNAME, usersModel.getVendorname());
+
+        // Add other fields as needed
+        editor.apply();
+
+
     }
 }
