@@ -90,7 +90,28 @@ public class FirestoreService {
     }
 
 
-    public void userDetailsFetch(String mobileNumber, String password, LoginCallback callback) {
+    public void getUserDetails(String mobileNumber, LoginCallback callback) {
+        db.collection(DatabaseReference.UserDetails_TableName)
+                .whereEqualTo(DatabaseReference.mobileno_UserDetails, mobileNumber)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            for (QueryDocumentSnapshot document : querySnapshot) {
+                                callback.onLoginResult(true,"Logged in SuccessFully", document);
+
+                            }
+                        } else {
+                            callback.onLoginResult(false,"The entered mobile number is not in the database", null);
+                        }
+                    } else {
+                        callback.onLoginResult(false,"Something went wrong, Please check the internet connection and try again", null);
+                    }
+                });
+    }
+
+    public void userDetailsFetchAndCheckUserStatus(String mobileNumber, String password, LoginCallback callback) {
         db.collection(DatabaseReference.UserDetails_TableName)
                 .whereEqualTo(DatabaseReference.mobileno_UserDetails, mobileNumber)
                 .get()
@@ -500,6 +521,7 @@ public class FirestoreService {
 
 
                             Counter_Model appData_model = task.getResult().toObject(Counter_Model.class);
+                            Objects.requireNonNull(appData_model).setOrderno(appData_model.getOrderno()+1);
                             Log.d("orderno fetchordernoData", String.valueOf(Objects.requireNonNull(appData_model).getOrderno()));
                             callback.onSuccess(appData_model.getOrderno());
 

@@ -489,6 +489,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
 
                                     quantity = quantityFromMenu + quantityfromCart;
                                     itemDetailsModelFromCart.setQuantity(quantity);
+                                    menuItemsModel.setQuantity((double) quantity);
 
                                     double itemtotalprice = MenuItemValueCalculator.calculateItemtotalPrice(menuItemsModel);
                                     itemDetailsModelFromCart.setTotalprice(itemtotalprice);

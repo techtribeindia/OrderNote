@@ -4,6 +4,7 @@ import static com.project.ordernote.utils.Constants.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -18,13 +19,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.project.ordernote.R;
 import com.project.ordernote.databinding.ActivityDashboardBinding;
@@ -144,18 +149,24 @@ public class Dashboard extends AppCompatActivity {
         activityDashboardBinding.addOrderFabButton.setOnClickListener(v -> {
 
             try {
-                Drawable drawable = activityDashboardBinding.addOrderFabButton.getDrawable();
-                Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
-                DrawableCompat.setTint(wrappedDrawable, ContextCompat.getColor(Dashboard.this, R.color.red));
+                if(sessionManager.getRole().equals(Constants.admin_role)) {
+
+                    Drawable drawable = activityDashboardBinding.addOrderFabButton.getDrawable();
+                    Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
+                    DrawableCompat.setTint(wrappedDrawable, ContextCompat.getColor(Dashboard.this, R.color.red));
 
 
-                for (int i = 0; i < activityDashboardBinding.bottomNavigationView.getMenu().size(); i++) {
-                    activityDashboardBinding.bottomNavigationView.getMenu().getItem(i).setChecked(false);
+                    for (int i = 0; i < activityDashboardBinding.bottomNavigationView.getMenu().size(); i++) {
+                        activityDashboardBinding.bottomNavigationView.getMenu().getItem(i).setChecked(false);
+                    }
+                    activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.addOrders);
+
+                    dashboardViewModel.setSelectedFragment(new CreateOrderFragment());
                 }
-                activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.addOrders);
+                else{
+                    showSnackbar(v,"Sorry you don't have permission to access place order screen");
 
-                dashboardViewModel.setSelectedFragment(new CreateOrderFragment());
-
+                }
             }
             catch (Exception e){
                 e.printStackTrace();
@@ -191,6 +202,42 @@ public class Dashboard extends AppCompatActivity {
 
     }
 
+
+    private void showSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+
+        snackbar.setAnchorView(activityDashboardBinding.addOrderFabButton); // Set the FAB as the anchor view
+
+
+
+        snackbar.setAction("X", v -> snackbar.dismiss());
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
+
+        // Get the Snackbar's layout view
+        View snackbarView = snackbar.getView();
+
+        // Check if the parent is CoordinatorLayout
+        if (snackbarView.getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        } else if (snackbarView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+            // If it's a FrameLayout, handle it like before
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        }
+
+        snackbar.show();
+    }
+
+    public FloatingActionButton getFabButton() {
+        return activityDashboardBinding.addOrderFabButton;
+    }
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();

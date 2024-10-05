@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 import com.project.ordernote.R;
@@ -38,6 +39,7 @@ import com.project.ordernote.data.model.OrderDetails_Model;
 
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.databinding.FragmentAddOrdersBinding;
+import com.project.ordernote.ui.activity.Dashboard;
 import com.project.ordernote.ui.adapter.CreateOrderCartItemAdapter;
 import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.ApiResponseState_Enum;
@@ -357,6 +359,8 @@ public class CreateOrderFragment extends Fragment {
             public void onClick(View view) {
                 try{
                     if(ordersViewModel==null){
+                        //Toast.makeText(requireActivity(), "Please add item in cart", Toast.LENGTH_SHORT).show();
+
                         showSnackbar(view,"Please add item in cart");
 
                         return;
@@ -389,18 +393,22 @@ public class CreateOrderFragment extends Fragment {
                                 }
                                 else{
                                     showSnackbar(view,"Failed in payment selection");
+                                    return;
 
 
                                 }
                             }
                             else{
                                 showSnackbar(view,"Failed in buyer selection");
+                                return;
 
 
                             }
                     }
                     else{
-                        showSnackbar(view,"Failed in AddItemDetails selection");
+
+                        showSnackbar(view,"Please add item in cart");
+                        return;
 
 
                     }
@@ -1072,6 +1080,14 @@ public class CreateOrderFragment extends Fragment {
     }
     private void showSnackbar(View view, String message) {
         Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        Dashboard activity = (Dashboard) getActivity(); // Get reference to the activity
+        if (activity != null) {
+            FloatingActionButton fab = activity.getFabButton(); // Get FAB from the activity
+
+             snackbar.setAnchorView(fab); // Set the FAB as the anchor view
+
+        }
+
         snackbar.setAction("X", v -> snackbar.dismiss());
         snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
 

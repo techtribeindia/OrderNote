@@ -24,12 +24,14 @@ import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
+import com.project.ordernote.data.model.Users_Model;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.AppData_ViewModel;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
+import com.project.ordernote.viewmodel.UserDetailsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,14 +45,16 @@ public class SplashScreen extends AppCompatActivity {
     private Buyers_ViewModel buyersViewModel;
     private MenuItems_ViewModel menuItemViewModel;
     private AppData_ViewModel appDataViewModel;
+    private UserDetailsViewModel userDetailsViewModel;
 
 
-    boolean gotbuyerData = false , gotMenuItemData = false , gotAppdata  = false;
+    boolean gotbuyerData = false , gotMenuItemData = false , gotAppdata  = false , gotUserData = false;
 
 
     private Observer<ApiResponseState_Enum<List<Buyers_Model>>> buyerModelListObserver;
     private Observer<ApiResponseState_Enum<List<MenuItems_Model>>> menuItemListObserver;
     private Observer<ApiResponseState_Enum<AppData_Model>> appDataModelObserver;
+    private Observer<ApiResponseState_Enum<Users_Model>> userDetailsModelListObserver;
 
 
     @Override
@@ -84,6 +88,7 @@ public class SplashScreen extends AppCompatActivity {
                     buyersViewModel = new ViewModelProvider(SplashScreen.this).get(Buyers_ViewModel.class);
                     menuItemViewModel = new ViewModelProvider(SplashScreen.this).get(MenuItems_ViewModel.class);
                     appDataViewModel = new ViewModelProvider(SplashScreen.this).get(AppData_ViewModel.class);
+                    userDetailsViewModel =  new ViewModelProvider(SplashScreen.this).get(UserDetailsViewModel.class);
                     fetchInitialData();
                     // Fetch data
                     setObserver();
@@ -91,6 +96,7 @@ public class SplashScreen extends AppCompatActivity {
                     buyersViewModel.getBuyersListFromViewModel().observeForever(buyerModelListObserver);
                     menuItemViewModel.getMenuItemsFromViewModel().observeForever(menuItemListObserver);
                     appDataViewModel.getAppModelDataFromLiveModel().observeForever(appDataModelObserver);
+                    userDetailsViewModel.getUserDetailsFromViewModel().observeForever(userDetailsModelListObserver);
 
 
                 } else {
@@ -118,6 +124,7 @@ public class SplashScreen extends AppCompatActivity {
         buyersViewModel.getBuyersListFromRepository(sessionManager.getVendorkey());
         menuItemViewModel.FetchMenuItemByVendorKeyFromRepository(sessionManager.getVendorkey());
         appDataViewModel.FetchAppDataFromRepositoryAndSaveInLocalDataManager();
+        userDetailsViewModel.getUserDetailsFromRepository(sessionManager.getUserMobileNumber());
 
 
      /*   // Observe to determine when data fetching is complete
@@ -221,6 +228,24 @@ public class SplashScreen extends AppCompatActivity {
                 }
             };
 
+
+            userDetailsModelListObserver = new Observer<ApiResponseState_Enum<Users_Model>> () {
+                @Override
+                public void onChanged(@Nullable ApiResponseState_Enum<Users_Model> users_Model) {
+                    // Update your UI or perform any actions based on the updated data
+
+                    //  Toast.makeText(requireActivity(), "sizze from observer: "+String.valueOf(itemDetailsList.size()), Toast.LENGTH_SHORT).show();
+
+                    if (Objects.requireNonNull(users_Model).status == ApiResponseState_Enum.Status.SUCCESS) {
+
+                       // sessionManager.saveUserDataUsingModel(users_Model.data);
+                        gotUserData = true;
+                        checkAndProceed();
+                    }
+
+                }
+            };
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -259,10 +284,12 @@ public class SplashScreen extends AppCompatActivity {
     }
     private void checkAndProceed() {
         // Assuming both data fetches are done
-        if(gotbuyerData  && gotMenuItemData && gotAppdata){
+        if(gotbuyerData  && gotMenuItemData && gotAppdata && gotUserData){
             // Proceed to the next activity
             if(sessionManager.isLoggedIn()){
-             if(sessionManager.getRole().equals(Constants.staff_role)||sessionManager.getRole().equals(Constants.admin_role)){
+             //   Toast.makeText(this, "Role: "+sessionManager.getRole(), Toast.LENGTH_SHORT).show();
+
+                if(sessionManager.getRole().equals(Constants.staff_role)||sessionManager.getRole().equals(Constants.admin_role)){
                  startActivity(new Intent(SplashScreen.this, Dashboard.class));
 
                  SplashScreen.this.finish();

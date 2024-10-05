@@ -3,6 +3,13 @@ package com.project.ordernote.data.model;
 public class Users_Model {
     private String mobileno;
     private String password;
+    private String name;
+    private String role;
+    private String vendorkey;
+    private String vendorname;
+    private String key;
+
+
     private Boolean loginResult;
     private String loginMessage;
 
@@ -13,9 +20,53 @@ public class Users_Model {
         this.loginMessage = loginMessage;
     }
 
+    public Users_Model() {
+    }
+
     public Users_Model(Boolean loginResult, String loginMessage) {
         this.loginResult = loginResult;
         this.loginMessage = loginMessage;
+    }
+
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getVendorkey() {
+        return vendorkey;
+    }
+
+    public void setVendorkey(String vendorkey) {
+        this.vendorkey = vendorkey;
+    }
+
+    public String getVendorname() {
+        return vendorname;
+    }
+
+    public void setVendorname(String vendorname) {
+        this.vendorname = vendorname;
     }
 
     public String getMobileno() {
