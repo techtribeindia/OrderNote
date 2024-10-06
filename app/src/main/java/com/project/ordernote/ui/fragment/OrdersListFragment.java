@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 import com.project.ordernote.R;
+import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.databinding.FragmentOrdersBinding;
 import com.project.ordernote.ui.adapter.OrdersListAdapter;

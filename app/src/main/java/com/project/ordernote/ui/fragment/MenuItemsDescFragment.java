@@ -207,12 +207,22 @@ public class MenuItemsDescFragment extends DialogFragment {
                     priceperkg = binding.price.getText().toString();
                     unitprice = binding.sellingPriceInput.getText().toString();
                     itemtype = Constants.priceperkg_itemtype;
+                    if(grossweight.isEmpty())
+                    {
+                        showSnackbar(view, "Please enter the Grossweight");
+                        return;
+                    }
                 }
                 if(binding.unitprice.isChecked())
                 {
                     itemtype = Constants.unitprice_itemtype;
                     priceperkg = binding.price.getText().toString();
                     unitprice = binding.price.getText().toString();
+                    if(grossweight.isEmpty()&&portionsize.isEmpty())
+                    {
+                        showSnackbar(view, "Please enter the Grossweight or Portion Size");
+                        return;
+                    }
                 }
 
 
@@ -248,7 +258,7 @@ public class MenuItemsDescFragment extends DialogFragment {
                 }
                 if (price.isEmpty())
                 {
-                    showSnackbar(view, "Please enter the portionsize");
+                    showSnackbar(view, "Please enter the Price");
                     return;
                 }
                 UUID uuid = UUID.randomUUID();
@@ -276,8 +286,9 @@ public class MenuItemsDescFragment extends DialogFragment {
                 }
                 else {
                     menuItemsModel.setItemkey(itemkey);
+                    Toast.makeText(requireActivity(), itemkey, Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(requireActivity(), itemkey, Toast.LENGTH_SHORT).show();
+
                 menuItemsModel.setItemname(itemname);
                 menuItemsModel.setItemtype(itemtype);
                 menuItemsModel.setGrossweight(grossweightingrams);

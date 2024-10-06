@@ -24,6 +24,8 @@ import com.project.ordernote.viewmodel.MenuItems_ViewModel;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,16 +73,17 @@ public class MenuItemListAdapter extends RecyclerView.Adapter<MenuItemListAdapte
         if(order.getItemtype().equalsIgnoreCase(Constants.unitprice_itemtype))
         {
             priceper = order.getPortionsize();
-            if(priceper == "")
-            {
+
                 float grossweight = order.getGrossweight();
                 if (grossweight>0)
                 {
                     grossweight = grossweight/1000;
+                    priceper = String.valueOf(grossweight)+" KG";
                 }
-
-                priceper = String.valueOf(grossweight)+" KG";
-            }
+                else
+                {
+                    priceper = order.getPortionsize();
+                }
 
         }
             holder.priceInfo.setText("₹ "+price+" / "+ priceper);
@@ -120,6 +123,15 @@ public class MenuItemListAdapter extends RecyclerView.Adapter<MenuItemListAdapte
     public void setOrders(List<MenuItems_Model> orders, String selectedOrderButton) {
         this.orders = orders;
         this.selectedScreen  = selectedOrderButton;
+        Collections.sort(this.orders, new Comparator<MenuItems_Model>() {
+            @Override
+            public int compare(MenuItems_Model o1, MenuItems_Model o2) {
+                // If tokenno is null, treat it as the lowest possible value for sorting purposes
+                if (o1.getItemname() == null) return -1;
+                if (o2.getItemname() == null) return 1;
+                return o1.getItemname().compareTo(o2.getItemname());
+            }
+        });
         notifyDataSetChanged();
 
     }
