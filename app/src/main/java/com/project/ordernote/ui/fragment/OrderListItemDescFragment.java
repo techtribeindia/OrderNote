@@ -75,6 +75,7 @@ public class OrderListItemDescFragment extends DialogFragment {
     TextView dialogTrucckNoText;
     View progressbarBacklayout;
     LottieAnimationView progressbar;
+    boolean CancelOnlyCalled = false;
 
     public OrderListItemDescFragment() {
 
@@ -365,7 +366,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                         showConfirmationDialog(
                                 "Order Cancellation",
                                 "Do you want to cancel the order? \n Order Cancellation cannot be reversed",
-                                () -> handleOrderCancellation(order.getOrderid(),Constants.cancelled_dispatchstatus)
+                                () -> handleOrderCancellation(order.getOrderid(),Constants.cancelled_dispatchstatus,"dialogCancel")
                         );
                     }
                 });
@@ -375,7 +376,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                         showConfirmationDialog(
                                 "Order Cancellation",
                                 "Do you want to cancel the order? \n Order Cancellation cannot be reversed",
-                                () -> handleOrderCancellation(order.getOrderid(),Constants.cancelled_dispatchstatus)
+                                () -> handleOrderCancellation(order.getOrderid(),Constants.cancelled_dispatchstatus,"dialogCancelOnlyBut")
                         );
                     }
                 });
@@ -385,7 +386,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                         showConfirmationDialog(
                                 "Order Cancellation",
                                 "Do you want to cancel the order? \n Order Cancellation cannot be reversed",
-                                () -> handleOrderCancellation(order.getOrderid(),Constants.cancelled_dispatchstatus)
+                                () -> handleOrderCancellation(order.getOrderid(),Constants.cancelled_dispatchstatus,"dialogCancel1")
                         );
                     }
                 });
@@ -476,8 +477,12 @@ public class OrderListItemDescFragment extends DialogFragment {
         orderDetailRejectOrderModel(orderid , status);
     }
 
-    public void handleOrderCancellation(String orderid, String ststus)
+    public void handleOrderCancellation(String orderid, String ststus, String button)
     {
+        if( button.equals("dialogCancelOnlyBut"))
+        {
+            CancelOnlyCalled = true;
+        }
         orderDetailCancelOrderModel(orderid , ststus);
     }
     public void handleOrderPlace(String orderid, String ststus)
@@ -525,7 +530,11 @@ public class OrderListItemDescFragment extends DialogFragment {
                 dialogCancelAndPlaceAgainButtonLayout.setVisibility(View.GONE);
                 dialogEditRequestButtonLayout.setVisibility(View.GONE);
                 dialogOrderStatusCard.setVisibility(View.VISIBLE);
-//                dialogCancelOnlyButtonLayout.setVisibility(View.VISIBLE);
+
+            if(CancelOnlyCalled)
+            {
+                dialogCancelOnlyButtonLayout.setVisibility(View.GONE);
+            }
                 dialogOrderStatusText.setText(String.valueOf(resource.data));
                 hideBanner();
 

@@ -59,9 +59,9 @@ public class DispatchFragment extends DialogFragment {
 
             bundle.putString("fragment", "DispatchFragment");
             bundle.putString("orderid", orderid);
-            bundle.putString("transporName", transportname);
-            bundle.putString("driverMobieno", drivermobileno);
-            bundle.putString("truckNo", truckno);
+            bundle.putString("transportname", transportname);
+            bundle.putString("drivermobileno", drivermobileno);
+            bundle.putString("truckno", truckno);
             message.setData(bundle);
             mHandler.sendMessage(message);
         }
@@ -142,7 +142,7 @@ public class DispatchFragment extends DialogFragment {
             truckno=truckNo;
 
             showConfirmationDialog(
-                    "Accept Order",
+                    "Update Dispatch details",
                     "Are you sure you want to update the dispatch details?",
                     () -> handleOrderDispatch(orderid,transporName,driverMobieno,truckNo)
             );
