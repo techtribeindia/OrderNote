@@ -169,7 +169,7 @@ public class ManageMenuScreenFragment extends DialogFragment {
     }
 
     private void observeOrderDetails() {
-
+        menuItemListAdapter.clearOrders();
         menuItemsViewModel.getMenuItemsFromViewModel().observe(getViewLifecycleOwner(), resource -> {
             if (resource != null) {
                 switch (resource.status) {

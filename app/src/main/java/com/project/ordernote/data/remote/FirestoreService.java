@@ -418,7 +418,7 @@ public class FirestoreService {
         }
         else {
             updates.put(DatabaseReference.itemname_MenuItems,menuItemsModel.getItemname());
-            updates.put(DatabaseReference.itemkey_MenuItems,menuItemsModel.getItemtype());
+            updates.put(DatabaseReference.itemtype_MenuItems,menuItemsModel.getItemtype());
             updates.put(DatabaseReference.grossweight_MenuItems,menuItemsModel.getGrossweight());
             updates.put(DatabaseReference.portionsize_MenuItems,menuItemsModel.getPortionsize());
             updates.put(DatabaseReference.unitprice_MenuItems,menuItemsModel.getUnitprice());
