@@ -35,7 +35,7 @@ public class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdap
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         ItemDetails_Model order = orders.get(position);
         holder.recycler_itemname.setText(order.getItemname() != null ? order.getItemname() : "N/A");
-        holder.weighttextview.setText(order.getNetweight() != null ? order.getNetweight() : "N/A");
+        holder.weighttextview.setText(String.valueOf(order.getGrossweight()));
         holder.quantityTextview.setText(String.valueOf(order.getQuantity()));
         holder.itemPriceTextView.setText("₹"+String.valueOf(order.getPrice()));
         holder.totalPriceTextview.setText("₹"+String.valueOf(order.getTotalprice()));
