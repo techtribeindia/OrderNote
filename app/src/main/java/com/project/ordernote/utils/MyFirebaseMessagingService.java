@@ -5,15 +5,23 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.project.ordernote.R;
@@ -29,33 +37,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
      */
     // [START receive_message]
+    /*
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // [START_EXCLUDE]
-        // There are two types of messages data messages and notification messages. Data messages
-        // are handled
-        // here in onMessageReceived whether the app is in the foreground or background. Data
-        // messages are the type
-        // traditionally used with GCM. Notification messages are only received here in
-        // onMessageReceived when the app
-        // is in the foreground. When the app is in the background an automatically generated
-        // notification is displayed.
-        // When the user taps on the notification they are returned to the app. Messages
-        // containing both notification
-        // and data payloads are treated as notification messages. The Firebase console always
-        // sends notification
-        // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
-        // [END_EXCLUDE]
-
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
         if (!remoteMessage.getData().isEmpty()) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            if (/* Check if data needs to be processed by long running job */ true) {
+            if ( true) {
                 // For long-running tasks (10 seconds or more) use WorkManager.
                 scheduleJob();
             } else {
@@ -78,6 +69,58 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
+   */
+
+
+    @Override
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
+/*
+        // Check if message contains a data payload.
+        if (!remoteMessage.getData().isEmpty()) {
+            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+
+            // Check if image URL is provided in the data payload
+            String imageUrl = remoteMessage.getData().get("imageUrl");
+
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                // Process image notification
+                sendNotificationWithImage(remoteMessage.getNotification().getTitle(),
+                        remoteMessage.getNotification().getBody(),
+                        imageUrl);
+            } else {
+                // Handle regular data notification without image
+                handleNow();
+            }
+        }
+
+
+ */
+        // Check if message contains a notification payload.
+    //    remoteMessage.getData();
+        //Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+        Log.d(TAG, "Message Notification DATA: " + remoteMessage.getData());
+
+        // String notificationBody = remoteMessage.getNotification().getBody();
+        //  String notificationTitle = remoteMessage.getNotification().getTitle();
+
+        //  if (remoteMessage.getNotification().getBody() != null) {
+
+        if (!remoteMessage.getData().isEmpty()) {
+            String notificationTitle = remoteMessage.getData().get("title");
+            String notificationBody = remoteMessage.getData().get("body");
+
+            // Check if image is present in data payload
+            String imageUrl = remoteMessage.getData().get("imageUrl");
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                sendNotificationWithImage(notificationTitle, notificationBody, imageUrl);
+            } else {
+                sendNotification(notificationTitle, notificationBody);
+            }
+        }
+    }
+
+
     // [END receive_message]
 
 
@@ -143,14 +186,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_IMMUTABLE);
+        Bitmap rectangleImage = BitmapFactory.decodeResource(getApplication().getResources(), R.drawable.img_1);
 
-        String channelId = getString(R.string.default_notification_channel_id);
+
+        String channelId = "Order Related Notifications";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Order Notifications",
+                    NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Notifications for new orders");
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+
+
+     //   String channelId = getString(R.string.default_notification_channel_id);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ordernotenotificationicon1)
                         .setContentTitle(notificationTitle)
                         .setContentText(messageBody)
+                        //.setLargeIcon(rectangleImage) // Rectangle image on the right
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
@@ -168,4 +227,62 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
+
+
+    private void sendNotificationWithImage(String title, String messageBody, String imageUrl) {
+        // Use Glide to fetch the image from the URL
+        Glide.with(getApplicationContext())
+                .asBitmap()
+                .load(imageUrl)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        // Build notification with the image
+                        sendNotificationWithBitmap(title, messageBody, resource);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        // Handle placeholder if needed
+                    }
+                });
+    }
+
+    private void sendNotificationWithBitmap(String title, String messageBody, Bitmap bitmap) {
+        Intent intent = new Intent(this, Dashboard.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_MUTABLE);
+
+
+        String channelId = "Order Related Notifications";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Order Notifications",
+                    NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Notifications for new orders");
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+
+
+        // Create notification
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.drawable.ordernotenotificationicon1)
+                        .setContentTitle(title)
+                        .setContentText(messageBody)
+                        .setStyle(new NotificationCompat.BigPictureStyle()
+                                .bigLargeIcon(bitmap))
+                                 // Display the image as a large icon
+                         // Display image in the expanded notification
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notificationBuilder.build());
+    }
+
 }

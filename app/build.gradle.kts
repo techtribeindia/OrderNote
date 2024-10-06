@@ -43,6 +43,7 @@ android {
 
 dependencies {
 
+    implementation ("com.github.bumptech.glide:glide:4.12.")
 
    implementation ("com.google.guava:guava:31.1-android")
 
