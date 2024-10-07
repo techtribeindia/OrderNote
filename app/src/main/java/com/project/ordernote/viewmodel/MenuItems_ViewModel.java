@@ -95,7 +95,7 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
     public void FetchMenuItemByVendorKeyFromRepository(String vendorKey) {
         menuItemsLiveData = repository.fetchMenuItemsUsingVendorkey(vendorKey);
 
-        Log.d("SplashScreen","Got menu item");
+        Log.d("SplashScreenActivity","Got menu item");
     }
 
 

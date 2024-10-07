@@ -87,18 +87,41 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sessionManager = new SessionManager(requireActivity());
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.MyCustomDialogTheme);
+
         if (getArguments() != null) {
 
         }
     }
+
+
     @Override
     public void onStart() {
         super.onStart();
         if (getDialog() != null && getDialog().getWindow() != null) {
             getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Removes default background
+            int statusBarColor = ContextCompat.getColor(requireContext(), R.color.reddishgrey);
+         //   getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(statusBarColor)); // Removes default background
+
+            // Forcefully set status bar color and clear any transparency
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Window window = getDialog().getWindow();
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.setStatusBarColor(statusBarColor); // Set status bar color to white
+
+                // Set dark icons if Android version supports it
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                } else {
+                    // For older versions, you may not be able to change icon colors, but status bar should be white
+                    window.getDecorView().setSystemUiVisibility(0); // Clear any flags affecting icon color
+                }
+            }
         }
     }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

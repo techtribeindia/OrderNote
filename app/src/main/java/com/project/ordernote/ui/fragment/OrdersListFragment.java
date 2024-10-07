@@ -207,7 +207,6 @@ public class OrdersListFragment extends Fragment {
                         showProgressBar(false);
                         break;
                     case ERROR:
-
                         messageCard.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
                         messageText.setText(resource.message);
