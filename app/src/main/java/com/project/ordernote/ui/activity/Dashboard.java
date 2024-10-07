@@ -162,6 +162,7 @@ public class Dashboard extends AppCompatActivity {
                     activityDashboardBinding.bottomNavigationView.setSelectedItemId(R.id.addOrders);
 
                     dashboardViewModel.setSelectedFragment(new CreateOrderFragment());
+
                 }
                 else{
                     showSnackbar(v,"Sorry you don't have permission to access place order screen");

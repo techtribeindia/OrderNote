@@ -274,7 +274,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setContentTitle(title)
                         .setContentText(messageBody)
                         .setStyle(new NotificationCompat.BigPictureStyle()
-                                .bigLargeIcon(bitmap))
+                                .bigLargeIcon(bitmap)
+                                )
+
                                  // Display the image as a large icon
                          // Display image in the expanded notification
                         .setAutoCancel(true)
