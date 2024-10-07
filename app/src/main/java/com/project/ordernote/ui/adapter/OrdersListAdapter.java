@@ -18,6 +18,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.ordernote.R;
+import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.utils.Constants;
@@ -25,6 +26,8 @@ import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -106,6 +109,15 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
     public void setOrders(List<OrderDetails_Model> orders, String selectedOrderButton) {
         this.orders = orders;
         this.selectedScreen  = selectedOrderButton;
+        Collections.sort(this.orders, new Comparator<OrderDetails_Model>() {
+            @Override
+            public int compare(OrderDetails_Model o1, OrderDetails_Model o2) {
+                // If tokenno is null, treat it as the lowest possible value for sorting purposes
+                if (o1.getTokenno() == null) return -1;
+                if (o2.getTokenno() == null) return 1;
+                return o1.getTokenno().compareTo(o2.getTokenno());
+            }
+        });
         notifyDataSetChanged();
 
     }

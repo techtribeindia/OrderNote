@@ -155,25 +155,35 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
 
 
             }
-            return;
+
         }
+        else {
         if (originalData != null) {
-            List<MenuItems_Model> updatedOrders = new ArrayList<>(menuItemsLiveDataOriginal);
+            List<MenuItems_Model> updatedOrders = new ArrayList<>(originalData);
             for (MenuItems_Model order : updatedOrders) {
                 if (order.getItemkey().equals(menuItemsModel.getItemkey())) {
                     order.setItemname(menuItemsModel.getItemname());
-
+                    order.setItemtype(menuItemsModel.getItemtype());
+                    order.setGrossweight(menuItemsModel.getGrossweight());
+                    order.setPortionsize(menuItemsModel.getPortionsize());
+                    order.setPriceperkg(menuItemsModel.getPriceperkg());
+                    order.setUnitprice(menuItemsModel.getUnitprice());
                     break;
                 }
 
             }
+            menuItemsLiveDataOriginal = new ArrayList<>(updatedOrders);
         }
         if (currentData != null && currentData.data != null) {
             List<MenuItems_Model> updatedOrders = new ArrayList<>(currentData.data);
             for (MenuItems_Model order : updatedOrders) {
                 if (order.getItemkey().equals(menuItemsModel.getItemkey())) {
                     order.setItemname(menuItemsModel.getItemname());
-
+                    order.setItemtype(menuItemsModel.getItemtype());
+                    order.setGrossweight(menuItemsModel.getGrossweight());
+                    order.setPortionsize(menuItemsModel.getPortionsize());
+                    order.setPriceperkg(menuItemsModel.getPriceperkg());
+                    order.setUnitprice(menuItemsModel.getUnitprice());
                     break;
                 }
 
@@ -185,7 +195,7 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
             //orderDetailsLiveData.setValue(new ApiResponseState_Enum.Status.SUCCESS, updatedOrders, null));
         }
     }
-
+}
  /*   public LiveData<String> getSelectedMenuItemPositionFromViewModel() {
         return selectedMenuItemPosition;
     }
