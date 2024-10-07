@@ -115,7 +115,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
                 // If tokenno is null, treat it as the lowest possible value for sorting purposes
                 if (o1.getTokenno() == null) return -1;
                 if (o2.getTokenno() == null) return 1;
-                return o1.getTokenno().compareTo(o2.getTokenno());
+                return o2.getTokenno().compareTo(o1.getTokenno());
             }
         });
         notifyDataSetChanged();

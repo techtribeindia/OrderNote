@@ -13,7 +13,7 @@ import java.util.List;
 
 public class LocalDataManager {
 
-    // Static instance of the singleton class
+     // Static instance of the singleton class
     private static LocalDataManager instance;
 
     // Lists to hold the data
