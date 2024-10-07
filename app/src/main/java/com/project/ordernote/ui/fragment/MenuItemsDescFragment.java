@@ -1,9 +1,11 @@
 package com.project.ordernote.ui.fragment;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -123,8 +125,16 @@ public class MenuItemsDescFragment extends DialogFragment {
 
         if(Objects.equals(selectedScreen, "add"))
         {
+            Toast.makeText(requireActivity(), "Add", Toast.LENGTH_SHORT).show();
             binding.menuitemButton.setText("Add MenuItem");
             function = "add";
+            binding.itemname.setText("");
+            binding.priceperkg.setChecked(false);
+            binding.unitprice.setChecked(false);
+            binding.grossweight.setText("");
+            binding.portionsize.setText("");
+            binding.price.setText("");
+            binding.sellingPriceInput.setText("");
         }
         else
         {
@@ -188,7 +198,7 @@ public class MenuItemsDescFragment extends DialogFragment {
         binding.closeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getDialog().dismiss();
+                onDismiss(requireDialog());
             }
         });
 
@@ -306,6 +316,7 @@ public class MenuItemsDescFragment extends DialogFragment {
             MenuItems_Model menuitems = gson.fromJson(orderJson, MenuItems_Model.class);
 
             if (menuitems != null) {
+                Toast.makeText(requireActivity(), "Menu items", Toast.LENGTH_SHORT).show();
                 binding.itemname.setText(menuitems.getItemname());
                 itemkey = menuitems.getItemkey();
                 if(menuitems.getItemtype().equalsIgnoreCase(Constants.priceperkg_itemtype))
@@ -413,11 +424,11 @@ public class MenuItemsDescFragment extends DialogFragment {
                 break;
             case SUCCESS:
 
-                getDialog().dismiss();
+                onDismiss(requireDialog());
                 showSnackbar(requireView(),"Success in fetching orders");
                 showProgressBar(false);
                 sendHandlerMessage(function);
-                Objects.requireNonNull(getDialog()).dismiss();
+
                 break;
             case ERROR:
                 showSnackbar(requireView(),resource.message);
@@ -425,7 +436,10 @@ public class MenuItemsDescFragment extends DialogFragment {
                 break;
         }
     }
-
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+    }
     private void showProgressBar(boolean show) {
 
         try {
