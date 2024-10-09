@@ -646,7 +646,14 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
 
     public void getOrdersByDateAndVendorKey(Timestamp startdatee, Timestamp endDatee, String vendorkey) {
 
+        if(orderDetailsForReportScreenData!=null && orderDetailsForReportScreenData .getValue() != null  && orderDetailsForReportScreenData .getValue().data != null) {
+        orderDetailsForReportScreenData .getValue().data.clear();
+        }
+
+        ordersforReportScreenObserver = reportScreenstate -> orderDetailsForReportScreenData.setValue(reportScreenstate);
+
         LiveData<ApiResponseState_Enum<List<OrderDetails_Model>>> source = repository.getOrdersByDateAndVendorKey(startdatee , endDatee, vendorkey);
+
         source.observeForever(ordersforReportScreenObserver);
     }
 }

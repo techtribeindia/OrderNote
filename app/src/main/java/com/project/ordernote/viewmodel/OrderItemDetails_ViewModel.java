@@ -1,6 +1,7 @@
 package com.project.ordernote.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -16,6 +17,7 @@ import com.project.ordernote.data.repository.OrderItemDetails_Repository;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class OrderItemDetails_ViewModel extends AndroidViewModel {
@@ -109,8 +111,48 @@ public class OrderItemDetails_ViewModel extends AndroidViewModel {
     }
     public void getOrderItemsByDateAndVendorKey_ReportScreenObserver(Timestamp startdatee, Timestamp endDatee, String vendorkey) {
 
+        if(orderItemDetailsReportScreenMutableLiveData!=null && orderItemDetailsReportScreenMutableLiveData .getValue() != null  && orderItemDetailsReportScreenMutableLiveData .getValue().data != null) {
+            orderItemDetailsReportScreenMutableLiveData .getValue().data.clear();
+        }
+
+
         LiveData<ApiResponseState_Enum<List<OrderItemDetails_Model>>> source = repository.getOrderItemsByDateAndVendorKey(startdatee , endDatee , vendorkey);
         source.observeForever(ordersItemDetailsReportScreenObserver);
+
+    }
+
+    public boolean checkIfReportScreenLiveDataHaveItemDetailsForOrderId(String orderid) {
+
+         try {
+             if (orderItemDetailsReportScreenMutableLiveData == null) {
+                 orderItemDetailsReportScreenMutableLiveData = new MutableLiveData<>();
+                 Log.d("itemdetailviewmodel", "checkIfReportScreenLiveDataHaveItemDetailsForOrderId - null return");
+
+                 return false;
+             }
+             for (int iterator = 0; iterator < Objects.requireNonNull(orderItemDetailsReportScreenMutableLiveData.getValue()).data.size(); iterator++) {
+                 if (orderid.equals(orderItemDetailsReportScreenMutableLiveData.getValue().data.get(iterator).getOrderid())) {
+
+                     return true;
+                 } else {
+                     if ((Objects.requireNonNull(orderItemDetailsReportScreenMutableLiveData.getValue()).data.size() - 1) == iterator) {
+                         Log.d("itemdetailviewmodel", "checkIfReportScreenLiveDataHaveItemDetailsForOrderId - inside else return");
+
+                         return false;
+
+                     }
+                 }
+             }
+         }
+         catch (Exception e){
+             e.printStackTrace();
+             Log.d("itemdetailviewmodel", "checkIfReportScreenLiveDataHaveItemDetailsForOrderId - catch");
+
+             return false;
+         }
+        Log.d("itemdetailviewmodel", "checkIfReportScreenLiveDataHaveItemDetailsForOrderId - last return");
+
+        return false;
 
     }
 }

@@ -67,7 +67,7 @@ public class PDFGenerator {
 
     FragmentActivity fragmentActivity;
     Context context;
-    String pdfType;
+    String pdfType , supervisorname = "";
     HashMap<String, OrderDetails_Model> orderDetailsHashmap = new HashMap<>();
     HashMap<String, JSONObject> statuswisetotalcountdetailsjson ;
     HashMap<String, List<OrderItemDetails_Model>> orderwiseOrderItemDetails_statuswisereport;
@@ -75,6 +75,7 @@ public class PDFGenerator {
     List<OrderItemDetails_Model> orderItems;
     ReportsFilterDetails_Model selectedFilterValue;
     PDFGeneratorListener listener;
+    double totalItemPrice = 0 , totalfinalprice = 0 , discount = 0;
 
     HashMap<String, ReportsItemwiseCalculationDetail_Model> itemwiseTotalHashmap = new HashMap<>();
     List<String> itemwiseTotalHashmapKeyList = new ArrayList<>();
@@ -84,7 +85,7 @@ public class PDFGenerator {
     private static int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
 
 
-    public PDFGenerator(FragmentActivity fragmentActivity, Context context, String pdfType, HashMap<String, OrderDetails_Model> orderDetailsHashmapp, List<OrderItemDetails_Model> orderItems, ReportsFilterDetails_Model value, PDFGeneratorListener listener) {
+    public PDFGenerator(FragmentActivity fragmentActivity, Context context, String pdfType, HashMap<String, OrderDetails_Model> orderDetailsHashmapp, List<OrderItemDetails_Model> orderItems, ReportsFilterDetails_Model value ,String supervisornamee, PDFGeneratorListener listener) {
         itemwiseTotalHashmapKeyList = new ArrayList<>();
         itemwiseTotalHashmap = new HashMap<>();
         this.fragmentActivity = fragmentActivity;
@@ -94,14 +95,20 @@ public class PDFGenerator {
         this.orderItems = orderItems;
         this.selectedFilterValue = value;
         this.listener = listener;
-
+        this.supervisorname = supervisornamee;
+        try{
+            file = null;layoutDocument=null;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
        //  CheckForPermission_And_CreatePdf();
         prepareDataForPDF();
 
     }
 
-    public PDFGenerator(FragmentActivity fragmentActivity, Context context, String pdfType, HashMap<String, JSONObject> statuswisetotalcountdetailsjsonn, HashMap<String, List<OrderItemDetails_Model>> orderwiseOrderItemDetailss, HashMap<String, List<String>> statuswiseOrderid ,PDFGeneratorListener listener) {
+    public PDFGenerator(FragmentActivity fragmentActivity, Context context, String pdfType, HashMap<String, JSONObject> statuswisetotalcountdetailsjsonn, HashMap<String, List<OrderItemDetails_Model>> orderwiseOrderItemDetailss, HashMap<String, List<String>> statuswiseOrderid ,String supervisornamee,PDFGeneratorListener listener) {
 
 
         itemwiseTotalHashmapKeyList = new ArrayList<>();
@@ -113,6 +120,14 @@ public class PDFGenerator {
         this.orderwiseOrderItemDetails_statuswisereport = orderwiseOrderItemDetailss;
         this.statuswiseOrderid = statuswiseOrderid;
         this.listener = listener;
+        this.supervisorname = supervisornamee;
+
+        try{
+            file = null;layoutDocument=null;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
         prepareDataForStatueWisePDF();
 
@@ -129,8 +144,9 @@ public class PDFGenerator {
                 boolean bool = folder.mkdirs();
             }
             try {
-                String filename = "Category wise sales details.pdf";
+               // String filename = "Statuswise item details.pdf";
 
+                String filename = "Statuswise item details "+DateParserClass.getMillisecondsFromDate(DateParserClass.getDateInStandardFormat())+".pdf";
 
 
                 file = new File(folder, filename);
@@ -219,7 +235,7 @@ public class PDFGenerator {
             PdfPTable wholePDFContentWithImage_and_table = new PdfPTable(1);
             PdfPTable wholePDFContentWithOut_Outline_table = new PdfPTable(1);
 
-            PdfPTable tmcLogoImage_table = new PdfPTable(new float[] { 50, 25 ,25 });
+         //   PdfPTable tmcLogoImage_table = new PdfPTable(new float[] { 50, 25 ,25 });
 
 
             try {
@@ -229,7 +245,7 @@ public class PDFGenerator {
                 table_Cell.setCalculatedHeight(5f);
                 table_Cell.setVerticalAlignment(Element.ALIGN_RIGHT);
                 table_Cell.setBorder(Rectangle.NO_BORDER);
-                tmcLogoImage_table.addCell(table_Cell);
+             //   tmcLogoImage_table.addCell(table_Cell);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -240,7 +256,7 @@ public class PDFGenerator {
                 table_Cell.setCalculatedHeight(5f);
                 table_Cell.setVerticalAlignment(Element.ALIGN_RIGHT);
                 table_Cell.setBorder(Rectangle.NO_BORDER);
-                tmcLogoImage_table.addCell(table_Cell);
+           //     tmcLogoImage_table.addCell(table_Cell);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -254,7 +270,7 @@ public class PDFGenerator {
                 table_Cell.setCalculatedHeight(5f);
                 table_Cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 table_Cell.setVerticalAlignment(Element.ALIGN_RIGHT);
-                tmcLogoImage_table.addCell(table_Cell);
+            //    tmcLogoImage_table.addCell(table_Cell);
 
 
 
@@ -272,14 +288,14 @@ public class PDFGenerator {
                 phrasebilltimedetailscell.setVerticalAlignment(Element.ALIGN_CENTER);
                 phrasebilltimedetailscell.setPaddingLeft(10);
                 phrasebilltimedetailscell.setPaddingBottom(6);
-                tmcLogoImage_table.addCell(phrasebilltimedetailscell);
+            ///    tmcLogoImage_table.addCell(phrasebilltimedetailscell);
                 try {
                     PdfPCell table_Cell = new PdfPCell();
                     table_Cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                     table_Cell.setCalculatedHeight(5f);
                     table_Cell.setVerticalAlignment(Element.ALIGN_RIGHT);
                     table_Cell.setBorder(Rectangle.NO_BORDER);
-                    tmcLogoImage_table.addCell(table_Cell);
+            //        tmcLogoImage_table.addCell(table_Cell);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -290,7 +306,7 @@ public class PDFGenerator {
                     table_Cell.setCalculatedHeight(5f);
                     table_Cell.setVerticalAlignment(Element.ALIGN_RIGHT);
                     table_Cell.setBorder(Rectangle.NO_BORDER);
-                    tmcLogoImage_table.addCell(table_Cell);
+                //    tmcLogoImage_table.addCell(table_Cell);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -321,7 +337,7 @@ public class PDFGenerator {
 
                 PdfPTable supervisorNameDetails_table = new PdfPTable(1);
 
-                Phrase phraseSupervisorNameLabelTitle = new Phrase("Supervisor Name : " + String.valueOf("supervisorName") + "  ", valueFont_8Bold);
+                Phrase phraseSupervisorNameLabelTitle = new Phrase("Supervisor Name : " + String.valueOf(supervisorname) + "  ", valueFont_8Bold);
 
                 PdfPCell phraseSupervisorNameLabelTitlecell = new PdfPCell(phraseSupervisorNameLabelTitle);
                 phraseSupervisorNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -565,7 +581,11 @@ public class PDFGenerator {
 
 
 
-
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
 
 
 
@@ -575,202 +595,195 @@ public class PDFGenerator {
 
                     try {
 
-                        if(statuswisetotalcountdetailsjson.containsKey(Constants.created_status)){
-                            if(statuswiseOrderid.containsKey(Constants.created_status)){
+                        if (statuswisetotalcountdetailsjson.containsKey(Constants.created_status)) {
+                            if (statuswiseOrderid.containsKey(Constants.created_status)) {
 
                                 itemwiseTotalHashmap = new HashMap<>();
                                 orderItemsbasedOnOrderId = new ArrayList<>();
                                 itemwiseTotalHashmapKeyList = new ArrayList<>();
 
 
-                                List<String>orderidList  = statuswiseOrderid.get(Constants.created_status);
-                                if(orderidList.size() > 0){
-                                    PdfPTable statusLabel_table = new PdfPTable(new float[] {100  });
-
-                                    Phrase statusLabel_Title = new Phrase(Constants.created_status, valueFont_10);
-
-                                    PdfPCell statusLabel_Titlecell = new PdfPCell(statusLabel_Title);
-                                    statusLabel_Titlecell.setBorder(Rectangle.NO_BORDER);
-                                    statusLabel_Titlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                    statusLabel_Titlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                    statusLabel_Titlecell.setBorderWidthRight(01);
-                                    statusLabel_Titlecell.setPaddingLeft(6);
-                                    statusLabel_Titlecell.setPaddingBottom(10);
-                                    statusLabel_table.addCell(statusLabel_Titlecell);
+                                List<String> orderidList = statuswiseOrderid.get(Constants.created_status);
+                                if (orderidList.size() > 0) {
+                                boolean isHeadingLabelAdded = false;
+                                    for (int iterator = 0; iterator < orderidList.size(); iterator++) {
+                                        String orderidFromHashmap = orderidList.get(iterator);
 
 
-                                    try {
-                                        PdfPCell itemDetails_table_Cell = new PdfPCell(statusLabel_table);
-                                        itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                        itemDetails_table_Cell.setBorderWidthTop(1);
-                                        itemDetails_table_Cell.setBackgroundColor(customGreyColor);
-                                        itemDetails_table_Cell.setBorderWidthBottom(01);
-                                        wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
-
-
-                                    }
-                                    catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-
-
-                                    try{
-                                        PdfPTable itemDetailsLabel_table = new PdfPTable(new float[] {10 ,30 , 20 , 20 , 20  });
-
-                                        try{
-
-                                            Phrase phrasCtgynameLabelTitle = new Phrase(" S.No  ", valueFont_10);
-
-                                            PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
-                                            phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                            phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                            phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                            phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
-                                            phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
-                                            phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
-                                            itemDetailsLabel_table.addCell(phraseCtgyNameLabelTitlecell);
-
-
-
-
-                                            Phrase phrasMaleCountLabelTitle = new Phrase("Item Name", valueFont_10);
-
-                                            PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
-                                            phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                            phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                            phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                            phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
-                                            phraseMaleCountLabelTitlecell.setPaddingLeft(6);
-                                            phraseMaleCountLabelTitlecell.setPaddingBottom(10);
-                                            itemDetailsLabel_table.addCell(phraseMaleCountLabelTitlecell);
-
-
-
-                                            Phrase phrasFemaleCountLabelTitle = new Phrase("Quantity", valueFont_10);
-
-                                            PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
-                                            phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                            phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                            phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                            phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
-                                            phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
-                                            phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
-
-                                            itemDetailsLabel_table.addCell(phraseFemaleCountLabelTitlecell);
-
-
-
-
-                                            Phrase phrasTotalCountLabelTitle = new Phrase("Weight", valueFont_10);
-
-                                            PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
-                                            phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                            phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                            phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                            phraseCountLabelTitlecell.setPaddingLeft(6);
-                                            phraseCountLabelTitlecell.setPaddingBottom(10);
-                                            phraseCountLabelTitlecell.setBorderWidthRight(01);
-
-                                            itemDetailsLabel_table.addCell(phraseCountLabelTitlecell);
-
-
-                                            Phrase phraseWeightLabelTitle = new Phrase("Price", valueFont_10);
-
-                                            PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
-                                            phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                            phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                            phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                            phraseWeightLabelTitlecell.setPaddingLeft(6);
-                                            phraseWeightLabelTitlecell.setPaddingBottom(10);
-                                            phraseWeightLabelTitlecell.setBorderWidthRight(01);
-                                            itemDetailsLabel_table.addCell(phraseWeightLabelTitlecell);
-                                        }
-                                        catch (Exception e){
-                                            e.printStackTrace();
-                                        }
-
-                                        try {
-                                            PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                            itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                            itemDetails_table_Cell.setBorderWidthTop(1);
-                                            itemDetails_table_Cell.setBackgroundColor(customGreyColor);
-                                            itemDetails_table_Cell.setBorderWidthBottom(01);
-                                            wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
-
-
-                                        }
-                                        catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                     catch (Exception e){
-                                        e.printStackTrace();
-                                     }
-
-                                    for(int iterator = 0 ; iterator < orderidList.size(); iterator++){
-                                            String orderidFromHashmap = orderidList.get(iterator);
-
-                                         orderItemsbasedOnOrderId = new ArrayList<>(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
+                                        orderItemsbasedOnOrderId = new ArrayList<>(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
 
                                         // orderItemsbasedOnOrderId.addAll(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
-                                            if(!orderItemsbasedOnOrderId.isEmpty()){
+                                        if (!orderItemsbasedOnOrderId.isEmpty()) {
+                                            if (!isHeadingLabelAdded){
+                                                isHeadingLabelAdded = true;
 
-                                                try{
-                                                    for(int iteratr = 0 ; iteratr < orderItemsbasedOnOrderId.size(); iteratr++ ){
-                                                        OrderItemDetails_Model orderItemDetailsModel = orderItemsbasedOnOrderId.get(iteratr);
+                                                PdfPTable statusLabel_table = new PdfPTable(new float[]{100});
 
-                                                        if(itemwiseTotalHashmap.containsKey(orderItemDetailsModel.getMenuitemkey())){
-                                                            ReportsItemwiseCalculationDetail_Model modelFromHashmap  =  itemwiseTotalHashmap.get(orderItemDetailsModel.getMenuitemkey());
+                                                Phrase statusLabel_Title = new Phrase(Constants.created_pending_status, valueFont_10);
 
-                                                            int quantityFromHashmap = 0 , quantityFromItemArray = 0 ;
-                                                            double weightFromHashmap = 0 , weightFromItemArray = 0 , priceFromHashmap = 0 , priceFromItemArray = 0 ;
-
-                                                            quantityFromHashmap     = Objects.requireNonNull(modelFromHashmap).getTotalquantity();
-                                                            weightFromHashmap       = modelFromHashmap.getTotalweight();
-                                                            priceFromHashmap        = modelFromHashmap.getTotalprice();
-                                                            quantityFromItemArray   = orderItemDetailsModel.getQuantity();
-                                                            weightFromItemArray       = orderItemDetailsModel.getGrossweight();
-                                                            priceFromItemArray        = orderItemDetailsModel.getTotalprice();
-
-                                                            try{
-                                                                modelFromHashmap.setTotalweight(weightFromHashmap+weightFromItemArray);
-                                                                modelFromHashmap.setTotalquantity(quantityFromHashmap+quantityFromItemArray);
-                                                                modelFromHashmap.setTotalprice(priceFromHashmap+priceFromItemArray);
-                                                            }
-                                                            catch (Exception e){
-                                                                e.printStackTrace();
-                                                            }
+                                                PdfPCell statusLabel_Titlecell = new PdfPCell(statusLabel_Title);
+                                                statusLabel_Titlecell.setBorder(Rectangle.NO_BORDER);
+                                                statusLabel_Titlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                statusLabel_Titlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                statusLabel_Titlecell.setBorderWidthRight(01);
+                                                statusLabel_Titlecell.setPaddingLeft(6);
+                                                statusLabel_Titlecell.setPaddingBottom(10);
+                                                statusLabel_table.addCell(statusLabel_Titlecell);
 
 
+                                                try {
+                                                    PdfPCell itemDetails_table_Cell = new PdfPCell(statusLabel_table);
+                                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                    itemDetails_table_Cell.setBorderWidthTop(1);
+                                                    itemDetails_table_Cell.setBackgroundColor(customGreyColor);
+                                                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                                try {
+                                                    PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+                                                    try {
+
+                                                        Phrase phrasCtgynameLabelTitle = new Phrase(" S.No  ", valueFont_10);
+
+                                                        PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                                        phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                        phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                                        phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                                        phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                                        itemDetailsLabel_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+                                                        Phrase phrasMaleCountLabelTitle = new Phrase("Item Name", valueFont_10);
+
+                                                        PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                                        phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                                        phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                                        itemDetailsLabel_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+                                                        Phrase phrasFemaleCountLabelTitle = new Phrase("Quantity", valueFont_10);
+
+                                                        PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                                        phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                                        phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                                                        itemDetailsLabel_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+                                                        Phrase phrasTotalCountLabelTitle = new Phrase("Weight", valueFont_10);
+
+                                                        PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                                        phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseCountLabelTitlecell.setPaddingBottom(10);
+                                                        phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                                                        itemDetailsLabel_table.addCell(phraseCountLabelTitlecell);
+
+
+                                                        Phrase phraseWeightLabelTitle = new Phrase("Price", valueFont_10);
+
+                                                        PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                                        phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                                        phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                                        phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                                        itemDetailsLabel_table.addCell(phraseWeightLabelTitlecell);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                    try {
+                                                        PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                        itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                        itemDetails_table_Cell.setBorderWidthTop(1);
+                                                        itemDetails_table_Cell.setBackgroundColor(customGreyColor);
+                                                        itemDetails_table_Cell.setBorderWidthBottom(01);
+                                                        wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                            }
+
+                                            try {
+                                                for (int iteratr = 0; iteratr < orderItemsbasedOnOrderId.size(); iteratr++) {
+                                                    OrderItemDetails_Model orderItemDetailsModel = orderItemsbasedOnOrderId.get(iteratr);
+
+                                                    if (itemwiseTotalHashmap.containsKey(orderItemDetailsModel.getMenuitemkey())) {
+                                                        ReportsItemwiseCalculationDetail_Model modelFromHashmap = itemwiseTotalHashmap.get(orderItemDetailsModel.getMenuitemkey());
+
+                                                        int quantityFromHashmap = 0, quantityFromItemArray = 0;
+                                                        double weightFromHashmap = 0, weightFromItemArray = 0, priceFromHashmap = 0, priceFromItemArray = 0;
+
+                                                        quantityFromHashmap = Objects.requireNonNull(modelFromHashmap).getTotalquantity();
+                                                        weightFromHashmap = modelFromHashmap.getTotalweight();
+                                                        priceFromHashmap = modelFromHashmap.getTotalprice();
+                                                        quantityFromItemArray = orderItemDetailsModel.getQuantity();
+                                                        weightFromItemArray = orderItemDetailsModel.getGrossweight();
+                                                        priceFromItemArray = orderItemDetailsModel.getTotalprice();
+
+                                                        try {
+                                                            modelFromHashmap.setTotalweight(weightFromHashmap + weightFromItemArray);
+                                                            modelFromHashmap.setTotalquantity(quantityFromHashmap + quantityFromItemArray);
+                                                            modelFromHashmap.setTotalprice(priceFromHashmap + priceFromItemArray);
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
                                                         }
-                                                        else {
-                                                            ReportsItemwiseCalculationDetail_Model modelFromHashmap = new ReportsItemwiseCalculationDetail_Model();
-
-                                                            modelFromHashmap.setMenuitemkey(orderItemDetailsModel.getMenuitemkey());
-                                                            modelFromHashmap.setTotalprice(orderItemDetailsModel.getTotalprice());
-                                                            modelFromHashmap.setMenuitemname(orderItemDetailsModel.getItemname());
-                                                            modelFromHashmap.setTotalquantity(orderItemDetailsModel.getQuantity());
-                                                            modelFromHashmap.setTotalweight(orderItemDetailsModel.getGrossweight());
-                                                            itemwiseTotalHashmapKeyList.add(orderItemDetailsModel.getMenuitemkey());
-                                                            itemwiseTotalHashmap.put(orderItemDetailsModel.getMenuitemkey() , modelFromHashmap);
 
 
-                                                        }
+                                                    } else {
+                                                        ReportsItemwiseCalculationDetail_Model modelFromHashmap = new ReportsItemwiseCalculationDetail_Model();
+
+                                                        modelFromHashmap.setMenuitemkey(orderItemDetailsModel.getMenuitemkey());
+                                                        modelFromHashmap.setTotalprice(orderItemDetailsModel.getTotalprice());
+                                                        modelFromHashmap.setMenuitemname(orderItemDetailsModel.getItemname());
+                                                        modelFromHashmap.setTotalquantity(orderItemDetailsModel.getQuantity());
+                                                        modelFromHashmap.setTotalweight(orderItemDetailsModel.getGrossweight());
+                                                        itemwiseTotalHashmapKeyList.add(orderItemDetailsModel.getMenuitemkey());
+                                                        itemwiseTotalHashmap.put(orderItemDetailsModel.getMenuitemkey(), modelFromHashmap);
+
+
                                                     }
                                                 }
-                                                catch (Exception e) {
-                                                    e.printStackTrace();
-
-                                                }
-
-
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
 
                                             }
-                                            else{
-                                                orderItemsbasedOnOrderId = new ArrayList<>();
 
-                                            }
+
+                                        } else {
+                                            orderItemsbasedOnOrderId = new ArrayList<>();
+
+                                        }
 
 
                                     }
@@ -778,7 +791,7 @@ public class PDFGenerator {
 
 
                             }
-                            if(itemwiseTotalHashmapKeyList.size()>8){
+                            if (itemwiseTotalHashmapKeyList.size() > 8) {
                                 try {
 
 
@@ -789,11 +802,11 @@ public class PDFGenerator {
                                             //20, 30 , 12 ,10, 12 , 16
                                             //19, 18, 15, 15, 15, 18
 
-                                            PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
+                                            PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
 
                                             try {
-                                                Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
+                                                Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
 
                                                 PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
                                                 phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -803,7 +816,6 @@ public class PDFGenerator {
                                                 phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
                                                 phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
                                                 itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
-
 
 
                                                 Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
@@ -817,10 +829,6 @@ public class PDFGenerator {
                                                 itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
 
 
-
-
-
-
                                                 Phrase phrasQuantityLabelTitle = null;
                                                 phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
 
@@ -830,17 +838,21 @@ public class PDFGenerator {
                                                 phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
 
 
-
                                                 phraseQuantityLabelTitlecell.setBorderWidthRight(01);
                                                 phraseQuantityLabelTitlecell.setPaddingLeft(6);
                                                 phraseQuantityLabelTitlecell.setPaddingBottom(10);
                                                 itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
 
 
-
+                                               // Phrase phrasBatchpriceLabelTitle = null;
+                                                // phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
                                                 Phrase phrasBatchpriceLabelTitle = null;
-                                                phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
-
+                                                if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                }
+                                                else{
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                }
 
                                                 PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
                                                 phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -854,13 +866,9 @@ public class PDFGenerator {
                                                 itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
 
 
-
-
-
-
                                                 Phrase phrasNotesLabelTitle = null;
 
-                                                phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
                                                 PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
                                                 phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
                                                 phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -870,7 +878,6 @@ public class PDFGenerator {
                                                 phraseNotesLabelTitlecell.setBorderWidthRight(01);
                                                 phraseNotesLabelTitlecell.setPaddingBottom(10);
                                                 itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
-
 
 
                                             } catch (Exception e) {
@@ -891,21 +898,17 @@ public class PDFGenerator {
                                             }
 
 
-
-
-                                        }
-                                        catch (Exception e) {
+                                        } catch (Exception e) {
                                             e.printStackTrace();
                                         }
                                     }
-                                }
-                                catch (Exception e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
 
-                                tmcLogoImage_table.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                tmcLogoImage_table.setTotalWidth(10f);
-                                layoutDocument.add(tmcLogoImage_table);
+                               // tmcLogoImage_table.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                               // tmcLogoImage_table.setTotalWidth(10f);
+                              //  layoutDocument.add(tmcLogoImage_table);
 
                                 PdfPCell wholePDFWithOutBordercell = new PdfPCell(wholePDFContentWithOut_Outline_table);
                                 wholePDFWithOutBordercell.setCellEvent(roundRectange);
@@ -917,9 +920,8 @@ public class PDFGenerator {
 
                                 layoutDocument.add(wholePDFContentOutline_table);
                                 PdfPTable wholePDFContentWithOut_Outline_table2 = new PdfPTable(1);
-                                try{
+                                try {
                                     layoutDocument.newPage();
-
 
 
                                     try {
@@ -930,12 +932,11 @@ public class PDFGenerator {
                                             try {
 
 
-
-                                                PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
+                                                PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
 
                                                 try {
-                                                    Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
+                                                    Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
 
                                                     PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
                                                     phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -945,7 +946,6 @@ public class PDFGenerator {
                                                     phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
                                                     phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
                                                     itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
-
 
 
                                                     Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
@@ -960,10 +960,6 @@ public class PDFGenerator {
                                                     itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
 
 
-
-
-
-
                                                     Phrase phrasQuantityLabelTitle = null;
                                                     phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
 
@@ -973,17 +969,21 @@ public class PDFGenerator {
                                                     phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
 
 
-
                                                     phraseQuantityLabelTitlecell.setBorderWidthRight(01);
                                                     phraseQuantityLabelTitlecell.setPaddingLeft(6);
                                                     phraseQuantityLabelTitlecell.setPaddingBottom(10);
                                                     itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
 
 
-
+                                                   // Phrase phrasBatchpriceLabelTitle = null;
+                                                   // phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
                                                     Phrase phrasBatchpriceLabelTitle = null;
-                                                    phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
-
+                                                    if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                        phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                    }
+                                                    else{
+                                                        phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                    }
 
                                                     PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
                                                     phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -997,13 +997,9 @@ public class PDFGenerator {
                                                     itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
 
 
-
-
-
-
                                                     Phrase phrasNotesLabelTitle = null;
 
-                                                    phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                    phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
                                                     PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
                                                     phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
                                                     phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1013,7 +1009,6 @@ public class PDFGenerator {
                                                     phraseNotesLabelTitlecell.setBorderWidthRight(01);
                                                     phraseNotesLabelTitlecell.setPaddingBottom(10);
                                                     itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
-
 
 
                                                 } catch (Exception e) {
@@ -1033,8 +1028,6 @@ public class PDFGenerator {
                                                 }
 
 
-
-
                                             }
                                             catch (Exception e) {
                                                 e.printStackTrace();
@@ -1042,18 +1035,920 @@ public class PDFGenerator {
                                         }
 
 
-                                    }
-                                    catch (Exception e){
+                                    } catch (Exception e) {
                                         e.printStackTrace();
                                     }
 
 
+                                    //extraas
+
+
+
+
+
+
+
+                                    //finaladd
+                                    try {
+
+
+                                        PdfPTable wholePDFContentOutline_table2 = new PdfPTable(1);
+
+
+                                        PdfPCell wholePDFWithOutBordercell2 = new PdfPCell(wholePDFContentWithOut_Outline_table2);
+                                        wholePDFWithOutBordercell2.setCellEvent(roundRectange);
+                                        wholePDFWithOutBordercell2.setPadding(1);
+                                        wholePDFWithOutBordercell2.setBorder(Rectangle.NO_BORDER);
+                                        wholePDFContentOutline_table2.addCell(wholePDFWithOutBordercell2);
+                                        wholePDFContentOutline_table2.setWidthPercentage(100);
+
+
+                                        layoutDocument.add(wholePDFContentOutline_table2);
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+
+                            }
+                            else {
+                                try {
+                                    for (int iterator = 0; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
+                                        String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
+                                        try {
+
+                                            //20, 30 , 12 ,10, 12 , 16
+                                            //19, 18, 15, 15, 15, 18
+
+                                            PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+
+                                            try {
+                                                Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
+
+                                                PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
+                                                phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
+
+
+                                                Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
+
+                                                PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
+                                                phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
+
+
+                                                Phrase phrasQuantityLabelTitle = null;
+                                                phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
+
+                                                PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
+                                                phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+
+
+                                                phraseQuantityLabelTitlecell.setBorderWidthRight(01);
+                                                phraseQuantityLabelTitlecell.setPaddingLeft(6);
+                                                phraseQuantityLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
+
+
+                                               // Phrase phrasBatchpriceLabelTitle = null;
+                                               // phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+
+                                                Phrase phrasBatchpriceLabelTitle = null;
+                                                if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                }
+                                                else{
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                }
+
+                                                PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
+                                                phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
+                                                phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
+
+
+                                                phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
+
+
+                                                Phrase phrasNotesLabelTitle = null;
+
+                                                phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
+                                                phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setPaddingLeft(6);
+
+                                                phraseNotesLabelTitlecell.setBorderWidthRight(01);
+                                                phraseNotesLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
+
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                            try {
+                                                PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                itemDetails_table_Cell.setBorderWidthBottom(1);
+                                                // itemDetails_table_Cell.setBackgroundColor(WHITE);
+                                                wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                                 catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+
+
+
+                            }
+
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+                                try {
+
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
+
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("Total   ", valueFont_10Bold);
+
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
+
+
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.created_status).getDouble("pricebeforediscount")), valueFont_10);
+
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                    itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+
+                                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+                                try {
+
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
+
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("Discount   ", valueFont_10Bold);
+
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
+
+
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.created_status).getDouble("discount")), valueFont_10);
+
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                    itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+
+
+                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+                                try {
+
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
+
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("Final price   ", valueFont_10Bold);
+
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
+
+
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.created_status).getDouble("price")), valueFont_10);
+
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                    itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                    itemDetails_table_Cell.setBorderWidthTop(1);
+
+                                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                            try {
+                                PdfPTable EnptytableLabel_table = new PdfPTable(new float[]{35, 65});
+
+
+                                try {
+                                    Phrase phraseParticularsLabelTitle = new Phrase("    ", valueFont_10Bold);
+
+                                    PdfPCell phraseParticularsLabelTitlecell = new PdfPCell(phraseParticularsLabelTitle);
+                                    phraseParticularsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseParticularsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseParticularsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseParticularsLabelTitlecell.setPaddingLeft(6);
+                                    phraseParticularsLabelTitlecell.setPaddingTop(5);
+                                    phraseParticularsLabelTitlecell.setPaddingBottom(10);
+                                    EnptytableLabel_table.addCell(phraseParticularsLabelTitlecell);
+
+
+                                    Phrase phrasQuantityLabelTitle = new Phrase("     ", valueFont_10Bold);
+                                    PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
+                                    phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                    phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseQuantityLabelTitlecell.setPaddingTop(5);
+                                    phraseQuantityLabelTitlecell.setPaddingLeft(6);
+                                    phraseQuantityLabelTitlecell.setPaddingBottom(10);
+                                    EnptytableLabel_table.addCell(phraseQuantityLabelTitlecell);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(EnptytableLabel_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+
+                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                        if (statuswisetotalcountdetailsjson.containsKey(Constants.placed_status)) {
+
+                            itemwiseTotalHashmap = new HashMap<>();
+                            orderItemsbasedOnOrderId = new ArrayList<>();
+                            itemwiseTotalHashmapKeyList = new ArrayList<>();
+
+                            if (statuswiseOrderid.containsKey(Constants.placed_status)) {
+                                List<String> orderidList = statuswiseOrderid.get(Constants.placed_status);
+                                if (orderidList.size() > 0) {
+                                   boolean isHeadingLabelAdded = false;
+                                    for (int iterator = 0; iterator < orderidList.size(); iterator++) {
+                                        String orderidFromHashmap = orderidList.get(iterator);
+
+                                        orderItemsbasedOnOrderId = new ArrayList<>(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
+
+                                        // orderItemsbasedOnOrderId.addAll(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
+                                        if (!orderItemsbasedOnOrderId.isEmpty()) {
+                                            if (!isHeadingLabelAdded){
+                                                isHeadingLabelAdded = true;
+
+
+                                                PdfPTable statusLabel_table = new PdfPTable(new float[]{100});
+
+                                                Phrase statusLabel_Title = new Phrase(Constants.placed_pending_status, valueFont_10);
+
+                                                PdfPCell statusLabel_Titlecell = new PdfPCell(statusLabel_Title);
+                                                statusLabel_Titlecell.setBorder(Rectangle.NO_BORDER);
+                                                statusLabel_Titlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                statusLabel_Titlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                statusLabel_Titlecell.setBorderWidthRight(01);
+                                                statusLabel_Titlecell.setPaddingLeft(6);
+                                                statusLabel_Titlecell.setPaddingBottom(10);
+                                                statusLabel_table.addCell(statusLabel_Titlecell);
+
+
+                                                try {
+                                                    PdfPCell itemDetails_table_Cell = new PdfPCell(statusLabel_table);
+                                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                    itemDetails_table_Cell.setBorderWidthTop(1);
+                                                    itemDetails_table_Cell.setBackgroundColor(customGreyColor);
+                                                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                                try {
+                                                    PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+                                                    try {
+
+                                                        Phrase phrasCtgynameLabelTitle = new Phrase(" S.No  ", valueFont_10);
+
+                                                        PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                                        phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                        phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                                        phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                                        phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                                        itemDetailsLabel_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+                                                        Phrase phrasMaleCountLabelTitle = new Phrase("Item Name", valueFont_10);
+
+                                                        PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                                        phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                                        phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                                        itemDetailsLabel_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+                                                        Phrase phrasFemaleCountLabelTitle = new Phrase("Quantity", valueFont_10);
+
+                                                        PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                                        phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                                        phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                                                        itemDetailsLabel_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+                                                        Phrase phrasTotalCountLabelTitle = new Phrase("Weight", valueFont_10);
+
+                                                        PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                                        phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseCountLabelTitlecell.setPaddingBottom(10);
+                                                        phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                                                        itemDetailsLabel_table.addCell(phraseCountLabelTitlecell);
+
+
+                                                        Phrase phraseWeightLabelTitle = new Phrase("Price", valueFont_10);
+
+                                                        PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                                        phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                                        phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                                        phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                                        itemDetailsLabel_table.addCell(phraseWeightLabelTitlecell);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                    try {
+                                                        PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                        itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                        itemDetails_table_Cell.setBorderWidthTop(1);
+                                                        itemDetails_table_Cell.setBackgroundColor(customGreyColor);
+                                                        itemDetails_table_Cell.setBorderWidthBottom(01);
+                                                        wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                            }
+
+                                            try {
+                                                for (int iteratr = 0; iteratr < orderItemsbasedOnOrderId.size(); iteratr++) {
+                                                    OrderItemDetails_Model orderItemDetailsModel = orderItemsbasedOnOrderId.get(iteratr);
+
+                                                    if (itemwiseTotalHashmap.containsKey(orderItemDetailsModel.getMenuitemkey())) {
+                                                        ReportsItemwiseCalculationDetail_Model modelFromHashmap = itemwiseTotalHashmap.get(orderItemDetailsModel.getMenuitemkey());
+
+                                                        int quantityFromHashmap = 0, quantityFromItemArray = 0;
+                                                        double weightFromHashmap = 0, weightFromItemArray = 0, priceFromHashmap = 0, priceFromItemArray = 0;
+
+                                                        quantityFromHashmap = Objects.requireNonNull(modelFromHashmap).getTotalquantity();
+                                                        weightFromHashmap = modelFromHashmap.getTotalweight();
+                                                        priceFromHashmap = modelFromHashmap.getTotalprice();
+                                                        quantityFromItemArray = orderItemDetailsModel.getQuantity();
+                                                        weightFromItemArray = orderItemDetailsModel.getGrossweight();
+                                                        priceFromItemArray = orderItemDetailsModel.getTotalprice();
+
+                                                        try {
+                                                            modelFromHashmap.setTotalweight(weightFromHashmap + weightFromItemArray);
+                                                            modelFromHashmap.setTotalquantity(quantityFromHashmap + quantityFromItemArray);
+                                                            modelFromHashmap.setTotalprice(priceFromHashmap + priceFromItemArray);
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+
+
+                                                    } else {
+                                                        ReportsItemwiseCalculationDetail_Model modelFromHashmap = new ReportsItemwiseCalculationDetail_Model();
+
+                                                        modelFromHashmap.setMenuitemkey(orderItemDetailsModel.getMenuitemkey());
+                                                        modelFromHashmap.setTotalprice(orderItemDetailsModel.getTotalprice());
+                                                        modelFromHashmap.setMenuitemname(orderItemDetailsModel.getItemname());
+                                                        modelFromHashmap.setTotalquantity(orderItemDetailsModel.getQuantity());
+                                                        modelFromHashmap.setTotalweight(orderItemDetailsModel.getGrossweight());
+                                                        itemwiseTotalHashmapKeyList.add(orderItemDetailsModel.getMenuitemkey());
+                                                        itemwiseTotalHashmap.put(orderItemDetailsModel.getMenuitemkey(), modelFromHashmap);
+
+
+                                                    }
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+
+                                            }
+
+
+                                        } else {
+                                            orderItemsbasedOnOrderId = new ArrayList<>();
+
+                                        }
+
+
+                                    }
+                                }
+
+
+                            }
+                            if (itemwiseTotalHashmapKeyList.size() > 8) {
+                                try {
+
+
+                                    for (int iterator = 0; iterator < 9; iterator++) {
+                                        String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
+                                        try {
+
+                                            //20, 30 , 12 ,10, 12 , 16
+                                            //19, 18, 15, 15, 15, 18
+
+                                            PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+
+                                            try {
+                                                Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
+
+                                                PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
+                                                phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
+
+
+                                                Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
+                                                PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
+                                                phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
+
+
+                                                Phrase phrasQuantityLabelTitle = null;
+                                                phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
+
+                                                PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
+                                                phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+
+
+                                                phraseQuantityLabelTitlecell.setBorderWidthRight(01);
+                                                phraseQuantityLabelTitlecell.setPaddingLeft(6);
+                                                phraseQuantityLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
+
+
+                                              //  Phrase phrasBatchpriceLabelTitle = null;
+                                              //  phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                Phrase phrasBatchpriceLabelTitle = null;
+                                                if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                }
+                                                else{
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                }
+
+                                                PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
+                                                phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
+                                                phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
+
+
+                                                phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
+
+
+                                                Phrase phrasNotesLabelTitle = null;
+
+                                                phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
+                                                phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setPaddingLeft(6);
+
+                                                phraseNotesLabelTitlecell.setBorderWidthRight(01);
+                                                phraseNotesLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
+
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                            try {
+                                                PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                itemDetails_table_Cell.setBorderWidthBottom(1);
+                                                //itemDetails_table_Cell.setBackgroundColor(WHITE);
+                                                wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                               // tmcLogoImage_table.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                              //  tmcLogoImage_table.setTotalWidth(10f);
+                              //  layoutDocument.add(tmcLogoImage_table);
+
+                                PdfPCell wholePDFWithOutBordercell = new PdfPCell(wholePDFContentWithOut_Outline_table);
+                                wholePDFWithOutBordercell.setCellEvent(roundRectange);
+                                wholePDFWithOutBordercell.setPadding(1);
+                                wholePDFWithOutBordercell.setBorder(Rectangle.NO_BORDER);
+                                wholePDFContentOutline_table.addCell(wholePDFWithOutBordercell);
+                                wholePDFContentOutline_table.setWidthPercentage(100);
+
+
+                                layoutDocument.add(wholePDFContentOutline_table);
+                                PdfPTable wholePDFContentWithOut_Outline_table2 = new PdfPTable(1);
+                                try {
+                                    layoutDocument.newPage();
+
+
+                                    try {
+
+
+                                        for (int iterator = 9; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
+                                            String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
+                                            try {
+
+
+                                                PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+
+                                                try {
+                                                    Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
+
+                                                    PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
+                                                    phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                    phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
+                                                    phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
+
+
+                                                    Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
+
+                                                    PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
+                                                    phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                    phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
+                                                    phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
+
+
+                                                    Phrase phrasQuantityLabelTitle = null;
+                                                    phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
+
+                                                    PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
+                                                    phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                    phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+
+
+                                                    phraseQuantityLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseQuantityLabelTitlecell.setPaddingLeft(6);
+                                                    phraseQuantityLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
+
+
+                                                  //  Phrase phrasBatchpriceLabelTitle = null;
+                                                   // phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                    Phrase phrasBatchpriceLabelTitle = null;
+                                                    if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                        phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                    }
+                                                    else{
+                                                        phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                    }
+
+                                                    PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
+                                                    phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                    phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
+
+
+                                                    phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
+
+
+                                                    Phrase phrasNotesLabelTitle = null;
+
+                                                    phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                    PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
+                                                    phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                    phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseNotesLabelTitlecell.setPaddingLeft(6);
+
+                                                    phraseNotesLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseNotesLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
+
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                try {
+                                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                    itemDetails_table_Cell.setBorderWidthBottom(1);
+                                                    // itemDetails_table_Cell.setBackgroundColor(WHITE);
+                                                    wholePDFContentWithOut_Outline_table2.addCell(itemDetails_table_Cell);
+
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
 
                                     //extraas
-                                    try{
-
-
-
+/*                                    try {
 
 
                                         try {
@@ -1105,17 +2000,15 @@ public class PDFGenerator {
                                         }
 
 
-
-                                    }
-                                    catch (Exception e ){
+                                    } catch (Exception e) {
                                         e.printStackTrace();
                                     }
 
 
+ */
+
                                     //finaladd
                                     try {
-
-
 
 
                                         PdfPTable wholePDFContentOutline_table2 = new PdfPTable(1);
@@ -1136,9 +2029,7 @@ public class PDFGenerator {
                                     }
 
 
-
-                                }
-                                catch (Exception e){
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
 
@@ -1153,11 +2044,11 @@ public class PDFGenerator {
                                             //20, 30 , 12 ,10, 12 , 16
                                             //19, 18, 15, 15, 15, 18
 
-                                            PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
+                                            PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
 
                                             try {
-                                                Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
+                                                Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
 
                                                 PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
                                                 phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -1167,7 +2058,6 @@ public class PDFGenerator {
                                                 phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
                                                 phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
                                                 itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
-
 
 
                                                 Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
@@ -1182,10 +2072,6 @@ public class PDFGenerator {
                                                 itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
 
 
-
-
-
-
                                                 Phrase phrasQuantityLabelTitle = null;
                                                 phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
 
@@ -1195,17 +2081,21 @@ public class PDFGenerator {
                                                 phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
 
 
-
                                                 phraseQuantityLabelTitlecell.setBorderWidthRight(01);
                                                 phraseQuantityLabelTitlecell.setPaddingLeft(6);
                                                 phraseQuantityLabelTitlecell.setPaddingBottom(10);
                                                 itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
 
 
-
+                                              //  Phrase phrasBatchpriceLabelTitle = null;
+                                              //  phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
                                                 Phrase phrasBatchpriceLabelTitle = null;
-                                                phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
-
+                                                if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                }
+                                                else{
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                }
 
                                                 PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
                                                 phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -1219,13 +2109,9 @@ public class PDFGenerator {
                                                 itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
 
 
-
-
-
-
                                                 Phrase phrasNotesLabelTitle = null;
 
-                                                phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
                                                 PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
                                                 phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
                                                 phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1237,12 +2123,9 @@ public class PDFGenerator {
                                                 itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
 
 
-
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
-
-
 
 
                                             try {
@@ -1258,10 +2141,7 @@ public class PDFGenerator {
                                             }
 
 
-
-
-                                        }
-                                        catch (Exception e) {
+                                        } catch (Exception e) {
                                             e.printStackTrace();
                                         }
                                     }
@@ -1271,51 +2151,791 @@ public class PDFGenerator {
 
 
 
-                                //extraas
-                                try{
+
+                            }
+
+
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+                                try {
+
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
+
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("Total   ", valueFont_10Bold);
+
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
+
+
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.placed_status).getDouble("pricebeforediscount")), valueFont_10);
+                                //    Phrase phraseWeightLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                    itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                    itemDetails_table_Cell.setBorderWidthBottom(1);
+
+                                     wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+                                try {
+
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
+
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("Discount   ", valueFont_10Bold);
+
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
+
+
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.placed_status).getDouble("discount")), valueFont_10);
+
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                    itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                    //itemDetails_table_Cell.setBorderWidthTop(1);
+
+                                    //itemDetails_table_Cell.setBorderWidthBottom(01);
+                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+                                try {
+
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
+
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("Final price   ", valueFont_10Bold);
+
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
+
+
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.placed_status).getDouble("price")), valueFont_10);
+
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                    itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                    itemDetails_table_Cell.setBorderWidthTop(1);
+
+                                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+                                try {
+
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
+
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                     phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                     phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("   ", valueFont_10);
+
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
+
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
+
+
+                                    Phrase phraseWeightLabelTitle = new Phrase("", valueFont_10);
+
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+
+                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                        if (statuswisetotalcountdetailsjson.containsKey(Constants.rejected_status)) {
+                            if (statuswiseOrderid.containsKey(Constants.rejected_status)) {
+
+                                itemwiseTotalHashmap = new HashMap<>();
+                                orderItemsbasedOnOrderId = new ArrayList<>();
+                                itemwiseTotalHashmapKeyList = new ArrayList<>();
+
+                                boolean isHeadingLabelAdded = false;
+                                List<String> orderidList = statuswiseOrderid.get(Constants.rejected_status);
+                                if (orderidList.size() > 0) {
+
+                                    for (int iterator = 0; iterator < orderidList.size(); iterator++) {
+                                        String orderidFromHashmap = orderidList.get(iterator);
+
+                                        orderItemsbasedOnOrderId = new ArrayList<>(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
+
+                                        // orderItemsbasedOnOrderId.addAll(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
+                                        if (!orderItemsbasedOnOrderId.isEmpty()) {
+
+                                            if (!isHeadingLabelAdded){
+                                                isHeadingLabelAdded = true;
+
+
+                                                PdfPTable statusLabel_table = new PdfPTable(new float[]{100});
+
+                                                Phrase statusLabel_Title = new Phrase(Constants.rejected_status, valueFont_10);
+
+                                                PdfPCell statusLabel_Titlecell = new PdfPCell(statusLabel_Title);
+                                                statusLabel_Titlecell.setBorder(Rectangle.NO_BORDER);
+                                                statusLabel_Titlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                statusLabel_Titlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                statusLabel_Titlecell.setBorderWidthRight(01);
+                                                statusLabel_Titlecell.setPaddingLeft(6);
+                                                statusLabel_Titlecell.setPaddingBottom(10);
+                                                statusLabel_table.addCell(statusLabel_Titlecell);
+
+
+                                                try {
+                                                    PdfPCell itemDetails_table_Cell = new PdfPCell(statusLabel_table);
+                                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                    itemDetails_table_Cell.setBorderWidthTop(1);
+                                                    itemDetails_table_Cell.setBackgroundColor(customGreyColor);
+                                                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                                try {
+                                                    PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+                                                    try {
+
+                                                        Phrase phrasCtgynameLabelTitle = new Phrase(" S.No  ", valueFont_10);
+
+                                                        PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                                        phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                        phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                                        phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                                        phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                                        itemDetailsLabel_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+                                                        Phrase phrasMaleCountLabelTitle = new Phrase("Item Name", valueFont_10);
+
+                                                        PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                                        phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                                        phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                                        itemDetailsLabel_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+                                                        Phrase phrasFemaleCountLabelTitle = new Phrase("Quantity", valueFont_10);
+
+                                                        PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                                        phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                                        phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                                                        itemDetailsLabel_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+                                                        Phrase phrasTotalCountLabelTitle = new Phrase("Weight", valueFont_10);
+
+                                                        PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                                        phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseCountLabelTitlecell.setPaddingBottom(10);
+                                                        phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                                                        itemDetailsLabel_table.addCell(phraseCountLabelTitlecell);
+
+
+                                                        Phrase phraseWeightLabelTitle = new Phrase("Price", valueFont_10);
+
+                                                        PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                                        phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                                        phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                                        phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                                        itemDetailsLabel_table.addCell(phraseWeightLabelTitlecell);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                    try {
+                                                        PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                        itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                        itemDetails_table_Cell.setBorderWidthTop(1);
+                                                        itemDetails_table_Cell.setBackgroundColor(customGreyColor);
+                                                        itemDetails_table_Cell.setBorderWidthBottom(01);
+                                                        wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                            }
 
 
 
-                                    try {
-                                        PdfPTable EnptytableLabel_table = new PdfPTable(new float[]{35, 65});
+                                            try {
+                                                for (int iteratr = 0; iteratr < orderItemsbasedOnOrderId.size(); iteratr++) {
+                                                    OrderItemDetails_Model orderItemDetailsModel = orderItemsbasedOnOrderId.get(iteratr);
+
+                                                    if (itemwiseTotalHashmap.containsKey(orderItemDetailsModel.getMenuitemkey())) {
+                                                        ReportsItemwiseCalculationDetail_Model modelFromHashmap = itemwiseTotalHashmap.get(orderItemDetailsModel.getMenuitemkey());
+
+                                                        int quantityFromHashmap = 0, quantityFromItemArray = 0;
+                                                        double weightFromHashmap = 0, weightFromItemArray = 0, priceFromHashmap = 0, priceFromItemArray = 0;
+
+                                                        quantityFromHashmap = Objects.requireNonNull(modelFromHashmap).getTotalquantity();
+                                                        weightFromHashmap = modelFromHashmap.getTotalweight();
+                                                        priceFromHashmap = modelFromHashmap.getTotalprice();
+                                                        quantityFromItemArray = orderItemDetailsModel.getQuantity();
+                                                        weightFromItemArray = orderItemDetailsModel.getGrossweight();
+                                                        priceFromItemArray = orderItemDetailsModel.getTotalprice();
+
+                                                        try {
+                                                            modelFromHashmap.setTotalweight(weightFromHashmap + weightFromItemArray);
+                                                            modelFromHashmap.setTotalquantity(quantityFromHashmap + quantityFromItemArray);
+                                                            modelFromHashmap.setTotalprice(priceFromHashmap + priceFromItemArray);
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
 
 
+                                                    } else {
+                                                        ReportsItemwiseCalculationDetail_Model modelFromHashmap = new ReportsItemwiseCalculationDetail_Model();
+
+                                                        modelFromHashmap.setMenuitemkey(orderItemDetailsModel.getMenuitemkey());
+                                                        modelFromHashmap.setTotalprice(orderItemDetailsModel.getTotalprice());
+                                                        modelFromHashmap.setMenuitemname(orderItemDetailsModel.getItemname());
+                                                        modelFromHashmap.setTotalquantity(orderItemDetailsModel.getQuantity());
+                                                        modelFromHashmap.setTotalweight(orderItemDetailsModel.getGrossweight());
+                                                        itemwiseTotalHashmapKeyList.add(orderItemDetailsModel.getMenuitemkey());
+                                                        itemwiseTotalHashmap.put(orderItemDetailsModel.getMenuitemkey(), modelFromHashmap);
+
+
+                                                    }
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+
+                                            }
+
+
+                                        } else {
+                                            orderItemsbasedOnOrderId = new ArrayList<>();
+
+                                        }
+
+
+                                    }
+                                }
+
+
+                            }
+                            if (itemwiseTotalHashmapKeyList.size() > 8) {
+                                try {
+
+
+                                    for (int iterator = 0; iterator < 9; iterator++) {
+                                        String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
                                         try {
-                                            Phrase phraseParticularsLabelTitle = new Phrase("    ", valueFont_10Bold);
 
-                                            PdfPCell phraseParticularsLabelTitlecell = new PdfPCell(phraseParticularsLabelTitle);
-                                            phraseParticularsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                            phraseParticularsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                            phraseParticularsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                            phraseParticularsLabelTitlecell.setPaddingLeft(6);
-                                            phraseParticularsLabelTitlecell.setPaddingTop(5);
-                                            phraseParticularsLabelTitlecell.setPaddingBottom(10);
-                                            EnptytableLabel_table.addCell(phraseParticularsLabelTitlecell);
+                                            //20, 30 , 12 ,10, 12 , 16
+                                            //19, 18, 15, 15, 15, 18
+
+                                            PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
 
-                                            Phrase phrasQuantityLabelTitle = new Phrase("     ", valueFont_10Bold);
-                                            PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                            phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                            phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                            phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                            phraseQuantityLabelTitlecell.setPaddingTop(5);
-                                            phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                            phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                            EnptytableLabel_table.addCell(phraseQuantityLabelTitlecell);
+                                            try {
+                                                Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
+
+                                                PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
+                                                phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
+
+
+                                                Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
+                                                PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
+                                                phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
+
+
+                                                Phrase phrasQuantityLabelTitle = null;
+                                                phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
+
+                                                PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
+                                                phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+
+
+                                                phraseQuantityLabelTitlecell.setBorderWidthRight(01);
+                                                phraseQuantityLabelTitlecell.setPaddingLeft(6);
+                                                phraseQuantityLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
+
+
+                                              //  Phrase phrasBatchpriceLabelTitle = null;
+                                              //  phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+
+                                                Phrase phrasBatchpriceLabelTitle = null;
+                                                if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                }
+                                                else{
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                }
+
+                                                PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
+                                                phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
+                                                phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
+
+
+                                                phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
+
+
+                                                Phrase phrasNotesLabelTitle = null;
+
+                                                phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
+                                                phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setPaddingLeft(6);
+
+                                                phraseNotesLabelTitlecell.setBorderWidthRight(01);
+                                                phraseNotesLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
+
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                            try {
+                                                PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                itemDetails_table_Cell.setBorderWidthBottom(1);
+                                                //itemDetails_table_Cell.setBackgroundColor(WHITE);
+                                                wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
 
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                               // tmcLogoImage_table.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                               // tmcLogoImage_table.setTotalWidth(10f);
+                               // layoutDocument.add(tmcLogoImage_table);
+
+                                PdfPCell wholePDFWithOutBordercell = new PdfPCell(wholePDFContentWithOut_Outline_table);
+                                wholePDFWithOutBordercell.setCellEvent(roundRectange);
+                                wholePDFWithOutBordercell.setPadding(1);
+                                wholePDFWithOutBordercell.setBorder(Rectangle.NO_BORDER);
+                                wholePDFContentOutline_table.addCell(wholePDFWithOutBordercell);
+                                wholePDFContentOutline_table.setWidthPercentage(100);
 
 
-                                        try {
-                                            PdfPCell itemDetails_table_Cell = new PdfPCell(EnptytableLabel_table);
-                                            itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                            wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+                                layoutDocument.add(wholePDFContentOutline_table);
+                                PdfPTable wholePDFContentWithOut_Outline_table2 = new PdfPTable(1);
+                                try {
+                                    layoutDocument.newPage();
 
 
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
+                                    try {
+
+
+                                        for (int iterator = 9; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
+                                            String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
+                                            try {
+
+
+                                                PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+
+                                                try {
+                                                    Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
+
+                                                    PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
+                                                    phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                    phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
+                                                    phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
+
+
+                                                    Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
+
+                                                    PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
+                                                    phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                    phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
+                                                    phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
+
+
+                                                    Phrase phrasQuantityLabelTitle = null;
+                                                    phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
+
+                                                    PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
+                                                    phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                    phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+
+
+                                                    phraseQuantityLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseQuantityLabelTitlecell.setPaddingLeft(6);
+                                                    phraseQuantityLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
+
+
+                                                  //  Phrase phrasBatchpriceLabelTitle = null;
+                                                    //phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                    Phrase phrasBatchpriceLabelTitle = null;
+                                                    if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                        phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                    }
+                                                    else{
+                                                        phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                    }
+
+                                                    PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
+                                                    phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                    phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
+
+
+                                                    phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
+
+
+                                                    Phrase phrasNotesLabelTitle = null;
+
+                                                    phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                    PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
+                                                    phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                    phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseNotesLabelTitlecell.setPaddingLeft(6);
+
+                                                    phraseNotesLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseNotesLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
+
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                try {
+                                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                    itemDetails_table_Cell.setBorderWidthBottom(1);
+                                                    // itemDetails_table_Cell.setBackgroundColor(WHITE);
+                                                    wholePDFContentWithOut_Outline_table2.addCell(itemDetails_table_Cell);
+
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                         }
 
 
@@ -1323,2293 +2943,1437 @@ public class PDFGenerator {
                                         e.printStackTrace();
                                     }
 
+
+
+
+
+                                    //finaladd
+                                    try {
+
+
+                                        PdfPTable wholePDFContentOutline_table2 = new PdfPTable(1);
+
+
+                                        PdfPCell wholePDFWithOutBordercell2 = new PdfPCell(wholePDFContentWithOut_Outline_table2);
+                                        wholePDFWithOutBordercell2.setCellEvent(roundRectange);
+                                        wholePDFWithOutBordercell2.setPadding(1);
+                                        wholePDFWithOutBordercell2.setBorder(Rectangle.NO_BORDER);
+                                        wholePDFContentOutline_table2.addCell(wholePDFWithOutBordercell2);
+                                        wholePDFContentOutline_table2.setWidthPercentage(100);
+
+
+                                        layoutDocument.add(wholePDFContentOutline_table2);
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                                catch (Exception e ){
+
+
+                            }
+                            else {
+                                try {
+                                    for (int iterator = 0; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
+                                        String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
+                                        try {
+
+                                            //20, 30 , 12 ,10, 12 , 16
+                                            //19, 18, 15, 15, 15, 18
+
+                                            PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
+
+
+                                            try {
+                                                Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
+
+                                                PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
+                                                phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
+
+
+                                                Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
+
+                                                PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
+                                                phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
+
+
+                                                Phrase phrasQuantityLabelTitle = null;
+                                                phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
+
+                                                PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
+                                                phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+
+
+                                                phraseQuantityLabelTitlecell.setBorderWidthRight(01);
+                                                phraseQuantityLabelTitlecell.setPaddingLeft(6);
+                                                phraseQuantityLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
+
+
+                                               // Phrase phrasBatchpriceLabelTitle = null;
+                                               // phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10)
+                                                Phrase phrasBatchpriceLabelTitle = null;
+                                                if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                }
+                                                else{
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                }
+
+                                                PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
+                                                phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
+                                                phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
+
+
+                                                phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
+
+
+                                                Phrase phrasNotesLabelTitle = null;
+
+                                                phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
+                                                phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setPaddingLeft(6);
+
+                                                phraseNotesLabelTitlecell.setBorderWidthRight(01);
+                                                phraseNotesLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
+
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                            try {
+                                                PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                itemDetails_table_Cell.setBorderWidthBottom(1);
+                                                // itemDetails_table_Cell.setBackgroundColor(WHITE);
+                                                wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
 
 
 
+
                             }
 
-                         }
-                         if(statuswisetotalcountdetailsjson.containsKey(Constants.placed_status)){
 
-                             itemwiseTotalHashmap = new HashMap<>();
-                             orderItemsbasedOnOrderId = new ArrayList<>();
-                             itemwiseTotalHashmapKeyList = new ArrayList<>();
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
-                             if(statuswiseOrderid.containsKey(Constants.placed_status)){
-                                 List<String>orderidList  = statuswiseOrderid.get(Constants.placed_status);
-                                 if(orderidList.size() > 0){
-                                     PdfPTable statusLabel_table = new PdfPTable(new float[] {100  });
+                                try {
 
-                                     Phrase statusLabel_Title = new Phrase(Constants.placed_status, valueFont_10);
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
 
-                                     PdfPCell statusLabel_Titlecell = new PdfPCell(statusLabel_Title);
-                                     statusLabel_Titlecell.setBorder(Rectangle.NO_BORDER);
-                                     statusLabel_Titlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                     statusLabel_Titlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                     statusLabel_Titlecell.setBorderWidthRight(01);
-                                     statusLabel_Titlecell.setPaddingLeft(6);
-                                     statusLabel_Titlecell.setPaddingBottom(10);
-                                     statusLabel_table.addCell(statusLabel_Titlecell);
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
 
 
-                                     try {
-                                         PdfPCell itemDetails_table_Cell = new PdfPCell(statusLabel_table);
-                                         itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                         itemDetails_table_Cell.setBorderWidthTop(1);
-                                         itemDetails_table_Cell.setBackgroundColor(customGreyColor);
-                                         itemDetails_table_Cell.setBorderWidthBottom(01);
-                                         wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
 
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
 
-                                     }
-                                     catch (Exception e) {
-                                         e.printStackTrace();
-                                     }
 
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
 
-                                     try{
-                                         PdfPTable itemDetailsLabel_table = new PdfPTable(new float[] {10 ,30 , 20 , 20 , 20  });
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
 
-                                         try{
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
 
-                                             Phrase phrasCtgynameLabelTitle = new Phrase(" S.No  ", valueFont_10);
 
-                                             PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
-                                             phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                             phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                             phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                             phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
-                                             phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
-                                             phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
-                                             itemDetailsLabel_table.addCell(phraseCtgyNameLabelTitlecell);
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("Total   ", valueFont_10Bold);
 
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseCountLabelTitlecell.setBorderWidthRight(01);
 
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
 
-                                             Phrase phrasMaleCountLabelTitle = new Phrase("Item Name", valueFont_10);
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.rejected_status).getDouble("pricebeforediscount")), valueFont_10);
 
-                                             PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
-                                             phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                             phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                             phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                             phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
-                                             phraseMaleCountLabelTitlecell.setPaddingLeft(6);
-                                             phraseMaleCountLabelTitlecell.setPaddingBottom(10);
-                                             itemDetailsLabel_table.addCell(phraseMaleCountLabelTitlecell);
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                    itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                   // itemDetails_table_Cell.setBorderWidthTop(1);
 
+                                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
-                                             Phrase phrasFemaleCountLabelTitle = new Phrase("Quantity", valueFont_10);
 
-                                             PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
-                                             phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                             phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                             phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                             phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
-                                             phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
-                                             phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
-                                             itemDetailsLabel_table.addCell(phraseFemaleCountLabelTitlecell);
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
 
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
+                                try {
 
-                                             Phrase phrasTotalCountLabelTitle = new Phrase("Weight", valueFont_10);
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
 
-                                             PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
-                                             phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                             phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                             phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                             phraseCountLabelTitlecell.setPaddingLeft(6);
-                                             phraseCountLabelTitlecell.setPaddingBottom(10);
-                                             phraseCountLabelTitlecell.setBorderWidthRight(01);
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
 
-                                             itemDetailsLabel_table.addCell(phraseCountLabelTitlecell);
 
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
 
-                                             Phrase phraseWeightLabelTitle = new Phrase("Price", valueFont_10);
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
 
-                                             PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
-                                             phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                             phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                             phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                             phraseWeightLabelTitlecell.setPaddingLeft(6);
-                                             phraseWeightLabelTitlecell.setPaddingBottom(10);
-                                             phraseWeightLabelTitlecell.setBorderWidthRight(01);
-                                             itemDetailsLabel_table.addCell(phraseWeightLabelTitlecell);
-                                         }
-                                         catch (Exception e){
-                                             e.printStackTrace();
-                                         }
 
-                                         try {
-                                             PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                             itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                             itemDetails_table_Cell.setBorderWidthTop(1);
-                                             itemDetails_table_Cell.setBackgroundColor(customGreyColor);
-                                             itemDetails_table_Cell.setBorderWidthBottom(01);
-                                             wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
 
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
 
-                                         }
-                                         catch (Exception e) {
-                                             e.printStackTrace();
-                                         }
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
 
-                                     }
-                                     catch (Exception e){
-                                         e.printStackTrace();
-                                     }
 
-                                     for(int iterator = 0 ; iterator < orderidList.size(); iterator++){
-                                         String orderidFromHashmap = orderidList.get(iterator);
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("Discount   ", valueFont_10Bold);
 
-                                         orderItemsbasedOnOrderId = new ArrayList<>(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseCountLabelTitlecell.setBorderWidthRight(01);
 
-                                         // orderItemsbasedOnOrderId.addAll(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
-                                         if(!orderItemsbasedOnOrderId.isEmpty()){
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
-                                             try{
-                                                 for(int iteratr = 0 ; iteratr < orderItemsbasedOnOrderId.size(); iteratr++ ){
-                                                     OrderItemDetails_Model orderItemDetailsModel = orderItemsbasedOnOrderId.get(iteratr);
 
-                                                     if(itemwiseTotalHashmap.containsKey(orderItemDetailsModel.getMenuitemkey())){
-                                                         ReportsItemwiseCalculationDetail_Model modelFromHashmap  =  itemwiseTotalHashmap.get(orderItemDetailsModel.getMenuitemkey());
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.rejected_status).getDouble("discount")), valueFont_10);
 
-                                                         int quantityFromHashmap = 0 , quantityFromItemArray = 0 ;
-                                                         double weightFromHashmap = 0 , weightFromItemArray = 0 , priceFromHashmap = 0 , priceFromItemArray = 0 ;
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                    itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
-                                                         quantityFromHashmap     = Objects.requireNonNull(modelFromHashmap).getTotalquantity();
-                                                         weightFromHashmap       = modelFromHashmap.getTotalweight();
-                                                         priceFromHashmap        = modelFromHashmap.getTotalprice();
-                                                         quantityFromItemArray   = orderItemDetailsModel.getQuantity();
-                                                         weightFromItemArray       = orderItemDetailsModel.getGrossweight();
-                                                         priceFromItemArray        = orderItemDetailsModel.getTotalprice();
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                  //  itemDetails_table_Cell.setBorderWidthTop(1);
 
-                                                         try{
-                                                             modelFromHashmap.setTotalweight(weightFromHashmap+weightFromItemArray);
-                                                             modelFromHashmap.setTotalquantity(quantityFromHashmap+quantityFromItemArray);
-                                                             modelFromHashmap.setTotalprice(priceFromHashmap+priceFromItemArray);
-                                                         }
-                                                         catch (Exception e){
-                                                             e.printStackTrace();
-                                                         }
+                                    //itemDetails_table_Cell.setBorderWidthBottom(01);
+                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
 
-                                                     }
-                                                     else {
-                                                         ReportsItemwiseCalculationDetail_Model modelFromHashmap = new ReportsItemwiseCalculationDetail_Model();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
-                                                         modelFromHashmap.setMenuitemkey(orderItemDetailsModel.getMenuitemkey());
-                                                         modelFromHashmap.setTotalprice(orderItemDetailsModel.getTotalprice());
-                                                         modelFromHashmap.setMenuitemname(orderItemDetailsModel.getItemname());
-                                                         modelFromHashmap.setTotalquantity(orderItemDetailsModel.getQuantity());
-                                                         modelFromHashmap.setTotalweight(orderItemDetailsModel.getGrossweight());
-                                                         itemwiseTotalHashmapKeyList.add(orderItemDetailsModel.getMenuitemkey());
-                                                         itemwiseTotalHashmap.put(orderItemDetailsModel.getMenuitemkey() , modelFromHashmap);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
 
-                                                     }
-                                                 }
-                                             }
-                                             catch (Exception e) {
-                                                 e.printStackTrace();
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
-                                             }
+                                try {
 
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
 
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
 
-                                         }
-                                         else{
-                                             orderItemsbasedOnOrderId = new ArrayList<>();
 
-                                         }
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
 
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
 
-                                     }
-                                 }
 
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
 
-                             }
-                             if(itemwiseTotalHashmapKeyList.size()>8){
-                                 try {
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
 
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
 
-                                     for (int iterator = 0; iterator < 9; iterator++) {
-                                         String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
-                                         try {
 
-                                             //20, 30 , 12 ,10, 12 , 16
-                                             //19, 18, 15, 15, 15, 18
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("Final price   ", valueFont_10Bold);
 
-                                             PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseCountLabelTitlecell.setBorderWidthRight(01);
 
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
-                                             try {
-                                                 Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
 
-                                                 PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
-                                                 phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                 phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                 phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                 phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
-                                                 phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
-                                                 itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.rejected_status).getDouble("price")), valueFont_10);
 
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                    itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                    itemDetails_table_Cell.setBorderWidthTop(1);
 
-                                                 Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
-                                                 PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
-                                                 phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                 phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                 phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                 phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
-                                                 phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
-                                                 itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
+                                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
 
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
+                                try {
 
-                                                 Phrase phrasQuantityLabelTitle = null;
-                                                 phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
 
-                                                 PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                 phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                 phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                     phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
 
 
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
 
-                                                 phraseQuantityLabelTitlecell.setBorderWidthRight(01);
-                                                 phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                 phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                 itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                     phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
 
 
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
 
-                                                 Phrase phrasBatchpriceLabelTitle = null;
-                                                 phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
 
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
 
-                                                 PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
-                                                 phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                 phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                 phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
-                                                 phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
 
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("   ", valueFont_10);
 
-                                                 phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
-                                                 itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
 
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
 
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(""), valueFont_10);
 
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                     itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
 
-                                                 Phrase phrasNotesLabelTitle = null;
+                                     wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
-                                                 phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
-                                                 PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
-                                                 phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                 phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                 phraseNotesLabelTitlecell.setPaddingLeft(6);
 
-                                                 phraseNotesLabelTitlecell.setBorderWidthRight(01);
-                                                 phraseNotesLabelTitlecell.setPaddingBottom(10);
-                                                 itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
 
-                                             } catch (Exception e) {
-                                                 e.printStackTrace();
-                                             }
+                        }
+                        if (statuswisetotalcountdetailsjson.containsKey(Constants.cancelled_status)) {
+                            if (statuswiseOrderid.containsKey(Constants.cancelled_status)) {
 
+                                itemwiseTotalHashmap = new HashMap<>();
+                                orderItemsbasedOnOrderId = new ArrayList<>();
+                                itemwiseTotalHashmapKeyList = new ArrayList<>();
+                                boolean isHeadingLabelAdded = false;
+                                List<String> orderidList = statuswiseOrderid.get(Constants.cancelled_status);
+                                if (orderidList.size() > 0) {
 
-                                             try {
-                                                 PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                                 itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                                 itemDetails_table_Cell.setBorderWidthBottom(1);
-                                                 //itemDetails_table_Cell.setBackgroundColor(WHITE);
-                                                 wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+                                    for (int iterator = 0; iterator < orderidList.size(); iterator++) {
+                                        String orderidFromHashmap = orderidList.get(iterator);
 
+                                        orderItemsbasedOnOrderId = new ArrayList<>(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
 
-                                             } catch (Exception e) {
-                                                 e.printStackTrace();
-                                             }
+                                        // orderItemsbasedOnOrderId.addAll(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
+                                        if (!orderItemsbasedOnOrderId.isEmpty()) {
 
+                                            if (!isHeadingLabelAdded){
+                                                isHeadingLabelAdded = true;
 
+                                                PdfPTable statusLabel_table = new PdfPTable(new float[]{100});
 
+                                                Phrase statusLabel_Title = new Phrase(Constants.cancelled_status, valueFont_10);
 
-                                         }
-                                         catch (Exception e) {
-                                             e.printStackTrace();
-                                         }
-                                     }
-                                 }
-                                 catch (Exception e) {
-                                     e.printStackTrace();
-                                 }
+                                                PdfPCell statusLabel_Titlecell = new PdfPCell(statusLabel_Title);
+                                                statusLabel_Titlecell.setBorder(Rectangle.NO_BORDER);
+                                                statusLabel_Titlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                statusLabel_Titlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                statusLabel_Titlecell.setBorderWidthRight(01);
+                                                statusLabel_Titlecell.setPaddingLeft(6);
+                                                statusLabel_Titlecell.setPaddingBottom(10);
+                                                statusLabel_table.addCell(statusLabel_Titlecell);
 
-                                 tmcLogoImage_table.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                 tmcLogoImage_table.setTotalWidth(10f);
-                                 layoutDocument.add(tmcLogoImage_table);
 
-                                 PdfPCell wholePDFWithOutBordercell = new PdfPCell(wholePDFContentWithOut_Outline_table);
-                                 wholePDFWithOutBordercell.setCellEvent(roundRectange);
-                                 wholePDFWithOutBordercell.setPadding(1);
-                                 wholePDFWithOutBordercell.setBorder(Rectangle.NO_BORDER);
-                                 wholePDFContentOutline_table.addCell(wholePDFWithOutBordercell);
-                                 wholePDFContentOutline_table.setWidthPercentage(100);
+                                                try {
+                                                    PdfPCell itemDetails_table_Cell = new PdfPCell(statusLabel_table);
+                                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                    itemDetails_table_Cell.setBorderWidthTop(1);
+                                                    itemDetails_table_Cell.setBackgroundColor(customGreyColor);
+                                                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
 
-                                 layoutDocument.add(wholePDFContentOutline_table);
-                                 PdfPTable wholePDFContentWithOut_Outline_table2 = new PdfPTable(1);
-                                 try{
-                                     layoutDocument.newPage();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
 
 
+                                                try {
+                                                    PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
-                                     try {
+                                                    try {
 
+                                                        Phrase phrasCtgynameLabelTitle = new Phrase(" S.No  ", valueFont_10);
 
-                                         for (int iterator = 9; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
-                                             String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
-                                             try {
+                                                        PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                                        phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                        phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                                        phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                                        phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                                        itemDetailsLabel_table.addCell(phraseCtgyNameLabelTitlecell);
 
 
+                                                        Phrase phrasMaleCountLabelTitle = new Phrase("Item Name", valueFont_10);
 
-                                                 PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
+                                                        PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                                        phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                                        phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                                        itemDetailsLabel_table.addCell(phraseMaleCountLabelTitlecell);
 
 
-                                                 try {
-                                                     Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
+                                                        Phrase phrasFemaleCountLabelTitle = new Phrase("Quantity", valueFont_10);
 
-                                                     PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
-                                                     phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                     phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                     phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                     phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                     phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
-                                                     phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
-                                                     itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
+                                                        PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                                        phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                                        phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
 
+                                                        itemDetailsLabel_table.addCell(phraseFemaleCountLabelTitlecell);
 
 
-                                                     Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
+                                                        Phrase phrasTotalCountLabelTitle = new Phrase("Weight", valueFont_10);
 
-                                                     PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
-                                                     phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                     phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                     phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                     phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                     phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
-                                                     phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
-                                                     itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
+                                                        PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                                        phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseCountLabelTitlecell.setPaddingLeft(6);
+                                                        phraseCountLabelTitlecell.setPaddingBottom(10);
+                                                        phraseCountLabelTitlecell.setBorderWidthRight(01);
 
+                                                        itemDetailsLabel_table.addCell(phraseCountLabelTitlecell);
 
 
+                                                        Phrase phraseWeightLabelTitle = new Phrase("Price", valueFont_10);
 
+                                                        PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                                        phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                        phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                        phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                        phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                                        phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                                        phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                                        itemDetailsLabel_table.addCell(phraseWeightLabelTitlecell);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
 
+                                                    try {
+                                                        PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                        itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                        itemDetails_table_Cell.setBorderWidthTop(1);
+                                                        itemDetails_table_Cell.setBackgroundColor(customGreyColor);
+                                                        itemDetails_table_Cell.setBorderWidthBottom(01);
+                                                        wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
-                                                     Phrase phrasQuantityLabelTitle = null;
-                                                     phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
 
-                                                     PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                     phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                     phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                     phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
 
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
 
 
-                                                     phraseQuantityLabelTitlecell.setBorderWidthRight(01);
-                                                     phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                     phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                     itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
+                                            }
 
 
 
-                                                     Phrase phrasBatchpriceLabelTitle = null;
-                                                     phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
+                                            try {
+                                                for (int iteratr = 0; iteratr < orderItemsbasedOnOrderId.size(); iteratr++) {
+                                                    OrderItemDetails_Model orderItemDetailsModel = orderItemsbasedOnOrderId.get(iteratr);
 
+                                                    if (itemwiseTotalHashmap.containsKey(orderItemDetailsModel.getMenuitemkey())) {
+                                                        ReportsItemwiseCalculationDetail_Model modelFromHashmap = itemwiseTotalHashmap.get(orderItemDetailsModel.getMenuitemkey());
 
-                                                     PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
-                                                     phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                     phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                     phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                     phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
-                                                     phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
+                                                        int quantityFromHashmap = 0, quantityFromItemArray = 0;
+                                                        double weightFromHashmap = 0, weightFromItemArray = 0, priceFromHashmap = 0, priceFromItemArray = 0;
 
+                                                        quantityFromHashmap = Objects.requireNonNull(modelFromHashmap).getTotalquantity();
+                                                        weightFromHashmap = modelFromHashmap.getTotalweight();
+                                                        priceFromHashmap = modelFromHashmap.getTotalprice();
+                                                        quantityFromItemArray = orderItemDetailsModel.getQuantity();
+                                                        weightFromItemArray = orderItemDetailsModel.getGrossweight();
+                                                        priceFromItemArray = orderItemDetailsModel.getTotalprice();
 
-                                                     phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
-                                                     itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
+                                                        try {
+                                                            modelFromHashmap.setTotalweight(weightFromHashmap + weightFromItemArray);
+                                                            modelFromHashmap.setTotalquantity(quantityFromHashmap + quantityFromItemArray);
+                                                            modelFromHashmap.setTotalprice(priceFromHashmap + priceFromItemArray);
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
 
 
+                                                    } else {
+                                                        ReportsItemwiseCalculationDetail_Model modelFromHashmap = new ReportsItemwiseCalculationDetail_Model();
 
+                                                        modelFromHashmap.setMenuitemkey(orderItemDetailsModel.getMenuitemkey());
+                                                        modelFromHashmap.setTotalprice(orderItemDetailsModel.getTotalprice());
+                                                        modelFromHashmap.setMenuitemname(orderItemDetailsModel.getItemname());
+                                                        modelFromHashmap.setTotalquantity(orderItemDetailsModel.getQuantity());
+                                                        modelFromHashmap.setTotalweight(orderItemDetailsModel.getGrossweight());
+                                                        itemwiseTotalHashmapKeyList.add(orderItemDetailsModel.getMenuitemkey());
+                                                        itemwiseTotalHashmap.put(orderItemDetailsModel.getMenuitemkey(), modelFromHashmap);
 
 
+                                                    }
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
 
-                                                     Phrase phrasNotesLabelTitle = null;
+                                            }
 
-                                                     phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
-                                                     PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
-                                                     phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                     phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                     phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                     phraseNotesLabelTitlecell.setPaddingLeft(6);
 
-                                                     phraseNotesLabelTitlecell.setBorderWidthRight(01);
-                                                     phraseNotesLabelTitlecell.setPaddingBottom(10);
-                                                     itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
+                                        } else {
+                                            orderItemsbasedOnOrderId = new ArrayList<>();
 
+                                        }
 
 
-                                                 } catch (Exception e) {
-                                                     e.printStackTrace();
-                                                 }
+                                    }
+                                }
 
-                                                 try {
-                                                     PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                                     itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                                     itemDetails_table_Cell.setBorderWidthBottom(1);
-                                                     // itemDetails_table_Cell.setBackgroundColor(WHITE);
-                                                     wholePDFContentWithOut_Outline_table2.addCell(itemDetails_table_Cell);
 
+                            }
+                            if (itemwiseTotalHashmapKeyList.size() > 8) {
+                                try {
 
-                                                 } catch (Exception e) {
-                                                     e.printStackTrace();
-                                                 }
 
+                                    for (int iterator = 0; iterator < 9; iterator++) {
+                                        String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
+                                        try {
 
+                                            //20, 30 , 12 ,10, 12 , 16
+                                            //19, 18, 15, 15, 15, 18
 
+                                            PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
-                                             }
-                                             catch (Exception e) {
-                                                 e.printStackTrace();
-                                             }
-                                         }
 
+                                            try {
+                                                Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
 
-                                     }
-                                     catch (Exception e){
-                                         e.printStackTrace();
-                                     }
+                                                PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
+                                                phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
 
 
+                                                Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
+                                                PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
+                                                phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
 
-                                     //extraas
-                                     try{
 
+                                                Phrase phrasQuantityLabelTitle = null;
+                                                phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
 
+                                                PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
+                                                phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
 
 
+                                                phraseQuantityLabelTitlecell.setBorderWidthRight(01);
+                                                phraseQuantityLabelTitlecell.setPaddingLeft(6);
+                                                phraseQuantityLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
 
-                                         try {
-                                             PdfPTable EnptytableLabel_table = new PdfPTable(new float[]{35, 65});
 
+                                               // Phrase phrasBatchpriceLabelTitle = null;
+                                               // phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                Phrase phrasBatchpriceLabelTitle = null;
+                                                if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                }
+                                                else{
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                }
 
-                                             try {
-                                                 Phrase phraseParticularsLabelTitle = new Phrase("    ", valueFont_10Bold);
+                                                PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
+                                                phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
+                                                phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
 
-                                                 PdfPCell phraseParticularsLabelTitlecell = new PdfPCell(phraseParticularsLabelTitle);
-                                                 phraseParticularsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseParticularsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                 phraseParticularsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                 phraseParticularsLabelTitlecell.setPaddingLeft(6);
-                                                 phraseParticularsLabelTitlecell.setPaddingTop(5);
-                                                 phraseParticularsLabelTitlecell.setPaddingBottom(10);
-                                                 EnptytableLabel_table.addCell(phraseParticularsLabelTitlecell);
 
+                                                phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
 
-                                                 Phrase phrasQuantityLabelTitle = new Phrase("     ", valueFont_10Bold);
-                                                 PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                 phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                                 phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                 phraseQuantityLabelTitlecell.setPaddingTop(5);
-                                                 phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                 phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                 EnptytableLabel_table.addCell(phraseQuantityLabelTitlecell);
 
-                                             } catch (Exception e) {
-                                                 e.printStackTrace();
-                                             }
+                                                Phrase phrasNotesLabelTitle = null;
 
+                                                phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
+                                                phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setPaddingLeft(6);
 
-                                             try {
-                                                 PdfPCell itemDetails_table_Cell = new PdfPCell(EnptytableLabel_table);
-                                                 itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                phraseNotesLabelTitlecell.setBorderWidthRight(01);
+                                                phraseNotesLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
 
-                                                 wholePDFContentWithOut_Outline_table2.addCell(itemDetails_table_Cell);
 
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
 
-                                             } catch (Exception e) {
-                                                 e.printStackTrace();
-                                             }
 
+                                            try {
+                                                PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                itemDetails_table_Cell.setBorderWidthBottom(1);
+                                                //itemDetails_table_Cell.setBackgroundColor(WHITE);
+                                                wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
-                                         } catch (Exception e) {
-                                             e.printStackTrace();
-                                         }
 
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
 
 
-                                     }
-                                     catch (Exception e ){
-                                         e.printStackTrace();
-                                     }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
+                               // tmcLogoImage_table.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                               // tmcLogoImage_table.setTotalWidth(10f);
+                               // layoutDocument.add(tmcLogoImage_table);
 
-                                     //finaladd
-                                     try {
+                                PdfPCell wholePDFWithOutBordercell = new PdfPCell(wholePDFContentWithOut_Outline_table);
+                                wholePDFWithOutBordercell.setCellEvent(roundRectange);
+                                wholePDFWithOutBordercell.setPadding(1);
+                                wholePDFWithOutBordercell.setBorder(Rectangle.NO_BORDER);
+                                wholePDFContentOutline_table.addCell(wholePDFWithOutBordercell);
+                                wholePDFContentOutline_table.setWidthPercentage(100);
 
 
+                                layoutDocument.add(wholePDFContentOutline_table);
+                                PdfPTable wholePDFContentWithOut_Outline_table2 = new PdfPTable(1);
+                                try {
+                                    layoutDocument.newPage();
 
 
-                                         PdfPTable wholePDFContentOutline_table2 = new PdfPTable(1);
+                                    try {
 
 
-                                         PdfPCell wholePDFWithOutBordercell2 = new PdfPCell(wholePDFContentWithOut_Outline_table2);
-                                         wholePDFWithOutBordercell2.setCellEvent(roundRectange);
-                                         wholePDFWithOutBordercell2.setPadding(1);
-                                         wholePDFWithOutBordercell2.setBorder(Rectangle.NO_BORDER);
-                                         wholePDFContentOutline_table2.addCell(wholePDFWithOutBordercell2);
-                                         wholePDFContentOutline_table2.setWidthPercentage(100);
+                                        for (int iterator = 9; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
+                                            String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
+                                            try {
 
 
-                                         layoutDocument.add(wholePDFContentOutline_table2);
+                                                PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
-                                     } catch (Exception e) {
-                                         e.printStackTrace();
-                                     }
 
+                                                try {
+                                                    Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
 
+                                                    PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
+                                                    phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                    phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
+                                                    phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
 
-                                 }
-                                 catch (Exception e){
-                                     e.printStackTrace();
-                                 }
 
+                                                    Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
 
-                             }
-                             else {
-                                 try {
-                                     for (int iterator = 0; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
-                                         String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
-                                         try {
+                                                    PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
+                                                    phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                    phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
+                                                    phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
 
-                                             //20, 30 , 12 ,10, 12 , 16
-                                             //19, 18, 15, 15, 15, 18
 
-                                             PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
+                                                    Phrase phrasQuantityLabelTitle = null;
+                                                    phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
 
+                                                    PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
+                                                    phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                    phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
 
-                                             try {
-                                                 Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
 
-                                                 PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
-                                                 phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                 phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                 phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                 phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
-                                                 phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
-                                                 itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
+                                                    phraseQuantityLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseQuantityLabelTitlecell.setPaddingLeft(6);
+                                                    phraseQuantityLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
 
 
+                                                  //  Phrase phrasBatchpriceLabelTitle = null;
+                                                    //phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                    Phrase phrasBatchpriceLabelTitle = null;
+                                                    if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                        phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                    }
+                                                    else{
+                                                        phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                    }
 
-                                                 Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
+                                                    PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
+                                                    phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                    phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
 
-                                                 PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
-                                                 phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                 phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                 phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                 phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
-                                                 phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
-                                                 itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
 
+                                                    phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
 
 
+                                                    Phrase phrasNotesLabelTitle = null;
 
+                                                    phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                    PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
+                                                    phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                    phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                    phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                    phraseNotesLabelTitlecell.setPaddingLeft(6);
 
+                                                    phraseNotesLabelTitlecell.setBorderWidthRight(01);
+                                                    phraseNotesLabelTitlecell.setPaddingBottom(10);
+                                                    itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
 
-                                                 Phrase phrasQuantityLabelTitle = null;
-                                                 phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
 
-                                                 PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                 phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                 phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
 
+                                                try {
+                                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                    itemDetails_table_Cell.setBorderWidthBottom(1);
+                                                    // itemDetails_table_Cell.setBackgroundColor(WHITE);
+                                                    wholePDFContentWithOut_Outline_table2.addCell(itemDetails_table_Cell);
 
 
-                                                 phraseQuantityLabelTitlecell.setBorderWidthRight(01);
-                                                 phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                 phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                 itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
 
 
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
 
-                                                 Phrase phrasBatchpriceLabelTitle = null;
-                                                 phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
 
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
 
-                                                 PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
-                                                 phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                 phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                 phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
-                                                 phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
 
+                                    //finaladd
+                                    try {
 
-                                                 phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
-                                                 itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
 
+                                        PdfPTable wholePDFContentOutline_table2 = new PdfPTable(1);
 
 
+                                        PdfPCell wholePDFWithOutBordercell2 = new PdfPCell(wholePDFContentWithOut_Outline_table2);
+                                        wholePDFWithOutBordercell2.setCellEvent(roundRectange);
+                                        wholePDFWithOutBordercell2.setPadding(1);
+                                        wholePDFWithOutBordercell2.setBorder(Rectangle.NO_BORDER);
+                                        wholePDFContentOutline_table2.addCell(wholePDFWithOutBordercell2);
+                                        wholePDFContentOutline_table2.setWidthPercentage(100);
 
 
+                                        layoutDocument.add(wholePDFContentOutline_table2);
 
-                                                 Phrase phrasNotesLabelTitle = null;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
 
-                                                 phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
-                                                 PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
-                                                 phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                 phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                 phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                 phraseNotesLabelTitlecell.setPaddingLeft(6);
 
-                                                 phraseNotesLabelTitlecell.setBorderWidthRight(01);
-                                                 phraseNotesLabelTitlecell.setPaddingBottom(10);
-                                                 itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
 
+                            }
+                            else {
+                                try {
+                                    for (int iterator = 0; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
+                                        String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
+                                        try {
 
-                                             } catch (Exception e) {
-                                                 e.printStackTrace();
-                                             }
+                                            //20, 30 , 12 ,10, 12 , 16
+                                            //19, 18, 15, 15, 15, 18
 
+                                            PdfPTable itemDetailsLabel_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
 
+                                            try {
+                                                Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator + 1), valueFont_10Bold);
 
-                                             try {
-                                                 PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                                 itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                                 itemDetails_table_Cell.setBorderWidthBottom(1);
-                                                 // itemDetails_table_Cell.setBackgroundColor(WHITE);
-                                                 wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+                                                PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
+                                                phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
 
 
-                                             } catch (Exception e) {
-                                                 e.printStackTrace();
-                                             }
+                                                Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
 
+                                                PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
+                                                phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                                phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
+                                                phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
 
 
+                                                Phrase phrasQuantityLabelTitle = null;
+                                                phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
 
-                                         }
-                                         catch (Exception e) {
-                                             e.printStackTrace();
-                                         }
-                                     }
-                                 } catch (Exception e) {
-                                     e.printStackTrace();
-                                 }
+                                                PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
+                                                phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
 
 
+                                                phraseQuantityLabelTitlecell.setBorderWidthRight(01);
+                                                phraseQuantityLabelTitlecell.setPaddingLeft(6);
+                                                phraseQuantityLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
 
-                                 //extraas
-                                 try{
 
+                                              //  Phrase phrasBatchpriceLabelTitle = null;
+                                               // phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                Phrase phrasBatchpriceLabelTitle = null;
+                                                if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                                }
+                                                else{
+                                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                                }
 
+                                                PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
+                                                phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
+                                                phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
 
-                                     try {
-                                         PdfPTable EnptytableLabel_table = new PdfPTable(new float[]{35, 65});
 
+                                                phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
 
-                                         try {
-                                             Phrase phraseParticularsLabelTitle = new Phrase("    ", valueFont_10Bold);
 
-                                             PdfPCell phraseParticularsLabelTitlecell = new PdfPCell(phraseParticularsLabelTitle);
-                                             phraseParticularsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                             phraseParticularsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                             phraseParticularsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                             phraseParticularsLabelTitlecell.setPaddingLeft(6);
-                                             phraseParticularsLabelTitlecell.setPaddingTop(5);
-                                             phraseParticularsLabelTitlecell.setPaddingBottom(10);
-                                             EnptytableLabel_table.addCell(phraseParticularsLabelTitlecell);
+                                                Phrase phrasNotesLabelTitle = null;
 
+                                                phrasNotesLabelTitle = new Phrase((" ₹ " + String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
+                                                PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
+                                                phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                                phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                                phraseNotesLabelTitlecell.setPaddingLeft(6);
 
-                                             Phrase phrasQuantityLabelTitle = new Phrase("     ", valueFont_10Bold);
-                                             PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                             phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                             phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                             phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                             phraseQuantityLabelTitlecell.setPaddingTop(5);
-                                             phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                             phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                             EnptytableLabel_table.addCell(phraseQuantityLabelTitlecell);
+                                                phraseNotesLabelTitlecell.setBorderWidthRight(01);
+                                                phraseNotesLabelTitlecell.setPaddingBottom(10);
+                                                itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
 
-                                         } catch (Exception e) {
-                                             e.printStackTrace();
-                                         }
 
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
 
-                                         try {
-                                             PdfPCell itemDetails_table_Cell = new PdfPCell(EnptytableLabel_table);
-                                             itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                             wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
+                                            try {
+                                                PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
+                                                itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                                itemDetails_table_Cell.setBorderWidthBottom(1);
+                                                // itemDetails_table_Cell.setBackgroundColor(WHITE);
+                                                wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
-                                         } catch (Exception e) {
-                                             e.printStackTrace();
-                                         }
 
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
 
-                                     } catch (Exception e) {
-                                         e.printStackTrace();
-                                     }
 
-                                 }
-                                 catch (Exception e ){
-                                     e.printStackTrace();
-                                 }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
 
+                            }
 
-                             }
 
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
-                         }
-                          if(statuswisetotalcountdetailsjson.containsKey(Constants.rejected_status)){
-                              if(statuswiseOrderid.containsKey(Constants.rejected_status)){
+                                try {
 
-                                  itemwiseTotalHashmap = new HashMap<>();
-                                  orderItemsbasedOnOrderId = new ArrayList<>();
-                                  itemwiseTotalHashmapKeyList = new ArrayList<>();
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
 
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
 
-                                  List<String>orderidList  = statuswiseOrderid.get(Constants.rejected_status);
-                                  if(orderidList.size() > 0){
-                                      PdfPTable statusLabel_table = new PdfPTable(new float[] {100  });
 
-                                      Phrase statusLabel_Title = new Phrase(Constants.rejected_status, valueFont_10);
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
 
-                                      PdfPCell statusLabel_Titlecell = new PdfPCell(statusLabel_Title);
-                                      statusLabel_Titlecell.setBorder(Rectangle.NO_BORDER);
-                                      statusLabel_Titlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                      statusLabel_Titlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                      statusLabel_Titlecell.setBorderWidthRight(01);
-                                      statusLabel_Titlecell.setPaddingLeft(6);
-                                      statusLabel_Titlecell.setPaddingBottom(10);
-                                      statusLabel_table.addCell(statusLabel_Titlecell);
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
 
 
-                                      try {
-                                          PdfPCell itemDetails_table_Cell = new PdfPCell(statusLabel_table);
-                                          itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                          itemDetails_table_Cell.setBorderWidthTop(1);
-                                          itemDetails_table_Cell.setBackgroundColor(customGreyColor);
-                                          itemDetails_table_Cell.setBorderWidthBottom(01);
-                                          wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
 
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
 
-                                      }
-                                      catch (Exception e) {
-                                          e.printStackTrace();
-                                      }
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
 
 
-                                      try{
-                                          PdfPTable itemDetailsLabel_table = new PdfPTable(new float[] {10 ,30 , 20 , 20 , 20  });
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("Total   ", valueFont_10Bold);
 
-                                          try{
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                                    phraseCountLabelTitlecell.setBorderWidthRight(01);
 
-                                              Phrase phrasCtgynameLabelTitle = new Phrase(" S.No  ", valueFont_10);
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
-                                              PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
-                                              phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                              phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
-                                              phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
-                                              phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
-                                              itemDetailsLabel_table.addCell(phraseCtgyNameLabelTitlecell);
 
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.cancelled_status).getDouble("price")), valueFont_10);
 
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                    itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
 
-                                              Phrase phrasMaleCountLabelTitle = new Phrase("Item Name", valueFont_10);
 
-                                              PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
-                                              phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                              phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
-                                              phraseMaleCountLabelTitlecell.setPaddingLeft(6);
-                                              phraseMaleCountLabelTitlecell.setPaddingBottom(10);
-                                              itemDetailsLabel_table.addCell(phraseMaleCountLabelTitlecell);
+                                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
 
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
-                                              Phrase phrasFemaleCountLabelTitle = new Phrase("Quantity", valueFont_10);
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
-                                              PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
-                                              phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                              phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
-                                              phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
-                                              phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
 
-                                              itemDetailsLabel_table.addCell(phraseFemaleCountLabelTitlecell);
+                        try {
+                            PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
+                            try {
 
+                                Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
 
+                                PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
 
-                                              Phrase phrasTotalCountLabelTitle = new Phrase("Weight", valueFont_10);
 
-                                              PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
-                                              phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                              phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseCountLabelTitlecell.setPaddingLeft(6);
-                                              phraseCountLabelTitlecell.setPaddingBottom(10);
-                                              phraseCountLabelTitlecell.setBorderWidthRight(01);
+                                Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
 
-                                              itemDetailsLabel_table.addCell(phraseCountLabelTitlecell);
+                                PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
 
 
-                                              Phrase phraseWeightLabelTitle = new Phrase("Price", valueFont_10);
+                                Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
 
-                                              PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
-                                              phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                              phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseWeightLabelTitlecell.setPaddingLeft(6);
-                                              phraseWeightLabelTitlecell.setPaddingBottom(10);
-                                              phraseWeightLabelTitlecell.setBorderWidthRight(01);
-                                              itemDetailsLabel_table.addCell(phraseWeightLabelTitlecell);
-                                          }
-                                          catch (Exception e){
-                                              e.printStackTrace();
-                                          }
+                                PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
 
-                                          try {
-                                              PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                              itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                              itemDetails_table_Cell.setBorderWidthTop(1);
-                                              itemDetails_table_Cell.setBackgroundColor(customGreyColor);
-                                              itemDetails_table_Cell.setBorderWidthBottom(01);
-                                              wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+                                itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
 
 
-                                          }
-                                          catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
+                                Phrase phrasTotalCountLabelTitle = new Phrase("Discount   ", valueFont_10Bold);
 
-                                      }
-                                      catch (Exception e){
-                                          e.printStackTrace();
-                                      }
+                                PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                phraseCountLabelTitlecell.setPaddingLeft(6);
+                                phraseCountLabelTitlecell.setPaddingBottom(10);
+                                phraseCountLabelTitlecell.setBorderWidthRight(01);
 
-                                      for(int iterator = 0 ; iterator < orderidList.size(); iterator++){
-                                          String orderidFromHashmap = orderidList.get(iterator);
+                                itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
-                                          orderItemsbasedOnOrderId = new ArrayList<>(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
 
-                                          // orderItemsbasedOnOrderId.addAll(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
-                                          if(!orderItemsbasedOnOrderId.isEmpty()){
+                                Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.cancelled_status).getDouble("discount")), valueFont_10);
 
-                                              try{
-                                                  for(int iteratr = 0 ; iteratr < orderItemsbasedOnOrderId.size(); iteratr++ ){
-                                                      OrderItemDetails_Model orderItemDetailsModel = orderItemsbasedOnOrderId.get(iteratr);
+                                PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
-                                                      if(itemwiseTotalHashmap.containsKey(orderItemDetailsModel.getMenuitemkey())){
-                                                          ReportsItemwiseCalculationDetail_Model modelFromHashmap  =  itemwiseTotalHashmap.get(orderItemDetailsModel.getMenuitemkey());
+                            try {
+                                PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                //itemDetails_table_Cell.setBorderWidthTop(1);
 
-                                                          int quantityFromHashmap = 0 , quantityFromItemArray = 0 ;
-                                                          double weightFromHashmap = 0 , weightFromItemArray = 0 , priceFromHashmap = 0 , priceFromItemArray = 0 ;
+                                //itemDetails_table_Cell.setBorderWidthBottom(01);
+                                wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
-                                                          quantityFromHashmap     = Objects.requireNonNull(modelFromHashmap).getTotalquantity();
-                                                          weightFromHashmap       = modelFromHashmap.getTotalweight();
-                                                          priceFromHashmap        = modelFromHashmap.getTotalprice();
-                                                          quantityFromItemArray   = orderItemDetailsModel.getQuantity();
-                                                          weightFromItemArray       = orderItemDetailsModel.getGrossweight();
-                                                          priceFromItemArray        = orderItemDetailsModel.getTotalprice();
 
-                                                          try{
-                                                              modelFromHashmap.setTotalweight(weightFromHashmap+weightFromItemArray);
-                                                              modelFromHashmap.setTotalquantity(quantityFromHashmap+quantityFromItemArray);
-                                                              modelFromHashmap.setTotalprice(priceFromHashmap+priceFromItemArray);
-                                                          }
-                                                          catch (Exception e){
-                                                              e.printStackTrace();
-                                                          }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
-                                                      }
-                                                      else {
-                                                          ReportsItemwiseCalculationDetail_Model modelFromHashmap = new ReportsItemwiseCalculationDetail_Model();
 
-                                                          modelFromHashmap.setMenuitemkey(orderItemDetailsModel.getMenuitemkey());
-                                                          modelFromHashmap.setTotalprice(orderItemDetailsModel.getTotalprice());
-                                                          modelFromHashmap.setMenuitemname(orderItemDetailsModel.getItemname());
-                                                          modelFromHashmap.setTotalquantity(orderItemDetailsModel.getQuantity());
-                                                          modelFromHashmap.setTotalweight(orderItemDetailsModel.getGrossweight());
-                                                          itemwiseTotalHashmapKeyList.add(orderItemDetailsModel.getMenuitemkey());
-                                                          itemwiseTotalHashmap.put(orderItemDetailsModel.getMenuitemkey() , modelFromHashmap);
+                        try {
+                            PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
+                            try {
 
-                                                      }
-                                                  }
-                                              }
-                                              catch (Exception e) {
-                                                  e.printStackTrace();
+                                Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
 
-                                              }
+                                PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                                phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
 
 
+                                Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
 
-                                          }
-                                          else{
-                                              orderItemsbasedOnOrderId = new ArrayList<>();
+                                PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                                phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
 
-                                          }
 
+                                Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
 
-                                      }
-                                  }
+                                PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                                phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
 
+                                itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
 
-                              }
-                              if(itemwiseTotalHashmapKeyList.size()>8){
-                                  try {
 
+                                Phrase phrasTotalCountLabelTitle = new Phrase("Final price   ", valueFont_10Bold);
 
-                                      for (int iterator = 0; iterator < 9; iterator++) {
-                                          String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
-                                          try {
+                                PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                phraseCountLabelTitlecell.setPaddingLeft(6);
+                                phraseCountLabelTitlecell.setPaddingBottom(10);
+                                phraseCountLabelTitlecell.setBorderWidthRight(01);
 
-                                              //20, 30 , 12 ,10, 12 , 16
-                                              //19, 18, 15, 15, 15, 18
+                                itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
-                                              PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
 
+                                Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.cancelled_status).getDouble("price")), valueFont_10);
 
-                                              try {
-                                                  Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
+                                PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                                itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
-                                                  PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
-                                                  phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                  phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
-                                                  phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
+                            try {
+                                PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                                itemDetails_table_Cell.setBorderWidthTop(1);
 
+                                itemDetails_table_Cell.setBorderWidthBottom(01);
+                                wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
 
-                                                  Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
-                                                  PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
-                                                  phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                  phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
-                                                  phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
 
+                            try {
+                                PdfPTable itemDetailstotal_table = new PdfPTable(new float[]{10, 30, 20, 20, 20});
 
+                                try {
 
+                                    Phrase phrasCtgynameLabelTitle = new Phrase("   ", valueFont_10);
 
-                                                  Phrase phrasQuantityLabelTitle = null;
-                                                  phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
+                                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                     phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseCtgyNameLabelTitlecell);
 
-                                                  PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                  phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
 
+                                    Phrase phrasMaleCountLabelTitle = new Phrase("", valueFont_10);
 
+                                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                     phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                                    itemDetailstotal_table.addCell(phraseMaleCountLabelTitlecell);
 
-                                                  phraseQuantityLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                  phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
 
+                                    Phrase phrasFemaleCountLabelTitle = new Phrase("", valueFont_10);
 
+                                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
 
-                                                  Phrase phrasBatchpriceLabelTitle = null;
-                                                  phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
+                                    itemDetailstotal_table.addCell(phraseFemaleCountLabelTitlecell);
 
 
-                                                  PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
-                                                  phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
+                                    Phrase phrasTotalCountLabelTitle = new Phrase("   ", valueFont_10);
 
+                                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                                    phraseCountLabelTitlecell.setPaddingBottom(10);
 
-                                                  phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
+                                    itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
 
+                                    Phrase phraseWeightLabelTitle = new Phrase("", valueFont_10);
 
+                                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                                     itemDetailstotal_table.addCell(phraseWeightLabelTitlecell);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
+                                try {
+                                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailstotal_table);
+                                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
 
+                                     wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
 
-                                                  Phrase phrasNotesLabelTitle = null;
 
-                                                  phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
-                                                  PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
-                                                  phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseNotesLabelTitlecell.setPaddingLeft(6);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
-                                                  phraseNotesLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseNotesLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
 
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-                                              try {
-                                                  PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                                  itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                                  itemDetails_table_Cell.setBorderWidthBottom(1);
-                                                  //itemDetails_table_Cell.setBackgroundColor(WHITE);
-                                                  wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
-
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-
-
-                                          }
-                                          catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
-                                      }
-                                  }
-                                  catch (Exception e) {
-                                      e.printStackTrace();
-                                  }
-
-                                  tmcLogoImage_table.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                  tmcLogoImage_table.setTotalWidth(10f);
-                                  layoutDocument.add(tmcLogoImage_table);
-
-                                  PdfPCell wholePDFWithOutBordercell = new PdfPCell(wholePDFContentWithOut_Outline_table);
-                                  wholePDFWithOutBordercell.setCellEvent(roundRectange);
-                                  wholePDFWithOutBordercell.setPadding(1);
-                                  wholePDFWithOutBordercell.setBorder(Rectangle.NO_BORDER);
-                                  wholePDFContentOutline_table.addCell(wholePDFWithOutBordercell);
-                                  wholePDFContentOutline_table.setWidthPercentage(100);
-
-
-                                  layoutDocument.add(wholePDFContentOutline_table);
-                                  PdfPTable wholePDFContentWithOut_Outline_table2 = new PdfPTable(1);
-                                  try{
-                                      layoutDocument.newPage();
-
-
-
-                                      try {
-
-
-                                          for (int iterator = 9; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
-                                              String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
-                                              try {
-
-
-
-                                                  PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
-
-
-                                                  try {
-                                                      Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
-
-                                                      PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
-                                                      phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                      phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                      phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                      phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                      phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
-                                                      phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
-                                                      itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
-
-
-
-                                                      Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
-
-                                                      PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
-                                                      phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                      phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                      phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                      phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                      phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
-                                                      phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
-                                                      itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
-
-
-
-
-
-
-                                                      Phrase phrasQuantityLabelTitle = null;
-                                                      phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
-
-                                                      PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                      phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                      phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                      phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-
-
-
-                                                      phraseQuantityLabelTitlecell.setBorderWidthRight(01);
-                                                      phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                      phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                      itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
-
-
-
-                                                      Phrase phrasBatchpriceLabelTitle = null;
-                                                      phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
-
-
-                                                      PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
-                                                      phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                      phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                      phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                      phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
-                                                      phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
-
-
-                                                      phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
-                                                      itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
-
-
-
-
-
-
-                                                      Phrase phrasNotesLabelTitle = null;
-
-                                                      phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
-                                                      PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
-                                                      phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                      phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                      phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                      phraseNotesLabelTitlecell.setPaddingLeft(6);
-
-                                                      phraseNotesLabelTitlecell.setBorderWidthRight(01);
-                                                      phraseNotesLabelTitlecell.setPaddingBottom(10);
-                                                      itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
-
-
-
-                                                  } catch (Exception e) {
-                                                      e.printStackTrace();
-                                                  }
-
-                                                  try {
-                                                      PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                                      itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                                      itemDetails_table_Cell.setBorderWidthBottom(1);
-                                                      // itemDetails_table_Cell.setBackgroundColor(WHITE);
-                                                      wholePDFContentWithOut_Outline_table2.addCell(itemDetails_table_Cell);
-
-
-                                                  } catch (Exception e) {
-                                                      e.printStackTrace();
-                                                  }
-
-
-
-
-                                              }
-                                              catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-                                          }
-
-
-                                      }
-                                      catch (Exception e){
-                                          e.printStackTrace();
-                                      }
-
-
-
-                                      //extraas
-                                      try{
-
-
-
-
-
-                                          try {
-                                              PdfPTable EnptytableLabel_table = new PdfPTable(new float[]{35, 65});
-
-
-                                              try {
-                                                  Phrase phraseParticularsLabelTitle = new Phrase("    ", valueFont_10Bold);
-
-                                                  PdfPCell phraseParticularsLabelTitlecell = new PdfPCell(phraseParticularsLabelTitle);
-                                                  phraseParticularsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseParticularsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                  phraseParticularsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseParticularsLabelTitlecell.setPaddingLeft(6);
-                                                  phraseParticularsLabelTitlecell.setPaddingTop(5);
-                                                  phraseParticularsLabelTitlecell.setPaddingBottom(10);
-                                                  EnptytableLabel_table.addCell(phraseParticularsLabelTitlecell);
-
-
-                                                  Phrase phrasQuantityLabelTitle = new Phrase("     ", valueFont_10Bold);
-                                                  PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                  phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                                  phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseQuantityLabelTitlecell.setPaddingTop(5);
-                                                  phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                  phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                  EnptytableLabel_table.addCell(phraseQuantityLabelTitlecell);
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-                                              try {
-                                                  PdfPCell itemDetails_table_Cell = new PdfPCell(EnptytableLabel_table);
-                                                  itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-
-                                                  wholePDFContentWithOut_Outline_table2.addCell(itemDetails_table_Cell);
-
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-                                          } catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
-
-
-
-                                      }
-                                      catch (Exception e ){
-                                          e.printStackTrace();
-                                      }
-
-
-                                      //finaladd
-                                      try {
-
-
-
-
-                                          PdfPTable wholePDFContentOutline_table2 = new PdfPTable(1);
-
-
-                                          PdfPCell wholePDFWithOutBordercell2 = new PdfPCell(wholePDFContentWithOut_Outline_table2);
-                                          wholePDFWithOutBordercell2.setCellEvent(roundRectange);
-                                          wholePDFWithOutBordercell2.setPadding(1);
-                                          wholePDFWithOutBordercell2.setBorder(Rectangle.NO_BORDER);
-                                          wholePDFContentOutline_table2.addCell(wholePDFWithOutBordercell2);
-                                          wholePDFContentOutline_table2.setWidthPercentage(100);
-
-
-                                          layoutDocument.add(wholePDFContentOutline_table2);
-
-                                      } catch (Exception e) {
-                                          e.printStackTrace();
-                                      }
-
-
-
-                                  }
-                                  catch (Exception e){
-                                      e.printStackTrace();
-                                  }
-
-
-                              }
-                              else {
-                                  try {
-                                      for (int iterator = 0; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
-                                          String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
-                                          try {
-
-                                              //20, 30 , 12 ,10, 12 , 16
-                                              //19, 18, 15, 15, 15, 18
-
-                                              PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
-
-
-                                              try {
-                                                  Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
-
-                                                  PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
-                                                  phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                  phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
-                                                  phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
-
-
-
-                                                  Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
-
-                                                  PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
-                                                  phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                  phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
-                                                  phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
-
-
-
-
-
-
-                                                  Phrase phrasQuantityLabelTitle = null;
-                                                  phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
-
-                                                  PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                  phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-
-
-
-                                                  phraseQuantityLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                  phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
-
-
-
-                                                  Phrase phrasBatchpriceLabelTitle = null;
-                                                  phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
-
-
-                                                  PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
-                                                  phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
-
-
-                                                  phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
-
-
-
-
-
-
-                                                  Phrase phrasNotesLabelTitle = null;
-
-                                                  phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
-                                                  PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
-                                                  phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseNotesLabelTitlecell.setPaddingLeft(6);
-
-                                                  phraseNotesLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseNotesLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
-
-
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-
-
-                                              try {
-                                                  PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                                  itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                                  itemDetails_table_Cell.setBorderWidthBottom(1);
-                                                  // itemDetails_table_Cell.setBackgroundColor(WHITE);
-                                                  wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
-
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-
-
-                                          }
-                                          catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
-                                      }
-                                  } catch (Exception e) {
-                                      e.printStackTrace();
-                                  }
-
-
-
-                                  //extraas
-                                  try{
-
-
-
-                                      try {
-                                          PdfPTable EnptytableLabel_table = new PdfPTable(new float[]{35, 65});
-
-
-                                          try {
-                                              Phrase phraseParticularsLabelTitle = new Phrase("    ", valueFont_10Bold);
-
-                                              PdfPCell phraseParticularsLabelTitlecell = new PdfPCell(phraseParticularsLabelTitle);
-                                              phraseParticularsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseParticularsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                              phraseParticularsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseParticularsLabelTitlecell.setPaddingLeft(6);
-                                              phraseParticularsLabelTitlecell.setPaddingTop(5);
-                                              phraseParticularsLabelTitlecell.setPaddingBottom(10);
-                                              EnptytableLabel_table.addCell(phraseParticularsLabelTitlecell);
-
-
-                                              Phrase phrasQuantityLabelTitle = new Phrase("     ", valueFont_10Bold);
-                                              PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                              phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                              phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseQuantityLabelTitlecell.setPaddingTop(5);
-                                              phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                              phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                              EnptytableLabel_table.addCell(phraseQuantityLabelTitlecell);
-
-                                          } catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
-
-
-                                          try {
-                                              PdfPCell itemDetails_table_Cell = new PdfPCell(EnptytableLabel_table);
-                                              itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                              wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
-
-
-                                          } catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
-
-
-                                      } catch (Exception e) {
-                                          e.printStackTrace();
-                                      }
-
-                                  }
-                                  catch (Exception e ){
-                                      e.printStackTrace();
-                                  }
-
-
-
-                              }
-
-
-                          }
-                        else  if(statuswisetotalcountdetailsjson.containsKey(Constants.cancelled_status)){
-                              if(statuswiseOrderid.containsKey(Constants.cancelled_status)){
-
-                                  itemwiseTotalHashmap = new HashMap<>();
-                                  orderItemsbasedOnOrderId = new ArrayList<>();
-                                  itemwiseTotalHashmapKeyList = new ArrayList<>();
-
-                                  List<String>orderidList  = statuswiseOrderid.get(Constants.cancelled_status);
-                                  if(orderidList.size() > 0){
-                                      PdfPTable statusLabel_table = new PdfPTable(new float[] {100  });
-
-                                      Phrase statusLabel_Title = new Phrase(Constants.rejected_status, valueFont_10);
-
-                                      PdfPCell statusLabel_Titlecell = new PdfPCell(statusLabel_Title);
-                                      statusLabel_Titlecell.setBorder(Rectangle.NO_BORDER);
-                                      statusLabel_Titlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                      statusLabel_Titlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                      statusLabel_Titlecell.setBorderWidthRight(01);
-                                      statusLabel_Titlecell.setPaddingLeft(6);
-                                      statusLabel_Titlecell.setPaddingBottom(10);
-                                      statusLabel_table.addCell(statusLabel_Titlecell);
-
-
-                                      try {
-                                          PdfPCell itemDetails_table_Cell = new PdfPCell(statusLabel_table);
-                                          itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                          itemDetails_table_Cell.setBorderWidthTop(1);
-                                          itemDetails_table_Cell.setBackgroundColor(customGreyColor);
-                                          itemDetails_table_Cell.setBorderWidthBottom(01);
-                                          wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
-
-
-                                      }
-                                      catch (Exception e) {
-                                          e.printStackTrace();
-                                      }
-
-
-                                      try{
-                                          PdfPTable itemDetailsLabel_table = new PdfPTable(new float[] {10 ,30 , 20 , 20 , 20  });
-
-                                          try{
-
-                                              Phrase phrasCtgynameLabelTitle = new Phrase(" S.No  ", valueFont_10);
-
-                                              PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
-                                              phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                              phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
-                                              phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
-                                              phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
-                                              itemDetailsLabel_table.addCell(phraseCtgyNameLabelTitlecell);
-
-
-
-
-                                              Phrase phrasMaleCountLabelTitle = new Phrase("Item Name", valueFont_10);
-
-                                              PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
-                                              phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                              phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
-                                              phraseMaleCountLabelTitlecell.setPaddingLeft(6);
-                                              phraseMaleCountLabelTitlecell.setPaddingBottom(10);
-                                              itemDetailsLabel_table.addCell(phraseMaleCountLabelTitlecell);
-
-
-
-                                              Phrase phrasFemaleCountLabelTitle = new Phrase("Quantity", valueFont_10);
-
-                                              PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
-                                              phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                              phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
-                                              phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
-                                              phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
-
-                                              itemDetailsLabel_table.addCell(phraseFemaleCountLabelTitlecell);
-
-
-
-
-                                              Phrase phrasTotalCountLabelTitle = new Phrase("Weight", valueFont_10);
-
-                                              PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
-                                              phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                              phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseCountLabelTitlecell.setPaddingLeft(6);
-                                              phraseCountLabelTitlecell.setPaddingBottom(10);
-                                              phraseCountLabelTitlecell.setBorderWidthRight(01);
-
-                                              itemDetailsLabel_table.addCell(phraseCountLabelTitlecell);
-
-
-                                              Phrase phraseWeightLabelTitle = new Phrase("Price", valueFont_10);
-
-                                              PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
-                                              phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                              phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseWeightLabelTitlecell.setPaddingLeft(6);
-                                              phraseWeightLabelTitlecell.setPaddingBottom(10);
-                                              phraseWeightLabelTitlecell.setBorderWidthRight(01);
-                                              itemDetailsLabel_table.addCell(phraseWeightLabelTitlecell);
-                                          }
-                                          catch (Exception e){
-                                              e.printStackTrace();
-                                          }
-
-                                          try {
-                                              PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                              itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                              itemDetails_table_Cell.setBorderWidthTop(1);
-                                              itemDetails_table_Cell.setBackgroundColor(customGreyColor);
-                                              itemDetails_table_Cell.setBorderWidthBottom(01);
-                                              wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
-
-
-                                          }
-                                          catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
-
-                                      }
-                                      catch (Exception e){
-                                          e.printStackTrace();
-                                      }
-
-                                      for(int iterator = 0 ; iterator < orderidList.size(); iterator++){
-                                          String orderidFromHashmap = orderidList.get(iterator);
-
-                                          orderItemsbasedOnOrderId = new ArrayList<>(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
-
-                                          // orderItemsbasedOnOrderId.addAll(Objects.requireNonNull(orderwiseOrderItemDetails_statuswisereport.get(orderidFromHashmap)));
-                                          if(!orderItemsbasedOnOrderId.isEmpty()){
-
-                                              try{
-                                                  for(int iteratr = 0 ; iteratr < orderItemsbasedOnOrderId.size(); iteratr++ ){
-                                                      OrderItemDetails_Model orderItemDetailsModel = orderItemsbasedOnOrderId.get(iteratr);
-
-                                                      if(itemwiseTotalHashmap.containsKey(orderItemDetailsModel.getMenuitemkey())){
-                                                          ReportsItemwiseCalculationDetail_Model modelFromHashmap  =  itemwiseTotalHashmap.get(orderItemDetailsModel.getMenuitemkey());
-
-                                                          int quantityFromHashmap = 0 , quantityFromItemArray = 0 ;
-                                                          double weightFromHashmap = 0 , weightFromItemArray = 0 , priceFromHashmap = 0 , priceFromItemArray = 0 ;
-
-                                                          quantityFromHashmap     = Objects.requireNonNull(modelFromHashmap).getTotalquantity();
-                                                          weightFromHashmap       = modelFromHashmap.getTotalweight();
-                                                          priceFromHashmap        = modelFromHashmap.getTotalprice();
-                                                          quantityFromItemArray   = orderItemDetailsModel.getQuantity();
-                                                          weightFromItemArray       = orderItemDetailsModel.getGrossweight();
-                                                          priceFromItemArray        = orderItemDetailsModel.getTotalprice();
-
-                                                          try{
-                                                              modelFromHashmap.setTotalweight(weightFromHashmap+weightFromItemArray);
-                                                              modelFromHashmap.setTotalquantity(quantityFromHashmap+quantityFromItemArray);
-                                                              modelFromHashmap.setTotalprice(priceFromHashmap+priceFromItemArray);
-                                                          }
-                                                          catch (Exception e){
-                                                              e.printStackTrace();
-                                                          }
-
-
-                                                      }
-                                                      else {
-                                                          ReportsItemwiseCalculationDetail_Model modelFromHashmap = new ReportsItemwiseCalculationDetail_Model();
-
-                                                          modelFromHashmap.setMenuitemkey(orderItemDetailsModel.getMenuitemkey());
-                                                          modelFromHashmap.setTotalprice(orderItemDetailsModel.getTotalprice());
-                                                          modelFromHashmap.setMenuitemname(orderItemDetailsModel.getItemname());
-                                                          modelFromHashmap.setTotalquantity(orderItemDetailsModel.getQuantity());
-                                                          modelFromHashmap.setTotalweight(orderItemDetailsModel.getGrossweight());
-                                                          itemwiseTotalHashmapKeyList.add(orderItemDetailsModel.getMenuitemkey());
-                                                          itemwiseTotalHashmap.put(orderItemDetailsModel.getMenuitemkey() , modelFromHashmap);
-
-
-                                                      }
-                                                  }
-                                              }
-                                              catch (Exception e) {
-                                                  e.printStackTrace();
-
-                                              }
-
-
-
-                                          }
-                                          else{
-                                              orderItemsbasedOnOrderId = new ArrayList<>();
-
-                                          }
-
-
-                                      }
-                                  }
-
-
-                              }
-                              if(itemwiseTotalHashmapKeyList.size()>8){
-                                  try {
-
-
-                                      for (int iterator = 0; iterator < 9; iterator++) {
-                                          String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
-                                          try {
-
-                                              //20, 30 , 12 ,10, 12 , 16
-                                              //19, 18, 15, 15, 15, 18
-
-                                              PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
-
-
-                                              try {
-                                                  Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
-
-                                                  PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
-                                                  phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                  phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
-                                                  phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
-
-
-
-                                                  Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
-                                                  PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
-                                                  phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                  phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
-                                                  phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
-
-
-
-
-
-
-                                                  Phrase phrasQuantityLabelTitle = null;
-                                                  phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
-
-                                                  PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                  phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-
-
-
-                                                  phraseQuantityLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                  phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
-
-
-
-                                                  Phrase phrasBatchpriceLabelTitle = null;
-                                                  phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
-
-
-                                                  PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
-                                                  phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
-
-
-                                                  phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
-
-
-
-
-
-
-                                                  Phrase phrasNotesLabelTitle = null;
-
-                                                  phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
-                                                  PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
-                                                  phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseNotesLabelTitlecell.setPaddingLeft(6);
-
-                                                  phraseNotesLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseNotesLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
-
-
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-                                              try {
-                                                  PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                                  itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                                  itemDetails_table_Cell.setBorderWidthBottom(1);
-                                                  //itemDetails_table_Cell.setBackgroundColor(WHITE);
-                                                  wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
-
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-
-
-                                          }
-                                          catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
-                                      }
-                                  }
-                                  catch (Exception e) {
-                                      e.printStackTrace();
-                                  }
-
-                                  tmcLogoImage_table.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                  tmcLogoImage_table.setTotalWidth(10f);
-                                  layoutDocument.add(tmcLogoImage_table);
-
-                                  PdfPCell wholePDFWithOutBordercell = new PdfPCell(wholePDFContentWithOut_Outline_table);
-                                  wholePDFWithOutBordercell.setCellEvent(roundRectange);
-                                  wholePDFWithOutBordercell.setPadding(1);
-                                  wholePDFWithOutBordercell.setBorder(Rectangle.NO_BORDER);
-                                  wholePDFContentOutline_table.addCell(wholePDFWithOutBordercell);
-                                  wholePDFContentOutline_table.setWidthPercentage(100);
-
-
-                                  layoutDocument.add(wholePDFContentOutline_table);
-                                  PdfPTable wholePDFContentWithOut_Outline_table2 = new PdfPTable(1);
-                                  try{
-                                      layoutDocument.newPage();
-
-
-
-                                      try {
-
-
-                                          for (int iterator = 9; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
-                                              String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
-                                              try {
-
-
-
-                                                  PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
-
-
-                                                  try {
-                                                      Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
-
-                                                      PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
-                                                      phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                      phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                      phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                      phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                      phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
-                                                      phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
-                                                      itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
-
-
-
-                                                      Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
-
-                                                      PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
-                                                      phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                      phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                      phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                      phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                      phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
-                                                      phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
-                                                      itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
-
-
-
-
-
-
-                                                      Phrase phrasQuantityLabelTitle = null;
-                                                      phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
-
-                                                      PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                      phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                      phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                      phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-
-
-
-                                                      phraseQuantityLabelTitlecell.setBorderWidthRight(01);
-                                                      phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                      phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                      itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
-
-
-
-                                                      Phrase phrasBatchpriceLabelTitle = null;
-                                                      phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
-
-
-                                                      PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
-                                                      phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                      phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                      phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                      phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
-                                                      phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
-
-
-                                                      phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
-                                                      itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
-
-
-
-
-
-
-                                                      Phrase phrasNotesLabelTitle = null;
-
-                                                      phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
-                                                      PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
-                                                      phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                      phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                      phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                      phraseNotesLabelTitlecell.setPaddingLeft(6);
-
-                                                      phraseNotesLabelTitlecell.setBorderWidthRight(01);
-                                                      phraseNotesLabelTitlecell.setPaddingBottom(10);
-                                                      itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
-
-
-
-                                                  } catch (Exception e) {
-                                                      e.printStackTrace();
-                                                  }
-
-                                                  try {
-                                                      PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                                      itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                                      itemDetails_table_Cell.setBorderWidthBottom(1);
-                                                      // itemDetails_table_Cell.setBackgroundColor(WHITE);
-                                                      wholePDFContentWithOut_Outline_table2.addCell(itemDetails_table_Cell);
-
-
-                                                  } catch (Exception e) {
-                                                      e.printStackTrace();
-                                                  }
-
-
-
-
-                                              }
-                                              catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-                                          }
-
-
-                                      }
-                                      catch (Exception e){
-                                          e.printStackTrace();
-                                      }
-
-
-
-                                      //extraas
-                                      try{
-
-
-
-
-
-                                          try {
-                                              PdfPTable EnptytableLabel_table = new PdfPTable(new float[]{35, 65});
-
-
-                                              try {
-                                                  Phrase phraseParticularsLabelTitle = new Phrase("    ", valueFont_10Bold);
-
-                                                  PdfPCell phraseParticularsLabelTitlecell = new PdfPCell(phraseParticularsLabelTitle);
-                                                  phraseParticularsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseParticularsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                  phraseParticularsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseParticularsLabelTitlecell.setPaddingLeft(6);
-                                                  phraseParticularsLabelTitlecell.setPaddingTop(5);
-                                                  phraseParticularsLabelTitlecell.setPaddingBottom(10);
-                                                  EnptytableLabel_table.addCell(phraseParticularsLabelTitlecell);
-
-
-                                                  Phrase phrasQuantityLabelTitle = new Phrase("     ", valueFont_10Bold);
-                                                  PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                  phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                                  phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseQuantityLabelTitlecell.setPaddingTop(5);
-                                                  phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                  phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                  EnptytableLabel_table.addCell(phraseQuantityLabelTitlecell);
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-                                              try {
-                                                  PdfPCell itemDetails_table_Cell = new PdfPCell(EnptytableLabel_table);
-                                                  itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-
-                                                  wholePDFContentWithOut_Outline_table2.addCell(itemDetails_table_Cell);
-
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-                                          } catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
-
-
-
-                                      }
-                                      catch (Exception e ){
-                                          e.printStackTrace();
-                                      }
-
-
-                                      //finaladd
-                                      try {
-
-
-
-
-                                          PdfPTable wholePDFContentOutline_table2 = new PdfPTable(1);
-
-
-                                          PdfPCell wholePDFWithOutBordercell2 = new PdfPCell(wholePDFContentWithOut_Outline_table2);
-                                          wholePDFWithOutBordercell2.setCellEvent(roundRectange);
-                                          wholePDFWithOutBordercell2.setPadding(1);
-                                          wholePDFWithOutBordercell2.setBorder(Rectangle.NO_BORDER);
-                                          wholePDFContentOutline_table2.addCell(wholePDFWithOutBordercell2);
-                                          wholePDFContentOutline_table2.setWidthPercentage(100);
-
-
-                                          layoutDocument.add(wholePDFContentOutline_table2);
-
-                                      } catch (Exception e) {
-                                          e.printStackTrace();
-                                      }
-
-
-
-                                  }
-                                  catch (Exception e){
-                                      e.printStackTrace();
-                                  }
-
-
-                              }
-                              else {
-                                  try {
-                                      for (int iterator = 0; iterator < itemwiseTotalHashmapKeyList.size(); iterator++) {
-                                          String itemkey = itemwiseTotalHashmapKeyList.get(iterator);
-                                          try {
-
-                                              //20, 30 , 12 ,10, 12 , 16
-                                              //19, 18, 15, 15, 15, 18
-
-                                              PdfPTable itemDetailsLabel_table  = new PdfPTable(new float[]{10 , 30 , 20 , 20 , 20  });
-
-
-                                              try {
-                                                  Phrase phraseSnoDetailsLabelTitle = new Phrase(String.valueOf(iterator+1), valueFont_10Bold);
-
-                                                  PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
-                                                  phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                  phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
-                                                  phraseSnoDetailsLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseSnoDetailsLabelTitlecell);
-
-
-
-                                                  Phrase phraseEarTagDetailsLabelTitle = new Phrase(String.valueOf(itemwiseTotalHashmap.get(itemkey).getMenuitemname()), valueFont_10Bold);
-
-                                                  PdfPCell phraseEarTagDetailsLabelTitlecell = new PdfPCell(phraseEarTagDetailsLabelTitle);
-                                                  phraseEarTagDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseEarTagDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                                  phraseEarTagDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseEarTagDetailsLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseEarTagDetailsLabelTitlecell.setPaddingLeft(6);
-                                                  phraseEarTagDetailsLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseEarTagDetailsLabelTitlecell);
-
-
-
-
-
-
-                                                  Phrase phrasQuantityLabelTitle = null;
-                                                  phrasQuantityLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalquantity())) + " Nos", valueFont_10);
-
-                                                  PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                                  phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-
-
-
-                                                  phraseQuantityLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                                  phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseQuantityLabelTitlecell);
-
-
-
-                                                  Phrase phrasBatchpriceLabelTitle = null;
-                                                  phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
-
-
-                                                  PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
-                                                  phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseBatchPriceLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseBatchPriceLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseBatchPriceLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseBatchPriceLabelTitlecell.setPaddingLeft(6);
-
-
-                                                  phraseBatchPriceLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseBatchPriceLabelTitlecell);
-
-
-
-
-
-
-                                                  Phrase phrasNotesLabelTitle = null;
-
-                                                  phrasNotesLabelTitle =  new Phrase((" ₹ "+String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalprice())) + " ", valueFont_10);
-                                                  PdfPCell phraseNotesLabelTitlecell = new PdfPCell(phrasNotesLabelTitle);
-                                                  phraseNotesLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                                  phraseNotesLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                                  phraseNotesLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                                  phraseNotesLabelTitlecell.setPaddingLeft(6);
-
-                                                  phraseNotesLabelTitlecell.setBorderWidthRight(01);
-                                                  phraseNotesLabelTitlecell.setPaddingBottom(10);
-                                                  itemDetailsLabel_table.addCell(phraseNotesLabelTitlecell);
-
-
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-
-
-                                              try {
-                                                  PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsLabel_table);
-                                                  itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                                  itemDetails_table_Cell.setBorderWidthBottom(1);
-                                                  // itemDetails_table_Cell.setBackgroundColor(WHITE);
-                                                  wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
-
-
-                                              } catch (Exception e) {
-                                                  e.printStackTrace();
-                                              }
-
-
-
-
-                                          }
-                                          catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
-                                      }
-                                  } catch (Exception e) {
-                                      e.printStackTrace();
-                                  }
-
-
-
-                                  //extraas
-                                  try{
-
-
-
-                                      try {
-                                          PdfPTable EnptytableLabel_table = new PdfPTable(new float[]{35, 65});
-
-
-                                          try {
-                                              Phrase phraseParticularsLabelTitle = new Phrase("    ", valueFont_10Bold);
-
-                                              PdfPCell phraseParticularsLabelTitlecell = new PdfPCell(phraseParticularsLabelTitle);
-                                              phraseParticularsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseParticularsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                                              phraseParticularsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseParticularsLabelTitlecell.setPaddingLeft(6);
-                                              phraseParticularsLabelTitlecell.setPaddingTop(5);
-                                              phraseParticularsLabelTitlecell.setPaddingBottom(10);
-                                              EnptytableLabel_table.addCell(phraseParticularsLabelTitlecell);
-
-
-                                              Phrase phrasQuantityLabelTitle = new Phrase("     ", valueFont_10Bold);
-                                              PdfPCell phraseQuantityLabelTitlecell = new PdfPCell(phrasQuantityLabelTitle);
-                                              phraseQuantityLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                              phraseQuantityLabelTitlecell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                              phraseQuantityLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
-                                              phraseQuantityLabelTitlecell.setPaddingTop(5);
-                                              phraseQuantityLabelTitlecell.setPaddingLeft(6);
-                                              phraseQuantityLabelTitlecell.setPaddingBottom(10);
-                                              EnptytableLabel_table.addCell(phraseQuantityLabelTitlecell);
-
-                                          } catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
-
-
-                                          try {
-                                              PdfPCell itemDetails_table_Cell = new PdfPCell(EnptytableLabel_table);
-                                              itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
-                                              wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
-
-
-                                          } catch (Exception e) {
-                                              e.printStackTrace();
-                                          }
-
-
-                                      } catch (Exception e) {
-                                          e.printStackTrace();
-                                      }
-
-                                  }
-                                  catch (Exception e ){
-                                      e.printStackTrace();
-                                  }
-
-
-
-                              }
-
-
-
-                          }
-
+                        }
 
 
 
@@ -3620,18 +4384,12 @@ public class PDFGenerator {
                     }
 
 
-
-
-
-
-
-
                     //finaladd
                     try {
 
-                        tmcLogoImage_table.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        tmcLogoImage_table.setTotalWidth(10f);
-                        layoutDocument.add(tmcLogoImage_table);
+                       // tmcLogoImage_table.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                       // tmcLogoImage_table.setTotalWidth(10f);
+                       // layoutDocument.add(tmcLogoImage_table);
 
 
 
@@ -3649,19 +4407,10 @@ public class PDFGenerator {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-
-
-
-
                 }
                 catch (Exception e){
                     e.printStackTrace();
                 }
-
-
-
-
 
             }
             catch (Exception e){
@@ -3776,7 +4525,7 @@ public class PDFGenerator {
                 boolean bool = folder.mkdirs();
             }
             try {
-                String filename = "Category wise sales details.pdf";
+                String filename = "Categorywise sales details "+DateParserClass.getMillisecondsFromDate(DateParserClass.getDateInStandardFormat())+".pdf";
 
 
 
@@ -3969,7 +4718,7 @@ public class PDFGenerator {
 
                 PdfPTable supervisorNameDetails_table = new PdfPTable(1);
 
-                Phrase phraseSupervisorNameLabelTitle = new Phrase("Supervisor Name : " + String.valueOf("supervisorName") + "  ", valueFont_8Bold);
+                Phrase phraseSupervisorNameLabelTitle = new Phrase("Supervisor Name : " + String.valueOf(supervisorname) + "  ", valueFont_8Bold);
 
                 PdfPCell phraseSupervisorNameLabelTitlecell = new PdfPCell(phraseSupervisorNameLabelTitle);
                 phraseSupervisorNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -4061,6 +4810,9 @@ public class PDFGenerator {
 
                 PdfPTable Whole_SupplerDetails_table = new PdfPTable(new float[] { 100  });
                 try{
+
+
+
                     try {
 
                             Phrase phraseretailerNameLabelTitle = new Phrase("Filter Details", valueFont_10Bold);
@@ -4085,7 +4837,7 @@ public class PDFGenerator {
 
                     try {
 
-                        Phrase phraseretailerNameLabelTitle = new Phrase("Filter Type : "+selectedFilterValue.getSelectedFilterType()+"\n", valueFont_10);
+                        Phrase phraseretailerNameLabelTitle = new Phrase("Filter Type : "+selectedFilterValue.getSelectedFilterType() +" - Accepted Orders"+"\n", valueFont_10Bold);
 
                         PdfPCell phraseretailerNameLabelTitlecell = new PdfPCell(phraseretailerNameLabelTitle);
                         phraseretailerNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -4441,10 +5193,41 @@ public class PDFGenerator {
                 }
 
 
+                try{
+                    for(String orderid : orderDetailsHashmap.keySet()) {
+                        OrderDetails_Model orderDetailsModel = orderDetailsHashmap.get(orderid);
+                        try {
+                            double value = orderDetailsModel.getDiscount();
+                            discount = value + discount;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            double value = orderDetailsModel.getTotalprice();
+                            totalfinalprice = value + totalfinalprice;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+
+                    }
+                    }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
 
                 try{
                     for(int iteratr = 0 ; iteratr < orderItems.size(); iteratr++ ){
                         OrderItemDetails_Model orderItemDetailsModel = orderItems.get(iteratr);
+                        try{
+                            double value = orderItemDetailsModel.getTotalprice();
+                            totalItemPrice = value + totalItemPrice;
+                        }
+                        catch(Exception e){
+                            e.printStackTrace();
+                        }
 
                         if(itemwiseTotalHashmap.containsKey(orderItemDetailsModel.getMenuitemkey())){
                             ReportsItemwiseCalculationDetail_Model modelFromHashmap  =  itemwiseTotalHashmap.get(orderItemDetailsModel.getMenuitemkey());
@@ -4513,7 +5296,7 @@ public class PDFGenerator {
 
                                     PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
                                    phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                   phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                   phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                    phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
                                    phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
                                    phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
@@ -4556,8 +5339,12 @@ public class PDFGenerator {
 
 
                                     Phrase phrasBatchpriceLabelTitle = null;
-                                    phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
-
+                                    if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                    phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                    }
+                                    else{
+                                        phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                    }
 
                                     PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
                                     phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -4656,7 +5443,7 @@ public class PDFGenerator {
 
                                         PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
                                         phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                        phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                        phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                         phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
                                         phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
                                         phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
@@ -4698,9 +5485,15 @@ public class PDFGenerator {
 
 
 
+                               //         Phrase phrasBatchpriceLabelTitle = null;
+                                 //       phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
                                         Phrase phrasBatchpriceLabelTitle = null;
-                                        phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
-
+                                        if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                            phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                        }
+                                        else{
+                                            phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                        }
 
                                         PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
                                         phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -4765,7 +5558,7 @@ public class PDFGenerator {
                         }
 
 
-
+/*
                         //extraas
                         try{
 
@@ -4829,6 +5622,8 @@ public class PDFGenerator {
                         }
 
 
+ */
+/*
                         //finaladd
                         try {
 
@@ -4852,6 +5647,8 @@ public class PDFGenerator {
                             e.printStackTrace();
                         }
 
+
+ */
 
 
                     }
@@ -4878,7 +5675,7 @@ public class PDFGenerator {
 
                                     PdfPCell phraseSnoDetailsLabelTitlecell = new PdfPCell(phraseSnoDetailsLabelTitle);
                                     phraseSnoDetailsLabelTitlecell.setBorder(Rectangle.NO_BORDER);
-                                    phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                    phraseSnoDetailsLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                     phraseSnoDetailsLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
                                     phraseSnoDetailsLabelTitlecell.setBorderWidthRight(01);
                                     phraseSnoDetailsLabelTitlecell.setPaddingLeft(6);
@@ -4920,9 +5717,15 @@ public class PDFGenerator {
 
 
 
+                                  //  Phrase phrasBatchpriceLabelTitle = null;
+                                   // phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
                                     Phrase phrasBatchpriceLabelTitle = null;
-                                    phrasBatchpriceLabelTitle = new Phrase((String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight())) + " Kg", valueFont_10);
-
+                                    if(itemwiseTotalHashmap.get(itemkey).getTotalweight() > 0 ){
+                                        phrasBatchpriceLabelTitle = new Phrase(String.valueOf(WeightConverter.ConvertGramsToKilograms(String.valueOf(itemwiseTotalHashmap.get(itemkey).getTotalweight()))) + " Kg", valueFont_10);
+                                    }
+                                    else{
+                                        phrasBatchpriceLabelTitle = new Phrase(String.valueOf(" - "));
+                                    }
 
                                     PdfPCell phraseBatchPriceLabelTitlecell = new PdfPCell(phrasBatchpriceLabelTitle);
                                     phraseBatchPriceLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -4987,7 +5790,7 @@ public class PDFGenerator {
                     }
 
 
-
+/*
                     //extraas
                     try{
 
@@ -5045,7 +5848,22 @@ public class PDFGenerator {
                         e.printStackTrace();
                     }
 
+ */
 
+                    try{
+
+                        tmcLogoImage_table.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        tmcLogoImage_table.setTotalWidth(10f);
+                        layoutDocument.add(tmcLogoImage_table);
+
+
+
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+/*
                     //finaladd
                     try {
 
@@ -5071,8 +5889,13 @@ public class PDFGenerator {
                     }
 
 
+ */
+
 
                 }
+
+
+
 
 
             }
@@ -5081,6 +5904,358 @@ public class PDFGenerator {
             }
 
 
+
+
+            try{
+                PdfPTable itemDetailsTotal_table = new PdfPTable(new float[] {10 ,30 , 20 , 20 , 20  });
+
+
+
+                try {
+
+
+
+
+
+                    Phrase phrasCtgynameLabelTitle = new Phrase("  ", valueFont_10);
+
+                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                    itemDetailsTotal_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+
+
+                    Phrase phrasMaleCountLabelTitle = new Phrase(" ", valueFont_10);
+
+                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                    itemDetailsTotal_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+
+                    Phrase phrasFemaleCountLabelTitle = new Phrase(" ", valueFont_10);
+
+                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                    itemDetailsTotal_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+
+
+                    Phrase phrasTotalCountLabelTitle = new Phrase(" Total ", valueFont_10Bold);
+
+                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                    phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                    itemDetailsTotal_table.addCell(phraseCountLabelTitlecell);
+
+
+                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(totalItemPrice), valueFont_10);
+
+                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                    itemDetailsTotal_table.addCell(phraseWeightLabelTitlecell);
+
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+
+
+                try {
+                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsTotal_table);
+                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                    ///itemDetails_table_Cell.setBorderWidthTop(1);
+                   // itemDetails_table_Cell.setBackgroundColor(customGreyColor);
+                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            try{
+                PdfPTable itemDetailsTotal_table = new PdfPTable(new float[] {10 ,30 , 20 , 20 , 20  });
+
+
+
+                try {
+
+
+
+
+
+                    Phrase phrasCtgynameLabelTitle = new Phrase("  ", valueFont_10);
+
+                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                    itemDetailsTotal_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+
+
+                    Phrase phrasMaleCountLabelTitle = new Phrase(" ", valueFont_10);
+
+                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                    itemDetailsTotal_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+
+                    Phrase phrasFemaleCountLabelTitle = new Phrase(" ", valueFont_10);
+
+                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                    itemDetailsTotal_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+
+
+                    Phrase phrasTotalCountLabelTitle = new Phrase(" Discount ", valueFont_10Bold);
+
+                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                    phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                    itemDetailsTotal_table.addCell(phraseCountLabelTitlecell);
+
+
+                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(discount), valueFont_10);
+
+                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                    itemDetailsTotal_table.addCell(phraseWeightLabelTitlecell);
+
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+
+
+                try {
+                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsTotal_table);
+                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                   // itemDetails_table_Cell.setBorderWidthTop(1);
+                    // itemDetails_table_Cell.setBackgroundColor(customGreyColor);
+                    //itemDetails_table_Cell.setBorderWidthBottom(01);
+                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            try{
+                PdfPTable itemDetailsTotal_table = new PdfPTable(new float[] {10 ,30 , 20 , 20 , 20  });
+
+
+
+                try {
+
+
+
+
+
+                    Phrase phrasCtgynameLabelTitle = new Phrase("  ", valueFont_10);
+
+                    PdfPCell phraseCtgyNameLabelTitlecell = new PdfPCell(phrasCtgynameLabelTitle);
+                    phraseCtgyNameLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseCtgyNameLabelTitlecell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    phraseCtgyNameLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseCtgyNameLabelTitlecell.setBorderWidthRight(01);
+                    phraseCtgyNameLabelTitlecell.setPaddingLeft(6);
+                    phraseCtgyNameLabelTitlecell.setPaddingBottom(10);
+                    itemDetailsTotal_table.addCell(phraseCtgyNameLabelTitlecell);
+
+
+
+
+                    Phrase phrasMaleCountLabelTitle = new Phrase(" ", valueFont_10);
+
+                    PdfPCell phraseMaleCountLabelTitlecell = new PdfPCell(phrasMaleCountLabelTitle);
+                    phraseMaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseMaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseMaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseMaleCountLabelTitlecell.setBorderWidthRight(01);
+                    phraseMaleCountLabelTitlecell.setPaddingLeft(6);
+                    phraseMaleCountLabelTitlecell.setPaddingBottom(10);
+                    itemDetailsTotal_table.addCell(phraseMaleCountLabelTitlecell);
+
+
+
+                    Phrase phrasFemaleCountLabelTitle = new Phrase(" ", valueFont_10);
+
+                    PdfPCell phraseFemaleCountLabelTitlecell = new PdfPCell(phrasFemaleCountLabelTitle);
+                    phraseFemaleCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseFemaleCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseFemaleCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseFemaleCountLabelTitlecell.setPaddingLeft(6);
+                    phraseFemaleCountLabelTitlecell.setPaddingBottom(10);
+                    phraseFemaleCountLabelTitlecell.setBorderWidthRight(01);
+
+                    itemDetailsTotal_table.addCell(phraseFemaleCountLabelTitlecell);
+
+
+
+
+                    Phrase phrasTotalCountLabelTitle = new Phrase(" Final price ", valueFont_10Bold);
+
+                    PdfPCell phraseCountLabelTitlecell = new PdfPCell(phrasTotalCountLabelTitle);
+                    phraseCountLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseCountLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseCountLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseCountLabelTitlecell.setPaddingLeft(6);
+                    phraseCountLabelTitlecell.setPaddingBottom(10);
+                    phraseCountLabelTitlecell.setBorderWidthRight(01);
+
+                    itemDetailsTotal_table.addCell(phraseCountLabelTitlecell);
+
+
+                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(totalfinalprice), valueFont_10);
+
+                    PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
+                    phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
+                    phraseWeightLabelTitlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    phraseWeightLabelTitlecell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    phraseWeightLabelTitlecell.setPaddingLeft(6);
+                    phraseWeightLabelTitlecell.setPaddingBottom(10);
+                    phraseWeightLabelTitlecell.setBorderWidthRight(01);
+                    itemDetailsTotal_table.addCell(phraseWeightLabelTitlecell);
+
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+
+
+                try {
+                    PdfPCell itemDetails_table_Cell = new PdfPCell(itemDetailsTotal_table);
+                    itemDetails_table_Cell.setBorder(Rectangle.NO_BORDER);
+                    itemDetails_table_Cell.setBorderWidthTop(1);
+                    // itemDetails_table_Cell.setBackgroundColor(customGreyColor);
+                    itemDetails_table_Cell.setBorderWidthBottom(01);
+                    wholePDFContentWithOut_Outline_table.addCell(itemDetails_table_Cell);
+
+
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+            //finaladd
+            try {
+
+
+
+
+                PdfPCell wholePDFWithOutBordercell = new PdfPCell(wholePDFContentWithOut_Outline_table);
+                wholePDFWithOutBordercell.setCellEvent(roundRectange);
+                wholePDFWithOutBordercell.setPadding(1);
+                wholePDFWithOutBordercell.setBorder(Rectangle.NO_BORDER);
+                wholePDFContentOutline_table.addCell(wholePDFWithOutBordercell);
+                wholePDFContentOutline_table.setWidthPercentage(100);
+
+
+                layoutDocument.add(wholePDFContentOutline_table);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
         }

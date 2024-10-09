@@ -1078,6 +1078,7 @@ public class CreateOrderFragment extends Fragment {
             return "0"; // Return "0" if no numeric part is found
         }
     }
+
     private void showSnackbar(View view, String message) {
         Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
         Dashboard activity = (Dashboard) getActivity(); // Get reference to the activity

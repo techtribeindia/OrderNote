@@ -3,14 +3,19 @@ package com.project.ordernote.ui.activity;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -25,7 +30,9 @@ import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.model.Users_Model;
+import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.ApiResponseState_Enum;
+import com.project.ordernote.utils.CheckPermissionForManageStorage;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.AppData_ViewModel;
@@ -55,6 +62,8 @@ public class SplashScreen extends AppCompatActivity {
     private Observer<ApiResponseState_Enum<List<MenuItems_Model>>> menuItemListObserver;
     private Observer<ApiResponseState_Enum<AppData_Model>> appDataModelObserver;
     private Observer<ApiResponseState_Enum<Users_Model>> userDetailsModelListObserver;
+
+
 
 
     @Override
@@ -118,7 +127,18 @@ public class SplashScreen extends AppCompatActivity {
 
 
     }
-
+    private void openNotificationSettings() {
+        Intent intent = new Intent();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+        } else {
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+        }
+        startActivity(intent);
+    }
 
     private void fetchInitialData() {
         buyersViewModel.getBuyersListFromRepository(sessionManager.getVendorkey());
@@ -300,9 +320,12 @@ public class SplashScreen extends AppCompatActivity {
 
               }
             }
-            else{
 
-                Toast.makeText(this, "Sorry, you don't have enough permission to access this app ", Toast.LENGTH_SHORT).show();
+            else{
+                Intent intent = new Intent(SplashScreen.this, LoginScreen.class);
+                SplashScreen.this.startActivity(intent);
+                SplashScreen.this.finish();
+                Toast.makeText(this, "Sorry, you don't have enough permission , Please Login again ", Toast.LENGTH_SHORT).show();
 
             }
 

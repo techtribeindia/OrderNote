@@ -3,8 +3,11 @@ package com.project.ordernote.ui.activity;
 import static com.project.ordernote.utils.Constants.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -12,12 +15,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -38,6 +47,7 @@ import com.project.ordernote.ui.fragment.BuyersFragment;
 import com.project.ordernote.ui.fragment.OrdersListFragment;
 import com.project.ordernote.ui.fragment.ReportsFragment;
 import com.project.ordernote.ui.fragment.SettingsFragment;
+import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.Dashboard_ViewModel;
@@ -92,6 +102,48 @@ public class Dashboard extends AppCompatActivity {
 
 
        */
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                // Permission already granted
+            } else {
+                // Permission not granted, request it
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+
+            }
+        }
+        else {
+            if (!areNotificationsEnabled()) {
+                // Show a dialog or snackbar prompting the user to enable notifications
+
+
+                AlertDialogUtil.showCustomDialogllowAccess(
+                        this,
+                        "Enable Notifications",
+                        "Please enable notifications to stay updated with important information.", "Open Allow Notification ", "Not now", "RED",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Handle positive button click
+                                openNotificationSettings();
+
+                            }
+                        },
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Handle negative button click
+
+                                Toast.makeText(Dashboard.this, "Sorry you will not receive any notifications", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                );
+
+            }
+        }
+
 
 
 
@@ -202,6 +254,53 @@ public class Dashboard extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 101) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Notification permission granted
+            } else {
+                // Notification permission denied
+                showRationaleOrSettingsDialog();
+            }
+        }
+    }
+    private void showRationaleOrSettingsDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Notification Permission Needed")
+                .setMessage("This app needs notification permission to send you updates. Please enable it in settings.")
+                .setPositiveButton("Go to Settings", (dialog, which) -> {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.fromParts("package", getPackageName(), null));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void openNotificationSettings() {
+        Intent intent = new Intent();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+        } else {
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+        }
+        startActivity(intent);
+    }
+
+
+
+
+    public boolean areNotificationsEnabled() {
+        return NotificationManagerCompat.from(this).areNotificationsEnabled();
+    }
+
 
 
     private void showSnackbar(View view, String message) {

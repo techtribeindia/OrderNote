@@ -14,6 +14,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -21,19 +22,26 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 import com.project.ordernote.R;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.model.OrderItemDetails_Model;
 import com.project.ordernote.data.model.ReportsFilterDetails_Model;
 import com.project.ordernote.databinding.FragmentReportsBinding;
+import com.project.ordernote.ui.activity.Dashboard;
 import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.utils.CheckPermissionForManageStorage;
@@ -55,6 +63,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class ReportsFragment extends Fragment {
@@ -166,7 +177,7 @@ public class ReportsFragment extends Fragment {
                 binding.weekCommonFilter.setBackground(backgroundweek);
                 binding.weekCommonFilter.setTextColor(getResources().getColor(R.color.black));
                 isTodaySelectedInReportScreen = true;
-                Toast.makeText(requireActivity(), "Today", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(requireActivity(), "Today", Toast.LENGTH_SHORT).show();
 
 
                 Timestamp startdatee = (DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateInStandardFormat()+" 00:00:00"));
@@ -188,7 +199,7 @@ public class ReportsFragment extends Fragment {
                 Drawable backgroundtoday = ContextCompat.getDrawable(requireActivity(), R.drawable.round_lightredbackground);
                 binding.todayCommonFilter.setBackground(backgroundtoday);
                 binding.todayCommonFilter.setTextColor(getResources().getColor(R.color.black));
-                Toast.makeText(requireActivity(), "Week", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(requireActivity(), "Week", Toast.LENGTH_SHORT).show();
                 isTodaySelectedInReportScreen = false;
                 processOrderAndOrderItemArrayForReportScreenUIMethodCalled = false;
                 Timestamp startdatee = (DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getFirstDayOfWeek(DateParserClass.getDateInStandardFormat())+" 00:00:00"));
@@ -225,12 +236,20 @@ public class ReportsFragment extends Fragment {
         binding.downloadReportScrenData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isTodaySelectedInReportScreen){
-                    setListenerAndGenerateReport(Constants.today_statuswise_pdf);
+                if(!statuswisetotalcountdetailsjson.isEmpty() && !orderwiseOrderItemDetails.isEmpty() && !statuswiseOrderid.isEmpty()){
+                    if(isTodaySelectedInReportScreen){
+                        setListenerAndGenerateReport(Constants.today_statuswise_pdf);
+
+                    }
+                    else{
+                        setListenerAndGenerateReport(Constants.week_statuswise_pdf);
+                    }
 
                 }
                 else{
-                    setListenerAndGenerateReport(Constants.week_statuswise_pdf);
+                    showSnackbar(view,"There is no data to generate report");
+
+                  //  Toast.makeText(requireActivity(), "There is no data to generate", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -255,7 +274,7 @@ public class ReportsFragment extends Fragment {
 
                                         CheckPermissionForManageStorage.checkPermissionForManageStorageFromFragment(requireContext() , requireActivity() , checkPermissionForManageStorageInterface);
 
-                                        Toast.makeText(requireActivity(), "Create", Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(requireActivity(), "Create", Toast.LENGTH_SHORT).show();
                                     }
                                 },
                                 new DialogInterface.OnClickListener() {
@@ -264,7 +283,7 @@ public class ReportsFragment extends Fragment {
                                         // Handle negative button click
                                         CheckPermissionForManageStorage.justCheckForPermission(requireContext() , requireActivity() , checkPermissionForManageStorageInterface);
 
-                                        Toast.makeText(requireActivity(), "NotNow", Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(requireActivity(), "NotNow", Toast.LENGTH_SHORT).show();
 
                                     }
                                 }
@@ -287,7 +306,7 @@ public class ReportsFragment extends Fragment {
 
             @Override
             public void onPermissionGranted(String result, boolean isJustCheckForPermission) {
-                Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -308,7 +327,7 @@ public class ReportsFragment extends Fragment {
 
                                         CheckPermissionForManageStorage.checkPermissionForManageStorageFromFragment(requireContext() , requireActivity() , checkPermissionForManageStorageInterface);
 
-                                        Toast.makeText(requireActivity(), "Create", Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(requireActivity(), "Create", Toast.LENGTH_SHORT).show();
                                     }
                                 },
                                 new DialogInterface.OnClickListener() {
@@ -317,7 +336,7 @@ public class ReportsFragment extends Fragment {
                                         // Handle negative button click
                                         CheckPermissionForManageStorage.justCheckForPermission(requireContext() , requireActivity() , checkPermissionForManageStorageInterface);
 
-                                        Toast.makeText(requireActivity(), "NotNow", Toast.LENGTH_SHORT).show();
+                                      //  Toast.makeText(requireActivity(), "NotNow", Toast.LENGTH_SHORT).show();
 
                                     }
                                 }
@@ -337,7 +356,7 @@ public class ReportsFragment extends Fragment {
 
                 }
 
-                Toast.makeText(requireActivity(), result, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(requireActivity(), result, Toast.LENGTH_SHORT).show();
 
             }
 
@@ -377,14 +396,17 @@ public class ReportsFragment extends Fragment {
                             case ERROR:
                                 if(resource.message.equals(Constants.noDataAvailable)){
                                     isOrderDetailsForReportScreenFetchedData = true;
-                                    Toast.makeText(requireActivity(), "No order Data for selected filter", Toast.LENGTH_SHORT).show();
+                                    showSnackbar(getView() ,"No order Data for selected filter");
+                                   // Toast.makeText(requireActivity(), "No order Data for selected filter", Toast.LENGTH_SHORT).show();
                                     if(isOrderItemDetailsForReportScreenFetchedData){
                                         setDataOnUI();
+                                        showProgressBar(false);
                                       //  Toast.makeText(requireActivity(), "Successfully fetched the order details", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 else{
-                                    Toast.makeText(requireActivity(), "Error while fetching order details  ," + String.valueOf(resource.message), Toast.LENGTH_SHORT).show();
+                                   // Toast.makeText(requireActivity(), "Error while fetching order details  ," + String.valueOf(resource.message), Toast.LENGTH_SHORT).show();
+                                    showSnackbar(getView() ,"Error while fetching order details ");
 
                                 }
 
@@ -417,15 +439,17 @@ public class ReportsFragment extends Fragment {
                             case ERROR:
                                 if(resource.message.equals(Constants.noDataAvailable)){
                                     isOrderItemDetailsForReportScreenFetchedData = true;
-                                    Toast.makeText(requireActivity(), "No order Item Data for selected filter", Toast.LENGTH_SHORT).show();
+                                    showSnackbar(getView() ,"No order Item Data for selected filter");
+                                   // Toast.makeText(requireActivity(), "No order Item Data for selected filter", Toast.LENGTH_SHORT).show();
                                     if(isOrderDetailsForReportScreenFetchedData){
                                         setDataOnUI();
+                                        showProgressBar(false);
                                       //  Toast.makeText(requireActivity(), "Successfully fetched the order Item details", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 else{
-                                    Toast.makeText(requireActivity(), "Error while fetching order Item details  ," + String.valueOf(resource.message), Toast.LENGTH_SHORT).show();
-
+                                   // Toast.makeText(requireActivity(), "Error while fetching order Item details  ," + String.valueOf(resource.message), Toast.LENGTH_SHORT).show();
+                                    showSnackbar(getView() ,"Error while fetching order Item details ");
                                 }
 
                                 break;
@@ -451,51 +475,62 @@ public class ReportsFragment extends Fragment {
         orderwiseOrderItemDetails.clear();
         statuswiseOrderid.clear();
 
-        if(!Objects.requireNonNull(ordersViewModel.getOrdersListForReportDetailsFromViewModel().getValue()).data.isEmpty() && !Objects.requireNonNull(orderItemDetailsViewModel.getOrdersItemDetailsReportScreenFromViewModel().getValue()).data.isEmpty()) {
-   for (int orderIterator = 0; orderIterator < Objects.requireNonNull(ordersViewModel.getOrdersListForReportDetailsFromViewModel().getValue()).data.size(); orderIterator++) {
-       OrderDetails_Model orderDetailsModel = Objects.requireNonNull(ordersViewModel.getOrdersListForReportDetailsFromViewModel().getValue()).data.get(orderIterator);
+        if( ordersViewModel.getOrdersListForReportDetailsFromViewModel().getValue() != null && ordersViewModel.getOrdersListForReportDetailsFromViewModel().getValue().data != null  && orderItemDetailsViewModel.getOrdersItemDetailsReportScreenFromViewModel().getValue() != null && orderItemDetailsViewModel.getOrdersItemDetailsReportScreenFromViewModel().getValue().data != null && !Objects.requireNonNull(ordersViewModel.getOrdersListForReportDetailsFromViewModel().getValue()).data.isEmpty() && !Objects.requireNonNull(orderItemDetailsViewModel.getOrdersItemDetailsReportScreenFromViewModel().getValue()).data.isEmpty()) {
+        for (int orderIterator = 0; orderIterator < Objects.requireNonNull(ordersViewModel.getOrdersListForReportDetailsFromViewModel().getValue()).data.size(); orderIterator++) {
+            OrderDetails_Model orderDetailsModel = Objects.requireNonNull(ordersViewModel.getOrdersListForReportDetailsFromViewModel().getValue()).data.get(orderIterator);
+            if(orderItemDetailsViewModel.checkIfReportScreenLiveDataHaveItemDetailsForOrderId(orderDetailsModel.getOrderid())) {
+                if (statuswiseOrderDetails.containsKey(orderDetailsModel.getStatus())) {
 
-       if (statuswiseOrderDetails.containsKey(orderDetailsModel.getStatus())) {
-
-           List<String> orderIDList = new ArrayList<>(Objects.requireNonNull(statuswiseOrderid.get(orderDetailsModel.getStatus())));
-                    if(!orderIDList.contains(orderDetailsModel.getOrderid())){
+                    List<String> orderIDList = new ArrayList<>(Objects.requireNonNull(statuswiseOrderid.get(orderDetailsModel.getStatus())));
+                    if (!orderIDList.contains(orderDetailsModel.getOrderid())) {
                         orderIDList.add(String.valueOf(orderDetailsModel.getOrderid()));
-                        statuswiseOrderid.put(orderDetailsModel.getStatus() , orderIDList);
+                        statuswiseOrderid.put(orderDetailsModel.getStatus(), orderIDList);
 
                     }
 
                     List<OrderDetails_Model> orderDetailsModelList = new ArrayList<>(Objects.requireNonNull(statuswiseOrderDetails.get(orderDetailsModel.getStatus())));
                     orderDetailsModelList.add(orderDetailsModel);
                     statuswiseOrderDetails.replace(orderDetailsModel.getStatus(), orderDetailsModelList);
+                } else {
+
+                    List<String> orderIDList = new ArrayList<>();
+                    List<OrderDetails_Model> orderDetailsModelList = new ArrayList<>();
+
+                    orderDetailsModelList.add(orderDetailsModel);
+                    statuswiseOrderDetails.put(orderDetailsModel.getStatus(), orderDetailsModelList);
+
+                    orderIDList.add(String.valueOf(orderDetailsModel.getOrderid()));
+                    statuswiseOrderid.put(orderDetailsModel.getStatus(), orderIDList);
+
+
                 }
-       else {
-
-           List<String> orderIDList = new ArrayList<>();
-           List<OrderDetails_Model> orderDetailsModelList = new ArrayList<>();
-
-           orderDetailsModelList.add(orderDetailsModel);
-            statuswiseOrderDetails.put(orderDetailsModel.getStatus(), orderDetailsModelList);
-
-            orderIDList.add(String.valueOf(orderDetailsModel.getOrderid()));
-            statuswiseOrderid.put(orderDetailsModel.getStatus() , orderIDList);
 
 
-
-       }
-
-
-                double orderPrice = 0;
+                double orderPrice = 0, orderDiscount = 0, finalPrice = 0;
                 orderPrice = orderDetailsModel.getTotalprice();
-
+                orderDiscount = orderDetailsModel.getDiscount();
+                if (orderDiscount > 0) {
+                    finalPrice = orderPrice + orderDiscount;
+                } else {
+                    finalPrice = orderPrice;
+                }
                 if (statuswisetotalcountdetailsjson.containsKey(orderDetailsModel.getStatus())) {
                     JSONObject jsonObject = statuswisetotalcountdetailsjson.get(orderDetailsModel.getStatus());
                     int ordersCountFromJson = 0;
-                    double priceFromJson = 0;
+                    double priceFromJson = 0, finalPriceFromJson = 0, discountPiceFromJson = 0;
                     try {
                         ordersCountFromJson = jsonObject.getInt("count");
                         priceFromJson = jsonObject.getDouble("price");
                         priceFromJson = orderPrice + priceFromJson;
+                        discountPiceFromJson = jsonObject.getDouble("discount");
+                        finalPriceFromJson = jsonObject.getDouble("pricebeforediscount");
+
+                        finalPriceFromJson = finalPriceFromJson + finalPrice;
+                        discountPiceFromJson = discountPiceFromJson + orderDiscount;
+
                         ordersCountFromJson = ordersCountFromJson + 1;
+                        jsonObject.put("discount", discountPiceFromJson);
+                        jsonObject.put("pricebeforediscount", finalPriceFromJson);
 
                         jsonObject.put("price", priceFromJson);
                         jsonObject.put("count", ordersCountFromJson);
@@ -511,6 +546,8 @@ public class ReportsFragment extends Fragment {
                     try {
                         jsonObject.put("price", orderPrice);
                         jsonObject.put("count", 1);
+                        jsonObject.put("discount", orderDiscount);
+                        jsonObject.put("pricebeforediscount", finalPrice);
                         jsonObject.put("status", orderDetailsModel.getStatus());
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
@@ -519,12 +556,10 @@ public class ReportsFragment extends Fragment {
 
 
                 }
-
-
             }
 
-
-            for (int itemIterator = 0; itemIterator < Objects.requireNonNull(orderItemDetailsViewModel.getOrdersItemDetailsReportScreenFromViewModel().getValue()).data.size(); itemIterator++) {
+            }
+        for (int itemIterator = 0; itemIterator < Objects.requireNonNull(orderItemDetailsViewModel.getOrdersItemDetailsReportScreenFromViewModel().getValue()).data.size(); itemIterator++) {
                 List<OrderItemDetails_Model> orderItemDetailsArrayList = new ArrayList<>();
 
                 OrderItemDetails_Model orderItemDetailsModel = orderItemDetailsViewModel.getOrdersItemDetailsReportScreenFromViewModel().getValue().data.get(itemIterator);
@@ -543,15 +578,44 @@ public class ReportsFragment extends Fragment {
             }
 
 
-            setDataOnUI();
+        setDataOnUI();
         }
         else{
 
             if(processOrderAndOrderItemArrayForReportScreenUIMethodCalled){
                 setDataOnUI();
+
                 return;
             }
             processOrderAndOrderItemArrayForReportScreenUIMethodCalled = true;
+
+            // Create a scheduled thread pool with 1 thread
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+            // Create a Handler associated with the main thread's Looper
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+
+
+            // Schedule the task to run after 6 seconds
+            scheduler.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    // Code to execute after 6 seconds
+
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // UI operations go here
+                            showProgressBar(false);
+                        }
+                    });
+
+
+                    System.out.println("Thread executed after 6 seconds");
+                    //showProgressBar(false);
+                }
+            }, 6, TimeUnit.SECONDS);
+
         }
 
 
@@ -583,8 +647,6 @@ public class ReportsFragment extends Fragment {
                 binding.totalAcceptedOrdersPriceTextview.setText("₹ 00,000");
 
             }
-
-
             if(statuswisetotalcountdetailsjson.containsKey(Constants.rejected_status)) {
 
                 binding.ordersRejectedCountTextview.setText(statuswisetotalcountdetailsjson.get(Constants.rejected_status).getInt("count") + " Orders");
@@ -595,8 +657,6 @@ public class ReportsFragment extends Fragment {
                 binding.totalRejectedPriceTextview.setText("₹ 00,000");
 
             }
-
-
             if(statuswisetotalcountdetailsjson.containsKey(Constants.cancelled_status)) {
 
                 binding.ordersCancelledCountTextview.setText(statuswisetotalcountdetailsjson.get(Constants.cancelled_status).getInt("count") + " Orders");
@@ -607,9 +667,6 @@ public class ReportsFragment extends Fragment {
                 binding.totalCancelledPriceTextview.setText("₹ 00,000");
 
             }
-
-
-
         }
         catch (Exception e){
             e.printStackTrace();
@@ -617,7 +674,7 @@ public class ReportsFragment extends Fragment {
 
 
         showProgressBar(false);
-        Toast.makeText(requireActivity(), "SetDatOnUI Called", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(requireActivity(), "SetDatOnUI Called", Toast.LENGTH_SHORT).show();
     }
 
     private void setObserverForSalesData() {
@@ -640,7 +697,7 @@ public class ReportsFragment extends Fragment {
                                 isOrderDetailsFetchedData = true;
                                 if(isOrderItemDetailsFetchedData){
 
-                                    Toast.makeText(requireActivity(), Objects.requireNonNull(reportsViewModel.getFilteredReports().getValue()).getSelectedFileType(), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(requireActivity(), Objects.requireNonNull(reportsViewModel.getFilteredReports().getValue()).getSelectedFileType(), Toast.LENGTH_SHORT).show();
 
 
 
@@ -666,7 +723,8 @@ public class ReportsFragment extends Fragment {
 
                                     }
                                     else{
-                                        Toast.makeText(requireActivity(), "No Orders found (orderdetails)", Toast.LENGTH_SHORT).show();
+                                        showSnackbar(getView() ,"No Orders found (orderdetails)");
+                                       // Toast.makeText(requireActivity(), "No Orders found (orderdetails)", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }
@@ -675,14 +733,16 @@ public class ReportsFragment extends Fragment {
                             case ERROR:
                                 if(resource.message.equals(Constants.noDataAvailable)){
                                     isOrderDetailsFetchedData = true;
-                                    Toast.makeText(requireActivity(), "No order Data for selected filter", Toast.LENGTH_SHORT).show();
+                                    showSnackbar(getView() ,"No order Data for selected filter");
+                                   // Toast.makeText(requireActivity(), "No order Data for selected filter", Toast.LENGTH_SHORT).show();
                                     if(isOrderItemDetailsFetchedData){
-                                        Toast.makeText(requireActivity(), "Successfully fetched the order details", Toast.LENGTH_SHORT).show();
+                                      //  Toast.makeText(requireActivity(), "Successfully fetched the order details", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 else{
                                     showProgressBar(false);
-                                    Toast.makeText(requireActivity(), "Error while fetching order details  ," + String.valueOf(resource.message), Toast.LENGTH_SHORT).show();
+                                    showSnackbar(getView() ,"Error while fetching order details ,"+ String.valueOf(resource.message));
+                                   // Toast.makeText(requireActivity(), "Error while fetching order details  ," + String.valueOf(resource.message), Toast.LENGTH_SHORT).show();
 
                                 }
                                 showProgressBar(false);
@@ -738,12 +798,14 @@ public class ReportsFragment extends Fragment {
 
                                         }
 
-                                        Toast.makeText(requireActivity(), "Successfully fetched the order Item details", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(requireActivity(), "Successfully fetched the order Item details", Toast.LENGTH_SHORT).show();
 
                                     }
                                     else{
                                         showProgressBar(false);
-                                        Toast.makeText(requireActivity(), "No Orders found (orderItemdetails)", Toast.LENGTH_SHORT).show();
+                                        showSnackbar(getView() ," No Orders found (orderItemdetails) ");
+
+                                      //  Toast.makeText(requireActivity(), "No Orders found (orderItemdetails)", Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -751,13 +813,16 @@ public class ReportsFragment extends Fragment {
                             case ERROR:
                                 if(resource.message.equals(Constants.noDataAvailable)){
                                     isOrderItemDetailsFetchedData = true;
-                                    Toast.makeText(requireActivity(), "No order Item Data for selected filter", Toast.LENGTH_SHORT).show();
+                                    showSnackbar(getView() ," No Order Item Data for selected filter");
+
+                                    //Toast.makeText(requireActivity(), "No order Item Data for selected filter", Toast.LENGTH_SHORT).show();
                                     if(isOrderDetailsFetchedData){
-                                        Toast.makeText(requireActivity(), "Successfully fetched the order Item details", Toast.LENGTH_SHORT).show();
+                                   //     Toast.makeText(requireActivity(), "Successfully fetched the order Item details", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 else{
-                                    Toast.makeText(requireActivity(), "Error while fetching order Item details  ," + String.valueOf(resource.message), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(requireActivity(), "Error while fetching order Item details  ," + String.valueOf(resource.message), Toast.LENGTH_SHORT).show();
+                                    showSnackbar(getView() ," Error while fetching order Item details  ," + String.valueOf(resource.message));
 
                                 }
                                 showProgressBar(false);
@@ -843,8 +908,8 @@ public class ReportsFragment extends Fragment {
 
             @Override
             public void onError(String message) {
-                Toast.makeText(requireActivity(), "Error in generating PDF ", Toast.LENGTH_SHORT).show();
-
+              //  Toast.makeText(requireActivity(), "Error in generating PDF ", Toast.LENGTH_SHORT).show();
+                showSnackbar(getView() ,"  Error in generating PDF ");
             }
         };
 
@@ -854,14 +919,22 @@ public class ReportsFragment extends Fragment {
             if (writeExternalStoragePermission == PackageManager.PERMISSION_GRANTED) {
                 // Permission is already granted
                 if(pdfType.equals(Constants.today_statuswise_pdf) || pdfType.equals(Constants.week_statuswise_pdf)){
-                    reportsViewModel.generateOrderDetailsPDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType, statuswisetotalcountdetailsjson, orderwiseOrderItemDetails , statuswiseOrderid);
+                    reportsViewModel.generateOrderDetailsPDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType, sessionManager.getVUserName(),statuswisetotalcountdetailsjson, orderwiseOrderItemDetails , statuswiseOrderid);
 
                 }
 
                 else {
 
-                    reportsViewModel.generatePDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType, ProcessOrderDetails(), processOrderItemDetails());
+                    if(!ProcessOrderDetails().isEmpty() && !processOrderItemDetails().isEmpty()){
+                     reportsViewModel.generatePDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType,sessionManager.getVUserName(), ProcessOrderDetails(), processOrderItemDetails());
+                    }
+                    else{
+                        showSnackbar(getView(),"There is no data to generate report");
+                        showProgressBar(false);
+                    }
+
                 }
+
 
 
 
@@ -878,13 +951,21 @@ public class ReportsFragment extends Fragment {
                 // Permission is already granted
                 Log.d("PermissionCheck", "Manage External Storage permission granted");
                 if(pdfType.equals(Constants.today_statuswise_pdf) || pdfType.equals(Constants.week_statuswise_pdf)){
-                    reportsViewModel.generateOrderDetailsPDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType, statuswisetotalcountdetailsjson, orderwiseOrderItemDetails , statuswiseOrderid) ;
+                    reportsViewModel.generateOrderDetailsPDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType,sessionManager.getVUserName(), statuswisetotalcountdetailsjson, orderwiseOrderItemDetails , statuswiseOrderid) ;
 
                 }
 
                 else {
 
-                    reportsViewModel.generatePDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType, ProcessOrderDetails(), processOrderItemDetails());
+                    if(!ProcessOrderDetails().isEmpty() && !processOrderItemDetails().isEmpty()){
+                        reportsViewModel.generatePDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType,sessionManager.getVUserName(), ProcessOrderDetails(), processOrderItemDetails());
+                    }
+                    else{
+                        showSnackbar(getView(),"There is no data to generate report");
+                        showProgressBar(false);
+                    }
+
+                    //  reportsViewModel.generatePDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType,sessionManager.getVUserName(), ProcessOrderDetails(), processOrderItemDetails());
                 }
             } else {
                 // Permission is not granted
@@ -1025,11 +1106,14 @@ public class ReportsFragment extends Fragment {
 
                         }
                         else{
-                            Toast.makeText(requireActivity(), "PDF Generated", Toast.LENGTH_SHORT).show();
+                            showSnackbar(getView() ," PDF GENERATED ");
+                           // Toast.makeText(requireActivity(), "PDF Generated", Toast.LENGTH_SHORT).show();
                             Uri uri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".provider", pdfFile);
                             Intent intent = new Intent(Intent.ACTION_VIEW);
                             intent.setDataAndType(uri, "application/pdf");
-                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                            //intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             startActivity(intent);
 
 
@@ -1037,7 +1121,9 @@ public class ReportsFragment extends Fragment {
                         }
                     }
                     else{
-                        Toast.makeText(requireActivity(), "statuswise  xls", Toast.LENGTH_SHORT).show();
+                        showSnackbar(getView() ," STATUS WISE XLS ");
+
+                        // Toast.makeText(requireActivity(), "statuswise  xls", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else{
@@ -1052,11 +1138,15 @@ public class ReportsFragment extends Fragment {
 
                         }
                         else{
-                            Toast.makeText(requireActivity(), "PDF Generated", Toast.LENGTH_SHORT).show();
+                            showSnackbar(getView() ," PDF GENERATED ");
+
+                          //  Toast.makeText(requireActivity(), "PDF Generated", Toast.LENGTH_SHORT).show();
                             Uri uri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".provider", pdfFile);
                             Intent intent = new Intent(Intent.ACTION_VIEW);
                             intent.setDataAndType(uri, "application/pdf");
-                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                            //intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             startActivity(intent);
 
 
@@ -1064,7 +1154,9 @@ public class ReportsFragment extends Fragment {
                         }
                     }
                     else{
-                        Toast.makeText(requireActivity(), "statuswise  xls", Toast.LENGTH_SHORT).show();
+                        showSnackbar(getView() ," STATUS XLS ");
+
+                        // Toast.makeText(requireActivity(), "statuswise  xls", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -1125,6 +1217,41 @@ public class ReportsFragment extends Fragment {
                 checkPermissionForManageStorageInterface.onPermissionRejected("Permission was rejected" ,false);
             }
         }
+    }
+
+    private void showSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        Dashboard activity = (Dashboard) getActivity(); // Get reference to the activity
+        if (activity != null) {
+            FloatingActionButton fab = activity.getFabButton(); // Get FAB from the activity
+
+            snackbar.setAnchorView(fab); // Set the FAB as the anchor view
+
+        }
+
+        snackbar.setAction("X", v -> snackbar.dismiss());
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
+
+        // Get the Snackbar's layout view
+        View snackbarView = snackbar.getView();
+
+        // Check if the parent is CoordinatorLayout
+        if (snackbarView.getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        } else if (snackbarView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+            // If it's a FrameLayout, handle it like before
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        }
+
+        snackbar.show();
     }
 
 

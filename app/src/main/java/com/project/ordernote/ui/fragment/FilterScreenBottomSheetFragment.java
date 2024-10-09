@@ -7,14 +7,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -23,10 +26,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.ReportsFilterDetails_Model;
+import com.project.ordernote.ui.activity.Dashboard;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.DateParserClass;
 import com.project.ordernote.utils.OnDateSelectedListener;
@@ -409,9 +415,8 @@ public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  
                 }
                 else if (last7daysFilterOptionSelected) {
 
-                    filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateTextFor_OldDaysfrom_given(8 ,  DateParserClass.getDateInStandardFormat())+" 00:00:00"));
+                    filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateTextFor_OldDaysfrom_given(6 ,  DateParserClass.getDateInStandardFormat())+" 00:00:00"));
                     filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateInStandardFormat()+" 23:59:59"));
-
                      filterValue.setSelectedFilterType(Constants.last7day_filter);
                     //Toast.makeText(requireContext(), " last7days ", Toast.LENGTH_SHORT).show();
 
@@ -431,6 +436,12 @@ public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  
                     filterValue.setStartDate(DateParserClass.convertGivenDateToTimeStamp(startDate+" 00:00:00"));
                     filterValue.setEndDate(DateParserClass.convertGivenDateToTimeStamp(endDate+" 23:59:59"));
                 }
+                else{
+                     showSnackbar(getView(),"Please select one option to generate report");
+
+                     return;
+
+                 }
                 if (filterListener != null) {
                     filterListener.onApplyFilters(filterValue);
                     dismiss();
@@ -539,6 +550,41 @@ public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  
         });
     }
 
+
+    private void showSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        Dashboard activity = (Dashboard) getActivity(); // Get reference to the activity
+        if (activity != null) {
+            FloatingActionButton fab = activity.getFabButton(); // Get FAB from the activity
+
+            snackbar.setAnchorView(fab); // Set the FAB as the anchor view
+
+        }
+
+        snackbar.setAction("X", v -> snackbar.dismiss());
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
+
+        // Get the Snackbar's layout view
+        View snackbarView = snackbar.getView();
+
+        // Check if the parent is CoordinatorLayout
+        if (snackbarView.getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        } else if (snackbarView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+            // If it's a FrameLayout, handle it like before
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        }
+
+        snackbar.show();
+    }
 
 
     private void openDatePicker() {
