@@ -41,7 +41,7 @@ public class AppData_ViewModel extends AndroidViewModel {
         LiveData<ApiResponseState_Enum<AppData_Model>> source = repository.FetchAppDataFromRepository();
         if(source.getValue()!=null){
             if(source.getValue().data!=null){
-                Log.d("SplashScreen","Got App Data");
+                Log.d("SplashScreenActivity","Got App Data");
                 appDataModelLiveData.setValue(source.getValue());
                 LocalDataManager.getInstance().setAppData_model(source.getValue().data);
             }

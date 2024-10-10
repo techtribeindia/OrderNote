@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -65,23 +66,22 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
         holder.buyerAddress.setText(order.getBuyeraddress() != null ? order.getBuyeraddress() : "N/A");
 
         holder.orderPrice.setText("₹"+String.valueOf(order.getTotalprice()));
-        if ((Objects.equals(order.getDispatchstatus(), Constants.editrequested_dispatchstatus)  && sessionManager.getRole().equalsIgnoreCase(Constants.admin_role)) || (Objects.equals(order.getDispatchstatus(), Constants.editapproved_dispatchstatus)  && sessionManager.getRole().equalsIgnoreCase(Constants.staff_role)))
+        if((Objects.equals(order.getDispatchstatus(), Constants.editrequested_dispatchstatus) && Objects.equals(sessionManager.getRole(),Constants.admin_role)) || (Objects.equals(order.getDispatchstatus(), Constants.editapproved_dispatchstatus) && Objects.equals(sessionManager.getRole(), Constants.staff_role) ))
         {
+
             holder.itemCard.setBackgroundResource(R.color.backgroundred);
         }
-
+        else
+        {
+            holder.itemCard.setBackgroundResource(R.color.white);
+        }
         List<ItemDetails_Model> itemDetailsList = order.getItemdetails();
         if (itemDetailsList != null && !itemDetailsList.isEmpty()) {
             for (ItemDetails_Model itemDetail : itemDetailsList) {
-                Log.d("Item Detail", "Menu Item Key: " + itemDetail.getMenuitemkey());
-                Log.d("Item Detail", "Menu Type: " + itemDetail.getMenutype());
-                Log.d("Item Detail", "Gross Weight: " + itemDetail.getGrossweight());
-                Log.d("Item Detail", "Net Weight: " + itemDetail.getNetweight());
-                Log.d("Item Detail", "Price per Kg: " + itemDetail.getPrice());
-                Log.d("Item Detail", "Price: " + itemDetail.getTotalprice());
+
             }
         } else {
-            Log.d("Item Detail", "No item details available");
+
         }
         holder.ViewBill.setOnClickListener(view -> {
             viewModel.setSelectedOrder(order);

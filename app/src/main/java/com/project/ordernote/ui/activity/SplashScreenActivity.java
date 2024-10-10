@@ -22,13 +22,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.AppData_Model;
 import com.project.ordernote.data.model.Buyers_Model;
-import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
-import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.model.Users_Model;
 import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.ApiResponseState_Enum;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
     private static final int SPLASH_DISPLAY_LENGTH = 2000;
     private SessionManager sessionManager;
 
@@ -71,6 +71,9 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splashscreen);
 
+
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -86,18 +89,31 @@ public class SplashScreen extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
 
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int result = googleApiAvailability.isGooglePlayServicesAvailable(getApplicationContext());
+        if (result != ConnectionResult.SUCCESS) {
+            if (googleApiAvailability.isUserResolvableError(result)) {
+                googleApiAvailability.getErrorDialog(this, result, 2404).show();
+            } else {
+                Toast.makeText(this, "Error - Google Play Services not available", Toast.LENGTH_SHORT).show();
+                Log.d("Error", "Google Play Services not available");
+            }
+        }
+
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                  // Check if the user is logged in
                 if (sessionManager.isLoggedIn()) {
                     // Redirect to DashboardScreen if the user is logged in
-                    Log.d("SplashScreen","Logged in");
+                    Log.d("SplashScreenActivity","Logged in");
                     // Initialize ViewModels
-                    buyersViewModel = new ViewModelProvider(SplashScreen.this).get(Buyers_ViewModel.class);
-                    menuItemViewModel = new ViewModelProvider(SplashScreen.this).get(MenuItems_ViewModel.class);
-                    appDataViewModel = new ViewModelProvider(SplashScreen.this).get(AppData_ViewModel.class);
-                    userDetailsViewModel =  new ViewModelProvider(SplashScreen.this).get(UserDetailsViewModel.class);
+                    buyersViewModel = new ViewModelProvider(SplashScreenActivity.this).get(Buyers_ViewModel.class);
+                    menuItemViewModel = new ViewModelProvider(SplashScreenActivity.this).get(MenuItems_ViewModel.class);
+                    appDataViewModel = new ViewModelProvider(SplashScreenActivity.this).get(AppData_ViewModel.class);
+                    userDetailsViewModel =  new ViewModelProvider(SplashScreenActivity.this).get(UserDetailsViewModel.class);
                     fetchInitialData();
                     // Fetch data
                     setObserver();
@@ -109,11 +125,11 @@ public class SplashScreen extends AppCompatActivity {
 
 
                 } else {
-                    Log.d("SplashScreen","Not Logged in");
+                    Log.d("SplashScreenActivity","Not Logged in");
 
-                    Intent intent = new Intent(SplashScreen.this, LoginScreen.class);
-                    SplashScreen.this.startActivity(intent);
-                    SplashScreen.this.finish();
+                    Intent intent = new Intent(SplashScreenActivity.this, LoginScreen.class);
+                    SplashScreenActivity.this.startActivity(intent);
+                    SplashScreenActivity.this.finish();
                 }
 
 
@@ -199,11 +215,11 @@ public class SplashScreen extends AppCompatActivity {
                                     gotbuyerData = true;
                                     checkAndProceed();
                                 } else {
-                                    Toast.makeText(SplashScreen.this, "Error in fetching Buyer 1 Splash ", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SplashScreenActivity.this, "Error in fetching Buyer 1 Splash ", Toast.LENGTH_SHORT).show();
 
                                 }
                             } else {
-                                Toast.makeText(SplashScreen.this, "Error in fetching Buyer 2 Splash ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SplashScreenActivity.this, "Error in fetching Buyer 2 Splash ", Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -272,6 +288,9 @@ public class SplashScreen extends AppCompatActivity {
         }
 
     }
+
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -310,9 +329,9 @@ public class SplashScreen extends AppCompatActivity {
              //   Toast.makeText(this, "Role: "+sessionManager.getRole(), Toast.LENGTH_SHORT).show();
 
                 if(sessionManager.getRole().equals(Constants.staff_role)||sessionManager.getRole().equals(Constants.admin_role)){
-                 startActivity(new Intent(SplashScreen.this, Dashboard.class));
+                 startActivity(new Intent(SplashScreenActivity.this, Dashboard.class));
 
-                 SplashScreen.this.finish();
+                 SplashScreenActivity.this.finish();
              }
              else{
 

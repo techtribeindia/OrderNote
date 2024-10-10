@@ -85,15 +85,16 @@ public class ManageMenuScreenFragment extends DialogFragment {
 
         menuItemsViewModel = new ViewModelProvider(requireActivity()).get(MenuItems_ViewModel.class);
         menuItemListAdapter = new MenuItemListAdapter(menuItemsViewModel);
-        menuItemsDescFragment = new MenuItemsDescFragment();
-        menuItemsDescFragment.setmHandler(newHandler(),"add");
+
         binding.menuRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(),1));
         binding.menuRecyclerView.setAdapter(menuItemListAdapter);
 
         binding.addMenuitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                menuItemsDescFragment.show(getParentFragmentManager(),"ManageMenuScreenFragment");
+                MenuItemsDescFragment dialogFragment = new MenuItemsDescFragment();
+                dialogFragment.setmHandler(newHandler(),"add");
+                dialogFragment.show(getParentFragmentManager(),"ManageMenuScreenFragment");
             }
         });
 

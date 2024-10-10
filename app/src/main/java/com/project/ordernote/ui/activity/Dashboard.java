@@ -47,12 +47,16 @@ import com.project.ordernote.ui.fragment.BuyersFragment;
 import com.project.ordernote.ui.fragment.OrdersListFragment;
 import com.project.ordernote.ui.fragment.ReportsFragment;
 import com.project.ordernote.ui.fragment.SettingsFragment;
+
 import com.project.ordernote.utils.AlertDialogUtil;
+
+import com.project.ordernote.utils.BaseActivity;
+
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.Dashboard_ViewModel;
 
-public class Dashboard extends AppCompatActivity {
+public class Dashboard extends BaseActivity {
     ActivityDashboardBinding activityDashboardBinding;
      private Dashboard_ViewModel dashboardViewModel;
 

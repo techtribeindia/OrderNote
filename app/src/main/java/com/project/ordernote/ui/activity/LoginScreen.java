@@ -25,9 +25,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.project.ordernote.R;
+import com.project.ordernote.utils.BaseActivity;
 import com.project.ordernote.viewmodel.UserDetailsViewModel;
 
-public class LoginScreen extends AppCompatActivity {
+public class LoginScreen extends BaseActivity {
     private UserDetailsViewModel userDetailsViewModel;
     private LinearLayout loginMain;
     private ScrollView scrollView;
@@ -52,6 +53,7 @@ public class LoginScreen extends AppCompatActivity {
         progressbar = findViewById(R.id.progressbar);
         final View rootView = findViewById(R.id.login_main);
         final ScrollView scrollView = findViewById(R.id.scroll_view);
+
 
         // Toggle password visibility
         etPassword.setOnTouchListener((v, event) -> {
@@ -103,7 +105,7 @@ public class LoginScreen extends AppCompatActivity {
             userDetailsViewModel.loginUser(mobileNumber, password).observe(this, loginResult -> {
                 showProgressBar(false);
                 if (loginResult.getLoginResult()) {
-                    Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
+                    Intent intent = new Intent(LoginScreen.this, SplashScreenActivity.class);
                     LoginScreen.this.startActivity(intent);
                     LoginScreen.this.finish();
                     // Navigate to the next screen
