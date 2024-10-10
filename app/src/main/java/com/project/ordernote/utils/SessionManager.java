@@ -8,7 +8,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.project.ordernote.data.model.Users_Model;
 
 public class SessionManager {
-    private static final String PREF_NAME = "UserSession";
+    private String PREF_NAME = "UserSession";
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String KEY_NAME = DatabaseReference.name_UserDetails;
     private static final String KEY_MOBILE_NUMBER = DatabaseReference.mobileno_UserDetails;
@@ -17,14 +17,17 @@ public class SessionManager {
     private static final String VENDORKEY = DatabaseReference.vendorkey;
     private static final String VENDORNAME = DatabaseReference.vendorname;
 
+
+
     // Add other keys as needed
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private Context context;
 
-    public SessionManager(Context context) {
+    public SessionManager(Context context, String pref_Name) {
         this.context = context;
+        this.PREF_NAME = pref_Name;
         pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         editor = pref.edit();
     }
@@ -37,7 +40,7 @@ public class SessionManager {
     public boolean isLoggedIn() {
         return pref.getBoolean(KEY_IS_LOGGED_IN, false);
     }
-    public String getVUserName()
+    public String getUserName()
     {
         return pref.getString(KEY_NAME,"");
     }

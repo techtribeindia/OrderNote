@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
-import android.window.SplashScreen;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -78,7 +77,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
         // Initialize SessionManager
-        sessionManager = new SessionManager(this);
+        sessionManager = new SessionManager(this, Constants.USERPREF_NAME);
 
 
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();

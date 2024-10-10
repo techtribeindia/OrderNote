@@ -18,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.project.ordernote.R;
@@ -26,6 +25,7 @@ import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.databinding.FragmentAddBuyerDetailsBinding;
 import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.utils.TextUtils;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 
@@ -43,6 +43,9 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
 
     boolean isAddBuyerCalled = false , isFragmentOpenedToAddNewBuyer = false , isUpdateBuyerCalled = false;
     String buyerkeyFromAnotherFragment = "";
+
+    SessionManager sessionManager ;
+
 
     public AddBuyerDetails_DialogFragment() {
         // Required empty public constructor
@@ -71,6 +74,7 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sessionManager = new SessionManager(requireActivity(), Constants.USERPREF_NAME);
 
     }
 
@@ -165,8 +169,8 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
                                 buyersModel.setPincode(binding.pincodeEdittext.getText().toString());
                                 buyersModel.setGstin(binding.gstinEdittext.getText().toString());
 
-                                buyersModel.setVendorkey("vendor_1");
-                                buyersModel.setVendorName("Ponrathi Travels");
+                                buyersModel.setVendorkey(sessionManager.getVendorkey());
+                                buyersModel.setVendorName(sessionManager.getVendorname());
                                 if(isFragmentOpenedToAddNewBuyer) {
                                     if(!buyers_viewModel.checkIfBuyerIsPresentInViewModelBuyerList(binding.mobileNoEdittext.getText().toString())){
                                         buyersModel.setUniquekey(String.valueOf(UUID.randomUUID()));

@@ -12,14 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,18 +25,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 import com.project.ordernote.R;
-import com.project.ordernote.data.model.Buyers_Model;
-import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.databinding.FragmentOrdersBinding;
 import com.project.ordernote.ui.adapter.OrdersListAdapter;
-import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 public class OrdersListFragment extends Fragment {
@@ -67,7 +61,7 @@ public class OrdersListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionManager = new SessionManager(requireActivity());
+        sessionManager = new SessionManager(requireActivity(), Constants.USERPREF_NAME);
     }
 
     @Override
@@ -236,7 +230,7 @@ public class OrdersListFragment extends Fragment {
             Date endDate = calendar.getTime();
             Timestamp endTimestamp = new Timestamp(endDate);
 
-            orderDetails_viewModel.getOrdersByStatus_DateAndVendorKey(status, startTimestamp, endTimestamp,"vendor_1");
+            orderDetails_viewModel.getOrdersByStatus_DateAndVendorKey(status, startTimestamp, endTimestamp,sessionManager.getVendorkey());
 
             return;
         }

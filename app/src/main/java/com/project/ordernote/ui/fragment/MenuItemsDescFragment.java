@@ -37,7 +37,6 @@ import com.project.ordernote.viewmodel.MenuItems_ViewModel;
 import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.DoubleUnaryOperator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,7 +83,7 @@ public class MenuItemsDescFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionManager = new SessionManager(requireActivity());
+        sessionManager = new SessionManager(requireActivity(), Constants.USERPREF_NAME);
         if (getArguments() != null) {
             orderJson = getArguments().getString("order_json");
 

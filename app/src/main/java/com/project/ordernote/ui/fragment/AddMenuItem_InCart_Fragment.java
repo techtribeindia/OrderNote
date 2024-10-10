@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.project.ordernote.R;
@@ -31,6 +30,7 @@ import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.databinding.FragmentAddMenuItemInCartBinding;
 import com.project.ordernote.ui.adapter.AutoCompleteMenuItemAdapter;
 import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.utils.WeightConverter;
 import com.project.ordernote.utils.calculations.MenuItemValueCalculator;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
@@ -61,6 +61,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
 
 
     NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+    SessionManager sessionManager ;
 
 
 
@@ -83,6 +84,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        sessionManager = new SessionManager(requireActivity(), Constants.USERPREF_NAME);
 
         try {
             menuItemsViewModel = new ViewModelProvider(requireActivity()).get(MenuItems_ViewModel.class);
@@ -95,7 +97,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
                 menuItemsViewModel.setMenuListinMutableLiveData(menuItemsList);
             }
             else{
-                menuItemsViewModel.FetchMenuItemByVendorKeyFromRepository("vendor_1");
+                menuItemsViewModel.FetchMenuItemByVendorKeyFromRepository(sessionManager.getVendorkey());
             }
 
 

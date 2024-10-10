@@ -32,6 +32,7 @@ import com.project.ordernote.ui.adapter.BuyerList_Adapter;
 import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.utils.SwipeToDeleteCallback;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 
@@ -50,7 +51,7 @@ public class BuyersFragment extends Fragment {
 
     BuyerList_Adapter buyerListAdapter;
     private Observer<ApiResponseState_Enum<List<Buyers_Model>>> buyersListObserver;
-
+    SessionManager sessionManager;
 
     boolean buyerDetailsFetchedSuccessfully = false , isDeleteBuyerCalled = false;
 
@@ -69,6 +70,7 @@ public class BuyersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sessionManager = new SessionManager(requireActivity(), Constants.USERPREF_NAME);
 
         try {
             // Initialize ViewModels
@@ -81,7 +83,7 @@ public class BuyersFragment extends Fragment {
                 buyersViewModel.setBuyersListinMutableLiveData(buyersList);
             }
             else{
-                buyersViewModel.getBuyersListFromRepository("vendor_1");
+                buyersViewModel.getBuyersListFromRepository(sessionManager.getVendorkey());
             }
 
 

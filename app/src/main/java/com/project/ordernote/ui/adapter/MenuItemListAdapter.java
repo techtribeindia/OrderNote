@@ -3,11 +3,9 @@ package com.project.ordernote.ui.adapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,19 +13,15 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.ordernote.R;
-import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
-import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
-import com.project.ordernote.viewmodel.OrderDetails_ViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 public class MenuItemListAdapter extends RecyclerView.Adapter<MenuItemListAdapter.OrderViewHolder> {
     private List<MenuItems_Model> orders = new ArrayList<>();
@@ -45,7 +39,7 @@ public class MenuItemListAdapter extends RecyclerView.Adapter<MenuItemListAdapte
     @Override
     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.menuitemslist_items, parent, false);
-        sessionManager = new SessionManager(parent.getContext());
+        sessionManager = new SessionManager(parent.getContext(), Constants.USERPREF_NAME);
         return new OrderViewHolder(view);
     }
 

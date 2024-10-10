@@ -36,6 +36,7 @@ import com.project.ordernote.ui.activity.Dashboard;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.DateParserClass;
 import com.project.ordernote.utils.OnDateSelectedListener;
+import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 
 import java.text.ParseException;
@@ -46,7 +47,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.TimeZone;
 
 public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  {
@@ -76,7 +76,7 @@ public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  
 
     CardView closeImage_cardview;
 
-
+    SessionManager sessionManager;
 
     public interface FilterListener {
         void onApplyFilters(ReportsFilterDetails_Model filterValue);
@@ -90,7 +90,7 @@ public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.filter_screen_bottom_sheet, container, false);
-
+        sessionManager = new SessionManager(requireActivity(), Constants.USERPREF_NAME);
         filterRadioGroup = view.findViewById(R.id.filterRadioGroup);
         today_radiobutton = view.findViewById(R.id.today_radiobutton);
         yesterday_radiobutton = view.findViewById(R.id.yesterday_radiobutton);
@@ -136,7 +136,7 @@ public class FilterScreenBottomSheetFragment extends BottomSheetDialogFragment  
                 buyersViewModel.setBuyersListinMutableLiveData(buyersList);
             }
             else{
-                buyersViewModel.getBuyersListFromRepository("vendor_1");
+                buyersViewModel.getBuyersListFromRepository(sessionManager.getVendorkey());
             }
 
             buyersViewModel.clearSelectedLiveData();

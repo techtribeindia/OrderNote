@@ -4,6 +4,14 @@ package com.project.ordernote.utils;
 public class Constants{
     public static String TAG = "TAG";
 
+
+    //SharedPrefRoot
+
+    public static  String USERPREF_NAME = "UserSession";
+    public static  String VENDORPREF_NAME = "VendorSession";
+
+
+
     //DecimalFormat
     public static String threeDecimalPattern = "###.###";
     public static String twoDecimalPattern = "#.##";
@@ -51,6 +59,11 @@ public class Constants{
     public static final String vendor_1_name_UserDetails = "Ponrathi Traders";
 
     //orderdetails Table
+
+    public static final String cash_payment_mode = "CASH";
+
+
+
     public static final String created_status = "CREATED";
 
     public static final String created_pending_status = "PENDING";
