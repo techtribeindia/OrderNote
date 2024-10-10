@@ -57,7 +57,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Datewise Orders"
+                android:text="Datewise Accepted Orders"
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
                 style="@style/BlackTextStyleSemiBold"

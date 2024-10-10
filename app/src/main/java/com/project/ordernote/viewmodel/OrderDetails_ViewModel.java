@@ -89,7 +89,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             orderDetailsLiveData = new MutableLiveData<>();
 
             if (orderDetailsLiveData.getValue() != null) {
-                orderDetailsLiveData.setValue(ApiResponseState_Enum.success(new ArrayList<>()));
+                orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(new ArrayList<>(),"There is no Orders for now"));
             }
 
             if (selectedOrderJson.getValue() != null) {
@@ -156,7 +156,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
     public void clearFromViewModel()
     {
         List<OrderDetails_Model> updatedOrders = new ArrayList<>();
-        orderDetailsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
+        orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,"There is no Orders for now"));
 
     }
 
@@ -323,8 +323,12 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             }
 
 
-
-            orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,""));
+            String message = "";
+            if(currentData.data.isEmpty())
+            {
+                message = "There is no Orders for now";
+            }
+            orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,message));
 
             //  orderDetailsLiveData.observeForever(ordersObserver);
 
@@ -359,8 +363,12 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
                     break;
                 }
             }
-
-            orderDetailsLiveData.setValue(ApiResponseState_Enum.success(updatedOrders));
+            String message = "";
+            if(currentData.data.isEmpty())
+            {
+                message = "There is no Orders for now";
+            }
+            orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,message));
 
             //  orderDetailsLiveData.observeForever(ordersObserver);
 
@@ -392,8 +400,12 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
                     break;
                 }
             }
-
-            orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,""));
+            String message = "";
+            if(updatedOrders.isEmpty())
+            {
+                message = "There is no Orders for now";
+            }
+            orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,message));
 
           //  orderDetailsLiveData.observeForever(ordersObserver);
 
