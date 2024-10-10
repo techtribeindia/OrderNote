@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+import android.window.SplashScreen;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -341,9 +342,9 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
 
             else{
-                Intent intent = new Intent(SplashScreen.this, LoginScreen.class);
-                SplashScreen.this.startActivity(intent);
-                SplashScreen.this.finish();
+                Intent intent = new Intent(SplashScreenActivity.this, LoginScreen.class);
+                SplashScreenActivity.this.startActivity(intent);
+                SplashScreenActivity.this.finish();
                 Toast.makeText(this, "Sorry, you don't have enough permission , Please Login again ", Toast.LENGTH_SHORT).show();
 
             }
