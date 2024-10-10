@@ -46,6 +46,7 @@ import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.DateParserClass;
 import com.project.ordernote.utils.DecimalInputFilter;
+import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.utils.SwipeToDeleteCallback;
 import com.project.ordernote.viewmodel.AppData_ViewModel;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
@@ -89,7 +90,10 @@ public class CreateOrderFragment extends Fragment {
 
     private ArrayAdapter<String> paymentModeAdapter;
     NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
-
+    SessionManager sessionManager ;
+    
+    
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentAddOrdersBinding.inflate(inflater, container, false);
@@ -102,6 +106,11 @@ public class CreateOrderFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
+
+
+            sessionManager = new SessionManager(requireActivity(), Constants.USERPREF_NAME);
+            
+            
             try{
                 orderItemDetailsViewModel = new ViewModelProvider(requireActivity()).get(OrderItemDetails_ViewModel.class);
 
@@ -118,7 +127,7 @@ public class CreateOrderFragment extends Fragment {
             }
             try {
                 counterViewModel = new ViewModelProvider(requireActivity()).get(Counter_ViewModel.class);
-                counterViewModel.getOrderCounterAndIncrementLocally("vendor_1");
+                counterViewModel.getOrderCounterAndIncrementLocally(sessionManager.getVendorkey());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -137,7 +146,7 @@ public class CreateOrderFragment extends Fragment {
                     buyersViewModel.setBuyersListinMutableLiveData(buyersList);
                 }
                 else{
-                    buyersViewModel.getBuyersListFromRepository("vendor_1");
+                    buyersViewModel.getBuyersListFromRepository(sessionManager.getVendorkey());
                 }
 
                 buyersViewModel.clearSelectedLiveData();
@@ -158,7 +167,7 @@ public class CreateOrderFragment extends Fragment {
                     menuItemsViewModel.setMenuListinMutableLiveData(menuItemsList);
                 }
                 else{
-                    menuItemsViewModel.FetchMenuItemByVendorKeyFromRepository("vendor_1");
+                    menuItemsViewModel.FetchMenuItemByVendorKeyFromRepository(sessionManager.getVendorkey());
                 }
 
                 menuItemsViewModel.updateSelectedMenuItemModel(new MenuItems_Model());
@@ -204,6 +213,7 @@ public class CreateOrderFragment extends Fragment {
             paymentModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             binding.paymentModeSpinner.setAdapter(paymentModeAdapter);
+            selectedPaymentMode = Constants.cash_payment_mode;
 
     }
 
@@ -218,6 +228,9 @@ public class CreateOrderFragment extends Fragment {
         ordersViewModel.getItemDetailsArraylistViewModel().observeForever(itemAddedInCartObserver);
         ordersViewModel.getOrderDetailsCalculatedValueModel().observeForever(orderDetailCalculatedValueModelObserver);
         counterViewModel.getOrderNumberLiveData().observeForever(orderNoObserver);
+        binding.paymentModeOverlayTextview.setVisibility(View.GONE);
+        binding.paymentModeSpinner.setVisibility(View.VISIBLE);
+
         binding.paymentModeOverlayTextview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -542,7 +555,7 @@ public class CreateOrderFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             // Handle positive button click
                             isGenerateOrderClicked = true;
-                            counterViewModel.incrementOrderCounter("vendor_1");
+                            counterViewModel.incrementOrderCounter(sessionManager.getVendorkey());
 
 
                         }
@@ -693,21 +706,21 @@ public class CreateOrderFragment extends Fragment {
                 e.printStackTrace();
             }
             try{
-                orderDetailsModel.setVendorkey(("vendor_1"));
+                orderDetailsModel.setVendorkey(sessionManager.getVendorkey());
 
             }
             catch (Exception e){
                 e.printStackTrace();
             }
             try{
-                orderDetailsModel.setVendorname(("Ponrathi Traders"));
+                orderDetailsModel.setVendorname((sessionManager.getVendorname()));
 
             }
             catch (Exception e){
                 e.printStackTrace();
             }
             try{
-                orderDetailsModel.setVendorname((orderDetailsModel.getVendorname()));
+                orderDetailsModel.setPaymentmode(selectedPaymentMode);
 
             }
             catch (Exception e){
@@ -742,7 +755,7 @@ public class CreateOrderFragment extends Fragment {
 
 
 
-            orderItemDetailsViewModel.addItemDetailsEntryInDBFromLOOP(ordersViewModel.getItemDetailsArraylistViewModel().getValue() , "vendor_1" , "Ponrathi Traders" , orderDetailsModel.getOrderid() , orderDetailsModel.getOrderplaceddate() , buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue());
+            orderItemDetailsViewModel.addItemDetailsEntryInDBFromLOOP(ordersViewModel.getItemDetailsArraylistViewModel().getValue() , sessionManager.getVendorkey() , sessionManager.getVendorname() , orderDetailsModel.getOrderid() , orderDetailsModel.getOrderplaceddate() , buyersViewModel.getSelectedBuyersDetailsFromViewModel().getValue());
 
             ordersViewModel.createOrderInDb(orderDetailsModel, new FirestoreService.FirestoreCallback<Void>() {
                 @Override
@@ -780,8 +793,8 @@ public class CreateOrderFragment extends Fragment {
          menuItemFetchedSuccesfully = false ; buyerDetailsFetchedSuccessfully = false ;
          isPaymentModeSelected = false ; isGenerateOrderClicked = false;
 
-        binding.paymentModeOverlayTextview.setVisibility(View.VISIBLE);
-        binding.paymentModeSpinner.setVisibility(View.GONE);
+//        binding.paymentModeOverlayTextview.setVisibility(View.VISIBLE);
+  //      binding.paymentModeSpinner.setVisibility(View.GONE);
         binding.paymentDescriptionEdittext.setText("");
         binding.receivedAmountEditText.setText("");
         binding.balanceAmountTextview.setText(currencyFormat.format(0.00));
@@ -790,7 +803,7 @@ public class CreateOrderFragment extends Fragment {
         ordersViewModel.clearAllLiveData();
         buyersViewModel.clearSelectedLiveData();
         menuItemsViewModel.updateSelectedMenuItemModel(new MenuItems_Model());
-        counterViewModel.getOrderCounterAndIncrementLocally("vendor_1");
+        counterViewModel.getOrderCounterAndIncrementLocally(sessionManager.getVendorkey());
         setObserver();
     }
 

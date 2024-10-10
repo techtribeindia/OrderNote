@@ -4,7 +4,6 @@ import static com.project.ordernote.utils.Constants.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -20,7 +19,6 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 
 import android.net.Uri;
@@ -66,7 +64,7 @@ public class Dashboard extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionManager = new SessionManager(this);
+        sessionManager = new SessionManager(this, Constants.USERPREF_NAME);
 
 
 

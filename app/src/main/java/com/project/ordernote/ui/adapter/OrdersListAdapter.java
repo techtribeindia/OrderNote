@@ -1,25 +1,19 @@
 package com.project.ordernote.ui.adapter;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.ordernote.R;
-import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.ItemDetails_Model;
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.utils.Constants;
@@ -54,7 +48,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
     @Override
     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.orderlist_items, parent, false);
-        sessionManager = new SessionManager(parent.getContext());
+        sessionManager = new SessionManager(parent.getContext(), Constants.USERPREF_NAME);
         return new OrderViewHolder(view);
     }
 

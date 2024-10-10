@@ -18,22 +18,16 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
-import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.databinding.FragmentManageMenuScreenBinding;
-import com.project.ordernote.databinding.FragmentSettingsBinding;
 import com.project.ordernote.ui.adapter.MenuItemListAdapter;
+import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,7 +57,7 @@ public class ManageMenuScreenFragment extends DialogFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        sessionManager = new SessionManager(requireActivity());
+        sessionManager = new SessionManager(requireActivity(), Constants.USERPREF_NAME);
         menuItemsViewModel = new ViewModelProvider(requireActivity()).get(MenuItems_ViewModel.class);
         menuItemsList = LocalDataManager.getInstance().getMenuItem();
         if(menuItemsList.size() > 0){

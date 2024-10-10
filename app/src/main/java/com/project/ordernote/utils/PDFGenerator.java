@@ -83,7 +83,7 @@ public class PDFGenerator {
     HashMap<String , List<String>> statuswiseOrderid = new HashMap<>();
 
     private static int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
-
+    private SessionManager sessionManager;
 
     public PDFGenerator(FragmentActivity fragmentActivity, Context context, String pdfType, HashMap<String, OrderDetails_Model> orderDetailsHashmapp, List<OrderItemDetails_Model> orderItems, ReportsFilterDetails_Model value ,String supervisornamee, PDFGeneratorListener listener) {
         itemwiseTotalHashmapKeyList = new ArrayList<>();
@@ -96,7 +96,8 @@ public class PDFGenerator {
         this.selectedFilterValue = value;
         this.listener = listener;
         this.supervisorname = supervisornamee;
-        try{
+        sessionManager = new SessionManager(context, Constants.USERPREF_NAME);
+         try{
             file = null;layoutDocument=null;
         }
         catch (Exception e){
@@ -110,7 +111,7 @@ public class PDFGenerator {
 
     public PDFGenerator(FragmentActivity fragmentActivity, Context context, String pdfType, HashMap<String, JSONObject> statuswisetotalcountdetailsjsonn, HashMap<String, List<OrderItemDetails_Model>> orderwiseOrderItemDetailss, HashMap<String, List<String>> statuswiseOrderid ,String supervisornamee,PDFGeneratorListener listener) {
 
-
+        sessionManager = new SessionManager(context, Constants.USERPREF_NAME);
         itemwiseTotalHashmapKeyList = new ArrayList<>();
         statuswisetotalcountdetailsjson = new HashMap<>();
         this.fragmentActivity = fragmentActivity;
@@ -392,7 +393,7 @@ public class PDFGenerator {
                 try {
 
 
-                    Phrase phrasecompanyDetailsTitle = new Phrase("Ponrathi Traders ", subtitleFont);
+                    Phrase phrasecompanyDetailsTitle = new Phrase( sessionManager.getVendorname(), subtitleFont);
 
                     PdfPCell phrasecompanyDetailsTitlecell = new PdfPCell(phrasecompanyDetailsTitle);
                     phrasecompanyDetailsTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -4773,7 +4774,7 @@ public class PDFGenerator {
                 try {
 
 
-                    Phrase phrasecompanyDetailsTitle = new Phrase("Ponrathi Traders ", subtitleFont);
+                    Phrase phrasecompanyDetailsTitle = new Phrase( sessionManager.getVendorname(), subtitleFont);
 
                     PdfPCell phrasecompanyDetailsTitlecell = new PdfPCell(phrasecompanyDetailsTitle);
                     phrasecompanyDetailsTitlecell.setBorder(Rectangle.NO_BORDER);

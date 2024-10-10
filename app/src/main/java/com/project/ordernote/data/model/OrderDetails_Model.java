@@ -17,7 +17,7 @@ public class OrderDetails_Model {
     String buyermobileno = "";
     String buyerpincode = "";
     String description = "";
-
+    String paymentmode = "";
     double discount =0;
     private List<ItemDetails_Model> itemdetails;
     Timestamp orderplaceddate;
@@ -39,7 +39,7 @@ public class OrderDetails_Model {
     {
 
     }
-    public OrderDetails_Model(String orderid, String buyername, String buyeraddress, String buyergstin, String buyerkey, double discount, List<Map<String, Object>> itemdetails, double price, String status, String tokenno, double totalprice, String vendorkey, String vendorname, double totalqty) {
+    public OrderDetails_Model(String orderid, String buyername, String buyeraddress, String buyergstin, String buyerkey, double discount, List<Map<String, Object>> itemdetails, double price, String status, String tokenno, double totalprice, String vendorkey, String vendorname, double totalqty,String paymentmodee) {
         this.orderid = orderid;
         this.buyername = buyername;
         this.buyeraddress = buyeraddress;
@@ -53,8 +53,17 @@ public class OrderDetails_Model {
         this.vendorkey = vendorkey;
         this.vendorname = vendorname;
         this.totalquantity = totalqty;
+        this.paymentmode = paymentmodee;
+
     }
 
+    public String getPaymentmode() {
+        return paymentmode;
+    }
+
+    public void setPaymentmode(String paymentmode) {
+        this.paymentmode = paymentmode;
+    }
 
     public double getReceivedamount() {
         return receivedamount;

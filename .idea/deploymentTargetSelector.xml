@@ -7,7 +7,7 @@
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2024-10-09T19:42:52.528204900Z">
 =======
-        <option name="selectionMode" value="DIALOG" />
+        <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2024-10-06T11:49:07.017536300Z">
 >>>>>>> master
           <Target type="DEFAULT_BOOT">

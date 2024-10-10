@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -58,7 +57,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionManager = new SessionManager(requireActivity());
+        sessionManager = new SessionManager(requireActivity(), Constants.USERPREF_NAME);
         if (getArguments() != null) {
 
         }
@@ -73,9 +72,9 @@ public class SettingsFragment extends Fragment {
         {
             binding.managemenuLayout.setVisibility(View.GONE);
         }
-        if(sessionManager.getVUserName() != null)
+        if(sessionManager.getUserName() != null)
         {
-            binding.userName.setText(sessionManager.getVUserName());
+            binding.userName.setText(sessionManager.getUserName());
         }
         else {
             binding.userName.setText(" ----- ");

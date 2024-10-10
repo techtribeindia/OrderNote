@@ -30,7 +30,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -121,7 +120,7 @@ public class ReportsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        sessionManager = new SessionManager(requireActivity());
+        sessionManager = new SessionManager(requireActivity(), Constants.USERPREF_NAME);
 
         binding = FragmentReportsBinding.inflate(inflater, container, false);
         reportsViewModel = new ViewModelProvider(requireActivity()).get(Reports_ViewModel.class);
@@ -158,12 +157,12 @@ public class ReportsFragment extends Fragment {
 
 
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint({"ResourceAsColor", "SetTextI18n"})
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        binding.vendorNameTextview.setText(String.valueOf(sessionManager.getVendorname())+" , ");
         binding.dateTimeDetails.setText(String.valueOf(DateParserClass.getDateTimeInReadableFormat()));
 
         binding.todayCommonFilter.setOnClickListener(new View.OnClickListener() {
@@ -919,14 +918,14 @@ public class ReportsFragment extends Fragment {
             if (writeExternalStoragePermission == PackageManager.PERMISSION_GRANTED) {
                 // Permission is already granted
                 if(pdfType.equals(Constants.today_statuswise_pdf) || pdfType.equals(Constants.week_statuswise_pdf)){
-                    reportsViewModel.generateOrderDetailsPDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType, sessionManager.getVUserName(),statuswisetotalcountdetailsjson, orderwiseOrderItemDetails , statuswiseOrderid);
+                    reportsViewModel.generateOrderDetailsPDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType, sessionManager.getUserName(),statuswisetotalcountdetailsjson, orderwiseOrderItemDetails , statuswiseOrderid);
 
                 }
 
                 else {
 
                     if(!ProcessOrderDetails().isEmpty() && !processOrderItemDetails().isEmpty()){
-                     reportsViewModel.generatePDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType,sessionManager.getVUserName(), ProcessOrderDetails(), processOrderItemDetails());
+                     reportsViewModel.generatePDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType,sessionManager.getUserName(), ProcessOrderDetails(), processOrderItemDetails());
                     }
                     else{
                         showSnackbar(getView(),"There is no data to generate report");
@@ -951,14 +950,14 @@ public class ReportsFragment extends Fragment {
                 // Permission is already granted
                 Log.d("PermissionCheck", "Manage External Storage permission granted");
                 if(pdfType.equals(Constants.today_statuswise_pdf) || pdfType.equals(Constants.week_statuswise_pdf)){
-                    reportsViewModel.generateOrderDetailsPDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType,sessionManager.getVUserName(), statuswisetotalcountdetailsjson, orderwiseOrderItemDetails , statuswiseOrderid) ;
+                    reportsViewModel.generateOrderDetailsPDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType,sessionManager.getUserName(), statuswisetotalcountdetailsjson, orderwiseOrderItemDetails , statuswiseOrderid) ;
 
                 }
 
                 else {
 
                     if(!ProcessOrderDetails().isEmpty() && !processOrderItemDetails().isEmpty()){
-                        reportsViewModel.generatePDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType,sessionManager.getVUserName(), ProcessOrderDetails(), processOrderItemDetails());
+                        reportsViewModel.generatePDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType,sessionManager.getUserName(), ProcessOrderDetails(), processOrderItemDetails());
                     }
                     else{
                         showSnackbar(getView(),"There is no data to generate report");

@@ -5,14 +5,11 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.model.Users_Model;
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.utils.ApiResponseState_Enum;
+import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
-
-import java.util.List;
 
 public class UserDetails_Repository {
     private final FirestoreService firestoreService;
@@ -20,7 +17,7 @@ public class UserDetails_Repository {
 
     public UserDetails_Repository(Context context) {
         firestoreService = new FirestoreService();
-        sessionManager = new SessionManager(context);
+        sessionManager = new SessionManager(context, Constants.USERPREF_NAME);
     }
 
     public LiveData<Users_Model> loginUser(String mobileNumber, String password) {

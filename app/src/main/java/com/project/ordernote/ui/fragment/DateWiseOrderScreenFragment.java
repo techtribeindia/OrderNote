@@ -1,8 +1,6 @@
 package com.project.ordernote.ui.fragment;
 
 import android.app.DatePickerDialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -86,7 +84,7 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionManager = new SessionManager(requireActivity());
+        sessionManager = new SessionManager(requireActivity(), Constants.USERPREF_NAME);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.MyCustomDialogTheme);
 
         if (getArguments() != null) {
