@@ -46,6 +46,8 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.")
 
    implementation ("com.google.guava:guava:31.1-android")
+    implementation ("com.google.android.gms:play-services-base:18.5.0")
+
 
     implementation ("com.github.bumptech.glide:glide:4.15.1")
     implementation("androidx.activity:activity:1.9.1")
