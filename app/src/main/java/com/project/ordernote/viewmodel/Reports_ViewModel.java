@@ -61,15 +61,15 @@ public class Reports_ViewModel extends AndroidViewModel {
 
 
 
-    public void generatePDF(FragmentActivity fragmentActivity, Context context, PDFGeneratorListener listener , String pdfType , HashMap<String, OrderDetails_Model> orderDetails, List<OrderItemDetails_Model> orderItems) {
+    public void generatePDF(FragmentActivity fragmentActivity, Context context, PDFGeneratorListener listener , String pdfType , String superisorname , HashMap<String, OrderDetails_Model> orderDetails, List<OrderItemDetails_Model> orderItems) {
 
-        new PDFGenerator(fragmentActivity,context, pdfType , orderDetails ,orderItems, filterDetailsModelMutableLiveData.getValue(),listener);
+        new PDFGenerator(fragmentActivity,context, pdfType , orderDetails ,orderItems, filterDetailsModelMutableLiveData.getValue(),superisorname,listener);
 
     }
 
-    public void generateOrderDetailsPDF(FragmentActivity fragmentActivity, Context context, PDFGeneratorListener listener, String pdfType, HashMap<String, JSONObject> statuswisetotalcountdetailsjson, HashMap<String, List<OrderItemDetails_Model>> orderwiseOrderItemDetails, HashMap<String, List<String>> statuswiseOrderid) {
+    public void generateOrderDetailsPDF(FragmentActivity fragmentActivity, Context context, PDFGeneratorListener listener, String pdfType,String superisorname , HashMap<String, JSONObject> statuswisetotalcountdetailsjson, HashMap<String, List<OrderItemDetails_Model>> orderwiseOrderItemDetails, HashMap<String, List<String>> statuswiseOrderid) {
 
-        new PDFGenerator(fragmentActivity,context, pdfType , statuswisetotalcountdetailsjson  ,orderwiseOrderItemDetails, statuswiseOrderid , listener);
+        new PDFGenerator(fragmentActivity,context, pdfType , statuswisetotalcountdetailsjson  ,orderwiseOrderItemDetails, statuswiseOrderid ,superisorname, listener);
 
     }
 }

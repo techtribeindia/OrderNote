@@ -52,6 +52,10 @@ public class Constants{
 
     //orderdetails Table
     public static final String created_status = "CREATED";
+
+    public static final String created_pending_status = "PENDING";
+    public static final String placed_pending_status = "ACCEPTED";
+
     public static final String rejected_status = "REJECTED";
     public static final String placed_status = "PLACED";
     public static final String cancelled_status = "CANCELLED";

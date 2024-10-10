@@ -86,6 +86,7 @@ public class OrderDetails_Repository {
             @Override
             public void onSuccess(List<OrderDetails_Model> result) {
                 if (result.isEmpty()) {
+
                     ordersLiveData.postValue(ApiResponseState_Enum.error(Constants.noDataAvailable, result));
                 } else {
                     ordersLiveData.postValue(ApiResponseState_Enum.success(result));

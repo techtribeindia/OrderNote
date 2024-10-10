@@ -153,7 +153,6 @@
                 android:layout_weight=".9"
                 android:padding="3dp"
                 android:textSize="10sp"
-
                 android:textColor="@color/white"
                 style="@style/WhiteTextStyleNormal"
                 android:gravity="center"
@@ -726,6 +725,19 @@
                         android:layout_toEndOf="@+id/salesDetailsImage"
                         android:layout_weight="1"
                         android:text="Tap to select filter" />
+
+                    <TextView
+                        android:id="@+id/instruction2Textview"
+                        style="@style/BlackTextStyleNormal"
+                        android:textSize="10sp"
+                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_below="@+id/salesReportInstructionTextview"
+                        android:layout_toEndOf="@+id/salesDetailsImage"
+                        android:layout_weight="1"
+                        android:text="Contains Only ACCEPTED ORDERS" />
 
                     <ImageView
                         android:layout_width="25dp"
