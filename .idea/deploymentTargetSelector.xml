@@ -20,12 +20,12 @@
           <targets>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="PhysicalDevice" identifier="serial=RZCW12KVFTP" />
+                <DeviceId pluginId="PhysicalDevice" identifier="serial=ZD2229C6M5" />
               </handle>
             </Target>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="PhysicalDevice" identifier="serial=ZD2229C6M5" />
+                <DeviceId pluginId="PhysicalDevice" identifier="serial=RZCW12KVFTP" />
               </handle>
             </Target>
           </targets>
