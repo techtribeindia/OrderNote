@@ -288,7 +288,7 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
                         }
                         else
                         {
-                            if(resource.message == null )
+                            if(resource.message == null || resource.message == "cleared" )
                             {
                                 dialogOrderStatusCard.setVisibility(View.VISIBLE);
                                 OrderRecyclerView.setVisibility(View.GONE);
@@ -306,7 +306,7 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
                             {
                                 dialogOrderStatusCard.setVisibility(View.VISIBLE);
                                 OrderRecyclerView.setVisibility(View.GONE);
-                                searchLayout.setVisibility(View.VISIBLE);
+                                searchLayout.setVisibility(View.GONE);
                                 dialogOrderStatusText.setText(String.valueOf(resource.message));
                             }
 
