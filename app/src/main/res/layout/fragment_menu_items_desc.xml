@@ -94,7 +94,7 @@
             android:background="@drawable/rectangle_whitebackground_blackborder"
             android:elevation="5dp"
             android:gravity="center_vertical"
-            android:hint="eg:- 500g" />
+            android:hint="eg:- 5.7Kg" />
 
         <TextView
             style="@style/BlackTextStyleSemiBold"

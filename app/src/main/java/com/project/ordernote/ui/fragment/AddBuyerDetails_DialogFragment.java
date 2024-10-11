@@ -86,7 +86,8 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
 
         }
         else{
-            Snackbar.make(requireView(), "Please wait", Snackbar.LENGTH_LONG).show();
+            showSnackbar(requireView(), "Please wait");
+           // Snackbar.make(requireView(), "Please wait", Snackbar.LENGTH_LONG).show();
 
         }
 
@@ -178,7 +179,8 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
 
                                     }
                                     else{
-                                        Snackbar.make(view, "Buyer with this mobile no is already added ", Snackbar.LENGTH_LONG).show();
+                                       // Snackbar.make(view, "Buyer with this mobile no is already added ", Snackbar.LENGTH_LONG).show();
+                                        showSnackbar(requireView(), "Buyer with this mobile no is already added");
 
                                     }
 
@@ -193,19 +195,26 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
 
                             } else {
                                 // Show Snackbar for missing address line 1
-                                Snackbar.make(view, "Please enter Address Line 1", Snackbar.LENGTH_LONG).show();
+                                showSnackbar(requireView(), "Please enter Address Line 1");
+
+                              //  Snackbar.make(view, "Please enter Address Line 1", Snackbar.LENGTH_LONG).show();
                             }
                         } else {
                             // Show Snackbar for invalid mobile number length
-                            Snackbar.make(view, "Please enter a valid 10-digit Mobile Number", Snackbar.LENGTH_LONG).show();
+                           // Snackbar.make(view, "Please enter a valid 10-digit Mobile Number", Snackbar.LENGTH_LONG).show();
+                            showSnackbar(requireView(), "Please enter a valid 10-digit Mobile Number");
+
                         }
                     } else {
                         // Show Snackbar for missing mobile number
-                        Snackbar.make(view, "Please enter Mobile Number", Snackbar.LENGTH_LONG).show();
+                        showSnackbar(requireView(), "Please enter Mobile Number");
+
+                      //  Snackbar.make(view, "Please enter Mobile Number", Snackbar.LENGTH_LONG).show();
                     }
                 } else {
                     // Show Snackbar for missing buyer name
-                    Snackbar.make(view, "Please enter Buyer Name", Snackbar.LENGTH_LONG).show();
+                    //Snackbar.make(view, "Please enter Buyer Name", Snackbar.LENGTH_LONG).show();
+                    showSnackbar(requireView(), "Please enter Buyer Name");
                 }
             }
         });

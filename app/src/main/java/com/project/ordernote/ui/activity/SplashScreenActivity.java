@@ -3,22 +3,27 @@ package com.project.ordernote.ui.activity;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.material.snackbar.Snackbar;
 import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.AppData_Model;
@@ -26,6 +31,7 @@ import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.data.model.Users_Model;
 import com.project.ordernote.utils.ApiResponseState_Enum;
+import com.project.ordernote.utils.BaseActivity;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.AppData_ViewModel;
@@ -38,7 +44,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends BaseActivity {
     private static final int SPLASH_DISPLAY_LENGTH = 2000;
     private SessionManager sessionManager;
 
@@ -196,11 +202,11 @@ public class SplashScreenActivity extends AppCompatActivity {
                                     checkAndProceed();
                                 } else {
                                     Toast.makeText(SplashScreenActivity.this, "Error in fetching Buyer 1 Splash ", Toast.LENGTH_SHORT).show();
-
+                                    showSnackbar(getCurrentFocus(), buyersResponse.message);
                                 }
                             } else {
                                 Toast.makeText(SplashScreenActivity.this, "Error in fetching Buyer 2 Splash ", Toast.LENGTH_SHORT).show();
-
+                                showSnackbar(getCurrentFocus(), buyersResponse.message);
                             }
 
                         }
@@ -269,6 +275,33 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     }
 
+
+    private void showSnackbar(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        snackbar.setAction("X", v -> snackbar.dismiss());
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
+
+        // Get the Snackbar's layout view
+        View snackbarView = snackbar.getView();
+
+        // Check if the parent is CoordinatorLayout
+        if (snackbarView.getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        } else if (snackbarView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+            // If it's a FrameLayout, handle it like before
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            int marginInDp = (int) (30 * getResources().getDisplayMetrics().density); // Convert 30dp to pixels
+            params.setMargins(0, marginInDp, 0, 0);
+            snackbarView.setLayoutParams(params);
+        }
+
+        snackbar.show();
+    }
 
 
     @Override

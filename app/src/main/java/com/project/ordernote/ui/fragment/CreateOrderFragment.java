@@ -295,7 +295,7 @@ public class CreateOrderFragment extends Fragment {
             }
         });
 
-        binding .receivedAmountEditText.setFilters(new InputFilter[]{new DecimalInputFilter()});
+        binding .receivedAmountEditText.setFilters(new InputFilter[]{new DecimalInputFilter(2)});
 
 
         binding. receivedAmountEditText.addTextChangedListener(new TextWatcher() {
@@ -744,7 +744,7 @@ public class CreateOrderFragment extends Fragment {
             }
             try{
 
-                orderDetailsModel.setStatus(Constants.created_status);
+                orderDetailsModel.setStatus(Constants.pending_status);
 
             }
             catch (Exception e){
@@ -880,8 +880,10 @@ public class CreateOrderFragment extends Fragment {
 
 
 
+                    if(!binding. receivedAmountEditText.getText().toString().equals("")){
+                        binding. receivedAmountEditText.setText(binding. receivedAmountEditText.getText().toString());
 
-
+                    }
                     binding.dicountValue.setText(String.valueOf(currencyFormat.format(Objects.requireNonNull(itemDetailsList).getDiscount())));
                     binding.totalPriceTextview.setText(String.valueOf(currencyFormat.format(itemDetailsList.getTotalprice())));
 

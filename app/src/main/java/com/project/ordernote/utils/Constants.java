@@ -64,13 +64,13 @@ public class Constants{
 
 
 
-    public static final String created_status = "CREATED";
+    public static final String pending_status = "PENDING";
 
     public static final String created_pending_status = "PENDING";
     public static final String placed_pending_status = "ACCEPTED";
 
     public static final String rejected_status = "REJECTED";
-    public static final String placed_status = "PLACED";
+    public static final String accepted_status = "ACCEPTED";
     public static final String cancelled_status = "CANCELLED";
 
     public static final String editapproved_dispatchstatus = "EDITAPPROVED";

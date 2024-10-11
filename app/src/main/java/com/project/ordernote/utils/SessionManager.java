@@ -52,7 +52,6 @@ public class SessionManager {
     {
         return  pref.getString(KEY_ROLE,"");
     }
-
     public String getVendorkey()
     {
         return pref.getString(VENDORKEY,"");

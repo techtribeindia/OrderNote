@@ -40,7 +40,7 @@ public class OrdersListFragment extends Fragment {
     private OrdersListAdapter ordersListAdapter;
     private FragmentOrdersBinding binding;
     private OrderListItemDescFragment orderListItemDescFragment;
-    private String selectedOrderButton = Constants.created_status;
+    private String selectedOrderButton = Constants.pending_status;
     private SessionManager sessionManager;
     RecyclerView recyclerView;
     CardView messageCard;
@@ -85,7 +85,7 @@ public class OrdersListFragment extends Fragment {
         setActiveButton(binding.pendingordersButton);
         orderDetails_viewModel.clearOrderDetails();
         try {
-            orderDetailViewModel(Constants.created_status);
+            orderDetailViewModel(Constants.pending_status);
         }
         catch (Exception e ){
             e.printStackTrace();
@@ -97,8 +97,8 @@ public class OrdersListFragment extends Fragment {
                 binding.searchEditText.setText("");
                 setActiveButton(binding.pendingordersButton);
                 orderDetails_viewModel.clearOrderDetails();
-                orderDetailViewModel(Constants.created_status);
-                selectedOrderButton = Constants.created_status;
+                orderDetailViewModel(Constants.pending_status);
+                selectedOrderButton = Constants.pending_status;
 
             }
         });
@@ -213,7 +213,7 @@ public class OrdersListFragment extends Fragment {
     }
 
     private void orderDetailViewModel(String status) {
-        if (Objects.equals(status, Constants.placed_status))
+        if (Objects.equals(status, Constants.accepted_status))
         {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -267,6 +267,7 @@ public class OrdersListFragment extends Fragment {
 
         }
     }
+
     private void showSnackbar(View view, String message) {
         Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
         snackbar.setAction("X", v -> snackbar.dismiss());

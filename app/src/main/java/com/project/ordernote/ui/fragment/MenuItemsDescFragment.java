@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -31,6 +32,7 @@ import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.databinding.FragmentMenuItemsDescBinding;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.DecimalInputFilter;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
 
@@ -121,6 +123,13 @@ public class MenuItemsDescFragment extends DialogFragment {
                 }
             }
         });
+
+        binding .priceperkg.setFilters(new InputFilter[]{new DecimalInputFilter(2)});
+        binding .unitprice.setFilters(new InputFilter[]{new DecimalInputFilter(2)});
+        binding .grossweight.setFilters(new InputFilter[]{new DecimalInputFilter(3)});
+        binding .portionsize.setFilters(new InputFilter[]{new DecimalInputFilter(3)});
+        binding .price.setFilters(new InputFilter[]{new DecimalInputFilter(2)});
+        binding .sellingPriceInput.setFilters(new InputFilter[]{new DecimalInputFilter(2)});
 
         if(Objects.equals(selectedScreen, "add"))
         {

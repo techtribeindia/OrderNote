@@ -22,12 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.remote.FirestoreService;
 import com.project.ordernote.databinding.FragmentBuyersBinding;
+import com.project.ordernote.ui.activity.Dashboard;
 import com.project.ordernote.ui.adapter.BuyerList_Adapter;
 import com.project.ordernote.utils.AlertDialogUtil;
 import com.project.ordernote.utils.ApiResponseState_Enum;
@@ -85,6 +87,7 @@ public class BuyersFragment extends Fragment {
             else{
                 buyersViewModel.getBuyersListFromRepository(sessionManager.getVendorkey());
             }
+
 
 
 
@@ -447,8 +450,19 @@ public class BuyersFragment extends Fragment {
 
         }
     }
+
+
+
     private void showSnackbar(View view, String message) {
         Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        Dashboard activity = (Dashboard) getActivity(); // Get reference to the activity
+        if (activity != null) {
+            FloatingActionButton fab = activity.getFabButton(); // Get FAB from the activity
+
+            snackbar.setAnchorView(fab); // Set the FAB as the anchor view
+
+        }
+
         snackbar.setAction("X", v -> snackbar.dismiss());
         snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent)); // optional: set the action color
 
@@ -473,4 +487,7 @@ public class BuyersFragment extends Fragment {
 
         snackbar.show();
     }
+
+
+
 }

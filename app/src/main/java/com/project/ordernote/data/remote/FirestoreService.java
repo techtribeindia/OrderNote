@@ -1,6 +1,7 @@
 package com.project.ordernote.data.remote;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,6 +21,7 @@ import com.project.ordernote.data.model.MenuItems_Model;
 
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.model.OrderItemDetails_Model;
+import com.project.ordernote.utils.BaseActivity;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.DatabaseReference;
 import com.project.ordernote.utils.SessionManager;
@@ -32,12 +34,13 @@ import java.util.Objects;
 
 public class FirestoreService {
 
-    private final FirebaseFirestore db;
+    private FirebaseFirestore db;
     private SessionManager sessionManager;
     public String vendorkey;
 
     public FirestoreService() {
-        db = FirebaseFirestore.getInstance();
+            db = FirebaseFirestore.getInstance();
+
 
     }
     public  void setUserDetails(String vendorkey)
@@ -47,24 +50,29 @@ public class FirestoreService {
 
     public void fetchBuyersListUsingVendorkey(String vendorKey, FirestoreCallback<List<Buyers_Model>> callback) {
 
-        db.collection("BuyerDetails")
-                .whereEqualTo("vendorkey", vendorKey)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        List<Buyers_Model> menuList = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Buyers_Model buyer = document.toObject(Buyers_Model.class);
-                            Log.d("fetchBuyerlistUsingvendorkey", buyer.getName()
-                            );
-                            menuList.add(buyer);
-                        }
-                        callback.onSuccess(menuList);
-                    } else {
-                        callback.onFailure(task.getException());
-                    }
-                });
+        if(BaseActivity.baseActivity.isOnline()) {
 
+            db.collection("BuyerDetails")
+                    .whereEqualTo("vendorkey", vendorKey)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<Buyers_Model> menuList = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Buyers_Model buyer = document.toObject(Buyers_Model.class);
+                                Log.d("fetchBuyerlistUsingvendorkey", buyer.getName()
+                                );
+                                menuList.add(buyer);
+                            }
+                            callback.onSuccess(menuList);
+                        } else {
+                            callback.onFailure(task.getException());
+                        }
+                    });
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
 
     }
 
@@ -72,7 +80,9 @@ public class FirestoreService {
 
     public void fetchAppData(FirestoreCallback<AppData_Model> callback) {
 
-        db.collection("AppData")
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            db.collection("AppData")
                  .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -86,12 +96,18 @@ public class FirestoreService {
                         callback.onFailure(task.getException());
                     }
                 });
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
 
     }
 
 
     public void getUserDetails(String mobileNumber, LoginCallback callback) {
-        db.collection(DatabaseReference.UserDetails_TableName)
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            db.collection(DatabaseReference.UserDetails_TableName)
                 .whereEqualTo(DatabaseReference.mobileno_UserDetails, mobileNumber)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -109,10 +125,17 @@ public class FirestoreService {
                         callback.onLoginResult(false,"Something went wrong, Please check the internet connection and try again", null);
                     }
                 });
+        }
+        else{
+            callback.onLoginResult(false,"Something went wrong, Please check the internet connection and try again", null);
+        }
+
     }
 
     public void userDetailsFetchAndCheckUserStatus(String mobileNumber, String password, LoginCallback callback) {
-        db.collection(DatabaseReference.UserDetails_TableName)
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            db.collection(DatabaseReference.UserDetails_TableName)
                 .whereEqualTo(DatabaseReference.mobileno_UserDetails, mobileNumber)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -151,9 +174,16 @@ public class FirestoreService {
                         callback.onLoginResult(false,"Something went wrong, Please check the internet connection and try again", null);
                     }
                 });
+        }
+        else{
+            callback.onLoginResult(false,"Something went wrong, Please check the internet connection and try again", null);
+        }
     }
     public void fetchOrdersByDate(String startDate, String endDate, FirestoreCallback<List<OrderDetails_Model>> callback) {
-        db.collection("orders")
+
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            db.collection("orders")
                 .whereGreaterThanOrEqualTo("orderDate", startDate)
                 .whereLessThanOrEqualTo("orderDate", endDate)
                 .whereEqualTo("vendorkey", vendorkey)
@@ -170,10 +200,20 @@ public class FirestoreService {
                         callback.onFailure(task.getException());
                     }
                 });
+
+
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
+
     }
 
     public void acceptOrder(String orderId, String status, FirestoreCallback<String> callback) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderId);
 
         Map<String, Object> updates = new HashMap<>();
@@ -186,7 +226,7 @@ public class FirestoreService {
         if (!updates.isEmpty()) {
             orderRef.update(updates)
                     .addOnSuccessListener(aVoid -> {
-                        callback.onSuccess("The order succfully accepted");
+                        callback.onSuccess("The order successfully accepted");
                     })
                     .addOnFailureListener(e -> {
                         callback.onFailure(e);
@@ -195,10 +235,18 @@ public class FirestoreService {
             // No updates to make, you may want to handle this case
             callback.onFailure(new Exception("No orders found with orderid: " + orderId));
         }
+
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
+
     }
 
     public void updateBatchDetails(String orderid,String transporName, String driverMobieno, String truckNo, FirestoreCallback<String> callback) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
 
         Map<String, Object> updates = new HashMap<>();
@@ -228,12 +276,21 @@ public class FirestoreService {
             // No updates to make, you may want to handle this case
             callback.onFailure(new Exception("No orders found with orderid: " + orderid));
         }
+
     }
+        else{
+        callback.onFailure(new Exception(" No Internet Connection "));
+    }
+
+}
 
 
     public void rejectOrder( String orderid,String status, FirestoreCallback<String> callback)
     {
-        DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
+
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
 
         orderRef.update(DatabaseReference.status_OrderDetails, status)
                 .addOnSuccessListener(aVoid -> {
@@ -244,11 +301,18 @@ public class FirestoreService {
                     callback.onFailure(e);
                     // Handle failure, e.g., notify user, retry
                 });
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
+
     }
 
     public void cancelOrder( String orderid,String status, FirestoreCallback<String> callback)
     {
-        DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
 
         orderRef.update(DatabaseReference.status_OrderDetails, status)
                 .addOnSuccessListener(aVoid -> {
@@ -260,10 +324,17 @@ public class FirestoreService {
                     // Handle failure, e.g., notify user, retry
                 });
     }
+        else{
+        callback.onFailure(new Exception(" No Internet Connection "));
+    }
+
+}
 
     public void placeOrder( String orderid,String status, FirestoreCallback<String> callback)
     {
-        DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
 
         orderRef.update(DatabaseReference.status_OrderDetails, status)
                 .addOnSuccessListener(aVoid -> {
@@ -274,11 +345,18 @@ public class FirestoreService {
                     callback.onFailure(e);
                     // Handle failure, e.g., notify user, retry
                 });
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
+
     }
 
     public void EditRequest( String orderid, String DispatchStatus, FirestoreCallback<String> callback)
     {
-        DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
 
         orderRef.update(DatabaseReference.dispatchstatus_OrderDetails, DispatchStatus)
                 .addOnSuccessListener(aVoid -> {
@@ -290,9 +368,15 @@ public class FirestoreService {
                     // Handle failure, e.g., notify user, retry
                 });
     }
+        else{
+        callback.onFailure(new Exception(" No Internet Connection "));
+    }
+
+}
 
     public void fetchOrdersByStatus(String status, FirestoreCallback<List<OrderDetails_Model>> callback)
     {
+        if(BaseActivity.baseActivity.isOnline()) {
 
         db.collection(DatabaseReference.OrderDetails_TableName)
                 .whereEqualTo(DatabaseReference.status_OrderDetails, status)
@@ -320,11 +404,17 @@ public class FirestoreService {
                         callback.onFailure(task.getException());
                     }
                 });
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
+
     }
 
 
     public void getOrdersByDateAndVendorKey(Timestamp startdatee, Timestamp endDatee, String vendorkey, FirestoreCallback<List<OrderDetails_Model>> callback) {
-        {
+        if(BaseActivity.baseActivity.isOnline()) {
+
             db.collection(DatabaseReference.OrderDetails_TableName)
                      .whereEqualTo(DatabaseReference.vendorkey, vendorkey)
                     .whereGreaterThanOrEqualTo(DatabaseReference.orderplaceddate_OrderDetails, startdatee)
@@ -348,11 +438,21 @@ public class FirestoreService {
                             callback.onFailure(task.getException());
                         }
                     });
-        }
     }
+        else{
+        callback.onFailure(new Exception(" No Internet Connection "));
+    }
+
+
+
+}
+
     public void getOrdersByStatus_DateAndVendorKey(String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderDetails_Model>> callback)
     {
-        db.collection(DatabaseReference.OrderDetails_TableName)
+        if(BaseActivity.baseActivity.isOnline()) {
+
+
+            db.collection(DatabaseReference.OrderDetails_TableName)
                 .whereEqualTo(DatabaseReference.status_OrderDetails, status)
                 .whereEqualTo(DatabaseReference.vendorkey, vendorkey)
                 .whereGreaterThanOrEqualTo(DatabaseReference.orderplaceddate_OrderDetails, startTimestamp)
@@ -376,10 +476,18 @@ public class FirestoreService {
                         callback.onFailure(task.getException());
                     }
                 });
+
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
+
     }
     public void getOrdersByBuyerKey_Status_DateAndVendorKey(String buyerkey,String status, Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderDetails_Model>> callback)
     {
-        db.collection(DatabaseReference.OrderDetails_TableName)
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            db.collection(DatabaseReference.OrderDetails_TableName)
                 .whereEqualTo(DatabaseReference.status_OrderDetails, status)
                 .whereEqualTo(DatabaseReference.buyerkey_OrderDetails, buyerkey)
                 .whereEqualTo(DatabaseReference.vendorkey, vendorkey)
@@ -404,10 +512,19 @@ public class FirestoreService {
                         callback.onFailure(task.getException());
                     }
                 });
+
+    }
+        else{
+        callback.onFailure(new Exception(" No Internet Connection "));
     }
 
+}
+
     public void updateInsertUpdateMenu(MenuItems_Model menuItemsModel, String process,   FirestoreService.FirestoreCallback <String>callback) {
-        Map<String, Object> updates = new HashMap<>();
+
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            Map<String, Object> updates = new HashMap<>();
         if(Objects.equals(process, "add"))
         {
             db.collection(DatabaseReference.MenuItems_TableName)
@@ -436,20 +553,32 @@ public class FirestoreService {
                     });
 
         }
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
 
 
     }
     public void createOrder(OrderDetails_Model orderDetailsModel,   FirestoreService.FirestoreCallback <Void>callback) {
-        db.collection(DatabaseReference.OrderDetails_TableName)
+        if(BaseActivity.baseActivity.isOnline()) {
+
+
+            db.collection(DatabaseReference.OrderDetails_TableName)
                 .document(orderDetailsModel.getOrderid())
                 .set(orderDetailsModel)
                 .addOnSuccessListener(documentReference -> callback.onSuccess(null))
                 .addOnFailureListener(callback::onFailure);
+    }
+        else{
+        callback.onFailure(new Exception(" No Internet Connection "));
+    }
 
     }
 
     public void fetchOrdersByStatus1(String status, fetchOrdersWithStatusCallback callback) {
-        db.collection(DatabaseReference.OrderDetails_TableName)
+
+            db.collection(DatabaseReference.OrderDetails_TableName)
                 .whereEqualTo(DatabaseReference.status_OrderDetails, status)
                 .whereEqualTo(DatabaseReference.vendorkey, vendorkey)
                 .get()
@@ -457,10 +586,14 @@ public class FirestoreService {
                     if (task.isSuccessful() && task.getResult() != null) {
                         QuerySnapshot querySnapshot = task.getResult();
                         if (!querySnapshot.isEmpty()) {
-                            callback.onOrdersWithStatusResult(querySnapshot);
+                            //callback.onOrdersWithStatusResult(querySnapshot);
+                            //don't use this method
+
                         }
                     }
                 });
+
+
     }
 
 
@@ -469,7 +602,10 @@ public class FirestoreService {
 
 
     public void fetchMenuItemsUsingVendorkey(String vendorkey, FirestoreCallback<List<MenuItems_Model>> callback) {
-        db.collection(DatabaseReference.MenuItems_TableName)
+
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            db.collection(DatabaseReference.MenuItems_TableName)
                 .whereEqualTo(DatabaseReference.vendorkey_MenuItems, vendorkey)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -485,15 +621,21 @@ public class FirestoreService {
                         callback.onFailure(task.getException());
                     }
                 });
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
 
     }
 
 
 
     public void incrementOrderCounter(String vendorkey, FirestoreCallback callback) {
-        DocumentReference counterRef = db.collection(DatabaseReference.Counter_TableName).document(vendorkey);
+        if(BaseActivity.baseActivity.isOnline()) {
 
-        db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentReference counterRef = db.collection(DatabaseReference.Counter_TableName).document(vendorkey);
+
+              db.runTransaction((Transaction.Function<Void>) transaction -> {
             DocumentSnapshot snapshot = transaction.get(counterRef);
             long newOrderNumber = snapshot.getLong(DatabaseReference.Orderno_CounterTable) + 1;
             transaction.update(counterRef, DatabaseReference.Orderno_CounterTable, newOrderNumber);
@@ -504,12 +646,20 @@ public class FirestoreService {
             return null;
         }).addOnFailureListener(e -> {
             // Handle failure through the callback
-            callback.onFailure(e);
-        });
+                callback.onFailure(e);
+             });
+        }
+        else{
+        callback.onFailure(new Exception(" No Internet Connection "));
     }
 
+}
+
     public void getOrderCounterAndIncrementLocally(String vendorkey, FirestoreCallback<Long> callback) {
-        db.collection(DatabaseReference.Counter_TableName).document(vendorkey)
+
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            db.collection(DatabaseReference.Counter_TableName).document(vendorkey)
                  .get()
                 .addOnCompleteListener(task -> {
                     Log.i("orderno taskcomplete : ", String.valueOf(Objects.requireNonNull(task)));
@@ -531,7 +681,10 @@ public class FirestoreService {
                         Log.i("orderno taskFailure: ", String.valueOf(Objects.requireNonNull(task.getException())));
                     }
                 });
-
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
     }
 
     public void addOrderItemDetails(OrderItemDetails_Model orderItemDetailsModel) {
@@ -547,33 +700,49 @@ public class FirestoreService {
 
     public void addBuyerInDB(Buyers_Model buyersModel, FirestoreCallback<Void> callback) {
 
+        if(BaseActivity.baseActivity.isOnline()) {
 
         db.collection(DatabaseReference.BuyerDetails_TableName)
                 .document(buyersModel.getUniquekey())
                 .set(buyersModel)
                 .addOnSuccessListener(documentReference -> callback.onSuccess(null))
                 .addOnFailureListener(callback::onFailure);
-
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
     }
 
     public void deleteBuyerDetails(String buyerkey, FirestoreCallback<Void> callback) {
+        if(BaseActivity.baseActivity.isOnline()) {
 
         db.collection(DatabaseReference.BuyerDetails_TableName)
                 .document(buyerkey)
                 .delete()
                 .addOnSuccessListener(aVoid -> callback.onSuccess(null))
                 .addOnFailureListener(callback::onFailure);
-
+    }
+        else{
+        callback.onFailure(new Exception(" No Internet Connection "));
+    }
     }
 
     public void updateBuyerInDB(Buyers_Model buyersModel, FirestoreCallback<Void> callback) {
-        db.collection(DatabaseReference.BuyerDetails_TableName)
+
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            db.collection(DatabaseReference.BuyerDetails_TableName)
                 .document(buyersModel.getUniquekey())
                 .set(buyersModel, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> callback.onSuccess(null))
                 .addOnFailureListener(callback::onFailure);
+        }
+        else{
+            callback.onFailure(new Exception(" No Internet Connection "));
+        }
     }
     public void getOrderItemsByDateAndVendorKey(Timestamp startdatee, Timestamp endDatee, String vendorkey, FirestoreCallback<List<OrderItemDetails_Model>> callback) {
+        if(BaseActivity.baseActivity.isOnline()) {
 
         db.collection(DatabaseReference.OrderItemDetails_TableName)
                  .whereGreaterThanOrEqualTo(DatabaseReference.orderplacedDate_OrderItemDetails, startdatee)
@@ -598,6 +767,10 @@ public class FirestoreService {
                           callback.onFailure(task.getException());
                     }
                 });
+    }
+        else{
+        callback.onFailure(new Exception(" No Internet Connection "));
+    }
 
     }
    /* public void getOrderItemsByVendorAndDate(Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderItemDetails_Model>> callback) {
