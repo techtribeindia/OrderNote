@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,7 @@ public class OrdersListFragment extends Fragment {
     RecyclerView recyclerView;
     CardView messageCard;
     TextView messageText;
+
     public OrdersListFragment() {
         // Required empty public constructor
     }
@@ -189,11 +191,13 @@ public class OrdersListFragment extends Fragment {
                         messageText.setText(resource.message);
                         if(Objects.equals(resource.message, ""))
                         {
+                            binding.searchlayout.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.VISIBLE);
                             messageCard.setVisibility(View.GONE);
                         }
                         else
                         {
+                            binding.searchlayout.setVisibility(View.GONE);
                             messageCard.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
                         }
