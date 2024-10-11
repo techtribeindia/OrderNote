@@ -101,6 +101,10 @@ public class MenuItemsDescFragment extends DialogFragment {
         MenuItems_Model menuItemsModel = new MenuItems_Model();
         binding = FragmentMenuItemsDescBinding.inflate(inflater, container, false);
         binding.sellingPriceInput.setEnabled(false);
+
+        binding.price.setFilters(new InputFilter[]{new DecimalInputFilter(2)});
+        binding.grossweight.setFilters(new InputFilter[]{new DecimalInputFilter(3)});
+
         binding.itemtype.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {

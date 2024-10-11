@@ -295,6 +295,7 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
                                 searchLayout.setVisibility(View.GONE);
                                 dialogOrderStatusText.setText(String.valueOf("Please click the Fetch Data button to load the orders"));
                             }
+
                             else if(resource.message == "" )
                             {
                                 dialogOrderStatusCard.setVisibility(View.GONE);

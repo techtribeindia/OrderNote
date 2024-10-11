@@ -112,7 +112,7 @@ public class OrderDetails_Repository {
             @Override
             public void onSuccess(List<OrderDetails_Model> result) {
                 if (result.isEmpty()) {
-                    ordersLiveData.postValue(ApiResponseState_Enum.successwithmessage(result, "There is no orders right now"));
+                    ordersLiveData.postValue(ApiResponseState_Enum.successwithmessage(result, "There is no Accepted Orders for the \n selected date"));
                 } else {
                     ordersLiveData.postValue(ApiResponseState_Enum.successwithmessage(result,""));
                 }
