@@ -626,10 +626,10 @@ public class ReportsFragment extends Fragment {
           DecimalFormat df = new DecimalFormat(Constants.twoDecimalWithCommaPattern);
 
         try{
-            if(statuswisetotalcountdetailsjson.containsKey(Constants.created_status)) {
+            if(statuswisetotalcountdetailsjson.containsKey(Constants.pending_status)) {
                 //JSONObject statusBasedObject = statuswisetotalcountdetailsjson.get(Constants.created_status);
-                binding.pendingOrdersCountTextview.setText(statuswisetotalcountdetailsjson.get(Constants.created_status).getInt("count") + " Orders");
-                binding.totalpendingorderPriceTextview.setText("₹ " + String.valueOf(df.format(statuswisetotalcountdetailsjson.get(Constants.created_status).getDouble("price"))));
+                binding.pendingOrdersCountTextview.setText(statuswisetotalcountdetailsjson.get(Constants.pending_status).getInt("count") + " Orders");
+                binding.totalpendingorderPriceTextview.setText("₹ " + String.valueOf(df.format(statuswisetotalcountdetailsjson.get(Constants.pending_status).getDouble("price"))));
 
             }
             else{
@@ -637,9 +637,9 @@ public class ReportsFragment extends Fragment {
                 binding.totalpendingorderPriceTextview.setText("₹ 00,000");
 
             }
-            if(statuswisetotalcountdetailsjson.containsKey(Constants.placed_status)) {
-                binding.acceptedOrdersCountTextview.setText(statuswisetotalcountdetailsjson.get(Constants.placed_status).getInt("count") + " Orders");
-                binding.totalAcceptedOrdersPriceTextview.setText("₹ " + String.valueOf(df.format(statuswisetotalcountdetailsjson.get(Constants.placed_status).getDouble("price"))));
+            if(statuswisetotalcountdetailsjson.containsKey(Constants.accepted_status)) {
+                binding.acceptedOrdersCountTextview.setText(statuswisetotalcountdetailsjson.get(Constants.accepted_status).getInt("count") + " Orders");
+                binding.totalAcceptedOrdersPriceTextview.setText("₹ " + String.valueOf(df.format(statuswisetotalcountdetailsjson.get(Constants.accepted_status).getDouble("price"))));
             }
             else{
                 binding.acceptedOrdersCountTextview.setText("0 Orders");
@@ -1019,7 +1019,7 @@ public class ReportsFragment extends Fragment {
 
                     showProgressBar(true);
                     if(reportData.getSelectedFilterType().equals(Constants.today_filter)){
-                        ordersViewModel.getOrdersByStatus_DateAndVendorKey(Constants.placed_status,reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
+                        ordersViewModel.getOrdersByStatus_DateAndVendorKey(Constants.accepted_status,reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
 
                         orderItemDetailsViewModel.getOrderItemsByDateAndVendorKey(reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
 
@@ -1027,27 +1027,27 @@ public class ReportsFragment extends Fragment {
 
                     }
                     else if(reportData.getSelectedFilterType().equals(Constants.yesterday_filter)){
-                        ordersViewModel.getOrdersByStatus_DateAndVendorKey(Constants.placed_status,reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
+                        ordersViewModel.getOrdersByStatus_DateAndVendorKey(Constants.accepted_status,reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
 
                         orderItemDetailsViewModel.getOrderItemsByDateAndVendorKey(reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
 
                     }
                     else if(reportData.getSelectedFilterType().equals(Constants.last7day_filter)){
-                        ordersViewModel.getOrdersByStatus_DateAndVendorKey(Constants.placed_status,reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
+                        ordersViewModel.getOrdersByStatus_DateAndVendorKey(Constants.accepted_status,reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
 
                         orderItemDetailsViewModel.getOrderItemsByDateAndVendorKey(reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
 
                     }
                     else if(reportData.getSelectedFilterType().equals(Constants.buyerwise_filter)){
 
-                        ordersViewModel.getOrdersByBuyerKeyStatus_DateAndVendorKey(reportData.getSelectedBuyerKey(),Constants.placed_status,reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
+                        ordersViewModel.getOrdersByBuyerKeyStatus_DateAndVendorKey(reportData.getSelectedBuyerKey(),Constants.accepted_status,reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
 
                         orderItemDetailsViewModel.getOrderItemsByDateAndVendorKey(reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
 
                     }
                     else if(reportData.getSelectedFilterType().equals(Constants.customdatewise_filter)){
 
-                        ordersViewModel.getOrdersByStatus_DateAndVendorKey(Constants.placed_status,reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
+                        ordersViewModel.getOrdersByStatus_DateAndVendorKey(Constants.accepted_status,reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
 
                         orderItemDetailsViewModel.getOrderItemsByDateAndVendorKey(reportData.getStartDate() , reportData.getEndDate() , reportData.getVendorkey());
 

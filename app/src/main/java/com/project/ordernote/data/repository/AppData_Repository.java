@@ -18,6 +18,7 @@ public class AppData_Repository {
     public AppData_Repository() {
         appDataLiveData = new MutableLiveData<>();
         firestoreService = new FirestoreService();
+
     }
 
 

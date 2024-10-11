@@ -408,8 +408,8 @@ public class PDFGenerator {
                 }
 
                 try {
-
-                    Phrase phrasecompanyAddressDetails = new Phrase("23/33, Chidambaram Street, \n Balaji Nagar Rd , Subash Nagar, Chromepet,\nChennai – 44 ,India.\nGSTIN 09,", valueFont_10);
+                    Phrase phrasecompanyAddressDetails = new Phrase("60, Great Cotton Road , \nTuticorin ( Thoothukudi ) , . \nTamilnadu - 628001 , India . \nGSTIN : 33AJTPS1766K1ZI", valueFont_10);
+                    //Phrase phrasecompanyAddressDetails = new Phrase("23/33, Chidambaram Street, \n Balaji Nagar Rd , Subash Nagar, Chromepet,\nChennai – 44 ,India.\nGSTIN 09,", valueFont_10);
 
                     PdfPCell phrasecompanyAddressDetailscell = new PdfPCell(phrasecompanyAddressDetails);
                     phrasecompanyAddressDetailscell.setBorder(Rectangle.NO_BORDER);
@@ -596,15 +596,15 @@ public class PDFGenerator {
 
                     try {
 
-                        if (statuswisetotalcountdetailsjson.containsKey(Constants.created_status)) {
-                            if (statuswiseOrderid.containsKey(Constants.created_status)) {
+                        if (statuswisetotalcountdetailsjson.containsKey(Constants.pending_status)) {
+                            if (statuswiseOrderid.containsKey(Constants.pending_status)) {
 
                                 itemwiseTotalHashmap = new HashMap<>();
                                 orderItemsbasedOnOrderId = new ArrayList<>();
                                 itemwiseTotalHashmapKeyList = new ArrayList<>();
 
 
-                                List<String> orderidList = statuswiseOrderid.get(Constants.created_status);
+                                List<String> orderidList = statuswiseOrderid.get(Constants.pending_status);
                                 if (orderidList.size() > 0) {
                                 boolean isHeadingLabelAdded = false;
                                     for (int iterator = 0; iterator < orderidList.size(); iterator++) {
@@ -1253,7 +1253,7 @@ public class PDFGenerator {
                                     itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
 
-                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.created_status).getDouble("pricebeforediscount")), valueFont_10);
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.pending_status).getDouble("pricebeforediscount")), valueFont_10);
 
                                     PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
                                     phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -1338,7 +1338,7 @@ public class PDFGenerator {
                                     itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
 
-                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.created_status).getDouble("discount")), valueFont_10);
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.pending_status).getDouble("discount")), valueFont_10);
 
                                     PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
                                     phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -1423,7 +1423,7 @@ public class PDFGenerator {
                                     itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
 
-                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.created_status).getDouble("price")), valueFont_10);
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.pending_status).getDouble("price")), valueFont_10);
 
                                     PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
                                     phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -1505,14 +1505,14 @@ public class PDFGenerator {
                             }
 
                         }
-                        if (statuswisetotalcountdetailsjson.containsKey(Constants.placed_status)) {
+                        if (statuswisetotalcountdetailsjson.containsKey(Constants.accepted_status)) {
 
                             itemwiseTotalHashmap = new HashMap<>();
                             orderItemsbasedOnOrderId = new ArrayList<>();
                             itemwiseTotalHashmapKeyList = new ArrayList<>();
 
-                            if (statuswiseOrderid.containsKey(Constants.placed_status)) {
-                                List<String> orderidList = statuswiseOrderid.get(Constants.placed_status);
+                            if (statuswiseOrderid.containsKey(Constants.accepted_status)) {
+                                List<String> orderidList = statuswiseOrderid.get(Constants.accepted_status);
                                 if (orderidList.size() > 0) {
                                    boolean isHeadingLabelAdded = false;
                                     for (int iterator = 0; iterator < orderidList.size(); iterator++) {
@@ -2211,7 +2211,7 @@ public class PDFGenerator {
                                     itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
 
-                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.placed_status).getDouble("pricebeforediscount")), valueFont_10);
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.accepted_status).getDouble("pricebeforediscount")), valueFont_10);
                                 //    Phrase phraseWeightLabelTitle = new Phrase("", valueFont_10);
 
                                     PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
@@ -2299,7 +2299,7 @@ public class PDFGenerator {
                                     itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
 
-                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.placed_status).getDouble("discount")), valueFont_10);
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.accepted_status).getDouble("discount")), valueFont_10);
 
                                     PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
                                     phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -2386,7 +2386,7 @@ public class PDFGenerator {
                                     itemDetailstotal_table.addCell(phraseCountLabelTitlecell);
 
 
-                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.placed_status).getDouble("price")), valueFont_10);
+                                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(statuswisetotalcountdetailsjson.get(Constants.accepted_status).getDouble("price")), valueFont_10);
 
                                     PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
                                     phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -4790,7 +4790,8 @@ public class PDFGenerator {
 
                 try {
 
-                    Phrase phrasecompanyAddressDetails = new Phrase("23/33, Chidambaram Street, \n Balaji Nagar Rd , Subash Nagar, Chromepet,\nChennai – 44 ,India.\nGSTIN 09,", valueFont_10);
+                  //  Phrase phrasecompanyAddressDetails = new Phrase("23/33, Chidambaram Street, \n Balaji Nagar Rd , Subash Nagar, Chromepet,\nChennai – 44 ,India.\nGSTIN 09,", valueFont_10);
+                    Phrase phrasecompanyAddressDetails = new Phrase("60, Great Cotton Road , \nTuticorin ( Thoothukudi ) , . \nTamilnadu - 628001 , India . \nGSTIN : 33AJTPS1766K1ZI", valueFont_10);
 
                     PdfPCell phrasecompanyAddressDetailscell = new PdfPCell(phrasecompanyAddressDetails);
                     phrasecompanyAddressDetailscell.setBorder(Rectangle.NO_BORDER);

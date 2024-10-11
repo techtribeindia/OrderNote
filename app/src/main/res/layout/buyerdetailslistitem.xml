@@ -10,9 +10,10 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="wrap_content"
+        android:minHeight="110dp"
         android:layout_marginStart="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="5dp"
         android:visibility="visible"
@@ -83,13 +84,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginTop="36dp"
                 android:lineHeight="20dp"
                 android:layout_toEndOf="@+id/circleBuyerImage"
                 android:text="xx , xxxxx  xxx xxxx , \nxxxx - xxxx . \nPh : - +91798xxxxxxx" />
 
             <RelativeLayout
-                android:layout_width="40dp"
+                android:layout_width="30dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true">

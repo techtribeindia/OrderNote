@@ -217,7 +217,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                     orderDetailEditRequestModel(order.getOrderid(),Constants.dispatched_dispatchstatus);
                 });
 
-                if(order.getStatus().equalsIgnoreCase(Constants.created_status) )
+                if(order.getStatus().equalsIgnoreCase(Constants.pending_status) )
                 {
                     if(sessionManager.getRole().equalsIgnoreCase(Constants.staff_role))
                     {
@@ -234,7 +234,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                 {
                     dialogCancelAndPlaceAgainButtonLayout.setVisibility(View.VISIBLE);
                 }
-                if(order.getStatus().equalsIgnoreCase(Constants.placed_status))
+                if(order.getStatus().equalsIgnoreCase(Constants.accepted_status))
                 {
 
                     if(sessionManager.getRole().equalsIgnoreCase(Constants.staff_role))
@@ -281,7 +281,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                     public void onClick(View view) {
                         if(sessionManager.getRole().equalsIgnoreCase(Constants.staff_role))
                         {
-                            if(order.getDispatchstatus().equalsIgnoreCase(Constants.editapproved_dispatchstatus)||order.getStatus().equalsIgnoreCase(Constants.created_status))
+                            if(order.getDispatchstatus().equalsIgnoreCase(Constants.editapproved_dispatchstatus)||order.getStatus().equalsIgnoreCase(Constants.pending_status))
                             {
                                 openDispatchSelectionDialog(order.getOrderid(),order.getTransportname(),order.getDrivermobileno(),order.getTruckno(),order.getDispatchstatus());
                             }
@@ -355,7 +355,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                     showConfirmationDialog(
                             "Accept Order",
                             "Are you sure you want to accept this order?",
-                            () -> handleOrderAcceptance(order.getOrderid(),Constants.placed_status)
+                            () -> handleOrderAcceptance(order.getOrderid(),Constants.accepted_status)
                     );
                 });
 
@@ -396,7 +396,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                         showConfirmationDialog(
                                 "Accept Order",
                                 "Are you sure you want to place this order again?",
-                                () -> handleOrderPlace(order.getOrderid(),Constants.created_status)
+                                () -> handleOrderPlace(order.getOrderid(),Constants.pending_status)
                         );
                     }
                 });

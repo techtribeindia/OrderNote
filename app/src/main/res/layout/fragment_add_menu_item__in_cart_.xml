@@ -44,6 +44,7 @@
             style="@style/BlackEditTextStyleSemiBold"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:singleLine="true"
             android:layout_marginTop="5dp"
             android:background="@drawable/rectangle_greybackground"
             android:gravity="center_vertical"
@@ -79,6 +80,8 @@
                     style="@style/BlackEditTextStyleSemiBold"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:singleLine="true"
+
                     android:layout_marginStart="1dp"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/rectangle_greybackground"
@@ -173,6 +176,7 @@
             android:layout_height="40dp"
             android:digits="0987654321."
             android:inputType="number"
+            android:singleLine="true"
 
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"

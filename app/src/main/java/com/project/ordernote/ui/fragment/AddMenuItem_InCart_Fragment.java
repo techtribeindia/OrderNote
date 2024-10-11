@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.databinding.FragmentAddMenuItemInCartBinding;
 import com.project.ordernote.ui.adapter.AutoCompleteMenuItemAdapter;
 import com.project.ordernote.utils.Constants;
+import com.project.ordernote.utils.DecimalInputFilter;
 import com.project.ordernote.utils.SessionManager;
 import com.project.ordernote.utils.WeightConverter;
 import com.project.ordernote.utils.calculations.MenuItemValueCalculator;
@@ -134,6 +136,8 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.priceEditText.setFilters(new InputFilter[]{new DecimalInputFilter(2)});
+        binding.weightEditText.setFilters(new InputFilter[]{new DecimalInputFilter(3)});
 
         menuItemsViewModel.getMenuItemsFromViewModel().observe(getViewLifecycleOwner(), resource -> {
             if (resource != null) {

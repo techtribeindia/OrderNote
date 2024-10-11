@@ -172,7 +172,7 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
                 dialogOrderStatusText.setText(String.valueOf("Please select the Date by clicking the select date button and then click on the Fetch Button to fetch the orders"));
                 return;
             }
-            orderDetailViewModel(Constants.placed_status);
+            orderDetailViewModel(Constants.accepted_status);
         });
 
         searchInput.addTextChangedListener(new TextWatcher() {
