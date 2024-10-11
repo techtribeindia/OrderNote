@@ -44,7 +44,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/rectangle_whitebackground_blackborder"
+            android:background="@drawable/rectangle_greybackground"
             android:elevation="5dp"
             android:gravity="center_vertical"
             android:hint="eg:- Thuvarai pottu" />
@@ -91,7 +91,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/rectangle_whitebackground_blackborder"
+            android:background="@drawable/rectangle_greybackground"
             android:elevation="5dp"
             android:gravity="center_vertical"
             android:hint="eg:- 5.7Kg" />
@@ -113,7 +113,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/rectangle_whitebackground_blackborder"
+            android:background="@drawable/rectangle_greybackground"
             android:elevation="5dp"
             android:gravity="center_vertical"
             android:hint="eg:- 1 PC" />
@@ -135,7 +135,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/rectangle_whitebackground_blackborder"
+            android:background="@drawable/rectangle_greybackground"
             android:elevation="5dp"
             android:gravity="center_vertical"
             android:hint="eg:- ₹ 500" />
@@ -159,7 +159,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/rectangle_greybackground"
+            android:background="@drawable/rectangle_whitebackground_blackborder"
             android:elevation="5dp"
             android:gravity="center_vertical"
             android:hint="eg:- ₹ 500"

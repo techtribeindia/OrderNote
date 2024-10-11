@@ -89,7 +89,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             orderDetailsLiveData = new MutableLiveData<>();
 
             if (orderDetailsLiveData.getValue() != null) {
-                orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(new ArrayList<>(),"There is no Orders for now"));
+                orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(new ArrayList<>(),"cleared"));
             }
 
             if (selectedOrderJson.getValue() != null) {
@@ -156,7 +156,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
     public void clearFromViewModel()
     {
         List<OrderDetails_Model> updatedOrders = new ArrayList<>();
-        orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,"There is no Orders for now"));
+        orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,"cleared"));
 
     }
 
@@ -403,7 +403,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             String message = "";
             if(updatedOrders.isEmpty())
             {
-                message = "There is no Orders for now";
+                message = "The last of the order is removed";
             }
             orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,message));
 
