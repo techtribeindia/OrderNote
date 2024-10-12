@@ -46,6 +46,7 @@
             style="@style/BlackEditTextStyleSemiBold"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:singleLine="true"
             android:layout_marginTop="5dp"
             android:background="@drawable/rectangle_greybackground"
             android:gravity="center_vertical"

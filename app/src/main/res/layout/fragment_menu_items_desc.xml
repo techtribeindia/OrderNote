@@ -41,11 +41,11 @@
             android:id="@+id/itemname"
             style="@style/BlackTextStyleSemiBold"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/rectangle_greybackground"
-            android:elevation="5dp"
+            android:singleLine="true"
             android:gravity="center_vertical"
             android:hint="eg:- Thuvarai pottu" />
         <TextView
@@ -88,11 +88,11 @@
             style="@style/BlackTextStyleSemiBold"
             android:inputType="numberDecimal"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/rectangle_greybackground"
-            android:elevation="5dp"
+            android:singleLine="true"
             android:gravity="center_vertical"
             android:hint="eg:- 5.7Kg" />
 
@@ -110,11 +110,11 @@
             style="@style/BlackTextStyleSemiBold"
 
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/rectangle_greybackground"
-            android:elevation="5dp"
+            android:singleLine="true"
             android:gravity="center_vertical"
             android:hint="eg:- 1 PC" />
         <TextView
@@ -132,11 +132,11 @@
             style="@style/BlackTextStyleSemiBold"
             android:inputType="numberDecimal"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/rectangle_greybackground"
-            android:elevation="5dp"
+            android:singleLine="true"
             android:gravity="center_vertical"
             android:hint="eg:- ₹ 500" />
         <TextView
@@ -156,11 +156,11 @@
             style="@style/BlackTextStyleSemiBold"
             android:inputType="numberDecimal"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/rectangle_whitebackground_blackborder"
-            android:elevation="5dp"
+            android:singleLine="true"
             android:gravity="center_vertical"
             android:hint="eg:- ₹ 500"
             android:visibility="gone"/>

@@ -53,7 +53,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
             style="@style/SubTitleTextStyle1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
 
             android:text="Menu item name" />
@@ -61,15 +61,14 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="36dp"
+             android:layout_marginTop="36dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/priceinfo"
                 style="@style/BlackTextStyleNormal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
+                android:layout_marginStart="6dp"
 
                 android:lineHeight="20dp"
 
@@ -77,34 +76,35 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         </LinearLayout>
 
 
-        <RelativeLayout
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true">
-
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-
-                android:layout_centerInParent="true"
-                android:alpha=".7"
-
-                android:src="@mipmap/right_arrow" />
-        </RelativeLayout>
-
-
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
 
-<View
+    <RelativeLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="14dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true">
+
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+
+            android:layout_centerInParent="true"
+            android:alpha=".7"
+
+            android:src="@mipmap/right_arrow" />
+    </RelativeLayout>
+
+
+    <View
     android:id="@+id/buyerlistdivider"
     android:layout_width="match_parent"
     android:layout_height="5dp"
     android:visibility="gone"
-    android:layout_below="@+id/buyerselectionCardView"
+    android:layout_below="@+id/menuselectionCardView"
     android:background="@color/reddishgrey"/>
 
 </RelativeLayout>
