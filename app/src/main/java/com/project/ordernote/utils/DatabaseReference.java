@@ -20,6 +20,9 @@ public class DatabaseReference{
     public static String truckno_OrderDetails = "truckno";
     public static String dispatchstatus_OrderDetails = "dispatchstatus";
     public static String orderplaceddate_OrderDetails = "orderplaceddate";
+    public static String orderacceptedddate_OrderDetails = "orderaccepteddate";
+    public static String orderrejectedddate_OrderDetails = "orderrejecteddate";
+    public static String orderrecancelledddate_OrderDetails = "ordercancellededdate";
     public static String buyerkey_OrderDetails= "buyerkey";
 
 

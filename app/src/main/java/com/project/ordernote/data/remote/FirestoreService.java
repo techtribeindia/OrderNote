@@ -221,7 +221,7 @@ public class FirestoreService {
         if (status != null && !status.isEmpty()) {
             updates.put(DatabaseReference.status_OrderDetails, status);
         }
-        updates.put(DatabaseReference.orderplaceddate_OrderDetails, Timestamp.now());
+        updates.put(DatabaseReference.orderacceptedddate_OrderDetails, Timestamp.now());
         // Check if there are any updates to make
         if (!updates.isEmpty()) {
             orderRef.update(updates)
@@ -289,10 +289,11 @@ public class FirestoreService {
     {
 
         if(BaseActivity.baseActivity.isOnline()) {
-
+            Map<String, Object> updates = new HashMap<>();
             DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
-
-        orderRef.update(DatabaseReference.status_OrderDetails, status)
+            updates.put(DatabaseReference.status_OrderDetails, status);
+            updates.put(DatabaseReference.orderrejectedddate_OrderDetails, Timestamp.now());
+            orderRef.update(updates)
                 .addOnSuccessListener(aVoid -> {
                     callback.onSuccess("The order status changed to rejected");
                     // Handle success, e.g., notify user, update UI
@@ -313,8 +314,10 @@ public class FirestoreService {
         if(BaseActivity.baseActivity.isOnline()) {
 
             DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
-
-        orderRef.update(DatabaseReference.status_OrderDetails, status)
+            Map<String, Object> updates = new HashMap<>();
+            updates.put(DatabaseReference.status_OrderDetails, status);
+            updates.put(DatabaseReference.orderrecancelledddate_OrderDetails, Timestamp.now());
+            orderRef.update(updates)
                 .addOnSuccessListener(aVoid -> {
                     callback.onSuccess("Order Cancelled");
                     // Handle success, e.g., notify user, update UI
@@ -335,8 +338,10 @@ public class FirestoreService {
         if(BaseActivity.baseActivity.isOnline()) {
 
             DocumentReference orderRef = db.collection(DatabaseReference.OrderDetails_TableName).document(orderid);
-
-        orderRef.update(DatabaseReference.status_OrderDetails, status)
+            Map<String, Object> updates = new HashMap<>();
+            updates.put(DatabaseReference.status_OrderDetails, status);
+            updates.put(DatabaseReference.orderplaceddate_OrderDetails, Timestamp.now());
+            orderRef.update(updates)
                 .addOnSuccessListener(aVoid -> {
                     callback.onSuccess("Order Placed");
                     // Handle success, e.g., notify user, update UI
