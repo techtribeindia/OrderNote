@@ -239,7 +239,7 @@ public class OrderListItemDescFragment extends DialogFragment {
 
                     if(sessionManager.getRole().equalsIgnoreCase(Constants.staff_role))
                     {
-                        if (isToday(order.getOrderplaceddate()) && order.getDispatchstatus().equalsIgnoreCase(Constants.dispatched_dispatchstatus))
+                        if (isToday(order.getOrderplaceddate()) && (order.getDispatchstatus().equalsIgnoreCase(Constants.dispatched_dispatchstatus) || order.getDispatchstatus().isEmpty()))
                         {
                             dialogEditRequestButtonLayout.setVisibility(View.VISIBLE);
                         }
