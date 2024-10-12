@@ -30,6 +30,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     android:layout_marginTop="20dp">
     <LinearLayout
         android:layout_width="match_parent"
@@ -72,12 +73,14 @@
         android:id="@+id/managemenu_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+
         android:orientation="vertical">
         <TextView
             android:id="@+id/manage_menu_label_textview"
             style="@style/SubTitleGreyTextStyle1"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="26dp"
 
             android:layout_centerVertical="true"
 
@@ -115,6 +118,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:orientation="vertical">
         <TextView
 
@@ -122,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="16dp"
             android:layout_marginBottom="3dp"
             android:gravity="center"
             android:text="General" />
@@ -132,6 +136,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@color/white"
+            android:paddingStart="16dp"
 
             android:padding="10dp"
             >

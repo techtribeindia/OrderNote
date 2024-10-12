@@ -103,7 +103,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
     public void setOrders(List<OrderDetails_Model> orders, String selectedOrderButton) {
         this.orders = orders;
         this.selectedScreen  = selectedOrderButton;
-        Collections.sort(this.orders, new Comparator<OrderDetails_Model>() {
+        /* Collections.sort(this.orders, new Comparator<OrderDetails_Model>() {
             @Override
             public int compare(OrderDetails_Model o1, OrderDetails_Model o2) {
                 // If tokenno is null, treat it as the lowest possible value for sorting purposes
@@ -112,6 +112,22 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Or
                 return o2.getTokenno().compareTo(o1.getTokenno());
             }
         });
+
+         */
+
+        Collections.sort(this.orders, new Comparator<OrderDetails_Model>() {
+            @Override
+            public int compare(OrderDetails_Model o1, OrderDetails_Model o2) {
+                // If tokenno is null, treat it as the lowest possible value for sorting purposes
+                if (o1.getTokenno() == null) return -1;
+                if (o2.getTokenno() == null) return 1;
+
+                // Compare the values as Integers for descending order
+                return Integer.valueOf(o2.getTokenno()).compareTo(Integer.valueOf(o1.getTokenno()));
+            }
+        });
+
+
         notifyDataSetChanged();
 
     }

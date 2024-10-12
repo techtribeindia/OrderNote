@@ -42,9 +42,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/addOrderFabButton"
         android:backgroundTint="@color/white"
-        android:src="@drawable/ic_baseline_add"
+         android:src="@drawable/ic_baseline_add"
         app:layout_anchor="@id/bottomAppBar"
         app:maxImageSize="40dp"
+        app:borderWidth="0dp"
          app:tint ="@color/darkgrey"
         android:contentDescription="@string/todo" />
 

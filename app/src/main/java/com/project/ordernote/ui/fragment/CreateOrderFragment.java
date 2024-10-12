@@ -215,6 +215,7 @@ public class CreateOrderFragment extends Fragment {
             binding.paymentModeSpinner.setAdapter(paymentModeAdapter);
             selectedPaymentMode = Constants.cash_payment_mode;
 
+
     }
 
     @Override
@@ -565,13 +566,14 @@ public class CreateOrderFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             // Handle negative button click
                             isGenerateOrderClicked = false;
+                            showProgressBar(false);
 
 
                         }
                     }, new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialogInterface) {
-                            isGenerateOrderClicked = false;
+                            isGenerateOrderClicked = false;showProgressBar(false);
                         }
                     }
 
@@ -789,9 +791,10 @@ public class CreateOrderFragment extends Fragment {
     private void neutralizeEveryVariableAndUI() {
 
         receivedAmount = 0;
-         selectedPaymentMode = "";paymentDesc ="";
+        selectedPaymentMode = Constants.cash_payment_mode;
+        paymentDesc ="";
          menuItemFetchedSuccesfully = false ; buyerDetailsFetchedSuccessfully = false ;
-         isPaymentModeSelected = false ; isGenerateOrderClicked = false;
+         isPaymentModeSelected = true ; isGenerateOrderClicked = false;
 
 //        binding.paymentModeOverlayTextview.setVisibility(View.VISIBLE);
   //      binding.paymentModeSpinner.setVisibility(View.GONE);
