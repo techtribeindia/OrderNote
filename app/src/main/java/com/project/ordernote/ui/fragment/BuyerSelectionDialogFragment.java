@@ -81,7 +81,7 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
                 }
                 if(!buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress2().equals("")){
                     if(!address.equals("")){
-                        address = address +" , " +'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress1());
+                        address = address +" , " +'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress2());
                     }
                     else{
                         address = Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress2());
@@ -133,7 +133,7 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
                        }
                        if(!buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress2().equals("")){
                            if(!address.equals("")){
-                               address = address +" , " +'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress1());
+                               address = address +" , " +'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress2());
                            }
                            else{
                                address = Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress2());
@@ -193,7 +193,7 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
                 }
                 if(!buyersModel.getAddress2().equals("")){
                     if(!address.equals("")){
-                        address = address +" , " +'\n'+Objects.requireNonNull(buyersModel.getAddress1());
+                        address = address +" , " +'\n'+Objects.requireNonNull(buyersModel.getAddress2());
                     }
                     else{
                         address = Objects.requireNonNull(buyersModel.getAddress2());
