@@ -201,9 +201,9 @@ public class ReportsFragment extends Fragment {
                 //Toast.makeText(requireActivity(), "Week", Toast.LENGTH_SHORT).show();
                 isTodaySelectedInReportScreen = false;
                 processOrderAndOrderItemArrayForReportScreenUIMethodCalled = false;
-                Timestamp startdatee = (DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getFirstDayOfWeek(DateParserClass.getDateInStandardFormat())+" 00:00:00"));
+                //Timestamp startdatee = (DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getFirstDayOfWeek(DateParserClass.getDateInStandardFormat())+" 00:00:00"));
+                Timestamp startdatee = (DateParserClass.convertGivenDateToTimeStamp("06/10/2024 00:00:00"));
                 Timestamp endDatee = (DateParserClass.convertGivenDateToTimeStamp(DateParserClass.getDateInStandardFormat()+" 23:59:59"));
-
                 ordersViewModel.getOrdersByDateAndVendorKey( startdatee,endDatee ,sessionManager.getVendorkey());
                 orderItemDetailsViewModel.getOrderItemsByDateAndVendorKey_ReportScreenObserver( startdatee, endDatee , sessionManager.getVendorkey());
 

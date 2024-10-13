@@ -795,7 +795,7 @@ public class CreateOrderFragment extends Fragment {
         paymentDesc ="";
          menuItemFetchedSuccesfully = false ; buyerDetailsFetchedSuccessfully = false ;
          isPaymentModeSelected = true ; isGenerateOrderClicked = false;
-
+         setAdapterForPaymentList();
 //        binding.paymentModeOverlayTextview.setVisibility(View.VISIBLE);
   //      binding.paymentModeSpinner.setVisibility(View.GONE);
         binding.paymentDescriptionEdittext.setText("");
