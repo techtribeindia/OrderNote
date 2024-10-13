@@ -153,12 +153,7 @@ public class Dashboard extends BaseActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Subscribed";
-                        if (!task.isSuccessful()) {
-                            msg = "Subscribe failed";
-                        }
-                        Log.d(TAG, msg);
-                        Toast.makeText(Dashboard.this, msg, Toast.LENGTH_SHORT).show();
+
                     }
                 });
 

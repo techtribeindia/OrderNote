@@ -91,7 +91,7 @@ public class OrderListItemDescFragment extends DialogFragment {
     public void setmHandler(Handler mHandler, String selectedOrderButton) {
         this.mHandler = mHandler;
         this.selectedScreen  = selectedOrderButton;
-        Log.d("selectedOrderButton", String.valueOf(selectedOrderButton));
+
     }
     public void sendHandlerMessage(String status) {
         if (mHandler != null) { // Null check to prevent NullPointerException
@@ -102,8 +102,6 @@ public class OrderListItemDescFragment extends DialogFragment {
             bundle.putString("status", status);
             message.setData(bundle);
             mHandler.sendMessage(message);
-        } else {
-            Log.e(TAG, "Handler is null, cannot send message");
         }
     }
 
@@ -131,9 +129,7 @@ public class OrderListItemDescFragment extends DialogFragment {
 
         if (getArguments() != null) {
             orderJson = getArguments().getString("order_json");
-            Log.d(TAG, "Received order JSON: " + orderJson);
-        } else {
-            Log.e(TAG, "No arguments found");
+
         }
     }
 
@@ -419,11 +415,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                     }
                 });
 
-            } else {
-                Log.e(TAG, "Failed to parse order JSON into OrderDetails_Model");
             }
-        } else {
-            Log.e(TAG, "Order JSON is null");
         }
 
         return view;
@@ -585,7 +577,7 @@ public class OrderListItemDescFragment extends DialogFragment {
                 orderDate.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH);
     }
     private void showBanner() {
-        Toast.makeText(requireActivity(), "Show banner", Toast.LENGTH_SHORT).show();
+
         motionLayout.transitionToEnd();
     }
 

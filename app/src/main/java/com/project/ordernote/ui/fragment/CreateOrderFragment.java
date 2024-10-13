@@ -429,7 +429,7 @@ public class CreateOrderFragment extends Fragment {
                 }
                 catch (Exception e){
 
-                    Toast.makeText(requireActivity(), "Failed in OnClick", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
 
                     e.printStackTrace();
                 }

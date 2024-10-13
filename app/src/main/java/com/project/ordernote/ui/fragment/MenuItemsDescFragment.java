@@ -71,10 +71,10 @@ public class MenuItemsDescFragment extends DialogFragment {
     public void setmHandler(Handler mHandler, String selectedOrderButton) {
         this.mHandler = mHandler;
         this.selectedScreen  = selectedOrderButton;
-        Log.d("selectedOrderButton", String.valueOf(selectedOrderButton));
+
     }
     private void sendHandlerMessage(String function) {
-        //Log.e(Constants.TAG, "createBillDetails in cartaItem 1");
+
 
         Message msg = new Message();
         Bundle bundle = new Bundle();
@@ -137,7 +137,7 @@ public class MenuItemsDescFragment extends DialogFragment {
 
         if(Objects.equals(selectedScreen, "add"))
         {
-            Toast.makeText(requireActivity(), "Add", Toast.LENGTH_SHORT).show();
+
             binding.menuitemButton.setText("Add MenuItem");
             function = "add";
             binding.itemname.setText("");
@@ -308,7 +308,7 @@ public class MenuItemsDescFragment extends DialogFragment {
                 }
                 else {
                     menuItemsModel.setItemkey(itemkey);
-                    Toast.makeText(requireActivity(), itemkey, Toast.LENGTH_SHORT).show();
+
                 }
 
                 menuItemsModel.setItemname(itemname);
@@ -328,7 +328,7 @@ public class MenuItemsDescFragment extends DialogFragment {
             MenuItems_Model menuitems = gson.fromJson(orderJson, MenuItems_Model.class);
 
             if (menuitems != null) {
-                Toast.makeText(requireActivity(), "Menu items", Toast.LENGTH_SHORT).show();
+
                 binding.itemname.setText(menuitems.getItemname());
                 itemkey = menuitems.getItemkey();
                 if(menuitems.getItemtype().equalsIgnoreCase(Constants.priceperkg_itemtype))

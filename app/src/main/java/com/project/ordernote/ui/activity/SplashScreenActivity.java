@@ -94,7 +94,7 @@ public class SplashScreenActivity extends BaseActivity {
                     googleApiAvailability.getErrorDialog(this, result, 2404).show();
                 } else {
                     Toast.makeText(this, "Error - Google Play Services not available", Toast.LENGTH_SHORT).show();
-                    Log.d("Error", "Google Play Services not available");
+
                 }
             }
 
@@ -205,11 +205,11 @@ public class SplashScreenActivity extends BaseActivity {
                                         gotbuyerData = true;
                                         checkAndProceed();
                                     } else {
-                                        Toast.makeText(SplashScreenActivity.this, "Error in fetching Buyer 1 Splash ", Toast.LENGTH_SHORT).show();
+
                                         showSnackbar(getCurrentFocus(), buyersResponse.message);
                                     }
                                 } else {
-                                    Toast.makeText(SplashScreenActivity.this, "Error in fetching Buyer 2 Splash ", Toast.LENGTH_SHORT).show();
+
                                     showSnackbar(getCurrentFocus(), buyersResponse.message);
                                 }
 
