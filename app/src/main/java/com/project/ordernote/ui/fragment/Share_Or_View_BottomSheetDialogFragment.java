@@ -1,5 +1,6 @@
 package com.project.ordernote.ui.fragment;
 
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -113,6 +114,14 @@ public class Share_Or_View_BottomSheetDialogFragment extends BottomSheetDialogFr
 
 
 
+
+
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        onDownloadingTypeSelectedListener.onDownloadingTypeSelectedListener("" , "");
 
 
     }

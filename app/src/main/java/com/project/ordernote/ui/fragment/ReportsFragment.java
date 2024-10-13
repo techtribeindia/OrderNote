@@ -1119,15 +1119,19 @@ public class ReportsFragment extends Fragment {
 
                         }
                     }
-                    else{
+                    else if(selectedType.equals(Constants.xls_filetype)){
                         showSnackbar(getView() ," STATUS WISE XLS ");
 
                         // Toast.makeText(requireActivity(), "statuswise  xls", Toast.LENGTH_SHORT).show();
+                    } else if (selectedType.equals("")) {
+                        //showSnackbar(getView() ," ");
+                        showProgressBar(false);
                     }
                 }
                 else{
 
                     if(Objects.requireNonNull(reportsViewModel.getFilteredReports().getValue()).getSelectedFileType().equals(Constants.pdf_filetype)){
+
                         if(selectedMode.equals(Constants.share_file)){
                             Uri uri1 = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".provider", pdfFile);
                             Intent intent1 = new Intent(Intent.ACTION_SEND);
@@ -1136,7 +1140,7 @@ public class ReportsFragment extends Fragment {
                             startActivity(Intent.createChooser(intent1, "Share PDF"));
 
                         }
-                        else{
+                        else if(selectedMode.equals(Constants.view_file)){
                             showSnackbar(getView() ," PDF GENERATED ");
 
                           //  Toast.makeText(requireActivity(), "PDF Generated", Toast.LENGTH_SHORT).show();
@@ -1150,6 +1154,9 @@ public class ReportsFragment extends Fragment {
 
 
 
+                        }
+                        else if(selectedMode.equals("")){
+                            showProgressBar(false);
                         }
                     }
                     else{
