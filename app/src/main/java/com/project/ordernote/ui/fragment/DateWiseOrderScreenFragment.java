@@ -144,7 +144,7 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
         orderDetails_viewModel = new ViewModelProvider(requireActivity()).get(OrderDetails_ViewModel.class);
         orderDetails_viewModel.setUserDetails(sessionManager.getVendorkey());
         ordersListAdapter = new OrdersListAdapter(orderDetails_viewModel);
-        Toast.makeText(requireActivity(), sessionManager.getVendorkey(), Toast.LENGTH_SHORT).show();
+
         OrderRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         OrderRecyclerView.setAdapter(ordersListAdapter);
 
@@ -333,7 +333,7 @@ public class DateWiseOrderScreenFragment extends DialogFragment {
             @Override
             public boolean handleMessage(@NonNull Message message) {
                 Bundle bundle = message.getData();
-                Toast.makeText(requireActivity(), String.valueOf(bundle.getString("OrderListItemDescFragment")), Toast.LENGTH_SHORT).show();
+
                 if (Objects.equals(bundle.getString("fragment"), "OrderListItemDescFragment"))
                 {
                     if (Objects.equals(bundle.getString("status"), "success"))
