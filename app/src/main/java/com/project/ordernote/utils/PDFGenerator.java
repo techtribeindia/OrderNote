@@ -46,6 +46,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +77,7 @@ public class PDFGenerator {
     ReportsFilterDetails_Model selectedFilterValue;
     PDFGeneratorListener listener;
     double totalItemPrice = 0 , totalfinalprice = 0 , discount = 0;
+     DecimalFormat df = new DecimalFormat(Constants.twoDecimalPattern);
 
     HashMap<String, ReportsItemwiseCalculationDetail_Model> itemwiseTotalHashmap = new HashMap<>();
     List<String> itemwiseTotalHashmapKeyList = new ArrayList<>();
@@ -5974,7 +5976,7 @@ public class PDFGenerator {
                     itemDetailsTotal_table.addCell(phraseCountLabelTitlecell);
 
 
-                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(totalItemPrice), valueFont_10);
+                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(df.format(totalItemPrice)), valueFont_10);
 
                     PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
                     phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -6084,7 +6086,7 @@ public class PDFGenerator {
                     itemDetailsTotal_table.addCell(phraseCountLabelTitlecell);
 
 
-                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(discount), valueFont_10);
+                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(df.format(discount)), valueFont_10);
 
                     PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
                     phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);
@@ -6194,7 +6196,7 @@ public class PDFGenerator {
                     itemDetailsTotal_table.addCell(phraseCountLabelTitlecell);
 
 
-                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(totalfinalprice), valueFont_10);
+                    Phrase phraseWeightLabelTitle = new Phrase(String.valueOf(df.format(totalfinalprice)), valueFont_10);
 
                     PdfPCell phraseWeightLabelTitlecell = new PdfPCell(phraseWeightLabelTitle);
                     phraseWeightLabelTitlecell.setBorder(Rectangle.NO_BORDER);

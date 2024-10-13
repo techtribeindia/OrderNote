@@ -294,7 +294,7 @@
                     android:layout_marginBottom="10dp"
                     android:visibility="visible"
                     app:cardCornerRadius="10dp"
-
+                    android:paddingBottom="10dp"
                     android:id="@+id/buyerselectionCardView"
                     app:cardElevation="5dp">
 

@@ -41,9 +41,9 @@
             android:layout_height="40dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/rectangle_whitebackground_blackborder"
-            android:elevation="5dp"
-            android:gravity="center_vertical"
+            android:background="@drawable/rectangle_greybackground"
+            android:singleLine="true"
+             android:gravity="center_vertical"
             android:hint="Transport name" />
         <TextView
             style="@style/BlackTextStyleSemiBold"
@@ -64,8 +64,8 @@
             android:layout_height="40dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/rectangle_whitebackground_blackborder"
-            android:elevation="5dp"
+            android:background="@drawable/rectangle_greybackground"
+            android:singleLine="true"
             android:gravity="center_vertical"
             android:hint="Enter the 10 Digit Mobile Number" />
 
@@ -85,10 +85,10 @@
             android:layout_height="40dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/rectangle_whitebackground_blackborder"
-            android:elevation="5dp"
+            android:background="@drawable/rectangle_greybackground"
+            android:singleLine="true"
             android:gravity="center_vertical"
-            android:hint="eg:- TN 69 AP 3579" />
+            android:hint="eg:- TN 69 AP 3579 " />
         <Button
             android:id="@+id/update_button"
             style="@style/WhiteTextStyleBold"
