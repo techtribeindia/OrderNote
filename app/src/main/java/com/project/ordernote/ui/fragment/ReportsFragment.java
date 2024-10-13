@@ -942,13 +942,13 @@ public class ReportsFragment extends Fragment {
                 CheckPermissionForManageStorage.justCheckForPermission(requireContext() , requireActivity() , checkPermissionForManageStorageInterface);
 
 
-                Log.d("PermissionCheck", "Write External Storage permission NOT granted");
+
             }
         }
         else{
             if (Environment.isExternalStorageManager()) {
                 // Permission is already granted
-                Log.d("PermissionCheck", "Manage External Storage permission granted");
+
                 if(pdfType.equals(Constants.today_statuswise_pdf) || pdfType.equals(Constants.week_statuswise_pdf)){
                     reportsViewModel.generateOrderDetailsPDF(requireActivity(), requireContext(), pdfGeneratorListener, pdfType,sessionManager.getUserName(), statuswisetotalcountdetailsjson, orderwiseOrderItemDetails , statuswiseOrderid) ;
 
@@ -968,7 +968,7 @@ public class ReportsFragment extends Fragment {
                 }
             } else {
                 // Permission is not granted
-                Log.d("PermissionCheck", "Manage External Storage permission NOT granted");
+
                 CheckPermissionForManageStorage.justCheckForPermission(requireContext() , requireActivity() , checkPermissionForManageStorageInterface);
 
             }
