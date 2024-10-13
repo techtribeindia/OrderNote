@@ -298,7 +298,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             String message = "";
             if(filteredOrders.isEmpty())
             {
-                message = "There is Orders for the entered buyer name";
+                message = "There are no Orders for the entered buyer name";
             }
             orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(filteredOrders,message));
 
@@ -326,7 +326,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             String message = "";
             if(currentData.data.isEmpty())
             {
-                message = "There is no Orders for now";
+                message = "There are no Orders for now";
             }
             orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,message));
 
@@ -366,7 +366,7 @@ public class OrderDetails_ViewModel extends AndroidViewModel {
             String message = "";
             if(currentData.data.isEmpty())
             {
-                message = "There is no Orders for now";
+                message = "There are no Orders for now";
             }
             orderDetailsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,message));
 
