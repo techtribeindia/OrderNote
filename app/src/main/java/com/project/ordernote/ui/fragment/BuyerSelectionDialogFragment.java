@@ -230,7 +230,7 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
             catch (Exception e){
                 e.printStackTrace();
             }
-            Toast.makeText(requireContext(), "Selected: " + selectedBuyer, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(requireContext(), "Selected: " + selectedBuyer, Toast.LENGTH_SHORT).show();
         });
 
 
