@@ -1,5 +1,6 @@
 package com.project.ordernote.ui.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -200,7 +202,6 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
 
                     }
                 }
-
                 if(!buyersModel.getPincode().equals("")){
                     if(!address.equals("")){
                         address = address +" - " +'\n'+Objects.requireNonNull(buyersModel.getPincode());
@@ -222,6 +223,13 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
             binding.buyerAddressTextview.setText(String.valueOf(address));
           //  binding.buyerAddressTextview.setText(String.valueOf (buyersModel.getAddress1() +" , "+'\n'+buyersModel.getAddress2()+" - "+""+buyersModel.getPincode()+" . "));
             buyerViewModel.setSelectedBuyerPositionStringLiveData( String.valueOf(position));
+            try {
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                Objects.requireNonNull(imm).hideSoftInputFromWindow(binding.autoCompleteTextViewBuyer.getWindowToken(), 0);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
             Toast.makeText(requireContext(), "Selected: " + selectedBuyer, Toast.LENGTH_SHORT).show();
         });
 
