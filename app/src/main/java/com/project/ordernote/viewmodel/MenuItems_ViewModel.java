@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
+import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 
@@ -151,6 +152,7 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
 
                 originalData.add(menuItemsModel);
                 menuItemsLiveDataOriginal = new ArrayList<>(originalData);
+                LocalDataManager.getInstance().setMenuItems(originalData);
                     menuItemsLiveData.setValue(ApiResponseState_Enum.successwithmessage(originalData,""));
 
 
@@ -188,7 +190,7 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
                 }
 
             }
-
+            LocalDataManager.getInstance().setMenuItems(updatedOrders);
             menuItemsLiveData.setValue(ApiResponseState_Enum.successwithmessage(updatedOrders,""));
             //  orderDetailsLiveData.observeForever(ordersObserver);
 

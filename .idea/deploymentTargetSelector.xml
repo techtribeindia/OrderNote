@@ -11,7 +11,6 @@
             </handle>
           </Target>
         </DropdownSelection>
-        <option name="selectionMode" value="DIALOG" />
         <DialogSelection>
           <targets>
             <Target type="DEFAULT_BOOT">
