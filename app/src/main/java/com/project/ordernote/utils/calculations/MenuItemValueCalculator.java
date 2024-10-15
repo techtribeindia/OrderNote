@@ -27,7 +27,7 @@ public class MenuItemValueCalculator {
 
 
             }
-            else if (menuItem.getItemtype().equals(Constants.unitprice_pricetype)) {
+            else if (menuItem.getItemtype().equals(Constants.unitprice_itemtype)) {
                 double priceperUnit = menuItem.getUnitprice();
                 double quantity   = menuItem.getQuantity();
 
