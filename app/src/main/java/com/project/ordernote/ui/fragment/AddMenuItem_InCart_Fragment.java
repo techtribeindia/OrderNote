@@ -260,18 +260,65 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
 
             }
         });
+        binding.quantityEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try{
+                    String quantity = String.valueOf(editable.toString());
+                    double quantity_double = 0 ;
+                    String digitsOnlytext = quantity.replaceAll("[^0-9]", "");
+                    quantity_double = Double.parseDouble(digitsOnlytext);
+
+                    //binding.quantityEditText.setText(String.valueOf((int)quantity_double));
+                    try {
+                        MenuItems_Model menuItemsModel = menuItemsViewModel.getSelectedMenuItemsFromViewModel().getValue();
+                        Objects.requireNonNull(menuItemsModel).setQuantity(quantity_double);
+                        menuItemsViewModel.updateSelectedMenuItemModel(menuItemsModel);
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    try {
+
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+                catch (Exception e ){
+                    e.printStackTrace();
+                }
+
+            }
+        });
         binding.plusIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try{
-                    String quantity = String.valueOf(binding.quantityTextview.getText().toString());
+                    String quantity = String.valueOf(binding.quantityEditText.getText().toString());
+                    if(quantity.trim().equals("")){
+                        showSnackbar(requireView(), "Please enter some Quantity");
+                        return;
+                    }
+
                     double quantity_double = 0 ;
                     String digitsOnlytext = quantity.replaceAll("[^0-9]", "");
                     quantity_double = Double.parseDouble(digitsOnlytext);
                     quantity_double = quantity_double + 1 ;
 
-                    binding.quantityTextview.setText(String.valueOf((int)quantity_double));
+                    binding.quantityEditText.setText(String.valueOf((int)quantity_double));
                     try {
                         MenuItems_Model menuItemsModel = menuItemsViewModel.getSelectedMenuItemsFromViewModel().getValue();
                         menuItemsModel.setQuantity(quantity_double);
@@ -300,7 +347,11 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 try{
-                    String quantity = String.valueOf(binding.quantityTextview.getText().toString());
+                    String quantity = String.valueOf(binding.quantityEditText.getText().toString());
+                    if(quantity.trim().equals("")){
+                        showSnackbar(requireView(), "Please enter some Quantity");
+                        return;
+                    }
                     double quantity_double = 0 ;
                     String digitsOnlytext = quantity.replaceAll("[^0-9]", "");
                     quantity_double = Double.parseDouble(digitsOnlytext);
@@ -308,7 +359,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
                     if(quantity_double > 1) {
                         quantity_double = quantity_double - 1;
 
-                        binding.quantityTextview.setText(String.valueOf((int)quantity_double));
+                        binding.quantityEditText.setText(String.valueOf((int)quantity_double));
 
 
                         try {
@@ -341,6 +392,56 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 try{
+                    String quantity = String.valueOf(binding.quantityEditText.getText().toString());
+                    String weight = String.valueOf(binding.weightEditText.getText().toString());
+                    String priceperkg_item = String.valueOf(binding.priceEditText.getText().toString());
+
+                    if(quantity.trim().equals("") ){
+                        showSnackbar(requireView(), "Please enter Quantity");
+                        return;
+                    }
+                    else{
+                        double quantity_double = 0 ;
+                        String digitsOnlytext = quantity.replaceAll("[^0-9]", "");
+                        quantity_double = Double.parseDouble(digitsOnlytext);
+                        if(quantity_double <= 0){
+                            showSnackbar(requireView(), " Quantity should not be zero / less than zero");
+                            return;
+                        }
+
+                    }
+                    if(Objects.requireNonNull(menuItemsViewModel.getSelectedMenuItemsFromViewModel().getValue()).getItemtype().equals(Constants.priceperkg_pricetype)){
+                        if(weight.trim().equals("")){
+                            showSnackbar(requireView(), "Please enter  Weight");
+                            return;
+                        }
+                        else{
+                            double weight_double = 0 ;
+                            String digitsOnlytext = weight.replaceAll("[^0-9]", "");
+                            weight_double = Double.parseDouble(digitsOnlytext);
+                            if(weight_double <= 0){
+                                showSnackbar(requireView(), " Weight should not be zero / less than zero");
+                                return;
+                            }
+
+                        }
+
+                        if(priceperkg_item.trim().equals("")){
+                            showSnackbar(requireView(), "Please enter Price Per Kg");
+                            return;
+                        }
+
+                    }
+                    else{
+                        if(priceperkg_item.trim().equals("")){
+                            showSnackbar(requireView(), "Please enter Price Per Unit");
+                            return;
+                        }
+
+                    }
+
+
+
                     if(!Objects.equals(Objects.requireNonNull(menuItemsViewModel.getSelectedMenuItemsFromViewModel().getValue()).getItemkey(), "")){
                         orderDetails_viewModel.addItemInCart(menuItemsViewModel.getSelectedMenuItemsFromViewModel().getValue());
                         dismiss();
@@ -368,7 +469,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
 
         try{
             MenuItems_Model newMenuItemModel = menuItemsViewModel.getSelectedMenuItemsFromViewModel() .getValue();
-            String quantity = String.valueOf(binding.quantityTextview.getText().toString());
+            String quantity = String.valueOf(binding.quantityEditText.getText().toString());
             String priceperitem = String.valueOf(binding.priceEditText.getText().toString());
             double priceperitem_double = 0 , weight_double = 0 , quantity_double = 0  ;
 
@@ -553,7 +654,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
                             }
 
                             try {
-                                binding.quantityTextview.setText(String.valueOf(1));
+                                binding.quantityEditText.setText(String.valueOf(1));
                                 binding.autoCompleteTextViewMenuItem.setText(String.valueOf(menuItemsModel.getItemname()));
 
                                 binding.autoCompleteTextViewMenuItem.dismissDropDown();
@@ -622,7 +723,7 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
                 }
 
                 try{
-                    binding.quantityTextview.setText(String.valueOf(1));
+                    binding.quantityEditText.setText(String.valueOf(1));
                     getCurrentKgAndPriceValue_and_Call_Calculation();
                     binding.autoCompleteTextViewMenuItem.setText(String.valueOf(menuItemsModel.getItemname()));
 

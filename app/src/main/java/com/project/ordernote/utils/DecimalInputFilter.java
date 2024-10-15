@@ -14,7 +14,7 @@ public class DecimalInputFilter implements InputFilter {
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
         // Prevent more than one dot in the input
-        if (source.equals(".") && dest.toString().contains(".")) {
+        if (String.valueOf(source).equals(".") && String.valueOf(dest).toString().contains(".")) {
             return "";
         }
         if (dest.toString().contains(".")) {
