@@ -191,7 +191,7 @@ public class SplashScreenActivity extends BaseActivity {
 
                         //  Toast.makeText(requireActivity(), "sizze from observer: "+String.valueOf(itemDetailsList.size()), Toast.LENGTH_SHORT).show();
                         if (Objects.requireNonNull(buyersResponse).status == ApiResponseState_Enum.Status.SUCCESS) {
-
+                            buyersViewModel.setBuyerDetails(buyersResponse);
                             LocalDataManager.getInstance().setBuyers(buyersResponse.data);
                             gotbuyerData = true;
                             checkAndProceed();

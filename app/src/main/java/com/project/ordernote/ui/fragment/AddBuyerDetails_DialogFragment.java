@@ -233,8 +233,9 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
             @Override
             public void onSuccess(Void result) {
                 isUpdateBuyerCalled = false;
-
+                buyers_viewModel.setSelectedBuyerLiveData(buyersModel);
                 buyers_viewModel.updateBuyerDataInViewModelAndLocalArray(buyersModel);
+
                 showProgressBar(false);
                 onDismiss(requireDialog());
                 showSnackbar(requireView(),"Buyer updated successfully");
@@ -283,7 +284,7 @@ public class AddBuyerDetails_DialogFragment extends DialogFragment {
             @Override
             public void onSuccess(Void result) {
                 isAddBuyerCalled = false;
-
+                buyers_viewModel.setSelectedBuyerLiveData(buyersModel);
                 buyers_viewModel.addBuyerDataItemInViewModelAndLocalArray(buyersModel);
                 showProgressBar(false);
                 onDismiss(requireDialog());
