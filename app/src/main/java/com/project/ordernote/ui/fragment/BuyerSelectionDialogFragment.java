@@ -12,6 +12,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.project.ordernote.R;
 import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.databinding.FragmentBuyerSelectionDialogBinding;
+import com.project.ordernote.utils.Constants;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 
 import java.util.ArrayList;
@@ -39,7 +42,7 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
     private FragmentBuyerSelectionDialogBinding binding;
     private Buyers_ViewModel buyerViewModel;
     private ArrayAdapter<String> buyerAdapter;
-
+    Handler mHandler;
     private Buyers_Model buyersModel = new Buyers_Model();
     String address  = "";
     String selectedBuyerPositionString = "";
@@ -69,7 +72,20 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
 
         }
     }
+    public void setHandler(Handler handler) {
+        this.mHandler = handler;
+    }
 
+    private void sendHandlerMessage(String bundlestr, String buyerKey ) {
+        //Log.e(Constants.TAG, "createBillDetails in cartaItem 1");
+
+        Message msg = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putString("fromadapter", bundlestr);
+        bundle.putString("buyerkey", buyerKey);
+        msg.setData(bundle);
+        mHandler.sendMessage(msg);
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -124,12 +140,14 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
         buyerViewModel.getSelectedBuyersDetailsFromViewModel().observe(getViewLifecycleOwner(), buyerList -> {
            try {
                if (buyerList.getName() != null) {
-                   binding.buyerMobileNoTextview.setText(String.valueOf(Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getMobileno()));
+
+
                  //  binding.buyerAddressTextview.setText(String.valueOf (Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress1() +" , "+'\n'+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getAddress2()+" - "+""+Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getPincode()+" . "));
 
                     address = "";
                    try{
                        binding.buyerMobileNoTextview.setText(String.valueOf(Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getMobileno()));
+                       binding.autoCompleteTextViewBuyer.setText(String.valueOf(Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue()).getName()));
                        if(!buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress1().equals("")){
                            address = Objects.requireNonNull(buyerViewModel.getSelectedBuyersDetailsFromViewModel().getValue().getAddress1());
                        }
@@ -255,7 +273,16 @@ public class BuyerSelectionDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
+
+        binding.addBuyerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendHandlerMessage("newbuyer","");
+                dismiss();
+            }
+        });
     }
+
 
     private void showSnackbar(View view, String message) {
         Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);

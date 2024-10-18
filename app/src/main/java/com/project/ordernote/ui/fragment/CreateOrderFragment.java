@@ -70,7 +70,7 @@ public class CreateOrderFragment extends Fragment {
     private AppData_ViewModel appDataViewModel;
     private Buyers_ViewModel buyersViewModel;
     private Counter_ViewModel counterViewModel;
-
+    private Observer<ApiResponseState_Enum<List<Buyers_Model>>> buyersListObserver;
 
     private List<String> paymentModeStringArrayList = new ArrayList<>();
 
@@ -987,6 +987,7 @@ public class CreateOrderFragment extends Fragment {
         try{
             BuyerSelectionDialogFragment dialogFragment = new BuyerSelectionDialogFragment();
            // dialogFragment.setBuyerSelectionListener(this); // Set the listener
+            dialogFragment.setHandler(newHandler());
             dialogFragment.show(getParentFragmentManager(), "BuyerSelectionDialogFragment");
 
         }
@@ -1004,7 +1005,19 @@ public class CreateOrderFragment extends Fragment {
                 Bundle bundle = msg.getData();
                 String data = bundle.getString("fromadapter");
 
+                if(data.equals("newbuyer")){
+                    String dataToSend = Constants.createNewBuyer;
+                    Bundle bundle1 = new Bundle();
+                    bundle1.putString(Constants.processtodo, dataToSend);
 
+                    AddBuyerDetails_DialogFragment dialogFragment = new AddBuyerDetails_DialogFragment();
+                    dialogFragment.setHandler(newHandler());
+                    dialogFragment.setArguments(bundle1);
+
+                    // dialogFragment.setBuyerSelectionListener(this); // Set the listener
+                    dialogFragment.show(getParentFragmentManager(), "AddBuyerDetails_DialogFragment");
+                    setNewBuyerObserver();
+                }
                 if(data.equals("CreateOrderItem_Delete")){
                     try {
                         int position = bundle.getInt("position");
@@ -1127,5 +1140,23 @@ public class CreateOrderFragment extends Fragment {
 
         snackbar.show();
     }
+    private void setNewBuyerObserver() {
+        buyersViewModel.getSelectedBuyersDetailsFromViewModel().observe(getViewLifecycleOwner(), buyerData -> {
+            if (buyerData != null) {
 
+                if(!buyerData.getName().equals("")){
+                    binding.selectedBuyerNameTextview.setText(String.valueOf(buyerData.getName()));
+                    binding.selecedBuyerDetailsTextview.setText(String.valueOf(buyerData.getAddress1() +" , "+'\n'+buyerData.getAddress2()+" - "+""+buyerData.getPincode()+" . "+'\n'+"Ph:- +91"+buyerData.getMobileno()));
+                }
+                else{
+                    binding.selectedBuyerNameTextview.setText(String.valueOf("Select Buyer Name"));
+                    binding.selecedBuyerDetailsTextview.setText(String.valueOf("xx , xxxxx  xxx xxxx , \nxxxx - xxxx . \nPh : - +91798xxxxxxx"));
+
+                }
+
+
+
+            }
+        });
+    }
 }
