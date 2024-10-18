@@ -24,6 +24,7 @@ public class Constants{
     public static String standardDateTimeFormat = "dd/MM/yyyy HH:mm:ss";
     public static String standardTimeFormat = "HH:mm:ss";
     public static String readableDateTimeFormat = "EEE, d MMM yyyy HH:mm:ss";
+    public static String firebaseDateTimeFormat = "yyyy-MM-ddTHH:mm:ssZ";
 
      public static String dateMonth = "ddMMM";
 

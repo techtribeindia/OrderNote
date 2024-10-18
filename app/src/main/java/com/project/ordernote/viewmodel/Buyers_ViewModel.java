@@ -89,7 +89,7 @@ public class Buyers_ViewModel extends AndroidViewModel {
         buyersListLiveData.setValue(ApiResponseState_Enum.successwithmessage(filteredBuyers,message));
 
     }
-        public void getBuyersListFromRepository(String vendorKey) {
+    public void getBuyersListFromRepository(String vendorKey) {
         buyersListLiveData = repository.getBuyersList(vendorKey);
 
     }

@@ -64,6 +64,7 @@ dependencies {
      implementation ("com.google.code.gson:gson:2.10.1")
     implementation("com.google.firebase:firebase-crashlytics:19.1.0")
     implementation("com.google.firebase:firebase-messaging:24.0.1")
+    implementation("com.google.firebase:firebase-functions:21.0.0")
 
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
     implementation ("androidx.core:core:1.13.1")

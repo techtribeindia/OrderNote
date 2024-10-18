@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.Users_Model;
 
 public class SessionManager {
@@ -75,7 +76,10 @@ public class SessionManager {
     }
     public void logout() {
         editor.clear(); // Clears all session data
-        editor.apply(); // Apply the changes
+        editor.apply();
+         new LocalDataManager();
+
+
     }
 
     public void saveUserDataUsingModel(Users_Model usersModel) {

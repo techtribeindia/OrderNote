@@ -997,10 +997,6 @@ public class CreateOrderFragment extends Fragment {
 
     }
 
-
-
-
-
     private Handler newHandler() {
         Handler.Callback callback = new Handler.Callback() {
 

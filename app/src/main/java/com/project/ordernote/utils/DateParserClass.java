@@ -49,6 +49,14 @@ public class DateParserClass {
        String CurrentDate_time = df.format(c);
         return CurrentDate_time;
     }
+    public static String getDateTimeInStandardFormat()
+    {
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat(standardDateTimeFormat,Locale.ENGLISH);
+        df.setTimeZone(TimeZone.getTimeZone(timeZone_Format));
+        String CurrentDate_time = df.format(c);
+        return CurrentDate_time;
+    }
 
 
     public static String getTime_newFormat() {
@@ -133,6 +141,33 @@ public class DateParserClass {
 
          return df1.format(c1);
     }
+
+    public static String getDateAndTimeOfNo_ofDaysBack(int no_of_daysBefore)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(standardDateFormat,Locale.ENGLISH);
+        dateFormat.setTimeZone(TimeZone.getTimeZone(timeZone_Format));
+        Date date = null;
+        try {
+            date = dateFormat.parse(getDateInStandardFormat());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        calendar.add(Calendar.DATE, -no_of_daysBefore);
+
+
+        Date c1 = calendar.getTime();
+
+
+        SimpleDateFormat df1 = new SimpleDateFormat(standardDateTimeFormat,Locale.ENGLISH);
+        df1.setTimeZone(TimeZone.getTimeZone(timeZone_Format));
+
+        return df1.format(c1);
+    }
+
 
     public static String getFirstDayOfWeek(String inputDate) {
 
@@ -312,6 +347,8 @@ public class DateParserClass {
         }
         return "";
     }
+
+
 
 
 

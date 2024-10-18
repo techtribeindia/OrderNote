@@ -1,5 +1,6 @@
 package com.project.ordernote.ui.activity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +8,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -24,13 +28,18 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.project.ordernote.R;
 import com.project.ordernote.data.local.LocalDataManager;
 import com.project.ordernote.data.model.AppData_Model;
 import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
 import com.project.ordernote.data.model.Users_Model;
+import com.project.ordernote.data.model.VendorDetails_Model;
+import com.project.ordernote.data.remote.OrderDetails_BulkDelete;
 import com.project.ordernote.utils.ApiResponseState_Enum;
 import com.project.ordernote.utils.BaseActivity;
 import com.project.ordernote.utils.Constants;
@@ -39,6 +48,7 @@ import com.project.ordernote.viewmodel.AppData_ViewModel;
 import com.project.ordernote.viewmodel.Buyers_ViewModel;
 import com.project.ordernote.viewmodel.MenuItems_ViewModel;
 import com.project.ordernote.viewmodel.UserDetailsViewModel;
+import com.project.ordernote.viewmodel.VendorDetails_ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,15 +63,17 @@ public class SplashScreenActivity extends BaseActivity {
         private MenuItems_ViewModel menuItemViewModel;
         private AppData_ViewModel appDataViewModel;
         private UserDetailsViewModel userDetailsViewModel;
+        private VendorDetails_ViewModel  vendorDetailsViewModel;
 
 
-        boolean gotbuyerData = false , gotMenuItemData = false , gotAppdata  = false , gotUserData = false;
-
+        boolean gotbuyerData = false , gotMenuItemData = false , gotAppdata  = false , gotUserData = false , gotVendorData = false , checkIfNeedToDeleteData = false;
+        String vendorkeyBeforeCallingUserData = "";
 
         private Observer<ApiResponseState_Enum<List<Buyers_Model>>> buyerModelListObserver;
         private Observer<ApiResponseState_Enum<List<MenuItems_Model>>> menuItemListObserver;
         private Observer<ApiResponseState_Enum<AppData_Model>> appDataModelObserver;
         private Observer<ApiResponseState_Enum<Users_Model>> userDetailsModelListObserver;
+        private Observer<ApiResponseState_Enum<VendorDetails_Model>> vendorDetailsModelListObserver;
 
 
         @Override
@@ -85,7 +97,7 @@ public class SplashScreenActivity extends BaseActivity {
             }
             // Initialize SessionManager
             sessionManager = new SessionManager(this, Constants.USERPREF_NAME);
-
+            vendorkeyBeforeCallingUserData = sessionManager.getVendorkey();
 
             GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
             int result = googleApiAvailability.isGooglePlayServicesAvailable(getApplicationContext());
@@ -112,14 +124,15 @@ public class SplashScreenActivity extends BaseActivity {
                         menuItemViewModel = new ViewModelProvider(SplashScreenActivity.this).get(MenuItems_ViewModel.class);
                         appDataViewModel = new ViewModelProvider(SplashScreenActivity.this).get(AppData_ViewModel.class);
                         userDetailsViewModel =  new ViewModelProvider(SplashScreenActivity.this).get(UserDetailsViewModel.class);
-                        fetchInitialData();
+                        vendorDetailsViewModel = new ViewModelProvider(SplashScreenActivity.this).get(VendorDetails_ViewModel.class);
+                         fetchInitialData();
                         // Fetch data
                         setObserver();
-
+                        userDetailsViewModel.getUserDetailsFromViewModel().observeForever(userDetailsModelListObserver);
                         buyersViewModel.getBuyersListFromViewModel().observeForever(buyerModelListObserver);
                         menuItemViewModel.getMenuItemsFromViewModel().observeForever(menuItemListObserver);
                         appDataViewModel.getAppModelDataFromLiveModel().observeForever(appDataModelObserver);
-                        userDetailsViewModel.getUserDetailsFromViewModel().observeForever(userDetailsModelListObserver);
+                        vendorDetailsViewModel.getVendorItemsFromViewModel().observeForever(vendorDetailsModelListObserver);
 
 
                     } else {
@@ -147,10 +160,12 @@ public class SplashScreenActivity extends BaseActivity {
 
 
         private void fetchInitialData() {
+            userDetailsViewModel.getUserDetailsFromRepository(sessionManager.getUserMobileNumber());
+            vendorDetailsViewModel.FetchVendorItemByVendorKeyFromRepository(sessionManager.getVendorkey());
+
             buyersViewModel.getBuyersListFromRepository(sessionManager.getVendorkey());
             menuItemViewModel.FetchMenuItemByVendorKeyFromRepository(sessionManager.getVendorkey());
             appDataViewModel.FetchAppDataFromRepositoryAndSaveInLocalDataManager();
-            userDetailsViewModel.getUserDetailsFromRepository(sessionManager.getUserMobileNumber());
 
 
          /*   // Observe to determine when data fetching is complete
@@ -265,9 +280,56 @@ public class SplashScreenActivity extends BaseActivity {
                         if (Objects.requireNonNull(users_Model).status == ApiResponseState_Enum.Status.SUCCESS) {
 
                            // sessionManager.saveUserDataUsingModel(users_Model.data);
-                            gotUserData = true;
+                            //gotUserData = true;
+
+                            if(vendorkeyBeforeCallingUserData.equals(Objects.requireNonNull(users_Model).data.getVendorkey())) {
+
+                                gotUserData = true;
+
+
+                                checkAndProceed();
+                            }
+                            else{
+                                gotUserData = false;
+                                logoutFun();
+                            }
+                         }
+
+                    }
+                };
+
+                vendorDetailsModelListObserver = new Observer<ApiResponseState_Enum<VendorDetails_Model>>() {
+                    @Override
+                    public void onChanged(ApiResponseState_Enum<VendorDetails_Model> vendorDetails_livedata) {
+
+                        if (Objects.requireNonNull(vendorDetails_livedata).status == ApiResponseState_Enum.Status.SUCCESS) {
+
+                            LocalDataManager.getInstance().setVendorDetails_model(Objects.requireNonNull(vendorDetails_livedata).data);
+                            gotVendorData = true;
+
+                            // Create input data for the worker
+                            Data inputData = new Data.Builder()
+                                    .putInt("orderExpiryDays", Objects.requireNonNull(vendorDetails_livedata).data.getOrderExpiryDays())
+                                    .putInt("orderDeletionIntervalDays", Objects.requireNonNull(vendorDetails_livedata).data.getOrderdeletionintervaldays())
+                                    .putLong("lastlyTriggeredOn", Objects.requireNonNull(vendorDetails_livedata).data.getOrderdeletiontriggeredon().toDate().getTime()) // Convert to millis
+                                    .putString("vendorkey", Objects.requireNonNull(vendorDetails_livedata).data.getVendorkey())
+                                    .build();
+
+                            // Create a one-time work request
+                            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(OrderDetails_BulkDelete.class)
+                                    .setInputData(inputData)
+                                    .build();
+
+                            // Enqueue the work request
+                            WorkManager.getInstance(getApplicationContext()).enqueue(workRequest);
+
+
+                            // OrderDetails_BulkDelete orderDetailsBulkDelete = new OrderDetails_BulkDelete();
+                           // orderDetailsBulkDelete.checkIfWeNeedToTriggerDeleteFunction(Objects.requireNonNull(vendorDetails_livedata).data.getOrderExpiryDays() ,Objects.requireNonNull(vendorDetails_livedata).data.getOrderdeletionintervaldays() , Objects.requireNonNull(vendorDetails_livedata).data.getOrderdeletiontriggeredon() , Objects.requireNonNull(vendorDetails_livedata).data.getVendorkey() );
                             checkAndProceed();
+
                         }
+
 
                     }
                 };
@@ -307,7 +369,26 @@ public class SplashScreenActivity extends BaseActivity {
             snackbar.show();
         }
 
+    public void  logoutFun()
+    {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(sessionManager.getRole()+"_"+sessionManager.getVendorkey())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Unsubscribed";
+                        if (!task.isSuccessful()) {
+                            msg = "Unsubscribe failed";
+                        }
 
+
+                    }
+                });
+
+        Intent intent  = new Intent(SplashScreenActivity.this, LoginScreen.class);
+         startActivity(intent);
+         finish();
+        sessionManager.logout();
+    }
         @Override
         public void onDestroy() {
             super.onDestroy();
@@ -340,7 +421,7 @@ public class SplashScreenActivity extends BaseActivity {
         }
         private void checkAndProceed() {
             // Assuming both data fetches are done
-            if(gotbuyerData  && gotMenuItemData && gotAppdata && gotUserData){
+            if(gotbuyerData  && gotMenuItemData && gotAppdata && gotUserData && gotVendorData){
                 // Proceed to the next activity
                 if(sessionManager.isLoggedIn()){
                  //   Toast.makeText(this, "Role: "+sessionManager.getRole(), Toast.LENGTH_SHORT).show();

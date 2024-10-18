@@ -13,7 +13,7 @@ public class DatabaseReference{
 
 
     //orderdetails Table name
-    public static String OrderDetails_TableName = "OrderDetails";
+    public static String OrderDetails_TableName = "TestOrderDetails";
     public static String status_OrderDetails = "status";
     public static String transportname_OrderDetails = "transportname";
     public static String drivermobileno_OrderDetails = "drivermobileno";
@@ -27,7 +27,7 @@ public class DatabaseReference{
 
 
     //orderItemDetails Table name
-    public static String OrderItemDetails_TableName = "OrderItemDetails";
+    public static String OrderItemDetails_TableName = "TestOrderItemDetails";
     public static String quantity_OrderItemDetails = "quantity";
     public static String grossweight_OrderItemDetails= "grossweight";
     public static String price_OrderItemDetails = "price";
@@ -52,6 +52,7 @@ public class DatabaseReference{
     public static String BuyerDetails_TableName = "BuyerDetails";
     public static String MobileNo_BuyerDetails = "mobileno";
     public static String Uniquekey_BuyerDetails = "uniquekey";
+    public static String VendorDetails_TableName = "VendorDetails";
 
 
 
