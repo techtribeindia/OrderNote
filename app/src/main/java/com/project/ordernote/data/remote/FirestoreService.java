@@ -1,7 +1,6 @@
 package com.project.ordernote.data.remote;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
@@ -21,6 +20,7 @@ import com.project.ordernote.data.model.MenuItems_Model;
 
 import com.project.ordernote.data.model.OrderDetails_Model;
 import com.project.ordernote.data.model.OrderItemDetails_Model;
+import com.project.ordernote.data.model.VendorDetails_Model;
 import com.project.ordernote.utils.BaseActivity;
 import com.project.ordernote.utils.Constants;
 import com.project.ordernote.utils.DatabaseReference;
@@ -778,6 +778,38 @@ public class FirestoreService {
     }
 
     }
+
+    public void fetchVendorDetails(String vendorkeyy, FirestoreCallback<VendorDetails_Model> firestoreCallback) {
+
+        if(BaseActivity.baseActivity.isOnline()) {
+
+            db.collection(DatabaseReference.VendorDetails_TableName)
+                    .whereEqualTo(DatabaseReference.vendorkey, vendorkeyy)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                          //  List<VendorDetails_Model> vendorDetailslist = new ArrayList<>();
+                            VendorDetails_Model vendorDetailsModel = null;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                 vendorDetailsModel = document.toObject(VendorDetails_Model.class);
+                                Log.d("fetchvendorUsingvendorkey", vendorDetailsModel.getVendorname());
+                               // vendorDetailslist.add(vendorDetailsModel);
+                            }
+                            firestoreCallback.onSuccess(vendorDetailsModel);
+                        } else {
+                            firestoreCallback.onFailure(task.getException());
+                        }
+                    });
+        }
+        else{
+            firestoreCallback.onFailure(new Exception(" No Internet Connection "));
+        }
+
+
+
+    }
+
+
    /* public void getOrderItemsByVendorAndDate(Timestamp startTimestamp, Timestamp endTimestamp, String vendorkey, FirestoreCallback<List<OrderItemDetails_Model>> callback) {
 
         db.collection(DatabaseReference.OrderItemDetails_TableName)

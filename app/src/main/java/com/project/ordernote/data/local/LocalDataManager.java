@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import com.project.ordernote.data.model.AppData_Model;
 import com.project.ordernote.data.model.Buyers_Model;
 import com.project.ordernote.data.model.MenuItems_Model;
+import com.project.ordernote.data.model.VendorDetails_Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +21,13 @@ public class LocalDataManager {
     private List<MenuItems_Model> menuItems;
     private List<Buyers_Model> buyers;
     private AppData_Model appData_model;
+    private VendorDetails_Model vendorDetailsModel;
     // Private constructor to prevent instantiation
-    private LocalDataManager() {
+    public LocalDataManager() {
         menuItems = new ArrayList<>();
         buyers = new ArrayList<>();
         appData_model = new AppData_Model();
+        vendorDetailsModel = new VendorDetails_Model();
     }
 
     // Method to get the singleton instance
@@ -49,6 +52,19 @@ public class LocalDataManager {
         }
         return appData_model;
     }
+
+    public VendorDetails_Model getVendorDetails_model() {
+        if(vendorDetailsModel == null ){
+            vendorDetailsModel = new VendorDetails_Model();
+        }
+        return vendorDetailsModel;
+    }
+
+    public void setVendorDetails_model(VendorDetails_Model vendorDetailsModell) {
+        this.vendorDetailsModel = vendorDetailsModell;
+    }
+
+
 
     public void setAppData_model(AppData_Model appData_model) {
         this.appData_model = appData_model;

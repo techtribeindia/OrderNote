@@ -1,5 +1,7 @@
 package com.project.ordernote.data.model;
 
+import com.google.firebase.Timestamp;
+
 public class VendorDetails_Model {
     private String vendorkey = "";
     private String vendorname = "";
@@ -9,7 +11,34 @@ public class VendorDetails_Model {
     private String mobileno = "";
     private String pincode = "";
     private String state = "";
+    private Timestamp orderdeletiontriggeredon;
+    private int orderExpiryDays = 0;
+    private int orderdeletionintervaldays = 0;
 
+
+    public Timestamp getOrderdeletiontriggeredon() {
+        return orderdeletiontriggeredon;
+    }
+
+    public void setOrderdeletiontriggeredon(Timestamp orderdeletiontriggeredon) {
+        this.orderdeletiontriggeredon = orderdeletiontriggeredon;
+    }
+
+    public int getOrderExpiryDays() {
+        return orderExpiryDays;
+    }
+
+    public void setOrderExpiryDays(int orderExpiryDays) {
+        this.orderExpiryDays = orderExpiryDays;
+    }
+
+    public int getOrderdeletionintervaldays() {
+        return orderdeletionintervaldays;
+    }
+
+    public void setOrderdeletionintervaldays(int orderdeletionintervaldays) {
+        this.orderdeletionintervaldays = orderdeletionintervaldays;
+    }
 
     public String getVendorkey() {
         return vendorkey;
