@@ -219,6 +219,8 @@ public class Buyers_ViewModel extends AndroidViewModel {
     }
 
     public void addBuyerDataItemInViewModelAndLocalArray(Buyers_Model buyersModel) {
+        List<Buyers_Model> buyerData =  buyersListLiveData.getValue().data;
+        List<Buyers_Model> originalData = buyersListLiveDataOriginal;
 
         if(buyersListLiveData == null){
             buyersListLiveData = new MutableLiveData<>();
@@ -227,18 +229,29 @@ public class Buyers_ViewModel extends AndroidViewModel {
         if(Objects.requireNonNull(buyersListLiveData.getValue()).data==null){
             buyersListLiveData.setValue(ApiResponseState_Enum.success(new ArrayList<>()));
         }
-
+            if(originalData.isEmpty())
+            {
+                buyersListLiveDataOriginal = new ArrayList<>(buyerData);
+                originalData = new ArrayList<>(buyerData);
+            }
             List<Buyers_Model> buyersModelArrayList = new ArrayList<>(Objects.requireNonNull(buyersListLiveData.getValue().data));
            // buyersListLiveData.getValue().data.add(buyersModel);
 
             LocalDataManager.getInstance().setBuyers(buyersModelArrayList);
 
-        List<Buyers_Model> originalData = buyersListLiveDataOriginal;
+
         if (originalData != null ) {
             originalData.add(buyersModel);
             LocalDataManager.getInstance().setBuyers(originalData);
             buyersListLiveDataOriginal = new ArrayList<>(originalData);
             buyersListLiveData.setValue(ApiResponseState_Enum.success(originalData));
+        }
+        else if(buyerData != null)
+        {
+            buyerData.add(buyersModel);
+            LocalDataManager.getInstance().setBuyers(buyerData);
+            buyersListLiveDataOriginal = new ArrayList<>(buyerData);
+            buyersListLiveData.setValue(ApiResponseState_Enum.success(buyerData));
         }
     }
 
