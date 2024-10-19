@@ -113,14 +113,14 @@ public class MenuItemsDescFragment extends DialogFragment {
                     binding.priceTextview.setText("Price Per Kg");
                     binding.sellingPriceInput.setVisibility(View.VISIBLE);
                     binding.sellingPriceTextview.setVisibility(View.VISIBLE);
-                    binding.grossweightText.setText("GrossWeight in KG");
+                    binding.grossweightText.setText("Bag Size in KG");
                     priceperkgFun();
 
                 }
                 if(binding.unitprice.isChecked())
                 {
                     binding.priceTextview.setText("Price Per Unit");
-                    binding.grossweightText.setText("GrossWeight in KG ( optional )");
+                    binding.grossweightText.setText("Bag Size in KG ( optional )");
                     binding.sellingPriceInput.setVisibility(View.GONE);
                     binding.sellingPriceTextview.setVisibility(View.GONE);
                     binding.sellingPriceInput.setText("");

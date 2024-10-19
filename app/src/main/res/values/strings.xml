@@ -9,7 +9,7 @@
     <string name="enter_buyer_name_amp_choose_a_buyer"><![CDATA[Enter Buyer Name & choose a buyer]]></string>
     <string name="enter_buyer_name"><![CDATA[Enter Buyer Name]]></string>
 
-    <string name="sample_phoneno">+919394247523</string>
+    <string name="sample_phoneno">Mobile Number</string>
     <string name="address">Address</string>
     <string name="select_buyer">Select Buyer</string>
     <string name="mobile_no">Mobile no</string>
