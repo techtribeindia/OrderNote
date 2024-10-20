@@ -14,8 +14,8 @@ android {
         applicationId = "com.project.ordernote"
         minSdk = 24
         targetSdk = 33
-        versionCode = 2
-        versionName = "1.0.0"
+        versionCode = 1
+        versionName = "1.0.2"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
