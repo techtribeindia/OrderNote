@@ -144,9 +144,13 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
 
     public  void updateInsertUpdateMenuData(MenuItems_Model menuItemsModel, String process)
     {
-        ApiResponseState_Enum<List<MenuItems_Model>> currentData = menuItemsLiveData.getValue();
+        List<MenuItems_Model> currentData = menuItemsLiveData.getValue().data;
         List<MenuItems_Model> originalData = menuItemsLiveDataOriginal;
-
+        if(originalData.isEmpty())
+        {
+            menuItemsLiveDataOriginal = new ArrayList<>(currentData);
+            originalData = new ArrayList<>(currentData);
+        }
         if(Objects.equals(process, "add"))
         {
             if (originalData != null) {
@@ -177,8 +181,8 @@ public class MenuItems_ViewModel  extends AndroidViewModel {
             }
             menuItemsLiveDataOriginal = new ArrayList<>(updatedOrders);
         }
-        if (currentData != null && currentData.data != null) {
-            List<MenuItems_Model> updatedOrders = new ArrayList<>(currentData.data);
+        if (currentData != null) {
+            List<MenuItems_Model> updatedOrders = new ArrayList<>(currentData);
             for (MenuItems_Model order : updatedOrders) {
                 if (order.getItemkey().equals(menuItemsModel.getItemkey())) {
                     order.setItemname(menuItemsModel.getItemname());

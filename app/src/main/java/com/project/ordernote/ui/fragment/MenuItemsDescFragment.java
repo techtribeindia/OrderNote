@@ -73,12 +73,13 @@ public class MenuItemsDescFragment extends DialogFragment {
         this.selectedScreen  = selectedOrderButton;
 
     }
-    private void sendHandlerMessage(String function) {
+    private void sendHandlerMessage(String function,String status) {
 
 
         Message msg = new Message();
         Bundle bundle = new Bundle();
         bundle.putString("function", function);
+        bundle.putString("fromadapter", status);
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
@@ -210,6 +211,8 @@ public class MenuItemsDescFragment extends DialogFragment {
         binding.closeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                sendHandlerMessage("close","MenuItemClosed");
                 onDismiss(requireDialog());
             }
         });
@@ -435,11 +438,11 @@ public class MenuItemsDescFragment extends DialogFragment {
                 showProgressBar(true);
                 break;
             case SUCCESS:
-
+                sendHandlerMessage(function,"menuitemsuccess");
                 onDismiss(requireDialog());
                 showSnackbar(requireView(),"Success in fetching orders");
                 showProgressBar(false);
-                sendHandlerMessage(function);
+
 
                 break;
             case ERROR:
