@@ -1,13 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/transparent"
+    android:background="@drawable/rounded_dialog_background"
     tools:context=".ui.fragment.AddMenuItem_InCart_Fragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/addMenuItem_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1">
+            <TextView
 
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
+                android:background="@drawable/borderwithred"
+                android:text="Add New MenuItem"
+                android:layout_weight="1"
+                android:fontFamily="@font/open_sans_bold"
+                android:textColor="@color/red"
+
+                />
+
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/closeIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/closewithcircle"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +50,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/rounded_dialog_background"
+
         android:orientation="vertical"
         android:padding="30dp">
 
@@ -239,16 +273,7 @@
 
 
 
-    <ImageView
-        android:id="@+id/closeIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="30dp"
-        android:padding="8dp"
-        android:layout_marginEnd="30dp"
-        android:src="@mipmap/closewithcircle"/>
+
 
 
 
@@ -270,4 +295,4 @@
         app:lottie_fileName="dotanimator.json"
         android:visibility="gone" />
 
-</RelativeLayout>
+</LinearLayout>

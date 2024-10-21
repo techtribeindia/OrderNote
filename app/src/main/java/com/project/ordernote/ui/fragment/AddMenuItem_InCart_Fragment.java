@@ -46,7 +46,7 @@ import java.util.Objects;
 public class AddMenuItem_InCart_Fragment extends DialogFragment {
 
     FragmentAddMenuItemInCartBinding binding;
-
+    Handler mHandler;
 
 
 
@@ -65,7 +65,20 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
     NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
     SessionManager sessionManager ;
 
+    public void setHandler(Handler handler) {
+        this.mHandler = handler;
+    }
 
+    private void sendHandlerMessage(String bundlestr, String buyerKey ) {
+        //Log.e(Constants.TAG, "createBillDetails in cartaItem 1");
+
+        Message msg = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putString("fromadapter", bundlestr);
+        bundle.putString("buyerkey", buyerKey);
+        msg.setData(bundle);
+        mHandler.sendMessage(msg);
+    }
 
     public AddMenuItem_InCart_Fragment() {
         // Required empty public constructor
@@ -461,7 +474,13 @@ public class AddMenuItem_InCart_Fragment extends DialogFragment {
 
             }
         });
-
+        binding.addMenuItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendHandlerMessage("newmenuitem","");
+                dismiss();
+            }
+        });
 
     }
 

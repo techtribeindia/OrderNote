@@ -973,6 +973,7 @@ public class CreateOrderFragment extends Fragment {
         try{
             AddMenuItem_InCart_Fragment dialogFragment2 = new AddMenuItem_InCart_Fragment();
             // dialogFragment.setBuyerSelectionListener(this); // Set the listener
+            dialogFragment2.setHandler(newHandler());
             dialogFragment2.show(getParentFragmentManager(), "AddMenuItemInCartDialogFragment");
 
         }
@@ -1003,7 +1004,11 @@ public class CreateOrderFragment extends Fragment {
             @Override
             public boolean handleMessage(Message msg) {
                 Bundle bundle = msg.getData();
-                String data = bundle.getString("fromadapter");
+                String data="";
+                if(bundle.getString("fromadapter") != null)
+                {
+                    data = bundle.getString("fromadapter");
+                }
 
                 if(data.equals("newbuyer")){
                     String dataToSend = Constants.createNewBuyer;
@@ -1018,6 +1023,22 @@ public class CreateOrderFragment extends Fragment {
                     dialogFragment.show(getParentFragmentManager(), "AddBuyerDetails_DialogFragment");
                     setNewBuyerObserver();
                 }
+                else if(data.equals("newmenuitem"))
+                {
+                    MenuItemsDescFragment dialogFragment = new MenuItemsDescFragment();
+                    dialogFragment.setmHandler(newHandler(),"add");
+                    dialogFragment.show(getParentFragmentManager(),"ManageMenuScreenFragment");
+
+                }
+
+                else if(data.equals("menuitemsuccess"))
+                {
+                    AddMenuItem_InCart_Fragment dialogFragment2 = new AddMenuItem_InCart_Fragment();
+                    // dialogFragment.setBuyerSelectionListener(this); // Set the listener
+                    dialogFragment2.setHandler(newHandler());
+                    dialogFragment2.show(getParentFragmentManager(), "AddMenuItemInCartDialogFragment");
+                }
+
                 if(data.equals("CreateOrderItem_Delete")){
                     try {
                         int position = bundle.getInt("position");
